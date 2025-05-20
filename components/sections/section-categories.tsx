@@ -8,8 +8,9 @@ import Skeleton from "../ui/skeleton";
 
 interface Category {
   id: number;
-  title: string;
-  bgColor: string;
+  name: string;
+  icon: string;
+  slug: string;
 }
 
 function SectionCategories() {
@@ -17,7 +18,6 @@ function SectionCategories() {
     API_ENDPOINTS.CATEGORIES
   );
   
-
   if (loading) {
     return (
       <section className="container py-10 px-4">
@@ -50,7 +50,7 @@ function SectionCategories() {
       <ul className="grid lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-3">
         {data?.map((category: Category) => (
           <li key={category.id}>
-            <CategoryCard bgColor={category.bgColor} title={category.title} />
+            <CategoryCard bgColor="#faf1ff" title={category.name} />
           </li>
         ))}
       </ul>
