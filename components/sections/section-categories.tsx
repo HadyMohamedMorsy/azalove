@@ -1,12 +1,12 @@
 "use client";
 
-import { API_ENDPOINTS } from "@/config/api";
+import { API_ENDPOINTS_FROM_NEXT } from "@/config/api";
 import useFetch from "@/hooks/useFetch";
 import CategoryCard from "../cards/category-card";
 import HeaderTitle from "../layout/header-title";
 import Skeleton from "../ui/skeleton";
 
-interface Category {
+export interface Category {
   id: number;
   name: string;
   icon: string;
@@ -15,9 +15,9 @@ interface Category {
 
 function SectionCategories() {
   const { data, loading, error } = useFetch<Category[]>(
-    API_ENDPOINTS.CATEGORIES
+    API_ENDPOINTS_FROM_NEXT.CATEGORIES
   );
-  
+
   if (loading) {
     return (
       <section className="container py-10 px-4">

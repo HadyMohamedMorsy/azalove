@@ -1,6 +1,14 @@
-import ProductCard from "../cards/product-card";
+import useFetch from "@/hooks/useFetch";
+import { Product } from "@/types/product";
+import Skeleton from "../ui/skeleton";
+import ProductGrid from "../products/product-grid";
 
 function SectionFeaturedBooks() {
+  const {
+    data: products,
+    loading,
+    error,
+  } = useFetch<Product[]>("/api/products/is-featured");
   return (
     <section className="container py-10 px-4">
       <div className="flex flex-col justify-center items-center mb-5">
@@ -18,18 +26,16 @@ function SectionFeaturedBooks() {
         </ul>
       </div>
       <div className="border-t border-l border-[#eae8e4]">
-        <div className="grid lg:grid-cols-5 md:grid-cols-5 sm:grid-cols-2 grid-cols-1">
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-        </div>
+        {loading ? (
+          <Skeleton length={3} />
+        ) : error ? (
+          <div className="text-red-500">Error loading products: {error}</div>
+        ) : (
+          <ProductGrid
+            products={products || []}
+            gridCols={{ lg: 5, md: 5, sm: 2, default: 1 }}
+          />
+        )}
       </div>
     </section>
   );

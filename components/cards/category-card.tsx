@@ -1,4 +1,9 @@
-const CategoryCard = ({ bgColor = "#faf1ff", title = "الاكل وي شرب" }) => {
+interface CategoryCardProps {
+  bgColor?: string;
+  title: string;
+}
+
+const CategoryCard = ({ bgColor = "#faf1ff", title }: CategoryCardProps) => {
   return (
     <div
       className={`relative px-[2.5rem] py-[2rem] break-words`}

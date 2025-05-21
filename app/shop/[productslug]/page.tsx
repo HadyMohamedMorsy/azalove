@@ -1,7 +1,7 @@
 "use client";
 import ProductCard from "@/components/cards/product-card";
-import TabsDetails from "@/components/single-product/tabs-details";
-import TabsFormat from "@/components/single-product/tabs-format";
+import TabsDetails from "@/components/products/single-product/tabs-details";
+import TabsFormat from "@/components/products/single-product/tabs-format";
 import Rating from "@/components/ui/rating";
 import { Button } from "@heroui/button";
 import { NumberInput } from "@heroui/number-input";

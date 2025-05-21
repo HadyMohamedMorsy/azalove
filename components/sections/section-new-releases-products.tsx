@@ -1,8 +1,17 @@
+import { API_ENDPOINTS_FROM_NEXT } from "@/config/api";
+import useFetch from "@/hooks/useFetch";
+import { Product } from "@/types/product";
 import Image from "next/image";
-import ProductCard from "../cards/product-card";
 import HeaderTitle from "../layout/header-title";
+import Skeleton from "../ui/skeleton";
+import ProductGrid from "../products/product-grid";
 
 function SectionNewReleases() {
+  const {
+    data: products,
+    loading,
+    error,
+  } = useFetch<Product[]>(API_ENDPOINTS_FROM_NEXT.PRODUCTS_IS_NEW);
   return (
     <section className="container py-10 px-4">
       <HeaderTitle
@@ -43,14 +52,18 @@ function SectionNewReleases() {
             </div>
           </div>
           <div className="col-span-2">
-            <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1">
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-            </div>
+            {loading ? (
+              <Skeleton length={3} />
+            ) : error ? (
+              <div className="text-red-500">
+                Error loading products: {error}
+              </div>
+            ) : (
+              <ProductGrid
+                products={products || []}
+                gridCols={{ lg: 3, md: 2, sm: 2, default: 1 }}
+              />
+            )}
           </div>
         </div>
       </div>

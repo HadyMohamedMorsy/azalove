@@ -1,12 +1,19 @@
+import { API_ENDPOINTS_FROM_SERVER } from "@/config/api";
+import { BLOG_SELECT } from "@/config/constants";
 import { apiFetch } from "@/utils/api-interceptor";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const response = await apiFetch("/category/front", {
+  const response = await apiFetch(API_ENDPOINTS_FROM_SERVER.BLOGS, {
     params: {
       query: {
-        select: ["id", "name", "slug", "icon"],
+        select: BLOG_SELECT,
         isPagination: false,
+        limit: 3,
+        filters: {
+          isPublished: "true",
+          isFeatured: "true",
+        },
       },
     },
   });
