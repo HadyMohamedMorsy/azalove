@@ -28,6 +28,7 @@ function ProductGrid({
     <div className={getGridColsClass()}>
       {products?.map((product) => (
         <ProductCard
+          id={Number(product.id)}
           key={product.id}
           srcImage={product.cover}
           name={product.name}

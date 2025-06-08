@@ -1,94 +1,112 @@
 "use client";
-import { BreadcrumbItem, Breadcrumbs } from "@heroui/breadcrumbs";
-import { Button } from "@heroui/button";
-import { Checkbox } from "@heroui/checkbox";
-import { Form } from "@heroui/form";
-import { Input } from "@heroui/input";
+
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useAuth } from "@/contexts/auth-context";
+import { useToast } from "@/hooks/use-toast";
+import Link from "next/link";
 import { useState } from "react";
 
 function Login() {
-  const [submitted, setSubmitted] = useState(null);
-  const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const { login } = useAuth();
+  const { toast } = useToast();
 
-  const onSubmit = (e: any) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data = Object.fromEntries(new FormData(e.currentTarget));
+    setIsLoading(true);
 
-    if (data.terms !== "true") {
-      setErrors({ terms: "Please accept the terms" });
+    try {
+      const formData = new FormData(e.currentTarget);
+      const email = formData.get("email") as string;
+      const password = formData.get("password") as string;
 
-      return;
+      await login(email, password);
+
+      toast({
+        title: "Login successful",
+        description: "Welcome back!",
+      });
+    } catch (error) {
+      toast({
+        title: "Login failed",
+        description: "Please check your credentials and try again.",
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
+
   return (
-    <div className="container py-10 px-4">
-      <header className="container  px-6 py-4 border-t border-b border-[#eae8e4]">
-        <Breadcrumbs>
-          <BreadcrumbItem>الرئيسيه</BreadcrumbItem>
-          <BreadcrumbItem>تسجيل الدخول</BreadcrumbItem>
-        </Breadcrumbs>
-      </header>
-      <section className="mt-8">
-        <Form
-          className="md:w-[650px] md:mx-auto w-full bg-white shadow-custom-2  py-8 px-4"
-          validationErrors={errors}
-          onReset={() => setSubmitted(null)}
-          onSubmit={onSubmit}
-        >
-          <h3 className="mb-5 font-web font-bold text-2xl">تسجيل الدخول</h3>
-          <div className="flex flex-col gap-4 md:w-[600px] w-full">
-            <div className="grid gap-8 grid-cols-1">
-              <Input
-                isRequired
-                label="اسم المستخدم أو عنوان البريد الإلكتروني*"
-                labelPlacement="outside"
-                name="name"
-                placeholder="اسم المستخدم أو عنوان البريد الإلكتروني*"
-                className="font-web"
-              />
-              <Input
-                isRequired
-                label="كلمة المرور"
-                labelPlacement="outside"
-                name="كلمة المرور"
-                placeholder="كلمة المرور"
-                type="password"
-              />
-            </div>
-
-            <div className="flex justify-between items-center">
-              <Checkbox
-                isRequired
-                name="terms"
-                validationBehavior="aria"
-                value="true"
-              >
-                تذكرنى
-              </Checkbox>
-              <a className="text-sm text-red-400" href="#">
-                هل فقدت كلمة المرور الخاصة بك؟
-              </a>
-            </div>
-            <div className="border-b border-[#eae8e4] py-2"></div>
-            <div className="flex gap-4">
-              <Button
-                className="w-[150px] mt-5 font-web"
-                color="primary"
-                type="submit"
-              >
-                ارسال
+    <div className="container flex h-screen w-screen flex-col items-center justify-center">
+      <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[450px]">
+        <Card>
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-2xl text-center">تسجيل الدخول</CardTitle>
+            <CardDescription className="text-center">
+              أدخل بريدك الإلكتروني وكلمة المرور للدخول إلى حسابك
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={onSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">البريد الإلكتروني</Label>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="أدخل بريدك الإلكتروني"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">كلمة المرور</Label>
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  placeholder="أدخل كلمة المرور"
+                  required
+                />
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="remember" name="terms" />
+                  <Label htmlFor="remember" className="text-sm">
+                    تذكرنى
+                  </Label>
+                </div>
+                <Link
+                  href="/forgot-password"
+                  className="text-sm text-red-500 hover:text-red-600"
+                >
+                  هل فقدت كلمة المرور؟
+                </Link>
+              </div>
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? "جاري التحميل..." : "تسجيل الدخول"}
               </Button>
+            </form>
+            <div className="mt-4 text-center text-sm">
+              ليس لديك حساب؟{" "}
+              <Link href="/register" className="text-primary hover:underline">
+                إنشاء حساب جديد
+              </Link>
             </div>
-          </div>
-
-          {submitted && (
-            <div className="text-small text-default-500 mt-4">
-              Submitted data: <pre>{JSON.stringify(submitted, null, 2)}</pre>
-            </div>
-          )}
-        </Form>
-      </section>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
+
 export default Login;

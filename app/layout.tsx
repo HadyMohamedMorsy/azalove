@@ -2,11 +2,17 @@ import "@/styles/globals.css";
 import "@/styles/utilities.css";
 
 import Footer from "@/components/layout/footer";
-import { Navbar } from "@/components/layout/navbar";
+import Navbar from "@/components/layout/navbar";
 import { Toaster } from "@/components/ui/toaster";
 import { siteConfig } from "@/config/site";
+import { AuthProvider } from "@/contexts/auth-context";
+import { CartProvider } from "@/contexts/cart-context";
+import { FavoritesProvider } from "@/contexts/favorites-context";
 import { Metadata, Viewport } from "next";
+import { Inter } from "next/font/google";
 import { Providers } from "./providers";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
@@ -34,13 +40,21 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning lang="ar" dir="rtl">
       <head />
-      <body>
-        <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
-          <Navbar />
-          {children}
-          <Footer />
-          <Toaster />
-        </Providers>
+      <body className={inter.className}>
+        <AuthProvider>
+          <CartProvider>
+            <FavoritesProvider>
+              <Providers
+                themeProps={{ attribute: "class", defaultTheme: "light" }}
+              >
+                <Navbar />
+                {children}
+                <Footer />
+                <Toaster />
+              </Providers>
+            </FavoritesProvider>
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

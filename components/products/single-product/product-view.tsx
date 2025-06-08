@@ -3,7 +3,9 @@ import Breadcrumb from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useCart } from "@/contexts/cart-context";
 import { useFetch } from "@/hooks/use-fetch";
+import { useToast } from "@/hooks/use-toast";
 import { Product, productBySlug } from "@/types/product";
 import {
   Heart,
@@ -26,9 +28,10 @@ const ProductView = () => {
   const { data, loading, error } = useFetch<productBySlug>(
     `/api/product/by-slug/${params.productslug}`
   );
-  const [selectedColor, setSelectedColor] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [isFavorited, setIsFavorited] = useState(false);
+  const { addToCart } = useCart();
+  const { toast } = useToast();
 
   if (loading) {
     return <div className="max-w-7xl mx-auto px-4 py-8">Loading...</div>;
@@ -47,14 +50,26 @@ const ProductView = () => {
     ? Math.round((Number(product.sku.discount) / product.sku.price) * 100)
     : 0;
 
+  const handleAddToCart = () => {
+    addToCart({
+      id: product.id.toString(),
+      name: product.name,
+      price: product.sku?.price,
+      image: product.images?.[0] ?? "",
+      quantity: quantity,
+    });
+
+    toast({
+      title: "Added to cart",
+      description: `${product.name} has been added to your cart.`,
+    });
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       {/* Breadcrumb */}
       <Breadcrumb
-        items={[
-          { label: "Home", href: "/" },
-          { label: product.name },
-        ]}
+        items={[{ label: "Home", href: "/" }, { label: product.name }]}
       />
 
       <div className="grid lg:grid-cols-2 gap-12 mb-16">
@@ -168,7 +183,7 @@ const ProductView = () => {
                   +
                 </button>
               </div>
-              <Button size="lg" className="flex-1">
+              <Button size="lg" className="flex-1" onClick={handleAddToCart}>
                 <ShoppingCart className="w-4 h-4 mr-2" />
                 Add to Cart
               </Button>
