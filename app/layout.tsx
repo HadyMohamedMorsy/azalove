@@ -3,6 +3,7 @@ import "@/styles/utilities.css";
 
 import Footer from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
+import { Toaster } from "@/components/ui/toaster";
 import { siteConfig } from "@/config/site";
 import { Metadata, Viewport } from "next";
 import { Providers } from "./providers";
@@ -38,6 +39,7 @@ export default function RootLayout({
           <Navbar />
           {children}
           <Footer />
+          <Toaster />
         </Providers>
       </body>
     </html>

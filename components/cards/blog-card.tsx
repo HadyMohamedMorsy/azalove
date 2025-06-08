@@ -1,42 +1,100 @@
 // components/Header.jsx
 import { Blog } from "@/types/blogs";
-import { faClock } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Image from "next/image";
-import Link from "next/link";
 
 interface BlogCardProps {
   blog: Blog;
 }
 
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
+import { Calendar, Eye, User } from "lucide-react";
+
 const BlogCard = ({ blog }: BlogCardProps) => {
+  const { toast } = useToast();
+  const {
+    id,
+    title,
+    shortDescription: excerpt,
+    subTitle: author,
+    createdAt: publishDate,
+    postType: readTime,
+    categories,
+    thumb: image,
+    createdBy,
+    views,
+  } = blog;
+  const domain = process.env.MAIN_DOMAIN;
+
+  const handleReadMore = () => {
+    toast({
+      title: "Opening blog post",
+      description: `Reading "${title}"...`,
+    });
+  };
+
   return (
-    <div className="px-[2.5rem] py-[2rem]">
-      <Image
-        src={blog.thumb || "/media/image-blog.jpg"}
-        className="object-contain"
-        alt={blog.title}
-        width={445}
-        height={300}
-      />
-      <div className="pt-2">
-        <span className="text-[#f75454] text-xs uppercase">
-          {blog.categories[0]?.name || "غير مصنف"}
-        </span>
-        <h3 className="text-2xl font-web font-bold mb-3">
-          <Link href={`/blog/${blog.slug}`} className="hover:text-blue-500">
-            {blog.title}
-          </Link>
-        </h3>
-        <p className="text-gray-600">
-          {blog.shortDescription || blog.description || ""}
-        </p>
-        <div className="mt-3 flex items-center text-gray-400 gap-3">
-          <FontAwesomeIcon icon={faClock} size="xs" />
-          <span>{new Date(blog.startDate).toLocaleDateString("ar-SA")}</span>
+    <Card className="group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+      {/* Blog Image */}
+      <div className="relative aspect-video overflow-hidden bg-gray-100">
+        <img
+          src={`${domain}${image}`}
+          alt={title}
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+        />
+
+        {/* Category Badge */}
+        <div className="absolute top-4 left-4">
+          <Badge
+            variant="secondary"
+            className="bg-background/90 backdrop-blur-sm"
+          >
+            {categories[0]?.name || "Uncategorized"}
+          </Badge>
         </div>
       </div>
-    </div>
+
+      <CardHeader className="pb-3">
+        {/* Meta Information */}
+        <div className="flex items-center gap-4 text-sm text-muted-foreground mb-2">
+          <div className="flex items-center gap-1">
+            <User className="w-4 h-4" />
+            <span>
+              {createdBy?.firstName} {createdBy?.lastName}
+            </span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Calendar className="w-4 h-4" />
+            <span>{new Date(publishDate).toLocaleDateString("ar-SA")}</span>
+          </div>
+        </div>
+
+        {/* Blog Title */}
+        <h3 className="font-bold text-lg line-clamp-2 leading-tight group-hover:text-primary transition-colors">
+          {title}
+        </h3>
+      </CardHeader>
+
+      <CardContent className="pt-0 space-y-4">
+        {/* Excerpt */}
+        <p className="text-muted-foreground text-sm line-clamp-3 leading-relaxed">
+          {excerpt}
+        </p>
+
+        {/* Footer */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1 text-sm text-muted-foreground">
+            <Eye className="w-4 h-4" />
+            <span>{views} views</span>
+          </div>
+
+          <Button onClick={handleReadMore} variant="outline" size="sm">
+            Read More
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 

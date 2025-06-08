@@ -1,47 +1,53 @@
 "use client";
 import BlogCard from "@/components/cards/blog-card";
-import ButtonList from "@/components/shop/button-list";
-import ShowProducts from "@/components/shop/show";
-import { BreadcrumbItem, Breadcrumbs } from "@heroui/breadcrumbs";
+import Skeleton from "@/components/ui/skeleton";
+import { API_ENDPOINTS_FROM_NEXT } from "@/config/api";
+import useFetch from "@/hooks/use-fetch";
+import type { Blog } from "@/types/blogs";
 import { Pagination } from "@heroui/pagination";
-import SortProducts from "../../components/shop/sort";
 
 function Blog() {
+  const {
+    data: blogs,
+    loading,
+    error,
+    total,
+  } = useFetch<Blog[]>(API_ENDPOINTS_FROM_NEXT.BLOGS);
+
+  if (loading) {
+    return <Skeleton length={12} />;
+  }
+
+  if (error) {
+    return (
+      <div className="text-red-500 text-center">
+        Error loading blogs: {error}
+      </div>
+    );
+  }
+
+  if (!blogs || blogs.length === 0) {
+    return (
+      <div className="blogs grid md:grid-cols-3 grid-cols-1 gap-6">
+        <div className="col-span-full p-8 text-center text-gray-500">
+          لا توجد مقالات متاحة في الوقت الحالي
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
-      <header className="container  px-6 py-4 border-t border-b border-[#eae8e4]">
-        <Breadcrumbs>
-          <BreadcrumbItem>الرئيسيه</BreadcrumbItem>
-          <BreadcrumbItem>المقالات</BreadcrumbItem>
-        </Breadcrumbs>
-      </header>
-      <section className="container py-10 px-4">
-        <div className="flex justify-between items-center py-5">
-          <span> عرض 1–12 من 89 نتيجة</span>
-          <div className="flex gap-4">
-            <SortProducts />
-            <ShowProducts />
-            <ButtonList />
-          </div>
-        </div>
-        <div className="blogs grid md:grid-cols-3 grid-cols-1 gap-6 ">
-          <BlogCard />
-          <BlogCard />
-          <BlogCard />
-          <BlogCard />
-          <BlogCard />
-          <BlogCard />
-          <BlogCard />
-          <BlogCard />
-          <BlogCard />
-          <BlogCard />
-          <BlogCard />
-          <BlogCard />
-        </div>
+      <div className="blogs grid md:grid-cols-3 grid-cols-1 gap-6">
+        {blogs.map((blog) => (
+          <BlogCard key={blog.id} blog={blog} />
+        ))}
+      </div>
+      {total !== undefined && (
         <div className="mt-4 flex justify-center">
-          <Pagination initialPage={1} total={300} />
+          <Pagination initialPage={1} total={total} />
         </div>
-      </section>
+      )}
     </>
   );
 }

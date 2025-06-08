@@ -11,7 +11,7 @@ function SectionHero() {
               <span className="text-[50px] mt-2 block"> أزالوف</span>
             </h2>
 
-            <button className="btn text-white bg-[#fa5e5d] capitalize mt-4 w-[120px">
+            <button className="btn text-white bg-[#fa5e5d] hover:bg-[#e54e4d] transition-colors duration-300 capitalize mt-4 w-[120px]">
               تسوق الان
             </button>
           </div>

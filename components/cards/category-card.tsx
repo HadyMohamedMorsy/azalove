@@ -38,7 +38,7 @@ const CategoryCard = ({ bgColor = "#faf1ff", title }: CategoryCardProps) => {
       <h3 className="font-web text-xl mt-2">{title}</h3>
       <a
         href="#"
-        className="font-web text-base text-gray-800 mt-2 inline-block"
+        className="font-web text-base text-gray-800 mt-2 inline-block hover:text-[#fa5e5d] transition-colors"
       >
         تسوق الان
       </a>

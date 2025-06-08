@@ -29,11 +29,10 @@ function ProductGrid({
       {products?.map((product) => (
         <ProductCard
           key={product.id}
-          srcImage={product.image}
+          srcImage={product.cover}
           name={product.name}
-          author={product.author}
-          price={product.price}
-          category={product.category.name}
+          sku={product.sku}
+          categories={product.categories}
           slug={product.slug}
         />
       ))}

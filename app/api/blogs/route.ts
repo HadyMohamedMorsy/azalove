@@ -8,18 +8,22 @@ export async function GET() {
     params: {
       query: {
         select: BLOG_SELECT,
-        isPagination: false,
-        limit: 3,
-        filters: {
-          isPublished: "true",
-          isFeatured: "true",
+        isPagination: true,
+        page: 1,
+        limit: 6,
+        relations: {
+          categories: {
+            select: ["id", "name", "slug"],
+          },
+          createdBy: {
+            select: ["id", "firstName", "lastName"],
+          },
         },
       },
     },
   });
 
   return NextResponse.json(
-    response.error ? { error: response.error } : response.data,
-    { status: response.status }
+    response.error ? { error: response.error } : response.data
   );
 }

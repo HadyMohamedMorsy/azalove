@@ -8,7 +8,8 @@ const HeaderTitle = ({ title = "", titleRoute = "", route = "#" }) => {
       <h2 className="font-web text-3xl">{title}</h2>
       <Link
         href={route}
-        className="font-web text-xl flex items-center gap-3 hover:opacity-80 transition-opacity"
+        className="font-web text-xl flex items-center gap-3 
+        hover:text-[#fa5e5d] transition-opacity"
       >
         <span>{titleRoute}</span>
         <FontAwesomeIcon icon={faArrowRight} size="xs" />

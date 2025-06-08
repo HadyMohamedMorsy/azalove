@@ -1,62 +1,162 @@
-import Image from "next/image";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
+import { Category } from "@/types/category";
+import { Sku } from "@/types/product";
+import { Eye, Heart, ShoppingCart } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 
 interface ProductCardProps {
   srcImage: string;
   name: string;
-  author: string;
-  price: number;
-  category: string;
+  sku: Sku;
+  categories: Category[];
   slug: string;
 }
 
 const ProductCard = ({
   srcImage,
   name,
-  author,
-  price,
-  category,
+  sku,
+  categories,
   slug,
 }: ProductCardProps) => {
+  const domain = process.env.MAIN_DOMAIN;
+  const { toast } = useToast();
+  const [isFavorited, setIsFavorited] = useState(false);
+
+  const handleAddToCart = () => {
+    if (sku.quantity <= 0) return;
+
+    toast({
+      title: "Added to cart",
+      description: `${name} has been added to your cart.`,
+    });
+  };
+
+  const handleToggleFavorite = () => {
+    setIsFavorited(!isFavorited);
+    toast({
+      title: isFavorited ? "Removed from favorites" : "Added to favorites",
+      description: `${name} has been ${isFavorited ? "removed from" : "added to"} your favorites.`,
+    });
+  };
+
+  const handleViewProduct = () => {
+    toast({
+      title: "View product",
+      description: `Opening ${name} details...`,
+    });
+  };
+
+  const calculateDiscount = () => {
+    if (sku.discount <= 0) return { finalPrice: sku.price, discount: 0 };
+
+    let finalPrice = sku.price;
+    let discount = 0;
+
+    if (sku.discountType === "percentage") {
+      discount = sku.discount;
+      finalPrice = sku.price - sku.price * (sku.discount / 100);
+    } else if (sku.discountType === "fixed") {
+      finalPrice = sku.price - sku.discount;
+    }
+
+    return { finalPrice, discount };
+  };
+
+  const { finalPrice, discount } = calculateDiscount();
+
   return (
-    <>
-      <div className="product-box md:p-[1.5rem] p-[1rem] flex flex-col items-center justify-center border-b border-r border-[#eae8e4] relative">
-        <Image
-          src={srcImage}
-          className="object-contain"
+    <Card className="group relative overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+      {/* Product Image */}
+      <div className="relative aspect-square overflow-hidden bg-gray-100">
+        <img
+          src={`${domain}${srcImage}`}
           alt={name}
-          width={120}
-          height={200}
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
-        <div className="content bg-white pt-2">
-          <span className="text-[#f75454] text-xs uppercase">{category}</span>
-          <h2 className="font-web product__name mb-1 line-clamp-2">
-            <Link href={`/shop/${slug}`} className="hover:text-blue-500">
-              {name}
-            </Link>
-          </h2>
-          <p className="author__name text-gray-700 text-xs">{author}</p>
-          <span className="text-base font-semibold mt-3 inline-flex">
-            <span>
-              <bdi>
-                <span className="mx-2">جنيه</span>
-                {price}
-              </bdi>
-            </span>
-          </span>
-          <div className="absolute opacity-0 right-0 left-0 bottom-0 hover:opacity-100 transition-opacity">
-            <div className="flex items-center justify-between">
-              <button className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
-                أضف إلى السلة
-              </button>
-              <button className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
-                أضف إلى المفضلة
-              </button>
-            </div>
-          </div>
+
+        {/* Badges */}
+        <div className="absolute top-3 left-3 flex flex-col gap-2">
+          {sku.discount > 0 && (
+            <Badge variant="destructive" className="text-xs">
+              {sku.discountType === "percentage" ? `${discount}%` : discount}
+            </Badge>
+          )}
+          {sku.quantity <= 0 && (
+            <Badge variant="secondary" className="text-xs">
+              Out of Stock
+            </Badge>
+          )}
+        </div>
+
+        {/* Action Buttons Overlay */}
+        <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <Button
+            size="sm"
+            variant="secondary"
+            className="w-10 h-10 rounded-full p-0"
+            onClick={handleToggleFavorite}
+          >
+            <Heart
+              className={`w-4 h-4 ${isFavorited ? "fill-red-500 text-red-500" : ""}`}
+            />
+          </Button>
+          <Button
+            size="sm"
+            variant="secondary"
+            className="w-10 h-10 rounded-full p-0"
+            onClick={handleViewProduct}
+          >
+            <Eye className="w-4 h-4" />
+          </Button>
         </div>
       </div>
-    </>
+
+      <CardContent className="p-4 space-y-3">
+        {/* Categories */}
+        {categories && categories.length > 0 && (
+          <div className="flex gap-2 flex-wrap">
+            {categories.map((category, index) => (
+              <span key={index} className="text-[#f75454] text-xs uppercase">
+                {category.name}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Product Name */}
+        <h3 className="font-web mb-1 line-clamp-2">
+          <Link href={`/shop/${slug}`} className="hover:text-blue-500 text-xl">
+            {name}
+          </Link>
+        </h3>
+
+        {/* Price */}
+        <div className="flex items-center gap-2">
+          <span className="text-lg font-bold">${finalPrice.toFixed(2)}</span>
+          {sku.discount > 0 && (
+            <span className="text-sm text-muted-foreground line-through">
+              ${sku.price.toFixed(2)}
+            </span>
+          )}
+        </div>
+
+        {/* Add to Cart Button */}
+        <Button
+          onClick={handleAddToCart}
+          disabled={sku.quantity <= 0}
+          className="w-full"
+          size="sm"
+        >
+          <ShoppingCart className="w-4 h-4 mr-2" />
+          {sku.quantity > 0 ? "أضف إلى السلة" : "Out of Stock"}
+        </Button>
+      </CardContent>
+    </Card>
   );
 };
 

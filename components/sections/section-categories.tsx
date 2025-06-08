@@ -1,7 +1,7 @@
 "use client";
 
 import { API_ENDPOINTS_FROM_NEXT } from "@/config/api";
-import useFetch from "@/hooks/useFetch";
+import { useFetch } from "@/hooks/use-fetch";
 import CategoryCard from "../cards/category-card";
 import HeaderTitle from "../layout/header-title";
 import Skeleton from "../ui/skeleton";
@@ -31,6 +31,10 @@ function SectionCategories() {
     );
   }
 
+  if (!data || data.length === 0) {
+    return null;
+  }
+
   if (error) {
     return (
       <section className="container py-10 px-4">
@@ -42,6 +46,10 @@ function SectionCategories() {
         <div className="text-red-500">Error loading categories: {error}</div>
       </section>
     );
+  }
+
+  if (!data || data.length === 0) {
+    return null;
   }
 
   return (

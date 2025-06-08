@@ -1,4 +1,4 @@
-export const PRODUCT_SELECT = ["id", "name", "slug", "image"] as const;
+export const PRODUCT_SELECT = ["id", "name", "slug", "cover", "rating"] as const;
 
 export const SKU_SELECT = [
   "id",
@@ -9,6 +9,21 @@ export const SKU_SELECT = [
   "discountType",
 ] as const;
 
-export const CATEGORY_SELECT = ["id", "name", "slug", "icon" , ] as const;
+export const CATEGORY_SELECT = [
+  "id",
+  "name",
+  "slug",
+  "icon",
+] as const;
 
-export const BLOG_SELECT = ["id", "title", "slug", "image", "content"] as const;
+export const BLOG_SELECT = [
+  "id",
+  "title",
+  "subTitle",
+  "slug",
+  "views",
+  "thumb",
+  "shortDescription",
+  "isFeatured",
+  "createdAt",
+] as const;
