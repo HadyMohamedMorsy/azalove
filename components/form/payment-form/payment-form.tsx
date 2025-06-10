@@ -1,8 +1,15 @@
-import { Button } from "@heroui/button";
-import { Card, CardBody } from "@heroui/card";
-import { Input } from "@heroui/input";
-import { Radio, RadioGroup } from "@heroui/radio";
-import { Select, SelectItem } from "@heroui/select";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import React from "react";
 
 interface PaymentFormProps {
@@ -27,7 +34,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onNext, onPrevious }) => {
 
   return (
     <Card>
-      <CardBody className="pt-6">
+      <CardContent className="pt-6">
         <h2 className="text-xl font-semibold mb-4">Payment Method</h2>
 
         <form
@@ -38,31 +45,25 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onNext, onPrevious }) => {
           className="space-y-6"
         >
           <RadioGroup defaultValue="card" className="space-y-4">
-            <Radio
-              className="flex items-center space-x-2 border rounded-md p-4 hover:bg-gray-50"
-              value="Credit / Debit Card"
-              id="card"
-            />
-            <Radio
-              className="flex items-center space-x-2 border rounded-md p-4 hover:bg-gray-50"
-              value="PayPal (Coming Soon)"
-              id="paypal"
-            />
+            <div className="flex items-center space-x-2 border rounded-md p-4 hover:bg-gray-50">
+              <RadioGroupItem value="card" id="card" />
+              <Label htmlFor="card">Credit / Debit Card</Label>
+            </div>
+            <div className="flex items-center space-x-2 border rounded-md p-4 hover:bg-gray-50">
+              <RadioGroupItem value="paypal" id="paypal" />
+              <Label htmlFor="paypal">PayPal (Coming Soon)</Label>
+            </div>
           </RadioGroup>
 
           <div className="space-y-4 pt-4">
             <div className="space-y-2">
-              <Input
-                label="Name on Card"
-                id="cardName"
-                placeholder="John Doe"
-                required
-              />
+              <Label htmlFor="cardName">Name on Card</Label>
+              <Input id="cardName" placeholder="John Doe" required />
             </div>
 
             <div className="space-y-2">
+              <Label htmlFor="cardNumber">Card Number</Label>
               <Input
-                label="Card Number"
                 id="cardNumber"
                 placeholder="0000 0000 0000 0000"
                 required
@@ -72,22 +73,42 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onNext, onPrevious }) => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2 col-span-1">
                 <div className="grid grid-cols-2 gap-2">
-                  <Select required items={months} placeholder="MM">
-                    {(month) => <SelectItem>{month.label}</SelectItem>}
+                  <Select required>
+                    <SelectTrigger>
+                      <SelectValue placeholder="MM" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {months.map((month) => (
+                        <SelectItem key={month.key} value={month.key}>
+                          {month.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
                   </Select>
 
-                  <Select required items={years} placeholder="YY">
-                    {(year) => <SelectItem>{year.label}</SelectItem>}
+                  <Select required>
+                    <SelectTrigger>
+                      <SelectValue placeholder="YY" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {years.map((year) => (
+                        <SelectItem key={year.key} value={year.key}>
+                          {year.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
                   </Select>
                 </div>
               </div>
 
               <div className="space-y-2 col-span-2 md:col-span-1">
-                <Input label="CVV" id="cvv" placeholder="123" required />
+                <Label htmlFor="cvv">CVV</Label>
+                <Input id="cvv" placeholder="123" required />
               </div>
 
               <div className="space-y-2 col-span-2 md:col-span-1">
-                <Input label="ZIP" id="zip" placeholder="94103" required />
+                <Label htmlFor="zip">ZIP</Label>
+                <Input id="zip" placeholder="94103" required />
               </div>
             </div>
           </div>
@@ -95,8 +116,8 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onNext, onPrevious }) => {
           <div className="pt-4 flex justify-between">
             <Button
               type="button"
-              variant="shadow"
-              onPress={onPrevious}
+              variant="outline"
+              onClick={onPrevious}
               className="text-checkout-primary border-checkout-primary hover:bg-checkout-secondary"
             >
               Back to Shipping
@@ -109,7 +130,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onNext, onPrevious }) => {
             </Button>
           </div>
         </form>
-      </CardBody>
+      </CardContent>
     </Card>
   );
 };

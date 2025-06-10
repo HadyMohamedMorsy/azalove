@@ -33,13 +33,13 @@ function Login() {
       await login(email, password);
 
       toast({
-        title: "Login successful",
-        description: "Welcome back!",
+        title: "تم تسجيل الدخول بنجاح",
+        description: "مرحبا بك مرة أخرى!",
       });
     } catch (error) {
       toast({
-        title: "Login failed",
-        description: "Please check your credentials and try again.",
+        title: "فشل تسجيل الدخول",
+        description: "يرجى التحقق من بيانات الدخول وإعادة المحاولة.",
       });
     } finally {
       setIsLoading(false);

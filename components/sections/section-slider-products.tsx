@@ -75,6 +75,7 @@ const SectionSliderProducts = () => {
               <div className="flex items-center justify-center text-white text-2xl md:p-[2.5rem] p-[1.5rem] bg-white">
                 <ProductCard
                   srcImage={product.cover}
+                  id={Number(product.id)}
                   name={product.name}
                   sku={product.sku}
                   categories={product.categories}

@@ -1,4 +1,10 @@
-import { Select, SelectItem } from "@heroui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export const animals = [
   { key: "cat", label: "Cat" },
@@ -18,8 +24,17 @@ export const animals = [
 
 const ShowProducts = () => {
   return (
-    <Select className="w-[150px]" items={animals} placeholder="اظهار">
-      {(animal) => <SelectItem>{animal.label}</SelectItem>}
+    <Select>
+      <SelectTrigger className="w-[150px]">
+        <SelectValue placeholder="اظهار" />
+      </SelectTrigger>
+      <SelectContent>
+        {animals.map((animal) => (
+          <SelectItem key={animal.key} value={animal.key}>
+            {animal.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
     </Select>
   );
 };

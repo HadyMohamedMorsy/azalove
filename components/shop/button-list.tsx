@@ -1,21 +1,41 @@
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { faList, faTableList } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button } from "@heroui/button";
-import { Tooltip } from "@heroui/tooltip";
 
 export default function ButtonList() {
   return (
     <div className="flex gap-4 items-center">
-      <Tooltip content="List">
-        <Button isIconOnly variant="bordered">
-          <FontAwesomeIcon icon={faList} />
-        </Button>
-      </Tooltip>
-      <Tooltip content="grid">
-        <Button isIconOnly variant="bordered">
-          <FontAwesomeIcon icon={faTableList} />
-        </Button>
-      </Tooltip>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="outline" size="icon">
+              <FontAwesomeIcon icon={faList} />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>List</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="outline" size="icon">
+              <FontAwesomeIcon icon={faTableList} />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Grid</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     </div>
   );
 }
