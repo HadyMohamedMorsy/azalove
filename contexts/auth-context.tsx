@@ -1,5 +1,7 @@
 "use client";
 
+import axios from "axios";
+import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -30,20 +32,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const token = localStorage.getItem("auth_token");
         if (token) {
           // Verify token with your API
-          const response = await fetch("/api/auth/verify", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+          const response = await axios.post("/api/auth/verify", {
+            token,
           });
-          if (response.ok) {
-            const userData = await response.json();
-            setUser(userData);
-          } else {
-            localStorage.removeItem("auth_token");
-          }
+          const { user } = response.data.data;
+          setUser(user);
         }
       } catch (error) {
         console.error("Auth check failed:", error);
+        localStorage.removeItem("auth_token");
       } finally {
         setIsLoading(false);
       }
@@ -54,22 +51,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
+      const response = await axios.post("/api/auth/login", {
+        email,
+        password,
+      });
+      const { access_token, user } = response.data.data;
+      localStorage.setItem("auth_token", access_token);
+
+      Cookies.set("auth_token", access_token, {
+        expires: 7,
+        path: "/",
+        secure: process.env.NODE_ENV === "development",
+        sameSite: "strict",
       });
 
-      if (!response.ok) {
-        throw new Error("Login failed");
-      }
-
-      const { token, user } = await response.json();
-      localStorage.setItem("auth_token", token);
       setUser(user);
-      router.push("/dashboard"); // Redirect to dashboard after login
+      router.push("/dashboard");
     } catch (error) {
       console.error("Login failed:", error);
       throw error;
@@ -78,6 +75,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = () => {
     localStorage.removeItem("auth_token");
+    Cookies.remove("auth_token");
     setUser(null);
     router.push("/login");
   };

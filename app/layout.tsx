@@ -10,7 +10,6 @@ import { CartProvider } from "@/contexts/cart-context";
 import { FavoritesProvider } from "@/contexts/favorites-context";
 import { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
-import { Providers } from "./providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -44,14 +43,10 @@ export default function RootLayout({
         <AuthProvider>
           <CartProvider>
             <FavoritesProvider>
-              <Providers
-                themeProps={{ attribute: "class", defaultTheme: "light" }}
-              >
-                <Navbar />
-                {children}
-                <Footer />
-                <Toaster />
-              </Providers>
+              <Navbar />
+              {children}
+              <Footer />
+              <Toaster />
             </FavoritesProvider>
           </CartProvider>
         </AuthProvider>

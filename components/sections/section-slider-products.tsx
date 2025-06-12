@@ -1,5 +1,3 @@
-"use client";
-
 import HeaderTitle from "../layout/header-title";
 import SliderProductsList from "./slider-products-list/slider-products-list";
 

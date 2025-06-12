@@ -2,7 +2,7 @@
 import ButtonList from "@/components/shop/button-list";
 import ShowProducts from "@/components/shop/show";
 import SortProducts from "@/components/shop/sort";
-import { BreadcrumbItem, Breadcrumbs } from "@heroui/breadcrumbs";
+import Link from "next/link";
 
 export default function BlogsLayout({
   children,
@@ -12,10 +12,19 @@ export default function BlogsLayout({
   return (
     <>
       <header className="container px-6 py-4 border-t border-b border-[#eae8e4]">
-        <Breadcrumbs>
-          <BreadcrumbItem>الرئيسيه</BreadcrumbItem>
-          <BreadcrumbItem>المدونة</BreadcrumbItem>
-        </Breadcrumbs>
+        <nav className="flex" aria-label="Breadcrumb">
+          <ol className="flex items-center space-x-2">
+            <li>
+              <Link href="/" className="text-gray-500 hover:text-gray-700">
+                الرئيسيه
+              </Link>
+            </li>
+            <li className="flex items-center space-x-2">
+              <span className="text-gray-500">/</span>
+              <span className="text-gray-700">المدونة</span>
+            </li>
+          </ol>
+        </nav>
       </header>
       <section className="container py-10 px-4">
         <div className="flex justify-between items-center py-5">

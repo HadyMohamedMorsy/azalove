@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "@/config/api";
-import axios, { AxiosError, AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 
 interface ApiResponse<T> {
   data?: T;
@@ -17,23 +17,17 @@ const axiosInstance = axios.create({
 export async function apiFetch<T>(
   endpoint: string,
   options?: AxiosRequestConfig
-): Promise<ApiResponse<T>> {
+) {
   try {
     const response = await axiosInstance(endpoint, options);
     return {
       data: response.data,
       status: response.status,
     };
-  } catch (error: unknown) {
-    if (error instanceof AxiosError) {
-      return {
-        error: error.response?.data?.error || error.message,
-        status: error.response?.status || 500,
-      };
-    }
+  } catch (error: any) {
     return {
-      error: "An unexpected error occurred",
-      status: 500,
+      error: error.response?.data?.message || "An error occurred",
+      status: error.response?.status || 500,
     };
   }
 }

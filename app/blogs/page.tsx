@@ -1,12 +1,21 @@
 "use client";
 import BlogCard from "@/components/cards/blog-card";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import Skeleton from "@/components/ui/skeleton";
 import { API_ENDPOINTS_FROM_NEXT } from "@/config/api";
 import useFetch from "@/hooks/use-fetch";
 import type { Blog } from "@/types/blogs";
-import { Pagination } from "@heroui/pagination";
+import { useState } from "react";
 
 function Blog() {
+  const [currentPage, setCurrentPage] = useState(1);
   const {
     data: blogs,
     loading,
@@ -36,6 +45,8 @@ function Blog() {
     );
   }
 
+  const totalPages = Math.ceil((total || 0) / 10); // Assuming 10 items per page
+
   return (
     <>
       <div className="blogs grid md:grid-cols-3 grid-cols-1 gap-6">
@@ -45,7 +56,50 @@ function Blog() {
       </div>
       {total !== undefined && (
         <div className="mt-4 flex justify-center">
-          <Pagination initialPage={1} total={total} />
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  href="#"
+                  onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                    e.preventDefault();
+                    if (currentPage > 1) {
+                      setCurrentPage(currentPage - 1);
+                    }
+                  }}
+                />
+              </PaginationItem>
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                (page) => (
+                  <PaginationItem key={page}>
+                    <PaginationLink
+                      href="#"
+                      onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                        e.preventDefault();
+                        setCurrentPage(page);
+                      }}
+                      isActive={currentPage === page}
+                    >
+                      {page}
+                    </PaginationLink>
+                  </PaginationItem>
+                )
+              )}
+
+              <PaginationItem>
+                <PaginationNext
+                  href="#"
+                  onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                    e.preventDefault();
+                    if (currentPage < totalPages) {
+                      setCurrentPage(currentPage + 1);
+                    }
+                  }}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
         </div>
       )}
     </>
