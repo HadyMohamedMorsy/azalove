@@ -1,7 +1,7 @@
 "use client";
 
-import EmptyState from "@/components/blocks/empty-state";
 import CategoryCard from "@/components/cards/category-card";
+import SectionPlaceholder from "@/components/placeholder/section-placeholder";
 import Skeleton from "@/components/ui/skeleton";
 import { API_ENDPOINTS_FROM_NEXT } from "@/config/api";
 import { useFetch } from "@/hooks/use-fetch";
@@ -22,10 +22,9 @@ function CategoriesList() {
     return <Skeleton length={5} />;
   }
 
-
   if (error) {
     return (
-      <EmptyState
+      <SectionPlaceholder
         icon="error"
         title="Failed to load categories"
         description="Something went wrong while loading this section. Please try again or check your connection."
@@ -37,7 +36,7 @@ function CategoriesList() {
 
   if (!data || data.length === 0) {
     return (
-      <EmptyState
+      <SectionPlaceholder
         icon="package"
         title="لا يوجد منتجات"
         description="لا يوجد منتجات في هذا القسم بعد. يرجى التحقق من قسم آخر"

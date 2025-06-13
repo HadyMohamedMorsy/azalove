@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const EmptyCartState = ({
+const CardPlaceholder = ({
   title = "Your Cart",
   description = "Ready to find something amazing?",
 }: {
@@ -28,4 +28,4 @@ const EmptyCartState = ({
   );
 };
 
-export default EmptyCartState;
+export default CardPlaceholder;

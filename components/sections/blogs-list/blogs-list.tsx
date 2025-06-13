@@ -1,7 +1,7 @@
 "use client";
 
-import EmptyState from "@/components/blocks/empty-state";
 import BlogCard from "@/components/cards/blog-card";
+import SectionPlaceholder from "@/components/placeholder/section-placeholder";
 import { Skeleton } from "@/components/ui/skeleton";
 import { API_ENDPOINTS_FROM_NEXT } from "@/config/api";
 import useFetch from "@/hooks/use-fetch";
@@ -26,7 +26,7 @@ export default function BlogsList() {
 
   if (error) {
     return (
-      <EmptyState
+      <SectionPlaceholder
         icon="error"
         title="Failed to load blogs"
         description="Something went wrong while loading this section. Please try again or check your connection."
@@ -38,7 +38,7 @@ export default function BlogsList() {
 
   if (!blogs || blogs.length === 0) {
     return (
-      <EmptyState
+      <SectionPlaceholder
         icon="package"
         title="لا يوجد مقالات"
         description="لا يوجد مقالات في هذا القسم بعد. يرجى التحقق من قسم آخر"

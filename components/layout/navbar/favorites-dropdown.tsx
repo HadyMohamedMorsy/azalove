@@ -1,5 +1,5 @@
 "use client";
-import EmptyCartState from "@/components/cards/empty-cards";
+import CardPlaceholder from "@/components/placeholder/card-placeholder";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -14,6 +14,7 @@ import { Heart, Trash2 } from "lucide-react";
 export function FavoritesDropdown() {
   const { favoriteItems, getTotalFavorites, removeFromFavorites } =
     useFavorites();
+  const domain = process.env.MAIN_DOMAIN;
 
   return (
     <DropdownMenu>
@@ -36,7 +37,7 @@ export function FavoritesDropdown() {
             Favorites ({getTotalFavorites()})
           </h3>
           {favoriteItems.length === 0 ? (
-            <EmptyCartState
+            <CardPlaceholder
               title="No favorites"
               description="Start browsing to add items to your wishlist!"
             />
@@ -47,7 +48,7 @@ export function FavoritesDropdown() {
                   <CardContent className="p-3">
                     <div className="flex items-center gap-3">
                       <img
-                        src={item.image}
+                        src={`${domain}${item.image}`}
                         alt={item.name}
                         className="w-12 h-12 rounded object-cover"
                       />

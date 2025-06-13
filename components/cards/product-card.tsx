@@ -7,6 +7,7 @@ import { Category } from "@/types/category";
 import { Sku } from "@/types/product";
 import { Heart, ShoppingCart, Star } from "lucide-react";
 import Link from "next/link";
+import ImagePlaceholder from "../placeholder/image-placeholder";
 
 interface ProductCardProps {
   id: number;
@@ -40,6 +41,11 @@ const ProductCard = ({
       image: srcImage,
       quantity: 1,
     });
+
+    // Decrement SKU quantity
+    if (sku.quantity > 0) {
+      sku.quantity -= 1;
+    }
 
     toast({
       title: "Added to cart",
@@ -122,11 +128,15 @@ const ProductCard = ({
 
       {/* Product Image */}
       <div className="relative h-64 bg-gradient-to-br from-rose-100 to-pink-100 flex items-center justify-center overflow-hidden">
-        <img
-          src={`${domain}${srcImage}`}
-          alt={name}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-        />
+        {srcImage ? (
+          <img
+            src={`${domain}${srcImage}`}
+            alt={name}
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          />
+        ) : (
+          <ImagePlaceholder />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       </div>
 
@@ -154,17 +164,24 @@ const ProductCard = ({
 
         {/* Price and Action */}
         <div className="flex items-center justify-between">
-          <span className="text-xl font-bold text-rose-600">
-            ${finalPrice?.toFixed(2)}
-          </span>
+          <div className="flex flex-col">
+            <span className="text-xl font-bold text-rose-600">
+              ${finalPrice?.toFixed(2)}
+            </span>
+            {sku && (
+              <span className="text-sm text-muted-foreground">
+                Available: {sku.quantity}
+              </span>
+            )}
+          </div>
           <Button
             size="sm"
             className="bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white rounded-full px-4 transition-all duration-300 hover:scale-105"
             onClick={handleAddToCart}
-            disabled={sku && !sku?.quantity}
+            disabled={!sku || sku?.quantity <= 0}
           >
             <ShoppingCart className="w-4 h-4 mr-1" />
-            {sku && sku?.quantity ? "Add" : "Out of Stock"}
+            {sku && sku?.quantity > 0 ? "Add" : "Out of Stock"}
           </Button>
         </div>
       </div>

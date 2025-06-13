@@ -1,7 +1,7 @@
-import { Package, ShoppingBag, Search, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { AlertTriangle, Package, Search, ShoppingBag } from "lucide-react";
 
-interface EmptyStateProps {
+interface SectionPlaceholderProps {
   icon?: "package" | "shopping-bag" | "search" | "error";
   title?: string;
   description?: string;
@@ -10,14 +10,14 @@ interface EmptyStateProps {
   className?: string;
 }
 
-const EmptyState = ({
+const SectionPlaceholder = ({
   icon = "package",
   title = "No products found",
   description = "There are no products in this section yet. Check back later or explore other categories.",
   actionLabel,
   onAction,
   className = "",
-}: EmptyStateProps) => {
+}: SectionPlaceholderProps) => {
   const IconComponent = {
     package: Package,
     "shopping-bag": ShoppingBag,
@@ -56,4 +56,4 @@ const EmptyState = ({
   );
 };
 
-export default EmptyState;
+export default SectionPlaceholder;

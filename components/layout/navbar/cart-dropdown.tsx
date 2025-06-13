@@ -1,5 +1,5 @@
 "use client";
-import EmptyCartState from "@/components/cards/empty-cards";
+import CardPlaceholder from "@/components/placeholder/card-placeholder";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -21,6 +21,7 @@ export function CartDropdown() {
     getTotalPrice,
   } = useCart();
   const [isOpen, setIsOpen] = useState(false);
+  const domain = process.env.MAIN_DOMAIN;
 
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
@@ -42,7 +43,10 @@ export function CartDropdown() {
           <h3 className="font-semibold text-lg">Shopping Cart</h3>
 
           {cartItems.length === 0 ? (
-            <EmptyCartState />
+            <CardPlaceholder
+              title="No items in cart"
+              description="Start shopping to fill it up with amazing products!"
+            />
           ) : (
             <>
               <div className="max-h-96 overflow-y-auto space-y-3">
@@ -51,7 +55,7 @@ export function CartDropdown() {
                     <CardContent className="p-3">
                       <div className="flex items-center space-x-3">
                         <img
-                          src={item.image}
+                          src={`${domain}${item.image}`}
                           alt={item.name}
                           className="w-12 h-12 object-cover rounded"
                         />

@@ -1,3 +1,4 @@
+import ImagePlaceholder from "@/components/placeholder/image-placeholder";
 import { Calendar } from "lucide-react";
 import React from "react";
 
@@ -25,11 +26,15 @@ const BlogCard: React.FC<BlogCardProps> = ({
     >
       {thumb && (
         <div className="w-full h-48 overflow-hidden">
-          <img
-            src={`${domain}${thumb}`}
-            alt={title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-          />
+          {thumb ? (
+            <img
+              src={`${domain}${thumb}`}
+              alt={title}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+          ) : (
+            <ImagePlaceholder />
+          )}
         </div>
       )}
 

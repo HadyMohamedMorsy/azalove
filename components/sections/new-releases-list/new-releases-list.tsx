@@ -1,6 +1,6 @@
 "use client";
 
-import EmptyState from "@/components/blocks/empty-state";
+import SectionPlaceholder from "@/components/placeholder/section-placeholder";
 import ProductGrid from "@/components/products/product-grid";
 import Skeleton from "@/components/ui/skeleton";
 import { API_ENDPOINTS_FROM_NEXT } from "@/config/api";
@@ -20,7 +20,7 @@ export default function NewReleasesList() {
 
   if (error) {
     return (
-      <EmptyState
+      <SectionPlaceholder
         icon="error"
         title="Failed to load products"
         description="Something went wrong while loading this section. Please try again or check your connection."
@@ -32,7 +32,7 @@ export default function NewReleasesList() {
 
   if (!products || products.length === 0) {
     return (
-      <EmptyState
+      <SectionPlaceholder
         icon="package"
         title="لا يوجد منتجات"
         description="لا يوجد منتجات في هذا القسم بعد. يرجى التحقق من قسم آخر"

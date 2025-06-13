@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { Calendar, Eye, User } from "lucide-react";
+import ImagePlaceholder from "../placeholder/image-placeholder";
 
 const BlogCard = ({ blog }: BlogCardProps) => {
   const { toast } = useToast();
@@ -38,11 +39,15 @@ const BlogCard = ({ blog }: BlogCardProps) => {
     <Card className="group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
       {/* Blog Image */}
       <div className="relative aspect-video overflow-hidden bg-gray-100">
-        <img
-          src={`${domain}${image}`}
-          alt={title}
-          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-        />
+        {image ? (
+          <img
+            src={`${domain}${image}`}
+            alt={title}
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+        ) : (
+          <ImagePlaceholder />
+        )}
 
         {/* Category Badge */}
         <div className="absolute top-4 left-4">
