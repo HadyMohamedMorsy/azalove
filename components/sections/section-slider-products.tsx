@@ -5,7 +5,7 @@ const SectionSliderProducts = () => {
   return (
     <div className="bg-[#fff6f6]">
       <section className="container py-10 relative px-4">
-        <HeaderTitle title="عروض" titleRoute="كل المنتجات" route="#" />
+        <HeaderTitle title="عروض" />
         <SliderProductsList />
       </section>
     </div>

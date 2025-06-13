@@ -8,6 +8,7 @@ import { Product } from "@/types/product";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
+import EmptyState from "@/components/blocks/empty-state";
 import "swiper/css";
 import "swiper/css/autoplay";
 import "swiper/css/navigation";
@@ -25,11 +26,27 @@ export default function SliderProductsList() {
   }
 
   if (error) {
-    return <div className="text-red-500">Error loading products: {error}</div>;
+    return (
+      <EmptyState
+        icon="error"
+        title="Failed to load products"
+        description="Something went wrong while loading this section. Please try again or check your connection."
+        actionLabel="Retry"
+        onAction={() => {}}
+      />
+    );
   }
 
   if (!products || products.length === 0) {
-    return null;
+    return (
+      <EmptyState
+        icon="package"
+        title="لا يوجد منتجات"
+        description="لا يوجد منتجات في هذا القسم بعد. "
+        actionLabel="التحقق من قسم آخر"
+        onAction={() => {}}
+      />
+    );
   }
 
   return (

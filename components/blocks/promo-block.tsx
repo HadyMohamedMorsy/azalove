@@ -38,10 +38,7 @@ const PromoBlock = ({
             {description}
           </span>
 
-          <button
-            className="btn text-white bg-[#fa5e5d] capitalize mt-4 w-[120px]"
-            onClick={() => (window.location.href = buttonLink)}
-          >
+          <button className="btn text-white bg-[#fa5e5d] capitalize mt-4 w-[120px]">
             {buttonText}
           </button>
         </div>

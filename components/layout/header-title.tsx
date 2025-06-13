@@ -1,19 +1,18 @@
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Link from "next/link"; // Import Next.js Link for client-side navigation
+import { Heart } from "lucide-react";
 
-const HeaderTitle = ({ title = "", titleRoute = "", route = "#" }) => {
+const HeaderTitle = ({ title = "", description = "" }) => {
   return (
-    <div className="flex justify-between items-center mb-4">
-      <h2 className="font-web text-3xl">{title}</h2>
-      <Link
-        href={route}
-        className="font-web text-xl flex items-center gap-3 
-        hover:text-[#fa5e5d] transition-opacity"
-      >
-        <span>{titleRoute}</span>
-        <FontAwesomeIcon icon={faArrowRight} size="xs" />
-      </Link>
+    <div className="text-center mb-4 animate-fade-in">
+      <div className="flex justify-center items-center gap-3 mb-4">
+        <Heart className="w-8 h-8 text-rose-500 animate-pulse" />
+        <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 bg-clip-text text-transparent">
+          {title}
+        </h2>
+        <Heart className="w-8 h-8 text-pink-500 animate-pulse" />
+      </div>
+      <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+        {description}
+      </p>
     </div>
   );
 };

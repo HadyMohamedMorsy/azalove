@@ -1,5 +1,6 @@
 "use client";
 
+import EmptyState from "@/components/blocks/empty-state";
 import BlogCard from "@/components/cards/blog-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { API_ENDPOINTS_FROM_NEXT } from "@/config/api";
@@ -23,13 +24,27 @@ export default function BlogsList() {
     );
   }
 
-  if (!blogs || blogs.length === 0) {
-    return null;
-  }
-
   if (error) {
     return (
-      <div className="text-center text-red-500">حدث خطأ في تحميل المقالات</div>
+      <EmptyState
+        icon="error"
+        title="Failed to load blogs"
+        description="Something went wrong while loading this section. Please try again or check your connection."
+        actionLabel="Retry"
+        onAction={() => {}}
+      />
+    );
+  }
+
+  if (!blogs || blogs.length === 0) {
+    return (
+      <EmptyState
+        icon="package"
+        title="لا يوجد مقالات"
+        description="لا يوجد مقالات في هذا القسم بعد. يرجى التحقق من قسم آخر"
+        actionLabel="التحقق من قسم آخر"
+        onAction={() => {}}
+      />
     );
   }
 

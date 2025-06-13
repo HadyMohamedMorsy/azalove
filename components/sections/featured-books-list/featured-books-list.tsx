@@ -1,5 +1,6 @@
 "use client";
 
+import EmptyState from "@/components/blocks/empty-state";
 import ProductGrid from "@/components/products/product-grid";
 import Skeleton from "@/components/ui/skeleton";
 import { API_ENDPOINTS_FROM_NEXT } from "@/config/api";
@@ -23,14 +24,26 @@ export default function FeaturedBooksList() {
 
   if (error) {
     return (
-      <div className="border-t border-l border-[#eae8e4]">
-        <div className="text-red-500">Error loading products: {error}</div>
-      </div>
+      <EmptyState
+        icon="error"
+        title="Failed to load products"
+        description="Something went wrong while loading this section. Please try again or check your connection."
+        actionLabel="Retry"
+        onAction={() => {}}
+      />
     );
   }
 
   if (!products || products.length === 0) {
-    return null;
+    return (
+      <EmptyState
+        icon="package"
+        title="لا يوجد منتجات"
+        description="لا يوجد منتجات في هذا القسم بعد. يرجى التحقق من قسم آخر"
+        actionLabel="التحقق من قسم آخر"
+        onAction={() => {}}
+      />
+    );
   }
 
   return (
