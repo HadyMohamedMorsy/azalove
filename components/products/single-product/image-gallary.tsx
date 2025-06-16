@@ -1,4 +1,6 @@
+import ImagePlaceholder from "@/components/placeholder/image-placeholder";
 import { Card } from "@/components/ui/card";
+import Image from "next/image";
 import { useState } from "react";
 
 interface ImageGalleryProps {
@@ -13,11 +15,17 @@ const ImageGallery = ({ images }: ImageGalleryProps) => {
       {/* Main Image */}
       <Card className="overflow-hidden">
         <div className="aspect-square bg-gray-50 flex items-center justify-center">
-          <img
-            src={`${domain}${images[selectedImage]}`}
-            alt="Product"
-            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-          />
+          {images[selectedImage] ? (
+            <Image
+              src={`${domain}${images[selectedImage]}`}
+              alt="Product"
+              className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+              width={100}
+              height={100}
+            />
+          ) : (
+            <ImagePlaceholder />
+          )}
         </div>
       </Card>
 
@@ -36,8 +44,10 @@ const ImageGallery = ({ images }: ImageGalleryProps) => {
               onClick={() => setSelectedImage(index)}
             >
               <div className="aspect-square bg-gray-50">
-                <img
+                <Image
                   src={`${domain}${image}`}
+                  width={100}
+                  height={100}
                   alt={`Product ${index + 1}`}
                   className="w-full h-full object-cover"
                 />

@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useFavorites } from "@/contexts/favorites-context";
 import { Heart, Trash2 } from "lucide-react";
+import Image from "next/image";
 
 export function FavoritesDropdown() {
   const { favoriteItems, getTotalFavorites, removeFromFavorites } =
@@ -47,9 +48,11 @@ export function FavoritesDropdown() {
                 <Card key={`${item.id}-${item.selectedColor}`} className="p-0">
                   <CardContent className="p-3">
                     <div className="flex items-center gap-3">
-                      <img
+                      <Image
                         src={`${domain}${item.image}`}
                         alt={item.name}
+                        width={100}
+                        height={100}
                         className="w-12 h-12 rounded object-cover"
                       />
                       <div className="flex-1 min-w-0">
@@ -61,7 +64,12 @@ export function FavoritesDropdown() {
                             Color: {item.selectedColor}
                           </p>
                         )}
-                        <p className="text-sm font-semibold">${item.price}</p>
+                        <p className="text-xl font-bold text-rose-600">
+                          ${item.finalPrice?.toFixed(2)}
+                        </p>
+                        <p className="text-sm text-muted-foreground line-through">
+                          ${item.price?.toFixed(2)}
+                        </p>
                       </div>
                       <Button
                         variant="ghost"

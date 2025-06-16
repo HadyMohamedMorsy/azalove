@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ShoppingCart, Plus, Minus, Trash2, CreditCard } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import Image from "next/image";
 
 const CartItems = () => {
   const { toast } = useToast();
@@ -106,9 +107,11 @@ const CartItems = () => {
                     className="flex gap-4 p-4 border rounded-lg"
                   >
                     <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center">
-                      <img
+                      <Image
                         src={item.image}
                         alt={item.name}
+                        width={100}
+                        height={100}
                         className="w-16 h-16 object-cover rounded"
                       />
                     </div>

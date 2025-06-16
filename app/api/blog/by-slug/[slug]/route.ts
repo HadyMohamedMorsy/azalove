@@ -6,11 +6,7 @@ export async function GET(
   { params }: { params: { slug: string } }
 ) {
   try {
-    const response = await apiFetch(`/blog/by-slug`, {
-      params: {
-        slug: params.slug,
-      },
-    });
+    const response = await apiFetch(`/blog/by-slug/${params.slug}`);
 
     if (response.error) {
       return NextResponse.json(

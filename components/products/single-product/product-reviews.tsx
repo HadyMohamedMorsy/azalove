@@ -1,65 +1,79 @@
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Star, ThumbsUp, ThumbsDown } from "lucide-react";
+import { Star } from "lucide-react";
+import { useState } from "react";
 
-const reviews = [
-  {
-    id: 1,
-    author: "Sarah Johnson",
-    avatar:
-      "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=40&h=40&fit=crop&crop=face",
-    rating: 5,
-    date: "2 weeks ago",
-    title: "Excellent sound quality!",
-    content:
-      "These headphones exceeded my expectations. The noise cancellation is fantastic and the battery life is exactly as advertised. Highly recommend!",
-    helpful: 24,
-    notHelpful: 2,
-    verified: true,
-  },
-  {
-    id: 2,
-    author: "Mike Chen",
-    avatar:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face",
-    rating: 4,
-    date: "1 month ago",
-    title: "Great value for money",
-    content:
-      "Really impressed with the build quality and comfort. The only minor issue is that they can get a bit warm during long listening sessions.",
-    helpful: 18,
-    notHelpful: 1,
-    verified: true,
-  },
-  {
-    id: 3,
-    author: "Emily Rodriguez",
-    avatar:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face",
-    rating: 5,
-    date: "1 month ago",
-    title: "Perfect for work from home",
-    content:
-      "The noise cancellation makes video calls so much clearer. My colleagues have commented on how clear my voice sounds too. Perfect for remote work!",
-    helpful: 31,
-    notHelpful: 0,
-    verified: true,
-  },
-];
+interface Review {
+  id?: number | null;
+  comment: string | null;
+  rate: number | null;
+  is_approved: number;
+  createdBy: {
+    firstName: string;
+    lastName: string;
+    id: number;
+  };
+}
 
-const ratingDistribution = [
-  { stars: 5, count: 847, percentage: 68 },
-  { stars: 4, count: 250, percentage: 20 },
-  { stars: 3, count: 100, percentage: 8 },
-  { stars: 2, count: 30, percentage: 2 },
-  { stars: 1, count: 20, percentage: 2 },
-];
+interface ProductReviewsProps {
+  reviews: Review[];
+}
 
-const ProductReviews = () => {
+const ProductReviews = ({ reviews }: ProductReviewsProps) => {
   const [sortBy, setSortBy] = useState("helpful");
+
+  const getInitials = (firstName: string, lastName: string) => {
+    return `${firstName[0]}${lastName[0]}`;
+  };
+
+  const sortReviews = (reviews: Review[]) => {
+    switch (sortBy) {
+      case "high":
+        return [...reviews].sort((a, b) => (b.rate || 0) - (a.rate || 0));
+      case "low":
+        return [...reviews].sort((a, b) => (a.rate || 0) - (b.rate || 0));
+      default:
+        return reviews;
+    }
+  };
+
+  const calculateRatingDistribution = (reviews: Review[]) => {
+    const distribution = [
+      { stars: 5, count: 0, percentage: 0 },
+      { stars: 4, count: 0, percentage: 0 },
+      { stars: 3, count: 0, percentage: 0 },
+      { stars: 2, count: 0, percentage: 0 },
+      { stars: 1, count: 0, percentage: 0 },
+    ];
+
+    reviews.forEach((review) => {
+      if (review.rate) {
+        const index = 5 - review.rate;
+        distribution[index].count++;
+      }
+    });
+
+    const total = reviews.length;
+    distribution.forEach((item) => {
+      item.percentage = Math.round((item.count / total) * 100);
+    });
+
+    return distribution;
+  };
+
+  const getAverageRating = (reviews: Review[]) => {
+    const total = reviews.reduce(
+      (sum, review) => sum + Number(review.rate || 0),
+      0
+    );
+    return (total / reviews.length).toFixed(1);
+  };
+
+  const ratingDistribution = calculateRatingDistribution(reviews);
+  const averageRating = getAverageRating(reviews);
+  const sortedReviews = sortReviews(reviews);
 
   return (
     <div className="space-y-8">
@@ -71,7 +85,7 @@ const ProductReviews = () => {
         <CardContent>
           <div className="grid md:grid-cols-2 gap-8">
             <div className="text-center">
-              <div className="text-4xl font-bold mb-2">4.8</div>
+              <div className="text-4xl font-bold mb-2">{averageRating}</div>
               <div className="flex justify-center mb-2">
                 {[...Array(5)].map((_, i) => (
                   <Star
@@ -80,7 +94,9 @@ const ProductReviews = () => {
                   />
                 ))}
               </div>
-              <p className="text-muted-foreground">Based on 1,247 reviews</p>
+              <p className="text-muted-foreground">
+                Based on {reviews.length} reviews
+              </p>
             </div>
             <div className="space-y-2">
               {ratingDistribution.map((item) => (
@@ -108,28 +124,34 @@ const ProductReviews = () => {
           onChange={(e) => setSortBy(e.target.value)}
           className="border rounded-md px-3 py-1 text-sm"
         >
-          <option value="helpful">Most Helpful</option>
-          <option value="recent">Most Recent</option>
-          <option value="rating">Highest Rating</option>
+          <option value="high">Highest Rating</option>
+          <option value="low">Lowest Rating</option>
         </select>
       </div>
 
       {/* Review List */}
       <div className="space-y-6">
-        {reviews.map((review) => (
+        {sortedReviews.map((review) => (
           <Card key={review.id}>
             <CardContent className="p-6">
               <div className="flex gap-4">
                 <Avatar>
-                  <AvatarImage src={review.avatar} />
-                  <AvatarFallback>{review.author[0]}</AvatarFallback>
+                  <AvatarFallback>
+                    {getInitials(
+                      review.createdBy.firstName,
+                      review.createdBy.lastName
+                    )}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="flex-1 space-y-3">
                   <div className="flex items-center justify-between">
                     <div>
                       <div className="flex items-center gap-2">
-                        <h4 className="font-medium">{review.author}</h4>
-                        {review.verified && (
+                        <h4 className="font-medium">
+                          {review.createdBy.firstName}{" "}
+                          {review.createdBy.lastName}
+                        </h4>
+                        {review.is_approved === 1 && (
                           <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
                             Verified Purchase
                           </span>
@@ -141,37 +163,18 @@ const ProductReviews = () => {
                             <Star
                               key={i}
                               className={`w-4 h-4 ${
-                                i < review.rating
+                                i < (review.rate || 0)
                                   ? "fill-yellow-400 text-yellow-400"
                                   : "text-gray-300"
                               }`}
                             />
                           ))}
                         </div>
-                        <span className="text-sm text-muted-foreground">
-                          {review.date}
-                        </span>
                       </div>
                     </div>
                   </div>
                   <div>
-                    <h5 className="font-medium mb-2">{review.title}</h5>
-                    <p className="text-muted-foreground">{review.content}</p>
-                  </div>
-                  <div className="flex items-center gap-4 pt-2">
-                    <span className="text-sm text-muted-foreground">
-                      Was this helpful?
-                    </span>
-                    <div className="flex items-center gap-2">
-                      <Button variant="outline" size="sm" className="h-8">
-                        <ThumbsUp className="w-3 h-3 mr-1" />
-                        {review.helpful}
-                      </Button>
-                      <Button variant="outline" size="sm" className="h-8">
-                        <ThumbsDown className="w-3 h-3 mr-1" />
-                        {review.notHelpful}
-                      </Button>
-                    </div>
+                    <p className="text-muted-foreground">{review.comment}</p>
                   </div>
                 </div>
               </div>

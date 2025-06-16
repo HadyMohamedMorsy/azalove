@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCart } from "@/contexts/cart-context";
+import { useFavorites } from "@/contexts/favorites-context";
 import { useFetch } from "@/hooks/use-fetch";
 import { useToast } from "@/hooks/use-toast";
 import { Product, productBySlug } from "@/types/product";
@@ -30,8 +31,14 @@ const ProductView = () => {
   );
   const [quantity, setQuantity] = useState(1);
   const [isFavorited, setIsFavorited] = useState(false);
-  const { addToCart } = useCart();
+  const { addToCart, getItemQuantity } = useCart();
   const { toast } = useToast();
+  const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
+
+  const getAvailableQuantity = () => {
+    if (!product.sku?.quantity) return 0;
+    return product.sku.quantity - getItemQuantity(product.id.toString());
+  };
 
   if (loading) {
     return <div className="max-w-7xl mx-auto px-4 py-8">Loading...</div>;
@@ -50,9 +57,40 @@ const ProductView = () => {
     ? Math.round((Number(product.sku.discount) / product.sku.price) * 100)
     : 0;
 
+  const calculateDiscount = () => {
+    if (!product.sku?.discount) {
+      return { finalPrice: product.sku?.price ?? 0 };
+    }
+
+    const { price, discount, discountType } = product.sku;
+    const discountAmount =
+      discountType === "percentage"
+        ? (Number(price) * Number(discount)) / 100
+        : Number(discount);
+
+    return {
+      finalPrice: Number(price) - Number(discountAmount),
+    };
+  };
+
+  const { finalPrice } = calculateDiscount();
+
   const handleAddToCart = () => {
+    if (!product.sku?.quantity) return;
+
+    const availableQuantity = getAvailableQuantity();
+    if (availableQuantity <= 0) {
+      toast({
+        title: "Cannot add more",
+        description: `You've reached the maximum available quantity for ${name}.`,
+      });
+      return;
+    }
+
     addToCart({
       id: product.id.toString(),
+      finalPrice: finalPrice ?? product.sku?.price,
+      skuQuantity: product.sku?.quantity,
       name: product.name,
       price: product.sku?.price,
       image: product.images?.[0] ?? "",
@@ -63,6 +101,30 @@ const ProductView = () => {
       title: "Added to cart",
       description: `${product.name} has been added to your cart.`,
     });
+  };
+
+  const handleToggleFavorite = () => {
+    const isItemFavorite = isFavorite(product.id);
+
+    if (isItemFavorite) {
+      removeFromFavorites(product.id);
+      toast({
+        title: "Removed from favorites",
+        description: `${name} has been removed from your favorites.`,
+      });
+    } else {
+      addToFavorites({
+        id: product.id,
+        name: product.name,
+        price: product.sku?.price ?? 0,
+        finalPrice: finalPrice ?? product.sku?.price ?? 0,
+        image: product.images?.[0] ?? "",
+      });
+      toast({
+        title: "Added to favorites",
+        description: `${name} has been added to your favorites.`,
+      });
+    }
   };
 
   return (
@@ -86,12 +148,22 @@ const ProductView = () => {
             <div className="flex items-center gap-2 mb-2">
               <Badge
                 variant="secondary"
-                className="bg-green-100 text-green-700"
+                className={`${
+                  quantity >= product.sku?.quantity
+                    ? "bg-red-100 text-red-700"
+                    : "bg-green-100 text-green-700"
+                }`}
               >
-                {product.sku?.quantity > 0 ? "In Stock" : "Out of Stock"}
+                {quantity >= product.sku?.quantity
+                  ? "Out of Stock"
+                  : "In Stock"}
               </Badge>
               {discount > 0 && (
-                <Badge variant="destructive">{discount}% OFF</Badge>
+                <Badge variant="destructive">
+                  {product.sku?.discountType === "percentage"
+                    ? `${product.sku?.discount}% OFF`
+                    : `$${product.sku?.discount} OFF`}
+                </Badge>
               )}
             </div>
             <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
@@ -113,57 +185,19 @@ const ProductView = () => {
 
           {/* Price */}
           <div className="flex items-center gap-3">
-            <span className="text-3xl font-bold">${product.sku?.price}</span>
+            <span className="text-3xl font-bold">
+              ${finalPrice?.toFixed(2)}
+            </span>
             {product.sku?.discount && (
               <span className="text-xl text-muted-foreground line-through">
-                ${Number(product.sku.price) + Number(product.sku.discount)}
+                ${product.sku?.price}
               </span>
             )}
           </div>
 
-          {/* Description */}
           <p className="text-muted-foreground leading-relaxed">
             {product.description}
           </p>
-
-          {/* Features */}
-          {/* <div>
-            <h3 className="font-semibold mb-3">Key Features</h3>
-            <ul className="space-y-2">
-              {product.features.map((feature, index) => (
-                <li key={index} className="flex items-center gap-2 text-sm">
-                  <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                  {feature}
-                </li>
-              ))}
-            </ul>
-          </div> */}
-
-          {/* Color Selection */}
-          {/* <div>
-            <h3 className="font-semibold mb-3">Color: {selectedColor}</h3>
-            <div className="flex gap-3">
-              {product.colors.map((color) => (
-                <button
-                  key={color}
-                  onClick={() => setSelectedColor(color)}
-                  className={`w-8 h-8 rounded-full border-2 ${
-                    selectedColor === color
-                      ? "border-primary"
-                      : "border-gray-300"
-                  } ${
-                    color === "Black"
-                      ? "bg-black"
-                      : color === "White"
-                        ? "bg-white"
-                        : color === "Blue"
-                          ? "bg-blue-500"
-                          : "bg-pink-400"
-                  }`}
-                />
-              ))}
-            </div>
-          </div> */}
 
           {/* Quantity and Actions */}
           <div className="space-y-4">
@@ -177,15 +211,23 @@ const ProductView = () => {
                 </button>
                 <span className="px-4 py-2 border-x">{quantity}</span>
                 <button
+                  disabled={quantity >= product.sku?.quantity}
                   onClick={() => setQuantity(quantity + 1)}
                   className="px-3 py-2 hover:bg-gray-100"
                 >
                   +
                 </button>
               </div>
-              <Button size="lg" className="flex-1" onClick={handleAddToCart}>
+              <Button
+                disabled={quantity >= product.sku?.quantity}
+                size="lg"
+                className="flex-1"
+                onClick={handleAddToCart}
+              >
                 <ShoppingCart className="w-4 h-4 mr-2" />
-                Add to Cart
+                {quantity >= product.sku?.quantity
+                  ? "Out of Stock"
+                  : "Add to Cart"}
               </Button>
               <Button
                 variant="outline"
@@ -244,44 +286,20 @@ const ProductView = () => {
 
       {/* Product Details Tabs */}
       <Tabs defaultValue="reviews" className="mb-16">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="reviews">Reviews</TabsTrigger>
           <TabsTrigger value="specifications">Specifications</TabsTrigger>
-          <TabsTrigger value="shipping">Shipping & Returns</TabsTrigger>
+          {/* <TabsTrigger value="shipping">Shipping & Returns</TabsTrigger> */}
         </TabsList>
         <TabsContent value="reviews" className="mt-8">
-          <ProductReviews />
+          <ProductReviews reviews={product.reviews} />
         </TabsContent>
         <TabsContent value="specifications" className="mt-8">
-          <ProductSpecs />
+          <ProductSpecs specifications={product.specifications} />
         </TabsContent>
-        <TabsContent value="shipping" className="mt-8">
-          <Card>
-            <CardContent className="p-6">
-              <h3 className="font-semibold mb-4">Shipping Information</h3>
-              <div className="space-y-4 text-sm">
-                <div>
-                  <h4 className="font-medium">Standard Shipping</h4>
-                  <p className="text-muted-foreground">
-                    5-7 business days - Free on orders over $50
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-medium">Express Shipping</h4>
-                  <p className="text-muted-foreground">
-                    2-3 business days - $9.99
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-medium">Returns</h4>
-                  <p className="text-muted-foreground">
-                    30-day return policy. Items must be in original condition.
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+        {/* <TabsContent value="shipping" className="mt-8">
+          <ShippingInfo />
+        </TabsContent> */}
       </Tabs>
 
       {relatedProducts && relatedProducts.length > 0 && (

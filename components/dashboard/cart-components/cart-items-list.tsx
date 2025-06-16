@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 import { useState } from "react";
+import Image from "next/image";
 
 export type CartItem = {
   id: number;
@@ -90,9 +91,11 @@ export default function CartItemsList({ onCartChange }: CartItemsListProps) {
       {cartItems.map((item) => (
         <div key={item.id} className="flex gap-4 p-4 border rounded-lg">
           <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center">
-            <img
+            <Image
               src={item.image}
               alt={item.name}
+              width={100}
+              height={100}
               className="w-16 h-16 object-cover rounded"
             />
           </div>

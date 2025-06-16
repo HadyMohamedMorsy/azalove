@@ -6,10 +6,12 @@ interface CartItem {
   id: string;
   name: string;
   price: number;
+  finalPrice: number;
   quantity: number;
   image: string;
   selectedColor?: string;
   selectedSize?: string;
+  skuQuantity: number;
 }
 
 interface CartContextType {
@@ -20,6 +22,7 @@ interface CartContextType {
   clearCart: () => void;
   getTotalItems: () => number;
   getTotalPrice: () => number;
+  getItemQuantity: (id: string) => number;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -40,19 +43,28 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem("cart", JSON.stringify(cartItems));
   }, [cartItems]);
 
+  const getItemQuantity = (id: string) => {
+    const item = cartItems.find((item) => item.id === id);
+    return item?.quantity || 0;
+  };
+
   const addToCart = (item: CartItem) => {
     setCartItems((prevItems) => {
-      const existingItem = prevItems.find(
-        (i) =>
-          i.id === item.id
-      );
+      const existingItem = prevItems.find((i) => i.id === item.id);
 
       if (existingItem) {
+        // Don't add if it would exceed SKU quantity
+        if (existingItem.quantity + item.quantity > existingItem.skuQuantity) {
+          return prevItems;
+        }
         return prevItems.map((i) =>
-          i.id === item.id
-            ? { ...i, quantity: i.quantity + item.quantity }
-            : i
+          i.id === item.id ? { ...i, quantity: i.quantity + item.quantity } : i
         );
+      }
+
+      // Don't add if initial quantity exceeds SKU quantity
+      if (item.quantity > item.skuQuantity) {
+        return prevItems;
       }
 
       return [...prevItems, item];
@@ -65,9 +77,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const updateQuantity = (id: string, quantity: number) => {
     if (quantity < 1) return;
-    setCartItems((prevItems) =>
-      prevItems.map((item) => (item.id === id ? { ...item, quantity } : item))
-    );
+
+    setCartItems((prevItems) => {
+      const item = prevItems.find((i) => i.id === id);
+      if (!item || quantity > item.skuQuantity) return prevItems;
+
+      return prevItems.map((item) =>
+        item.id === id ? { ...item, quantity } : item
+      );
+    });
   };
 
   const clearCart = () => {
@@ -80,7 +98,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const getTotalPrice = () => {
     return cartItems.reduce(
-      (total, item) => total + item.price * item.quantity,
+      (total, item) => total + item.finalPrice * item.quantity,
       0
     );
   };
@@ -95,6 +113,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         clearCart,
         getTotalItems,
         getTotalPrice,
+        getItemQuantity,
       }}
     >
       {children}

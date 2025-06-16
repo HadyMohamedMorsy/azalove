@@ -5,7 +5,8 @@ import { useFavorites } from "@/contexts/favorites-context";
 import { useToast } from "@/hooks/use-toast";
 import { Category } from "@/types/category";
 import { Sku } from "@/types/product";
-import { Heart, ShoppingCart, Star } from "lucide-react";
+import { BookOpen, Heart, Star } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import ImagePlaceholder from "../placeholder/image-placeholder";
 
@@ -28,24 +29,54 @@ const ProductCard = ({
 }: ProductCardProps) => {
   const domain = process.env.MAIN_DOMAIN;
   const { toast } = useToast();
-  const { addToCart } = useCart();
+  const { addToCart, getItemQuantity } = useCart();
   const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
 
+  const getAvailableQuantity = () => {
+    if (!sku?.quantity) return 0;
+    return sku.quantity - getItemQuantity(id.toString());
+  };
+
+  const calculateDiscount = () => {
+    if (!sku?.discount) {
+      return { finalPrice: sku?.price ?? 0 };
+    }
+
+    const { price, discount, discountType } = sku;
+    const discountAmount =
+      discountType === "percentage" ? (price * discount) / 100 : discount;
+
+    return {
+      finalPrice: price - discountAmount,
+      discountAmount,
+      originalPrice: price,
+    };
+  };
+
+  const { finalPrice, discountAmount, originalPrice } = calculateDiscount();
+  const availableQuantity = getAvailableQuantity();
+
   const handleAddToCart = () => {
-    if (!sku || !sku?.quantity) return;
+    if (!sku?.quantity) return;
+
+    const availableQuantity = getAvailableQuantity();
+    if (availableQuantity <= 0) {
+      toast({
+        title: "Cannot add more",
+        description: `You've reached the maximum available quantity for ${name}.`,
+      });
+      return;
+    }
 
     addToCart({
       id: id.toString(),
       name: name,
       price: sku?.price ?? 0,
+      finalPrice: finalPrice ?? sku?.price ?? 0,
       image: srcImage,
       quantity: 1,
+      skuQuantity: sku.quantity,
     });
-
-    // Decrement SKU quantity
-    if (sku.quantity > 0) {
-      sku.quantity -= 1;
-    }
 
     toast({
       title: "Added to cart",
@@ -67,6 +98,7 @@ const ProductCard = ({
         id,
         name,
         price: sku?.price ?? 0,
+        finalPrice: finalPrice ?? sku?.price ?? 0,
         image: srcImage,
       });
       toast({
@@ -76,33 +108,11 @@ const ProductCard = ({
     }
   };
 
-  const handleViewProduct = () => {
-    toast({
-      title: "View product",
-      description: `Opening ${name} details...`,
-    });
-  };
-
-  const calculateDiscount = () => {
-    if (!sku || !sku.discount)
-      return { finalPrice: sku?.price ?? 0, discount: 0 };
-
-    const { price, discount, discountType } = sku;
-    const finalPrice =
-      discountType === "percentage"
-        ? price - (price * discount) / 100
-        : price - discount;
-
-    return { finalPrice };
-  };
-
-  const { finalPrice } = calculateDiscount();
-
   return (
     <Card className="group relative overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-105 animate-fade-in bg-gradient-to-br from-white to-rose-50/30">
       {/* Product badges */}
       <div className="absolute top-3 left-3 z-10 flex flex-col gap-1">
-        {sku && +sku?.discount && (
+        {sku && discountAmount && (
           <span className="px-2 py-1 bg-gradient-to-r from-rose-500 to-pink-500 text-white text-xs font-semibold rounded-full">
             {sku?.discountType === "percentage"
               ? `${sku?.discount}% OFF`
@@ -129,8 +139,10 @@ const ProductCard = ({
       {/* Product Image */}
       <div className="relative h-64 bg-gradient-to-br from-rose-100 to-pink-100 flex items-center justify-center overflow-hidden">
         {srcImage ? (
-          <img
+          <Image
             src={`${domain}${srcImage}`}
+            width={100}
+            height={100}
             alt={name}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
           />
@@ -143,7 +155,7 @@ const ProductCard = ({
       {/* Product Info */}
       <div className="p-6">
         <h3 className="font-bold text-lg text-foreground mb-1 group-hover:text-rose-600 transition-colors duration-300">
-          <Link href={`/shop/${slug}`}>{name}</Link>
+          <Link href={`/product/${slug}`}>{name}</Link>
         </h3>
         {categories && categories.length > 0 && (
           <p className="text-muted-foreground text-sm mb-3">
@@ -165,12 +177,18 @@ const ProductCard = ({
         {/* Price and Action */}
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
-            <span className="text-xl font-bold text-rose-600">
-              ${finalPrice?.toFixed(2)}
-            </span>
-            {sku && (
-              <span className="text-sm text-muted-foreground">
-                Available: {sku.quantity}
+            {discountAmount ? (
+              <>
+                <span className="text-xl font-bold text-rose-600">
+                  ${finalPrice?.toFixed(2)}
+                </span>
+                <span className="text-sm text-muted-foreground line-through">
+                  ${originalPrice?.toFixed(2)}
+                </span>
+              </>
+            ) : (
+              <span className="text-xl font-bold text-rose-600">
+                ${finalPrice?.toFixed(2)}
               </span>
             )}
           </div>
@@ -178,10 +196,10 @@ const ProductCard = ({
             size="sm"
             className="bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white rounded-full px-4 transition-all duration-300 hover:scale-105"
             onClick={handleAddToCart}
-            disabled={!sku || sku?.quantity <= 0}
+            disabled={!sku || !availableQuantity}
           >
-            <ShoppingCart className="w-4 h-4 mr-1" />
-            {sku && sku?.quantity > 0 ? "Add" : "Out of Stock"}
+            <BookOpen size={16} />
+            {sku && availableQuantity ? "Add" : "Out of Stock"}
           </Button>
         </div>
       </div>

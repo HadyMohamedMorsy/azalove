@@ -38,7 +38,37 @@ export default function RootLayout({
 }) {
   return (
     <html suppressHydrationWarning lang="ar" dir="rtl">
-      <head />
+      <head>
+        <meta charSet="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Romantic Blog - Love Stories & Romance</title>
+        <meta
+          name="description"
+          content="Beautiful romantic blog with love stories and relationship advice"
+        />
+        <meta name="author" content="Lovable" />
+        <meta
+          property="og:title"
+          content="Romantic Blog - Love Stories & Romance"
+        />
+        <meta
+          property="og:description"
+          content="Beautiful romantic blog with love stories and relationship advice"
+        />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:image"
+          content="https://lovable.dev/opengraph-image-p98pqg.png"
+        />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@lovable_dev" />
+        <meta
+          name="twitter:image"
+          content="https://lovable.dev/opengraph-image-p98pqg.png"
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+      </head>
       <body className={inter.className}>
         <AuthProvider>
           <CartProvider>

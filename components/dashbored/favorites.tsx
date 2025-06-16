@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import Image from "next/image";
 import { useToast } from "@/hooks/use-toast";
 import { Heart, ShoppingCart, Star, Trash2 } from "lucide-react";
 import { useState } from "react";
@@ -97,9 +98,11 @@ const Favorites = () => {
             {favorites.map((item) => (
               <div key={item.id} className="border rounded-lg p-4 space-y-3">
                 <div className="aspect-square bg-gray-100 rounded-lg flex items-center justify-center">
-                  <img
+                  <Image
                     src={item.image}
                     alt={item.name}
+                    width={100}
+                    height={100}
                     className="w-24 h-24 object-cover rounded"
                   />
                 </div>

@@ -6,6 +6,7 @@ export interface FavoriteItem {
   id: number;
   name: string;
   price: number;
+  finalPrice: number;
   image: string;
   selectedColor?: string;
 }

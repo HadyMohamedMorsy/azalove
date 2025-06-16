@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ShoppingBag, Tag } from "lucide-react";
+import Image from "next/image";
 
 const OrderSummary = () => {
   const orderItems = [
@@ -59,9 +60,11 @@ const OrderSummary = () => {
           {orderItems.map((item) => (
             <div key={item.id} className="flex gap-3">
               <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                <img
+                <Image
                   src={item.image}
                   alt={item.name}
+                  width={100}
+                  height={100}
                   className="w-10 h-10 object-cover rounded"
                 />
               </div>

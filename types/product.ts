@@ -68,6 +68,25 @@ export interface ProductSlug {
     quantity: number;
     isActive: boolean;
   }>;
+  specifications: Array<{
+    id: number;
+    title: string;
+    attributes: {
+      name: string;
+      value: string;
+    }[];
+  }>;
+  reviews: Array<{
+    id: number;
+    comment: string;
+    rate: number;
+    is_approved: number;
+    createdBy: {
+      firstName: string;
+      lastName: string;
+      id: number;
+    };
+  }>;
 }
 
 export interface productBySlug {

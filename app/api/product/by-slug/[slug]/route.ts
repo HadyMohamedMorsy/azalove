@@ -10,21 +10,7 @@ export async function GET(
   }
 
   try {
-    const response = await apiFetch(`/product/by-slug`, {
-      params: {
-        query: {
-          slug: params.slug,
-          relations: {
-            categories: {
-              select: ["id", "name", "slug"],
-            },
-            sku: {
-              select: ["id", "price", "quantity", "discount", "discountType"],
-            },
-          },
-        },
-      },
-    });
+    const response = await apiFetch(`/product/by-slug/${params.slug}`);
 
     if (!response.data) {
       return NextResponse.json({ error: "Product not found" }, { status: 404 });

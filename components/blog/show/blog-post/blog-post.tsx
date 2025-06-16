@@ -1,5 +1,6 @@
 import { ShowBlog } from "@/types/blogs";
-import { Calendar, Clock, Tag, User } from "lucide-react";
+import { Calendar, Tag, User } from "lucide-react";
+import Image from "next/image";
 import React from "react";
 
 const BlogPost: React.FC<ShowBlog> = ({
@@ -16,10 +17,12 @@ const BlogPost: React.FC<ShowBlog> = ({
     <article className="max-w-4xl mx-auto bg-card rounded-lg shadow-lg overflow-hidden">
       {thumb && (
         <div className="w-full h-64 md:h-96 overflow-hidden">
-          <img
+          <Image
             src={`${domain}${thumb}`}
             alt={title}
             className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+            width={100}
+            height={100}
           />
         </div>
       )}
