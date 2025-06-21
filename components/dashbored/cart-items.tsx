@@ -1,24 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useCart } from "@/contexts/cart-context";
 import CartCard from "../dashboard/cart-components/cart-card";
-import CartItemsList, {
-  CartItem,
-} from "../dashboard/cart-components/cart-items-list";
+import CartItemsList from "../dashboard/cart-components/cart-items-list";
 import CartSummary from "../dashboard/cart-components/cart-summary";
 import CartWrapper from "../dashboard/cart-components/cart-wrapper";
 
 const CartItems = () => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const { cartItems, getTotalPrice } = useCart();
 
-  const handleCartChange = (items: CartItem[]) => {
-    setCartItems(items);
-  };
-
-  const subtotal = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  const subtotal = getTotalPrice();
   const shipping = subtotal > 50 ? 0 : 9.99;
   const tax = subtotal * 0.08;
   const total = subtotal + shipping + tax;
@@ -27,7 +18,7 @@ const CartItems = () => {
     <CartWrapper
       header={
         <CartCard>
-          <CartItemsList onCartChange={handleCartChange} />
+          <CartItemsList />
         </CartCard>
       }
     >

@@ -8,13 +8,25 @@ import {
 import { faList, faTableList } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export default function ButtonList() {
+interface ButtonListProps {
+  viewMode: "list" | "grid";
+  onViewModeChange: (mode: "list" | "grid") => void;
+}
+
+export default function ButtonList({
+  viewMode,
+  onViewModeChange,
+}: ButtonListProps) {
   return (
     <div className="flex gap-4 items-center">
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button variant="outline" size="icon">
+            <Button
+              variant={viewMode === "list" ? "default" : "outline"}
+              size="icon"
+              onClick={() => onViewModeChange("list")}
+            >
               <FontAwesomeIcon icon={faList} />
             </Button>
           </TooltipTrigger>
@@ -27,7 +39,11 @@ export default function ButtonList() {
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button variant="outline" size="icon">
+            <Button
+              variant={viewMode === "grid" ? "default" : "outline"}
+              size="icon"
+              onClick={() => onViewModeChange("grid")}
+            >
               <FontAwesomeIcon icon={faTableList} />
             </Button>
           </TooltipTrigger>

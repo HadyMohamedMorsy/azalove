@@ -38,12 +38,43 @@ interface FiltersData {
   featuredProducts: FeaturedProduct[];
 }
 
-const FiltersProducts = () => {
+interface Filters {
+  category: string;
+  priceRange: string;
+  sortBy: string;
+}
+
+interface FiltersProductsProps {
+  filters?: Filters;
+  onFilterChange?: (filters: Filters) => void;
+}
+
+const FiltersProducts = ({ filters, onFilterChange }: FiltersProductsProps) => {
   const {
     data: response,
     loading,
     error,
   } = useFetch<FiltersData>("/api/filters");
+
+  const handleCategoryChange = (categorySlug: string) => {
+    if (onFilterChange) {
+      onFilterChange({
+        category: categorySlug,
+        priceRange: filters?.priceRange || "",
+        sortBy: filters?.sortBy || "",
+      });
+    }
+  };
+
+  const handlePriceChange = (priceRange: string) => {
+    if (onFilterChange) {
+      onFilterChange({
+        category: filters?.category || "",
+        priceRange,
+        sortBy: filters?.sortBy || "",
+      });
+    }
+  };
 
   if (loading) {
     return <div>Loading filters...</div>;
@@ -70,9 +101,16 @@ const FiltersProducts = () => {
                       key={category.id}
                       className="flex justify-between items-center"
                     >
-                      <a href={`/shop?category=${category.slug}`}>
+                      <button
+                        onClick={() => handleCategoryChange(category.slug)}
+                        className={`text-left hover:text-primary transition-colors ${
+                          filters?.category === category.slug
+                            ? "text-primary font-medium"
+                            : ""
+                        }`}
+                      >
                         {category.name}
-                      </a>
+                      </button>
                     </li>
                   ))}
                 </ul>
@@ -93,6 +131,11 @@ const FiltersProducts = () => {
                     min={0}
                     step={50}
                     className="w-full"
+                    onValueChange={(value) => {
+                      if (value && value.length === 2) {
+                        handlePriceChange(`${value[0]}-${value[1]}`);
+                      }
+                    }}
                   />
                   <div className="flex justify-between text-sm text-gray-500">
                     <span>0 جنيه</span>

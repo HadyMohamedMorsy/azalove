@@ -4,6 +4,7 @@ import { Blog } from "@/types/blogs";
 interface BlogCardProps {
   blog: Blog;
   variant?: "default" | "featured";
+  viewMode?: "list" | "grid";
 }
 
 import { Badge } from "@/components/ui/badge";
@@ -14,7 +15,11 @@ import Image from "next/image";
 import Link from "next/link";
 import ImagePlaceholder from "../placeholder/image-placeholder";
 
-const BlogCard = ({ blog, variant = "default" }: BlogCardProps) => {
+const BlogCard = ({
+  blog,
+  variant = "default",
+  viewMode = "grid",
+}: BlogCardProps) => {
   const { toast } = useToast();
   const {
     id,
@@ -41,14 +46,22 @@ const BlogCard = ({ blog, variant = "default" }: BlogCardProps) => {
 
   return (
     <article
-      className={`group relative overflow-hidden rounded-2xl bg-white/80 backdrop-blur-sm border border-romantic-100/50 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 ${isFeatured ? "lg:col-span-2 lg:row-span-2" : ""}`}
+      className={`group relative overflow-hidden rounded-2xl bg-white/80 backdrop-blur-sm border border-romantic-100/50 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 ${
+        isFeatured ? "lg:col-span-2 lg:row-span-2" : ""
+      } ${viewMode === "list" ? "flex" : ""}`}
     >
       {/* Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-romantic-50/30 to-blush-50/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
       {/* Image Container */}
       <div
-        className={`relative overflow-hidden ${isFeatured ? "h-80" : "h-48"}`}
+        className={`relative overflow-hidden ${
+          isFeatured
+            ? "h-80"
+            : viewMode === "list"
+              ? "w-64 h-48 flex-shrink-0"
+              : "h-48"
+        }`}
       >
         {image ? (
           <Image
@@ -90,21 +103,31 @@ const BlogCard = ({ blog, variant = "default" }: BlogCardProps) => {
       </div>
 
       {/* Content */}
-      <div className={`relative p-6 ${isFeatured ? "p-8" : ""}`}>
-        <h2
-          className={`font-playfair font-semibold text-gray-900 mb-3 line-clamp-2 group-hover:text-romantic-700 transition-colors duration-300 ${isFeatured ? "text-2xl mb-4" : "text-xl"}`}
-        >
-          <Link href={`/blog/${slug}`}>{title}</Link>
-        </h2>
+      <div
+        className={`relative ${viewMode === "list" ? "flex-1 flex flex-col justify-between" : ""} ${isFeatured ? "p-8" : "p-6"}`}
+      >
+        <div>
+          <h2
+            className={`font-playfair font-semibold text-gray-900 mb-3 line-clamp-2 group-hover:text-romantic-700 transition-colors duration-300 ${
+              isFeatured ? "text-2xl mb-4" : "text-xl"
+            }`}
+          >
+            <Link href={`/blog/${slug}`}>{title}</Link>
+          </h2>
 
-        <p
-          className={`text-gray-600 mb-4 line-clamp-3 leading-relaxed ${isFeatured ? "text-base mb-6" : "text-sm"}`}
-        >
-          {excerpt}
-        </p>
+          <p
+            className={`text-gray-600 mb-4 line-clamp-3 leading-relaxed ${
+              isFeatured ? "text-base mb-6" : "text-sm"
+            }`}
+          >
+            {excerpt}
+          </p>
+        </div>
 
         {/* Author and Meta Info */}
-        <div className="flex items-center justify-between text-sm text-gray-500">
+        <div
+          className={`flex items-center justify-between text-sm text-gray-500 ${viewMode === "list" ? "mt-auto" : ""}`}
+        >
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-1">
               <User className="w-4 h-4" />

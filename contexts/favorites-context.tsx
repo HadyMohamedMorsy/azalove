@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 export interface FavoriteItem {
   id: number;
@@ -37,6 +43,19 @@ interface FavoritesProviderProps {
 
 export const FavoritesProvider = ({ children }: FavoritesProviderProps) => {
   const [favoriteItems, setFavoriteItems] = useState<FavoriteItem[]>([]);
+
+  // Load favorites from localStorage on initial render
+  useEffect(() => {
+    const savedFavorites = localStorage.getItem("favorites");
+    if (savedFavorites) {
+      setFavoriteItems(JSON.parse(savedFavorites));
+    }
+  }, []);
+
+  // Save favorites to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem("favorites", JSON.stringify(favoriteItems));
+  }, [favoriteItems]);
 
   const addToFavorites = (item: FavoriteItem) => {
     setFavoriteItems((prev) => {

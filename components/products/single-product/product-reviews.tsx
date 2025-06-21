@@ -1,8 +1,12 @@
+import ReviewForm from "@/components/form/review-from/review-form";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Star } from "lucide-react";
+import { useAuth } from "@/contexts/auth-context";
+import { useToast } from "@/hooks/use-toast";
+import { Plus, Star, X } from "lucide-react";
+import { useParams } from "next/navigation";
 import { useState } from "react";
 
 interface Review {
@@ -21,8 +25,14 @@ interface ProductReviewsProps {
   reviews: Review[];
 }
 
-const ProductReviews = ({ reviews }: ProductReviewsProps) => {
+const ProductReviews = ({ reviews: initialReviews }: ProductReviewsProps) => {
   const [sortBy, setSortBy] = useState("helpful");
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [reviews, setReviews] = useState<Review[]>(initialReviews);
+  const [showAllReviews, setShowAllReviews] = useState(false);
+  const { toast } = useToast();
+  const { user, redirectToLogin } = useAuth();
+  const params = useParams();
 
   const getInitials = (firstName: string, lastName: string) => {
     return `${firstName[0]}${lastName[0]}`;
@@ -71,12 +81,111 @@ const ProductReviews = ({ reviews }: ProductReviewsProps) => {
     return (total / reviews.length).toFixed(1);
   };
 
+  const handleToggleReviewForm = () => {
+    if (!user) {
+      // Redirect to login with current page as return URL
+      redirectToLogin();
+      return;
+    }
+    setShowReviewForm(!showReviewForm);
+  };
+
+  const handleReviewSubmit = async (reviewData: {
+    rate: number;
+    comment: string;
+  }) => {
+    if (!user) {
+      toast({
+        title: "Authentication required",
+        description: "Please log in to submit a review.",
+      });
+      redirectToLogin();
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("auth_token");
+      const response = await fetch(
+        "http://localhost:3001/api/v1/review/store",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "user-id": user.id,
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            rate: reviewData.rate,
+            comment: reviewData.comment,
+            slug: params.productslug,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to submit review");
+      }
+
+      toast({
+        title: "Review submitted successfully we will review it soon",
+        description: "Thank you for your review!",
+      });
+
+      setShowReviewForm(false);
+    } catch (error) {
+      console.error("Error submitting review:", error);
+      toast({
+        title: "Error",
+        description: "Failed to submit review. Please try again.",
+      });
+    }
+  };
+
+  const handleReviewCancel = () => {
+    setShowReviewForm(false);
+  };
+
   const ratingDistribution = calculateRatingDistribution(reviews);
   const averageRating = getAverageRating(reviews);
   const sortedReviews = sortReviews(reviews);
 
+  // Determine which reviews to display
+  const displayReviews =
+    reviews.length > 3 && !showAllReviews
+      ? sortedReviews.slice(0, 3)
+      : sortedReviews;
+
   return (
     <div className="space-y-8">
+      {/* Toggle Review Form Button */}
+      <div className="flex justify-end">
+        <Button
+          onClick={handleToggleReviewForm}
+          variant={showReviewForm ? "outline" : "default"}
+          className="flex items-center gap-2"
+        >
+          {showReviewForm ? (
+            <>
+              <X className="w-4 h-4" />
+              Hide Review Form
+            </>
+          ) : (
+            <>
+              <Plus className="w-4 h-4" />
+              Write a Review
+            </>
+          )}
+        </Button>
+      </div>
+
+      {/* Review Form */}
+      {showReviewForm && (
+        <ReviewForm
+          onSubmit={handleReviewSubmit}
+          onCancel={handleReviewCancel}
+        />
+      )}
+
       {/* Rating Overview */}
       <Card>
         <CardHeader>
@@ -131,7 +240,7 @@ const ProductReviews = ({ reviews }: ProductReviewsProps) => {
 
       {/* Review List */}
       <div className="space-y-6">
-        {sortedReviews.map((review) => (
+        {displayReviews.map((review) => (
           <Card key={review.id}>
             <CardContent className="p-6">
               <div className="flex gap-4">
@@ -183,9 +292,22 @@ const ProductReviews = ({ reviews }: ProductReviewsProps) => {
         ))}
       </div>
 
-      <div className="text-center">
-        <Button variant="outline">Load More Reviews</Button>
-      </div>
+      {/* Show More/Less Button */}
+      {reviews.length > 3 && (
+        <div className="text-center">
+          <Button
+            variant="outline"
+            onClick={() => setShowAllReviews(!showAllReviews)}
+            className="flex items-center gap-2"
+          >
+            {showAllReviews ? (
+              <>Show Less Reviews</>
+            ) : (
+              <>Show All Reviews ({reviews.length})</>
+            )}
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

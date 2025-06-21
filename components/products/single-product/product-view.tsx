@@ -297,9 +297,6 @@ const ProductView = () => {
         <TabsContent value="specifications" className="mt-8">
           <ProductSpecs specifications={product.specifications} />
         </TabsContent>
-        {/* <TabsContent value="shipping" className="mt-8">
-          <ShippingInfo />
-        </TabsContent> */}
       </Tabs>
 
       {relatedProducts && relatedProducts.length > 0 && (

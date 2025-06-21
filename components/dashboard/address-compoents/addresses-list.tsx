@@ -8,6 +8,7 @@ import { useFetch } from "@/hooks/use-fetch";
 import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
 import { Building, Edit, Home, MapPin, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface Address {
   id: number;
@@ -30,15 +31,18 @@ interface AddressesListProps {
   isDialogOpen: boolean;
   onDialogOpenChange: (open: boolean) => void;
   onEditAddress: (address: Address) => void;
+  newAddress?: Address | null;
 }
 
 export default function AddressesList({
   isDialogOpen,
   onDialogOpenChange,
   onEditAddress,
+  newAddress,
 }: AddressesListProps) {
   const { toast } = useToast();
   const { user } = useAuth();
+  const [localAddresses, setLocalAddresses] = useState<Address[]>([]);
 
   const {
     data: addresses,
@@ -47,6 +51,24 @@ export default function AddressesList({
   } = useFetch<Address[]>(
     `${API_ENDPOINTS_FROM_NEXT.ADDRESSES}?userId=${user?.id}`
   );
+
+  // Update local addresses when API data changes
+  useEffect(() => {
+    if (addresses) {
+      setLocalAddresses(addresses);
+    }
+  }, [addresses]);
+
+  // Append new address when it's added
+  useEffect(() => {
+    if (newAddress) {
+      setLocalAddresses((prev) => [...prev, newAddress]);
+    }
+  }, [newAddress]);
+
+  const addNewAddress = (newAddress: Address) => {
+    setLocalAddresses((prev) => [...prev, newAddress]);
+  };
 
   const handleEdit = (address: Address) => {
     onEditAddress(address);
@@ -58,6 +80,10 @@ export default function AddressesList({
       await axios.delete(`${API_ENDPOINTS_FROM_NEXT.ADDRESS_DELETE}`, {
         data: { id },
       });
+
+      // Remove from local state
+      setLocalAddresses((prev) => prev.filter((addr) => addr.id !== id));
+
       toast({
         title: "Address deleted",
         description: "The address has been removed from your address book.",
@@ -73,6 +99,15 @@ export default function AddressesList({
   const setAsDefault = async (id: number) => {
     try {
       await axios.put(`${API_ENDPOINTS_FROM_NEXT.ADDRESSES}/${id}/default`);
+
+      // Update local state to reflect default change
+      setLocalAddresses((prev) =>
+        prev.map((addr) => ({
+          ...addr,
+          isDefault: addr.id === id,
+        }))
+      );
+
       toast({
         title: "Default address updated",
         description: "This address is now set as your default.",
@@ -102,7 +137,7 @@ export default function AddressesList({
         </CardTitle>
       </CardHeader>
       <CardContent>
-        {!addresses || addresses.length === 0 ? (
+        {!localAddresses || localAddresses.length === 0 ? (
           <div className="text-center py-12">
             <MapPin className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
             <h3 className="text-lg font-semibold mb-2">No addresses yet</h3>
@@ -112,7 +147,7 @@ export default function AddressesList({
           </div>
         ) : (
           <div className="grid gap-4 md:grid-cols-2">
-            {addresses.map((address) => (
+            {localAddresses.map((address) => (
               <div key={address.id} className="border rounded-lg p-4 space-y-3">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-2">

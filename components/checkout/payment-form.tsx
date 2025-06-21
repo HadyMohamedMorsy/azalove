@@ -1,11 +1,11 @@
 "use client";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Card, CardContent } from "@/components/ui/card";
-import { CreditCard, Smartphone, Building } from "lucide-react";
+import { Building, CreditCard, Smartphone } from "lucide-react";
+import { useState } from "react";
 
 interface PaymentFormProps {
   onNext: (data: any) => void;
@@ -150,48 +150,6 @@ const PaymentForm = ({ onNext, onBack }: PaymentFormProps) => {
               </div>
             </div>
           )}
-
-          <div>
-            <h3 className="text-lg font-medium mb-3">Billing Address</h3>
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="billingAddress">Address</Label>
-                <Input
-                  id="billingAddress"
-                  value={formData.billingAddress}
-                  onChange={(e) =>
-                    handleInputChange("billingAddress", e.target.value)
-                  }
-                  required
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="billingCity">City</Label>
-                  <Input
-                    id="billingCity"
-                    value={formData.billingCity}
-                    onChange={(e) =>
-                      handleInputChange("billingCity", e.target.value)
-                    }
-                    required
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="billingPostalCode">Postal Code</Label>
-                  <Input
-                    id="billingPostalCode"
-                    value={formData.billingPostalCode}
-                    onChange={(e) =>
-                      handleInputChange("billingPostalCode", e.target.value)
-                    }
-                    required
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 

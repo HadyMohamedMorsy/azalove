@@ -1,12 +1,6 @@
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { CheckCircle, Package, Mail, Download } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CheckCircle, Package } from "lucide-react";
 
 interface OrderConfirmationProps {
   shippingData: any;
@@ -82,38 +76,6 @@ const OrderConfirmation = ({
           </div>
         </CardContent>
       </Card>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
-          <CardContent className="p-4 text-center">
-            <Mail className="w-6 h-6 mx-auto mb-2 text-blue-600" />
-            <CardTitle className="text-sm">Email Confirmation</CardTitle>
-            <CardDescription className="text-xs">
-              Sent to {shippingData.email}
-            </CardDescription>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4 text-center">
-            <Package className="w-6 h-6 mx-auto mb-2 text-orange-600" />
-            <CardTitle className="text-sm">Tracking Info</CardTitle>
-            <CardDescription className="text-xs">
-              Available within 24 hours
-            </CardDescription>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4 text-center">
-            <Download className="w-6 h-6 mx-auto mb-2 text-green-600" />
-            <CardTitle className="text-sm">Receipt</CardTitle>
-            <CardDescription className="text-xs">
-              Download PDF receipt
-            </CardDescription>
-          </CardContent>
-        </Card>
-      </div>
 
       <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
         <Button variant="outline">Download Receipt</Button>

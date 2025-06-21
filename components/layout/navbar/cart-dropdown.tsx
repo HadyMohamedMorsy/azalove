@@ -1,28 +1,28 @@
 "use client";
-import CardPlaceholder from "@/components/placeholder/card-placeholder";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { CardContent } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useCart } from "@/contexts/cart-context";
-import { Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
-import Image from "next/image";
+import { ShoppingCart } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
+import { CartItemCard } from "../../dashboard/cart-components/cart-item-card";
 
 export function CartDropdown() {
   const {
     cartItems,
-    updateQuantity,
-    removeFromCart,
     getTotalItems,
     getTotalPrice,
+    updateQuantity,
+    removeFromCart,
   } = useCart();
   const [isOpen, setIsOpen] = useState(false);
-  const domain = process.env.MAIN_DOMAIN;
+  const domain = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
@@ -43,96 +43,53 @@ export function CartDropdown() {
         <div className="space-y-4 ">
           <h3 className="font-semibold text-lg">Shopping Cart</h3>
 
-          {cartItems.length === 0 ? (
-            <CardPlaceholder
-              title="No items in cart"
-              description="Start shopping to fill it up with amazing products!"
-            />
-          ) : (
-            <>
-              <div className="max-h-96 overflow-y-auto space-y-3">
+          <CardContent className="p-0 max-h-96 overflow-y-auto">
+            {cartItems.length === 0 ? (
+              <div className="text-center text-muted-foreground py-8">
+                <ShoppingCart className="h-12 w-12 mx-auto mb-4" />
+                <p>Your cart is empty.</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
                 {cartItems.map((item: any) => (
-                  <Card key={`${item.id}-${item.selectedColor}`}>
-                    <CardContent className="p-3">
-                      <div className="flex items-center space-x-3">
-                        <Image
-                          src={`${domain}${item.image}`}
-                          alt={item.name}
-                          width={100}
-                          height={100}
-                          className="w-12 h-12 object-cover rounded"
-                        />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xl font-bold text-rose-600">
-                            ${item.finalPrice?.toFixed(2)}
-                          </p>
-                          <p className="text-sm text-muted-foreground line-through">
-                            ${item.price?.toFixed(2)}
-                          </p>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-8 w-8 p-0"
-                            onClick={() =>
-                              updateQuantity(item.id, item.quantity - 1)
-                            }
-                          >
-                            <Minus className="h-3 w-3" />
-                          </Button>
-                          <span className="text-sm font-medium w-8 text-center">
-                            {item.quantity}
-                          </span>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-8 w-8 p-0"
-                            onClick={() =>
-                              updateQuantity(item.id, item.quantity + 1)
-                            }
-                            disabled={item.quantity >= item.skuQuantity}
-                          >
-                            <Plus className="h-3 w-3" />
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-8 w-8 p-0 text-destructive hover:text-destructive"
-                            onClick={() => removeFromCart(item.id)}
-                          >
-                            <Trash2 className="h-3 w-3" />
-                          </Button>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                  <CartItemCard
+                    key={`${item.id}-${item.selectedColor}`}
+                    item={item}
+                    variant="dropdown"
+                  />
                 ))}
               </div>
+            )}
+          </CardContent>
 
-              <div className="border-t pt-4">
-                <div className="flex justify-between items-center mb-4">
-                  <span className="font-semibold">
-                    Total: ${getTotalPrice().toFixed(2)}
-                  </span>
-                  <span className="text-sm text-muted-foreground">
-                    {getTotalItems()} items
-                  </span>
-                </div>
-                <div className="space-y-2">
-                  <Button className="w-full" onClick={() => setIsOpen(false)}>
-                    Checkout
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    View Cart
-                  </Button>
-                </div>
+          {cartItems.length > 0 && (
+            <div className="border-t pt-4">
+              <div className="flex justify-between items-center mb-4">
+                <span className="font-semibold">
+                  Total: ${getTotalPrice().toFixed(2)}
+                </span>
+                <span className="text-sm text-muted-foreground">
+                  {getTotalItems()} items
+                </span>
               </div>
-            </>
+              <div className="space-y-2">
+                <Button
+                  asChild
+                  className="w-full"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <Link href="/checkout">Checkout</Link>
+                </Button>
+                <Button
+                  asChild
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <Link href="/dashboard?tab=cart">View Cart</Link>
+                </Button>
+              </div>
+            </div>
           )}
         </div>
       </DropdownMenuContent>

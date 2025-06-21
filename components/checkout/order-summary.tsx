@@ -1,3 +1,5 @@
+"use client";
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -5,39 +7,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { API_BASE_URL } from "@/config/api";
+import { useCart } from "@/contexts/cart-context";
 import { ShoppingBag, Tag } from "lucide-react";
 import Image from "next/image";
 
 const OrderSummary = () => {
-  const orderItems = [
-    {
-      id: 1,
-      name: "Wireless Bluetooth Headphones",
-      price: 79.99,
-      quantity: 1,
-      image: "/placeholder.svg",
-    },
-    {
-      id: 2,
-      name: "Smart Fitness Watch",
-      price: 199.99,
-      quantity: 1,
-      image: "/placeholder.svg",
-    },
-    {
-      id: 3,
-      name: "Premium Phone Case",
-      price: 24.99,
-      quantity: 2,
-      image: "/placeholder.svg",
-    },
-  ];
+  const { cartItems, getTotalPrice } = useCart();
 
-  const subtotal = orderItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  const subtotal = getTotalPrice();
   const shipping = 12.99;
   const tax = subtotal * 0.08;
   const total = subtotal + shipping + tax;
@@ -50,18 +28,18 @@ const OrderSummary = () => {
           Order Summary
         </CardTitle>
         <CardDescription>
-          {orderItems.reduce((sum, item) => sum + item.quantity, 0)} items in
+          {cartItems.reduce((sum, item) => sum + item.quantity, 0)} items in
           your order
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Order Items */}
         <div className="space-y-3">
-          {orderItems.map((item) => (
+          {cartItems.map((item) => (
             <div key={item.id} className="flex gap-3">
               <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
                 <Image
-                  src={item.image}
+                  src={`${API_BASE_URL}${item.image}`}
                   alt={item.name}
                   width={100}
                   height={100}
@@ -75,7 +53,7 @@ const OrderSummary = () => {
                     Qty: {item.quantity}
                   </span>
                   <span className="text-sm font-medium">
-                    ${(item.price * item.quantity).toFixed(2)}
+                    ${(item.finalPrice * item.quantity).toFixed(2)}
                   </span>
                 </div>
               </div>

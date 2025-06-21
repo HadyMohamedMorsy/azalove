@@ -17,6 +17,7 @@ interface ProductCardProps {
   sku?: Sku;
   categories: Category[];
   slug: string;
+  viewMode?: "list" | "grid";
 }
 
 const ProductCard = ({
@@ -26,13 +27,14 @@ const ProductCard = ({
   sku,
   categories,
   slug,
+  viewMode = "grid",
 }: ProductCardProps) => {
   const domain = process.env.MAIN_DOMAIN;
   const { toast } = useToast();
   const { addToCart, getItemQuantity } = useCart();
   const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
 
-  const getAvailableQuantity = () => {
+  const getAvailableQuantity = (): number => {
     if (!sku?.quantity) return 0;
     return sku.quantity - getItemQuantity(id.toString());
   };
@@ -109,7 +111,11 @@ const ProductCard = ({
   };
 
   return (
-    <Card className="group relative overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-105 animate-fade-in bg-gradient-to-br from-white to-rose-50/30">
+    <Card
+      className={`group relative overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-105 animate-fade-in bg-gradient-to-br from-white to-rose-50/30 ${
+        viewMode === "list" ? "flex" : ""
+      }`}
+    >
       {/* Product badges */}
       <div className="absolute top-3 left-3 z-10 flex flex-col gap-1">
         {sku && discountAmount && (
@@ -137,7 +143,11 @@ const ProductCard = ({
       </button>
 
       {/* Product Image */}
-      <div className="relative h-64 bg-gradient-to-br from-rose-100 to-pink-100 flex items-center justify-center overflow-hidden">
+      <div
+        className={`relative bg-gradient-to-br from-rose-100 to-pink-100 flex items-center justify-center overflow-hidden ${
+          viewMode === "list" ? "w-48 h-32 flex-shrink-0" : "h-64"
+        }`}
+      >
         {srcImage ? (
           <Image
             src={`${domain}${srcImage}`}
@@ -153,29 +163,35 @@ const ProductCard = ({
       </div>
 
       {/* Product Info */}
-      <div className="p-6">
-        <h3 className="font-bold text-lg text-foreground mb-1 group-hover:text-rose-600 transition-colors duration-300">
-          <Link href={`/product/${slug}`}>{name}</Link>
-        </h3>
-        {categories && categories.length > 0 && (
-          <p className="text-muted-foreground text-sm mb-3">
-            {categories.map((cat) => cat.name).join(", ")}
-          </p>
-        )}
+      <div
+        className={`${viewMode === "list" ? "flex-1 flex flex-col justify-between" : ""} p-6`}
+      >
+        <div>
+          <h3 className="font-bold text-lg text-foreground mb-1 group-hover:text-rose-600 transition-colors duration-300">
+            <Link href={`/product/${slug}`}>{name}</Link>
+          </h3>
+          {categories && categories.length > 0 && (
+            <p className="text-muted-foreground text-sm mb-3">
+              {categories.map((cat) => cat.name).join(", ")}
+            </p>
+          )}
 
-        {/* Rating */}
-        <div className="flex items-center gap-1 mb-3">
-          {[...Array(5)].map((_, i) => (
-            <Star
-              key={i}
-              className={`w-4 h-4 ${i < 4 ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`}
-            />
-          ))}
-          <span className="text-sm text-muted-foreground ml-1">(4.0)</span>
+          {/* Rating */}
+          <div className="flex items-center gap-1 mb-3">
+            {[...Array(5)].map((_, i) => (
+              <Star
+                key={i}
+                className={`w-4 h-4 ${i < 4 ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`}
+              />
+            ))}
+            <span className="text-sm text-muted-foreground ml-1">(4.0)</span>
+          </div>
         </div>
 
         {/* Price and Action */}
-        <div className="flex items-center justify-between">
+        <div
+          className={`flex items-center justify-between ${viewMode === "list" ? "mt-auto" : ""}`}
+        >
           <div className="flex flex-col">
             {discountAmount ? (
               <>

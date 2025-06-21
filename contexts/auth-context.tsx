@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface User {
@@ -16,6 +16,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   isLoading: boolean;
+  redirectToLogin: (returnUrl?: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -24,6 +25,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     // Check if user is logged in on mount
@@ -41,6 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } catch (error) {
         console.error("Auth check failed:", error);
         localStorage.removeItem("auth_token");
+        Cookies.remove("auth_token");
       } finally {
         setIsLoading(false);
       }
@@ -66,7 +69,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
 
       setUser(user);
-      router.push("/dashboard");
+
+      // Check if there's a return URL to redirect to
+      const returnUrl = localStorage.getItem("returnUrl");
+      if (returnUrl) {
+        localStorage.removeItem("returnUrl");
+        router.push(returnUrl);
+      } else {
+        router.push("/dashboard");
+      }
     } catch (error) {
       console.error("Login failed:", error);
       throw error;
@@ -80,8 +91,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     router.push("/login");
   };
 
+  const redirectToLogin = (returnUrl?: string) => {
+    if (returnUrl) {
+      localStorage.setItem("returnUrl", returnUrl);
+    } else {
+      // Store current page URL as return URL
+      localStorage.setItem(
+        "returnUrl",
+        window.location.pathname + window.location.search
+      );
+    }
+    router.push("/login");
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, isLoading }}>
+    <AuthContext.Provider
+      value={{ user, login, logout, isLoading, redirectToLogin }}
+    >
       {children}
     </AuthContext.Provider>
   );

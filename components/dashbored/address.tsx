@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 import { useState } from "react";
 import AddressCard from "../dashboard/address-compoents/address-card";
 import AddressDialog from "../dashboard/address-compoents/address-dialog";
@@ -23,6 +25,7 @@ interface Address {
 const AddressBook = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingAddress, setEditingAddress] = useState<Address | null>(null);
+  const [newAddress, setNewAddress] = useState<Address | null>(null);
 
   const handleEdit = (address: Address) => {
     setEditingAddress(address);
@@ -34,23 +37,40 @@ const AddressBook = () => {
     setEditingAddress(null);
   };
 
+  const handleAddressAdded = (address?: Address) => {
+    if (address) {
+      setNewAddress(address);
+    }
+    handleDialogClose();
+  };
+
+  const handleAddNewAddress = () => {
+    setEditingAddress(null);
+    setIsDialogOpen(true);
+  };
+
   return (
     <AddressCard
       headerContent={
-        <AddressDialog
-          isOpen={isDialogOpen}
-          onOpenChange={handleDialogClose}
-          editingAddress={editingAddress}
-          onSuccess={() => {
-            window.location.reload();
-          }}
-        />
+        <>
+          <Button onClick={handleAddNewAddress}>
+            <Plus className="w-4 h-4 mr-2" />
+            Add Address
+          </Button>
+          <AddressDialog
+            isOpen={isDialogOpen}
+            onOpenChange={handleDialogClose}
+            editingAddress={editingAddress}
+            onSuccess={handleAddressAdded}
+          />
+        </>
       }
     >
       <AddressesList
         isDialogOpen={isDialogOpen}
         onDialogOpenChange={setIsDialogOpen}
         onEditAddress={handleEdit}
+        newAddress={newAddress}
       />
     </AddressCard>
   );
