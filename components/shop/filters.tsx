@@ -77,11 +77,23 @@ const FiltersProducts = ({ filters, onFilterChange }: FiltersProductsProps) => {
   };
 
   if (loading) {
-    return <div>Loading filters...</div>;
+    return (
+      <div className="space-y-4">
+        <div className="animate-pulse">
+          <div className="h-12 bg-gray-200 rounded"></div>
+        </div>
+        <div className="animate-pulse">
+          <div className="h-12 bg-gray-200 rounded"></div>
+        </div>
+        <div className="animate-pulse">
+          <div className="h-12 bg-gray-200 rounded"></div>
+        </div>
+      </div>
+    );
   }
 
   if (error || !response) {
-    return <div>Error loading filters</div>;
+    return <div className="text-red-500">خطأ في تحميل الفلاتر</div>;
   }
 
   const { categories, featuredProducts } = response;
@@ -90,12 +102,14 @@ const FiltersProducts = ({ filters, onFilterChange }: FiltersProductsProps) => {
   return (
     <>
       <div className="space-y-4">
-        <div className="px-2 caategory-box border border-[#eae8e4]">
-          <Accordion type="single" collapsible>
-            <AccordionItem value="categories">
-              <AccordionTrigger>الفئات</AccordionTrigger>
+        <div className="px-4 py-3 border border-amaranth-200 rounded-lg bg-gradient-to-r from-cream-50 to-amaranth-50">
+          <Accordion type="single" collapsible defaultValue="categories">
+            <AccordionItem value="categories" className="border-0">
+              <AccordionTrigger className="text-amaranth-700 font-semibold hover:text-amaranth-800">
+                الفئات
+              </AccordionTrigger>
               <AccordionContent>
-                <ul className="m-0 p-0 flex flex-col gap-4">
+                <ul className="m-0 p-0 flex flex-col gap-3">
                   {categoryItems.map((category) => (
                     <li
                       key={category.id}
@@ -103,10 +117,10 @@ const FiltersProducts = ({ filters, onFilterChange }: FiltersProductsProps) => {
                     >
                       <button
                         onClick={() => handleCategoryChange(category.slug)}
-                        className={`text-left hover:text-primary transition-colors ${
+                        className={`text-right hover:text-amaranth-600 transition-colors duration-200 ${
                           filters?.category === category.slug
-                            ? "text-primary font-medium"
-                            : ""
+                            ? "text-amaranth-600 font-medium"
+                            : "text-gray-700"
                         }`}
                       >
                         {category.name}
@@ -119,10 +133,12 @@ const FiltersProducts = ({ filters, onFilterChange }: FiltersProductsProps) => {
           </Accordion>
         </div>
 
-        <div className="px-2 caategory-box border border-[#eae8e4]">
-          <Accordion type="single" collapsible>
-            <AccordionItem value="price">
-              <AccordionTrigger>تصفية حسب السعر</AccordionTrigger>
+        <div className="px-4 py-3 border border-amaranth-200 rounded-lg bg-gradient-to-r from-cream-50 to-amaranth-50">
+          <Accordion type="single" collapsible defaultValue="price">
+            <AccordionItem value="price" className="border-0">
+              <AccordionTrigger className="text-amaranth-700 font-semibold hover:text-amaranth-800">
+                تصفية حسب السعر
+              </AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-4">
                   <Slider
@@ -137,7 +153,7 @@ const FiltersProducts = ({ filters, onFilterChange }: FiltersProductsProps) => {
                       }
                     }}
                   />
-                  <div className="flex justify-between text-sm text-gray-500">
+                  <div className="flex justify-between text-sm text-gray-600">
                     <span>0 جنيه</span>
                     <span>1000 جنيه</span>
                   </div>
@@ -148,28 +164,37 @@ const FiltersProducts = ({ filters, onFilterChange }: FiltersProductsProps) => {
         </div>
 
         {featuredProducts.length > 0 && (
-          <div className="px-2 caategory-box border border-[#eae8e4]">
-            <Accordion type="single" collapsible>
-              <AccordionItem value="featured">
-                <AccordionTrigger>كتب مميزة</AccordionTrigger>
+          <div className="px-4 py-3 border border-amaranth-200 rounded-lg bg-gradient-to-r from-cream-50 to-amaranth-50">
+            <Accordion type="single" collapsible defaultValue="featured">
+              <AccordionItem value="featured" className="border-0">
+                <AccordionTrigger className="text-amaranth-700 font-semibold hover:text-amaranth-800">
+                  كتب مميزة
+                </AccordionTrigger>
                 <AccordionContent>
-                  {featuredProducts.map((product) => (
-                    <div key={product.id} className="flex gap-3 py-2">
-                      <Image
-                        src={product.thumb || "/media/placeholder.jpg"}
-                        className="object-contain"
-                        alt={product.title}
-                        width={90}
-                        height={60}
-                      />
-                      <div className="flex flex-col gap-3">
-                        <h3 className="font-web text-sm">{product.title}</h3>
-                        <span className="font-bold">
-                          جنيه {product.sku.price}
-                        </span>
+                  <div className="space-y-3">
+                    {featuredProducts.map((product) => (
+                      <div
+                        key={product.id}
+                        className="flex gap-3 py-2 hover:bg-amaranth-50 rounded-lg transition-colors duration-200"
+                      >
+                        <Image
+                          src={product.thumb || "/media/placeholder.jpg"}
+                          className="object-contain rounded-md"
+                          alt={product.title}
+                          width={90}
+                          height={60}
+                        />
+                        <div className="flex flex-col gap-2">
+                          <h3 className="font-medium text-sm text-gray-800">
+                            {product.title}
+                          </h3>
+                          <span className="font-bold text-amaranth-600">
+                            جنيه {product.sku.price}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </AccordionContent>
               </AccordionItem>
             </Accordion>

@@ -26,9 +26,9 @@ function CategoriesList() {
     return (
       <SectionPlaceholder
         icon="error"
-        title="Failed to load categories"
-        description="Something went wrong while loading this section. Please try again or check your connection."
-        actionLabel="Retry"
+        title="فشل في تحميل الفئات"
+        description="حدث خطأ أثناء تحميل هذا القسم. يرجى المحاولة مرة أخرى أو التحقق من الاتصال."
+        actionLabel="إعادة المحاولة"
         onAction={() => {}}
       />
     );
@@ -38,8 +38,8 @@ function CategoriesList() {
     return (
       <SectionPlaceholder
         icon="package"
-        title="لا يوجد منتجات"
-        description="لا يوجد منتجات في هذا القسم بعد. يرجى التحقق من قسم آخر"
+        title="لا يوجد فئات"
+        description="لا يوجد فئات في هذا القسم بعد. يرجى التحقق من قسم آخر"
         actionLabel="التحقق من قسم آخر"
         onAction={() => {}}
       />

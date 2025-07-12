@@ -64,7 +64,7 @@ export function FavoritesDropdown() {
                             Color: {item.selectedColor}
                           </p>
                         )}
-                        <p className="text-xl font-bold text-rose-600">
+                        <p className="text-xl font-bold text-amaranth-600">
                           ${item.finalPrice?.toFixed(2)}
                         </p>
                         <p className="text-sm text-muted-foreground line-through">

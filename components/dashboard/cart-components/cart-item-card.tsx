@@ -41,7 +41,7 @@ export function CartItemCard({ item, variant = "list" }: CartItemCardProps) {
               className="w-12 h-12 object-cover rounded"
             />
             <div className="flex-1 min-w-0">
-              <p className="text-xl font-bold text-rose-600">
+              <p className="text-xl font-bold text-amaranth-600">
                 ${item.finalPrice?.toFixed(2)}
               </p>
               <p className="text-sm text-muted-foreground line-through">

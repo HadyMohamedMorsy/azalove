@@ -150,8 +150,8 @@ const ProductView = () => {
                 variant="secondary"
                 className={`${
                   quantity >= product.sku?.quantity
-                    ? "bg-red-100 text-red-700"
-                    : "bg-green-100 text-green-700"
+                    ? "bg-amaranth-100 text-amaranth-700"
+                    : "bg-royal-100 text-royal-700"
                 }`}
               >
                 {quantity >= product.sku?.quantity
@@ -166,16 +166,16 @@ const ProductView = () => {
                 </Badge>
               )}
             </div>
-            <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
+            <h1 className="heading-section mb-2">{product.name}</h1>
             <div className="flex items-center gap-4 mb-4">
               <div className="flex items-center gap-1">
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className={`w-4 h-4 ${i < (product.rating || 0) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
+                    className={`w-3 h-3 md:w-4 md:h-4 ${i < (product.rating || 0) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
                   />
                 ))}
-                <span className="text-sm text-muted-foreground ml-1">
+                <span className="body-tiny text-muted-foreground ml-1">
                   {product.rating || 0} (
                   {product.rating ? "reviews" : "No reviews"})
                 </span>
@@ -185,17 +185,17 @@ const ProductView = () => {
 
           {/* Price */}
           <div className="flex items-center gap-3">
-            <span className="text-3xl font-bold">
+            <span className="text-responsive-3xl font-bold">
               ${finalPrice?.toFixed(2)}
             </span>
             {product.sku?.discount && (
-              <span className="text-xl text-muted-foreground line-through">
+              <span className="text-responsive-xl text-muted-foreground line-through">
                 ${product.sku?.price}
               </span>
             )}
           </div>
 
-          <p className="text-muted-foreground leading-relaxed">
+          <p className="body-medium text-muted-foreground leading-relaxed">
             {product.description}
           </p>
 
@@ -235,7 +235,7 @@ const ProductView = () => {
                 onClick={() => setIsFavorited(!isFavorited)}
               >
                 <Heart
-                  className={`w-4 h-4 ${isFavorited ? "fill-red-500 text-red-500" : ""}`}
+                  className={`w-4 h-4 ${isFavorited ? "fill-amaranth-500 text-amaranth-500" : ""}`}
                 />
               </Button>
               <Button variant="outline" size="lg">
@@ -252,27 +252,27 @@ const ProductView = () => {
             <CardContent className="p-4">
               <div className="grid grid-cols-3 gap-4 text-center">
                 <div className="flex flex-col items-center gap-2">
-                  <Truck className="w-5 h-5 text-muted-foreground" />
+                  <Truck className="w-4 h-4 md:w-5 md:h-5 text-muted-foreground" />
                   <div>
-                    <p className="text-sm font-medium">Free Shipping</p>
+                    <p className="body-tiny font-medium">Free Shipping</p>
                     <p className="text-xs text-muted-foreground">
                       Orders over $50
                     </p>
                   </div>
                 </div>
                 <div className="flex flex-col items-center gap-2">
-                  <Shield className="w-5 h-5 text-muted-foreground" />
+                  <Shield className="w-4 h-4 md:w-5 md:h-5 text-muted-foreground" />
                   <div>
-                    <p className="text-sm font-medium">2 Year Warranty</p>
+                    <p className="body-tiny font-medium">2 Year Warranty</p>
                     <p className="text-xs text-muted-foreground">
                       Full coverage
                     </p>
                   </div>
                 </div>
                 <div className="flex flex-col items-center gap-2">
-                  <RotateCcw className="w-5 h-5 text-muted-foreground" />
+                  <RotateCcw className="w-4 h-4 md:w-5 md:h-5 text-muted-foreground" />
                   <div>
-                    <p className="text-sm font-medium">30 Day Returns</p>
+                    <p className="body-tiny font-medium">30 Day Returns</p>
                     <p className="text-xs text-muted-foreground">
                       No questions asked
                     </p>
@@ -301,7 +301,7 @@ const ProductView = () => {
 
       {relatedProducts && relatedProducts.length > 0 && (
         <div className="mt-16">
-          <h2 className="text-2xl font-bold mb-8">Related Products</h2>
+          <h2 className="heading-section mb-8">Related Products</h2>
           <ProductGrid
             products={relatedProducts as Product[]}
             gridCols={{

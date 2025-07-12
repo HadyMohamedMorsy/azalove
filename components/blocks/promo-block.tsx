@@ -30,15 +30,15 @@ const PromoBlock = ({
       </div>
       <div className="content">
         <div className="flex flex-col gap-2">
-          <span className="font-web lg:text-[2rem] text-xl">{title}</span>
-          <span className="lg:text-[2.5rem] text-2xl text-[#f75454] font-semibold">
+          <span className="font-web text-lg md:text-xl lg:text-2xl">{title}</span>
+          <span className="text-sm md:text-base lg:text-lg text-amaranth-600 font-semibold">
             {discountText}
           </span>
-          <span className="lg:text-[1rem] text-xl text-gray-500 font-semibold">
+          <span className="text-sm md:text-base lg:text-lg text-muted-foreground font-semibold">
             {description}
           </span>
 
-          <button className="btn text-white bg-[#fa5e5d] capitalize mt-4 w-[120px]">
+          <button className="btn text-white bg-gradient-to-r from-amaranth-500 to-amaranth-600 hover:from-amaranth-600 hover:to-amaranth-700 capitalize mt-4 w-[120px] transition-all duration-300 text-sm md:text-base lg:text-lg">
             {buttonText}
           </button>
         </div>

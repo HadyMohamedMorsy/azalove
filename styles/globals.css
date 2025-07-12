@@ -3,49 +3,9 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: "Tajawal";
-  src: url("/fonts/Tajawal-Light.ttf") format("truetype");
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Tajawal";
-  src: url("/fonts/Tajawal-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Tajawal";
-  src: url("/fonts/Tajawal-Medium.ttf") format("truetype");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Tajawal";
-  src: url("/fonts/Tajawal-Bold.ttf") format("truetype");
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Tajawal";
-  src: url("/fonts/Tajawal-ExtraBold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Tajawal";
-  src: url("/fonts/Tajawal-Black.ttf") format("truetype");
-  font-weight: 900;
+  font-family: "Alexandria";
+  src: url("/fonts/Alexandria-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
@@ -56,11 +16,8 @@ html {
 
 body {
   overflow-x: hidden;
-  font-weight: 400;
-  font-style: normal;
+  font-family: "Alexandria", sans-serif !important;
 }
-
-
 
 @layer base {
   :root {
@@ -118,13 +75,127 @@ body {
   }
 }
 
-
-
 @layer base {
   * {
     @apply border-border;
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  /* Responsive Typography Utilities */
+  .text-responsive-xs {
+    @apply text-xs md:text-sm;
+  }
+
+  .text-responsive-sm {
+    @apply text-sm md:text-base;
+  }
+
+  .text-responsive-base {
+    @apply text-sm md:text-base lg:text-lg;
+  }
+
+  .text-responsive-lg {
+    @apply text-base md:text-lg lg:text-xl;
+  }
+
+  .text-responsive-xl {
+    @apply text-lg md:text-xl lg:text-2xl;
+  }
+
+  .text-responsive-2xl {
+    @apply text-xl md:text-2xl lg:text-3xl;
+  }
+
+  .text-responsive-3xl {
+    @apply text-2xl md:text-3xl lg:text-4xl;
+  }
+
+  .text-responsive-4xl {
+    @apply text-3xl md:text-4xl lg:text-5xl;
+  }
+
+  .text-responsive-5xl {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+  }
+
+  .text-responsive-6xl {
+    @apply text-5xl md:text-6xl lg:text-7xl;
+  }
+
+  /* Responsive Headings */
+  .heading-hero {
+    @apply text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold;
+  }
+
+  .heading-section {
+    @apply text-2xl md:text-3xl lg:text-4xl font-bold;
+  }
+
+  .heading-card {
+    @apply text-lg md:text-xl lg:text-2xl font-semibold;
+  }
+
+  .heading-small {
+    @apply text-base md:text-lg font-semibold;
+  }
+
+  /* Responsive Body Text */
+  .body-large {
+    @apply text-base md:text-lg lg:text-xl;
+  }
+
+  .body-medium {
+    @apply text-sm md:text-base lg:text-lg;
+  }
+
+  .body-small {
+    @apply text-xs md:text-sm lg:text-base;
+  }
+
+  .body-tiny {
+    @apply text-xs md:text-sm;
+  }
+
+  /* Responsive Spacing */
+  .space-responsive-sm {
+    @apply space-y-2 md:space-y-3;
+  }
+
+  .space-responsive-md {
+    @apply space-y-3 md:space-y-4 lg:space-y-6;
+  }
+
+  .space-responsive-lg {
+    @apply space-y-4 md:space-y-6 lg:space-y-8;
+  }
+
+  /* Responsive Padding */
+  .padding-responsive-sm {
+    @apply p-3 md:p-4 lg:p-6;
+  }
+
+  .padding-responsive-md {
+    @apply p-4 md:p-6 lg:p-8;
+  }
+
+  .padding-responsive-lg {
+    @apply p-6 md:p-8 lg:p-12;
+  }
+
+  /* Responsive Gaps */
+  .gap-responsive-sm {
+    @apply gap-2 md:gap-3 lg:gap-4;
+  }
+
+  .gap-responsive-md {
+    @apply gap-3 md:gap-4 lg:gap-6;
+  }
+
+  .gap-responsive-lg {
+    @apply gap-4 md:gap-6 lg:gap-8;
   }
 }

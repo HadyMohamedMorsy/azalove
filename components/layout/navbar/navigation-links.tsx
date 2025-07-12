@@ -15,10 +15,10 @@ export function NavigationLinks() {
             <Link
               key={item.href}
               href={item.href}
-              className={`text-lg px-3 py-2 rounded-md font-medium transition-colors duration-200 ${
+              className={`text-sm md:text-base lg:text-lg px-3 py-2 rounded-md transition-colors duration-200 ${
                 isActive
-                  ? "text-red-600 bg-red-50"
-                  : "text-muted-foreground hover:text-red-600 hover:bg-red-50"
+                  ? "text-amaranth-600 bg-amaranth-100"
+                  : "text-muted-foreground hover:text-amaranth-900 hover:bg-amaranth-100"
               }`}
             >
               {item.label}

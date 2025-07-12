@@ -43,20 +43,90 @@ function Shop() {
   };
 
   if (loading) {
-    return <Skeleton length={12} />;
+    return (
+      <>
+        <header className="container px-6 py-4 border-t border-b border-amaranth-200 bg-gradient-to-r from-cream-50 to-amaranth-50">
+          <nav className="flex" aria-label="Breadcrumb">
+            <ol className="flex items-center space-x-2 space-x-reverse">
+              <li>
+                <Link
+                  href="/"
+                  className="text-amaranth-600 hover:text-amaranth-700 transition-colors"
+                >
+                  الرئيسية
+                </Link>
+              </li>
+              <li className="flex items-center space-x-2 space-x-reverse">
+                <span className="text-amaranth-400">/</span>
+                <span className="text-amaranth-700 font-medium">التسوق</span>
+              </li>
+            </ol>
+          </nav>
+        </header>
+        <section className="container py-10 px-4">
+          <div className="grid md:grid-cols-4 grid-cols-1 gap-6">
+            <div className="products col-span-3">
+              <div className="mb-6">
+                <Skeleton length={1} containerClassName="h-16" />
+              </div>
+              <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-4">
+                <Skeleton length={8} />
+              </div>
+            </div>
+            <div className="filters">
+              <Skeleton length={3} containerClassName="space-y-4" />
+            </div>
+          </div>
+        </section>
+      </>
+    );
   }
 
   if (error) {
-    return <div className="text-red-500">Error loading products: {error}</div>;
+    return (
+      <div className="container py-10 px-4">
+        <div className="text-center">
+          <div className="text-red-500 text-lg mb-4">
+            حدث خطأ أثناء تحميل المنتجات
+          </div>
+          <p className="text-gray-600">{error}</p>
+        </div>
+      </div>
+    );
   }
 
   if (!products || products.length === 0) {
     return (
-      <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 border-t border-l border-[#eae8e4]">
-        <div className="col-span-full p-8 text-center text-gray-500">
-          No products available at the moment.
+      <>
+        <header className="container px-6 py-4 border-t border-b border-amaranth-200 bg-gradient-to-r from-cream-50 to-amaranth-50">
+          <nav className="flex" aria-label="Breadcrumb">
+            <ol className="flex items-center space-x-2 space-x-reverse">
+              <li>
+                <Link
+                  href="/"
+                  className="text-amaranth-600 hover:text-amaranth-700 transition-colors"
+                >
+                  الرئيسية
+                </Link>
+              </li>
+              <li className="flex items-center space-x-2 space-x-reverse">
+                <span className="text-amaranth-400">/</span>
+                <span className="text-amaranth-700 font-medium">التسوق</span>
+              </li>
+            </ol>
+          </nav>
+        </header>
+        <div className="container py-16 px-4">
+          <div className="text-center">
+            <div className="text-gray-500 text-xl mb-4">
+              لا توجد منتجات متاحة حاليًا
+            </div>
+            <p className="text-gray-400">
+              جرب المراجعة لاحقًا أو اتصل بنا للمساعدة
+            </p>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
@@ -64,17 +134,20 @@ function Shop() {
 
   return (
     <>
-      <header className="container px-6 py-4 border-t border-b border-[#eae8e4]">
+      <header className="container px-6 py-4 border-t border-b ">
         <nav className="flex" aria-label="Breadcrumb">
-          <ol className="flex items-center space-x-2">
+          <ol className="flex items-center space-x-2 space-x-reverse">
             <li>
-              <Link href="/" className="text-gray-500 hover:text-gray-700">
-                الرئيسيه
+              <Link
+                href="/"
+                className="text-amaranth-600 hover:text-amaranth-700 transition-colors"
+              >
+                الرئيسية
               </Link>
             </li>
-            <li className="flex items-center space-x-2">
-              <span className="text-gray-500">/</span>
-              <span className="text-gray-700">التسويق</span>
+            <li className="flex items-center space-x-2 space-x-reverse">
+              <span className="text-amaranth-400">/</span>
+              <span className="text-amaranth-700 font-medium">التسوق</span>
             </li>
           </ol>
         </nav>
@@ -90,12 +163,12 @@ function Shop() {
               viewMode={viewMode}
               onViewModeChange={handleViewModeChange}
             />
-            <div>
+            <div className="bg-white rounded-lg overflow-hidden">
               <div
                 className={
                   viewMode === "grid"
-                    ? "grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1"
-                    : "space-y-4"
+                    ? "grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-4 p-4"
+                    : "space-y-4 p-4"
                 }
               >
                 {products.map((product) => (
@@ -111,8 +184,8 @@ function Shop() {
                   />
                 ))}
               </div>
-              {total !== undefined && (
-                <div className="mt-4 flex justify-center">
+              {total !== undefined && totalPages > 1 && (
+                <div className="p-6 border-t border-amaranth-100 bg-gradient-to-r from-cream-50 to-amaranth-50">
                   <Pagination>
                     <PaginationContent>
                       <PaginationItem>
@@ -124,26 +197,45 @@ function Shop() {
                               setCurrentPage(currentPage - 1);
                             }
                           }}
+                          className={
+                            currentPage <= 1
+                              ? "opacity-50 cursor-not-allowed"
+                              : ""
+                          }
                         />
                       </PaginationItem>
 
-                      {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                        (page) => (
-                          <PaginationItem key={page}>
-                            <PaginationLink
-                              href="#"
-                              onClick={(
-                                e: React.MouseEvent<HTMLAnchorElement>
-                              ) => {
-                                e.preventDefault();
-                                setCurrentPage(page);
-                              }}
-                              isActive={currentPage === page}
-                            >
-                              {page}
-                            </PaginationLink>
-                          </PaginationItem>
-                        )
+                      {Array.from(
+                        { length: Math.min(totalPages, 7) },
+                        (_, i) => {
+                          let pageNumber;
+                          if (totalPages <= 7) {
+                            pageNumber = i + 1;
+                          } else if (currentPage <= 4) {
+                            pageNumber = i + 1;
+                          } else if (currentPage >= totalPages - 3) {
+                            pageNumber = totalPages - 6 + i;
+                          } else {
+                            pageNumber = currentPage - 3 + i;
+                          }
+
+                          return (
+                            <PaginationItem key={pageNumber}>
+                              <PaginationLink
+                                href="#"
+                                onClick={(
+                                  e: React.MouseEvent<HTMLAnchorElement>
+                                ) => {
+                                  e.preventDefault();
+                                  setCurrentPage(pageNumber);
+                                }}
+                                isActive={currentPage === pageNumber}
+                              >
+                                {pageNumber}
+                              </PaginationLink>
+                            </PaginationItem>
+                          );
+                        }
                       )}
 
                       <PaginationItem>
@@ -155,6 +247,11 @@ function Shop() {
                               setCurrentPage(currentPage + 1);
                             }
                           }}
+                          className={
+                            currentPage >= totalPages
+                              ? "opacity-50 cursor-not-allowed"
+                              : ""
+                          }
                         />
                       </PaginationItem>
                     </PaginationContent>

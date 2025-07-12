@@ -18,7 +18,7 @@ export default function ButtonList({
   onViewModeChange,
 }: ButtonListProps) {
   return (
-    <div className="flex gap-4 items-center">
+    <div className="flex gap-2 items-center">
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
@@ -26,12 +26,17 @@ export default function ButtonList({
               variant={viewMode === "list" ? "default" : "outline"}
               size="icon"
               onClick={() => onViewModeChange("list")}
+              className={
+                viewMode === "list"
+                  ? "bg-amaranth-500 hover:bg-amaranth-600 text-white border-amaranth-500"
+                  : "text-amaranth-600 border-amaranth-200 hover:bg-amaranth-50 hover:text-amaranth-700"
+              }
             >
               <FontAwesomeIcon icon={faList} />
             </Button>
           </TooltipTrigger>
           <TooltipContent>
-            <p>List</p>
+            <p>عرض القائمة</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -43,12 +48,17 @@ export default function ButtonList({
               variant={viewMode === "grid" ? "default" : "outline"}
               size="icon"
               onClick={() => onViewModeChange("grid")}
+              className={
+                viewMode === "grid"
+                  ? "bg-amaranth-500 hover:bg-amaranth-600 text-white border-amaranth-500"
+                  : "text-amaranth-600 border-amaranth-200 hover:bg-amaranth-50 hover:text-amaranth-700"
+              }
             >
               <FontAwesomeIcon icon={faTableList} />
             </Button>
           </TooltipTrigger>
           <TooltipContent>
-            <p>Grid</p>
+            <p>عرض الشبكة</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>

@@ -41,7 +41,10 @@ export function CartDropdown() {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-96 p-4" align="end">
         <div className="space-y-4 ">
-          <h3 className="font-semibold text-lg">Shopping Cart</h3>
+          <h3 className="heading-small">Shopping Cart</h3>
+          <span className="body-tiny text-muted-foreground">
+            {cartItems.length} item{cartItems.length !== 1 ? "s" : ""}
+          </span>
 
           <CardContent className="p-0 max-h-96 overflow-y-auto">
             {cartItems.length === 0 ? (

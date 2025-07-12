@@ -105,7 +105,7 @@ const ReviewForm = ({ onSubmit, onCancel }: ReviewFormProps) => {
           <div className="flex gap-3 pt-4">
             <Button
               type="submit"
-              className="bg-red-600 hover:bg-red-700"
+              className="bg-amaranth-600 hover:bg-amaranth-700"
               disabled={isSubmitting}
             >
               {isSubmitting ? "Submitting..." : "Submit Review"}
