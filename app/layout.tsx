@@ -1,8 +1,7 @@
 import "@/styles/globals.css";
 import "@/styles/utilities.css";
 
-import Footer from "@/components/layout/footer";
-import Navbar from "@/components/layout/navbar";
+import LayoutWrapper from "@/components/layout/layout-wrapper";
 import { Toaster } from "@/components/ui/toaster";
 import { siteConfig } from "@/config/site";
 import { AuthProvider } from "@/contexts/auth-context";
@@ -20,7 +19,7 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   icons: {
-    icon: "/favicon.ico",
+    icon: "/media/main-icon.ico",
   },
 };
 
@@ -46,7 +45,7 @@ export default function RootLayout({
           name="description"
           content="Beautiful romantic blog with love stories and relationship advice"
         />
-        <meta name="author" content="Lovable" />
+        <meta name="author" content="azalove" />
         <meta
           property="og:title"
           content="Romantic Blog - Love Stories & Romance"
@@ -56,16 +55,10 @@ export default function RootLayout({
           content="Beautiful romantic blog with love stories and relationship advice"
         />
         <meta property="og:type" content="website" />
-        <meta
-          property="og:image"
-          content="https://lovable.dev/opengraph-image-p98pqg.png"
-        />
+        <meta property="og:image" content="/media/opengraph-image.png" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@lovable_dev" />
-        <meta
-          name="twitter:image"
-          content="https://lovable.dev/opengraph-image-p98pqg.png"
-        />
+        <meta name="twitter:site" content="@azalove" />
+        <meta name="twitter:image" content="/media/opengraph-image.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
       </head>
@@ -73,9 +66,7 @@ export default function RootLayout({
         <AuthProvider>
           <CartProvider>
             <FavoritesProvider>
-              <Navbar />
-              {children}
-              <Footer />
+              <LayoutWrapper>{children}</LayoutWrapper>
               <Toaster />
             </FavoritesProvider>
           </CartProvider>

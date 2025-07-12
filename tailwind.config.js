@@ -89,7 +89,7 @@ const config = {
         azalove: {
           50: "#fef9f3",
           100: "#fdf2e3",
-          200: "#fae0b8",
+          200: "#FFF5E9",
           300: "#f6ca86",
           400: "#f0b054",
           500: "#E6A238", // Main yellow

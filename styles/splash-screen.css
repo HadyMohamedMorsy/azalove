@@ -1,0 +1,82 @@
+.splash-logo .svg-elem-1 {
+  stroke-dashoffset: 492.283447265625px;
+  stroke-dasharray: 492.283447265625px;
+  fill: transparent;
+  -webkit-transition:
+    stroke-dashoffset 1s cubic-bezier(0.47, 0, 0.745, 0.715) 0s,
+    fill 0.7s cubic-bezier(0.47, 0, 0.745, 0.715) 0.8s;
+  transition:
+    stroke-dashoffset 1s cubic-bezier(0.47, 0, 0.745, 0.715) 0s,
+    fill 0.7s cubic-bezier(0.47, 0, 0.745, 0.715) 0.8s;
+}
+
+.splash-logo.active .svg-elem-1 {
+  stroke-dashoffset: 0;
+  fill: rgb(177, 42, 73);
+}
+
+.splash-logo .svg-elem-2 {
+  stroke-dashoffset: 852.2926635742188px;
+  stroke-dasharray: 852.2926635742188px;
+  fill: transparent;
+  -webkit-transition:
+    stroke-dashoffset 1s cubic-bezier(0.47, 0, 0.745, 0.715) 0.12s,
+    fill 0.7s cubic-bezier(0.47, 0, 0.745, 0.715) 0.9s;
+  transition:
+    stroke-dashoffset 1s cubic-bezier(0.47, 0, 0.745, 0.715) 0.12s,
+    fill 0.7s cubic-bezier(0.47, 0, 0.745, 0.715) 0.9s;
+}
+
+.splash-logo.active .svg-elem-2 {
+  stroke-dashoffset: 0;
+  fill: rgb(177, 42, 73);
+}
+
+.splash-logo .svg-elem-3 {
+  stroke-dashoffset: 1198.03271484375px;
+  stroke-dasharray: 1198.03271484375px;
+  fill: transparent;
+  -webkit-transition:
+    stroke-dashoffset 1s cubic-bezier(0.47, 0, 0.745, 0.715) 0.24s,
+    fill 0.7s cubic-bezier(0.47, 0, 0.745, 0.715) 1s;
+  transition:
+    stroke-dashoffset 1s cubic-bezier(0.47, 0, 0.745, 0.715) 0.24s,
+    fill 0.7s cubic-bezier(0.47, 0, 0.745, 0.715) 1s;
+}
+
+.splash-logo.active .svg-elem-3 {
+  stroke-dashoffset: 0;
+  fill: rgb(61, 37, 69);
+}
+
+.splash-logo .svg-elem-4 {
+  stroke-dashoffset: 268.09454345703125px;
+  stroke-dasharray: 268.09454345703125px;
+  fill: transparent;
+  -webkit-transition:
+    stroke-dashoffset 1s cubic-bezier(0.47, 0, 0.745, 0.715) 0.36s,
+    fill 0.7s cubic-bezier(0.47, 0, 0.745, 0.715) 1.1s;
+  transition:
+    stroke-dashoffset 1s cubic-bezier(0.47, 0, 0.745, 0.715) 0.36s,
+    fill 0.7s cubic-bezier(0.47, 0, 0.745, 0.715) 1.1s;
+}
+
+.splash-logo.active .svg-elem-4 {
+  stroke-dashoffset: 0;
+  fill: rgb(61, 37, 69);
+}
+
+.splash-screen-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
