@@ -8,7 +8,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Calendar, CreditCard, Eye, Package } from "lucide-react";
+import { useTranslation } from "@/hooks/use-translation";
+import {
+  Calendar,
+  CreditCard,
+  Eye,
+  Heart,
+  Package,
+  Sparkles,
+} from "lucide-react";
 import { useState } from "react";
 import OrderDetailsDialog from "./order-details-dialog";
 
@@ -48,6 +56,7 @@ interface OrderDetails {
 const OrderHistory = () => {
   const [selectedOrder, setSelectedOrder] = useState<OrderDetails | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const { t, locale } = useTranslation();
 
   const orders: OrderDetails[] = [
     {
@@ -208,16 +217,20 @@ const OrderHistory = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "delivered":
-        return "bg-green-100 text-green-800";
+        return "bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 border-green-200";
       case "shipped":
-        return "bg-blue-100 text-blue-800";
+        return "bg-gradient-to-r from-blue-100 to-cyan-100 text-blue-800 border-blue-200";
       case "processing":
-        return "bg-yellow-100 text-yellow-800";
+        return "bg-gradient-to-r from-yellow-100 to-amber-100 text-yellow-800 border-yellow-200";
       case "cancelled":
-        return "bg-red-100 text-red-800";
+        return "bg-gradient-to-r from-red-100 to-pink-100 text-red-800 border-red-200";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gradient-to-r from-gray-100 to-slate-100 text-gray-800 border-gray-200";
     }
+  };
+
+  const getStatusText = (status: string) => {
+    return t(`orderHistory.status.${status}`);
   };
 
   const handleViewDetails = (order: OrderDetails) => {
@@ -227,58 +240,89 @@ const OrderHistory = () => {
 
   return (
     <>
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Package className="w-5 h-5" />
-            Order History
-          </CardTitle>
-          <CardDescription>
-            Track your recent orders and view order details.
+      <Card className="border-0 shadow-lg bg-gradient-to-br from-pink-50 to-rose-50">
+        <CardHeader className="text-center pb-6">
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <Heart className="w-6 h-6 text-rose-500" />
+            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent">
+              {t("orderHistory.title")}
+            </CardTitle>
+            <Sparkles className="w-6 h-6 text-rose-500" />
+          </div>
+          <CardDescription className="text-lg text-gray-600">
+            {t("orderHistory.description")}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
+          <div className="grid gap-6">
             {orders.map((order) => (
-              <div
+              <Card
                 key={order.id}
-                className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors"
+                className="group hover:shadow-xl transition-all duration-300 border-2 hover:border-rose-200 bg-white/80 backdrop-blur-sm"
               >
-                <div className="flex-1 space-y-2">
-                  <div className="flex items-center gap-4">
-                    <h3 className="font-semibold">{order.id}</h3>
-                    <Badge className={getStatusColor(order.status)}>
-                      {order.status.charAt(0).toUpperCase() +
-                        order.status.slice(1)}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-1">
-                      <Calendar className="w-4 h-4" />
-                      {new Date(order.date).toLocaleDateString()}
+                <CardContent className="p-6">
+                  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                    {/* Order Info */}
+                    <div className="flex-1 space-y-4">
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2">
+                          <Package className="w-5 h-5 text-rose-500" />
+                          <h3 className="font-bold text-lg text-gray-800">
+                            {t("orderHistory.orderId")}: {order.id}
+                          </h3>
+                        </div>
+                        <Badge
+                          className={`${getStatusColor(order.status)} font-semibold px-3 py-1`}
+                        >
+                          {getStatusText(order.status)}
+                        </Badge>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                        <div className="flex items-center gap-2 text-gray-600">
+                          <Calendar className="w-4 h-4 text-rose-400" />
+                          <span>
+                            {t("orderHistory.orderDate")}:{" "}
+                            {new Date(order.date).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-gray-600">
+                          <Package className="w-4 h-4 text-rose-400" />
+                          <span>
+                            {order.items.length}{" "}
+                            {order.items.length === 1
+                              ? t("orderHistory.item")
+                              : t("orderHistory.items")}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-gray-600">
+                          <CreditCard className="w-4 h-4 text-rose-400" />
+                          <span className="font-semibold text-rose-600">
+                            ${order.total}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="text-sm text-gray-500 italic">
+                        {order.items.map((item) => item.name).join(", ")}
+                      </div>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <Package className="w-4 h-4" />
-                      {order.items.length} item
-                      {order.items.length > 1 ? "s" : ""}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <CreditCard className="w-4 h-4" />${order.total}
+
+                    {/* Action Button */}
+                    <div className="flex justify-end">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleViewDetails(order)}
+                        className="group-hover:bg-rose-50 group-hover:border-rose-300 group-hover:text-rose-700 transition-colors"
+                      >
+                        <Eye className="w-4 h-4 mr-2" />
+                        {t("orderHistory.viewDetails")}
+                      </Button>
                     </div>
                   </div>
-                  <div className="text-sm text-muted-foreground">
-                    {order.items.map((item) => item.name).join(", ")}
-                  </div>
-                </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleViewDetails(order)}
-                >
-                  <Eye className="w-4 h-4 mr-2" />
-                  View Details
-                </Button>
-              </div>
+                </CardContent>
+              </Card>
             ))}
           </div>
         </CardContent>

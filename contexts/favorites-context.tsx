@@ -1,20 +1,16 @@
 "use client";
 
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { localStorageKeys, localStorageUtils } from "@/utils/localStorage";
+import { createContext, useContext, useEffect, useState } from "react";
 
 export interface FavoriteItem {
   id: number;
   name: string;
   price: number;
-  finalPrice: number;
+  originalPrice?: number;
   image: string;
   selectedColor?: string;
+  selectedSize?: string;
 }
 
 interface FavoritesContextType {
@@ -29,16 +25,8 @@ const FavoritesContext = createContext<FavoritesContextType | undefined>(
   undefined
 );
 
-export const useFavorites = () => {
-  const context = useContext(FavoritesContext);
-  if (!context) {
-    throw new Error("useFavorites must be used within a FavoritesProvider");
-  }
-  return context;
-};
-
 interface FavoritesProviderProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 export const FavoritesProvider = ({ children }: FavoritesProviderProps) => {
@@ -46,15 +34,18 @@ export const FavoritesProvider = ({ children }: FavoritesProviderProps) => {
 
   // Load favorites from localStorage on initial render
   useEffect(() => {
-    const savedFavorites = localStorage.getItem("favorites");
+    const savedFavorites = localStorageUtils.getItem<FavoriteItem[]>(
+      localStorageKeys.FAVORITES,
+      []
+    );
     if (savedFavorites) {
-      setFavoriteItems(JSON.parse(savedFavorites));
+      setFavoriteItems(savedFavorites);
     }
   }, []);
 
   // Save favorites to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem("favorites", JSON.stringify(favoriteItems));
+    localStorageUtils.setItem(localStorageKeys.FAVORITES, favoriteItems);
   }, [favoriteItems]);
 
   const addToFavorites = (item: FavoriteItem) => {
@@ -104,3 +95,11 @@ export const FavoritesProvider = ({ children }: FavoritesProviderProps) => {
     </FavoritesContext.Provider>
   );
 };
+
+export function useFavorites() {
+  const context = useContext(FavoritesContext);
+  if (context === undefined) {
+    throw new Error("useFavorites must be used within a FavoritesProvider");
+  }
+  return context;
+}

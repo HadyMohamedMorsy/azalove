@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { CreditCard } from "lucide-react";
+import { useTranslation } from "@/hooks/use-translation";
+import { CreditCard, Gift, Heart, Sparkles } from "lucide-react";
 
 interface CartSummaryProps {
   subtotal: number;
@@ -19,55 +20,92 @@ export default function CartSummary({
   disabled = false,
 }: CartSummaryProps) {
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   const handleCheckout = () => {
     toast({
-      title: "Proceeding to checkout",
-      description: "Redirecting to secure payment page...",
+      title: t("cart.checkoutTitle"),
+      description: t("cart.checkoutDescription"),
     });
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Order Summary</CardTitle>
+    <Card className="border-0 shadow-xl bg-gradient-to-br from-white via-purple-50 to-pink-50 overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-r from-purple-100/20 via-pink-100/20 to-rose-100/20 pointer-events-none"></div>
+      <CardHeader className="relative">
+        <CardTitle className="flex items-center gap-3 text-xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 bg-clip-text text-transparent">
+          <Gift className="w-5 h-5 text-purple-500" />
+          {t("cart.summaryTitle")}
+        </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <div className="flex justify-between">
-            <span>Subtotal</span>
-            <span>${subtotal.toFixed(2)}</span>
+      <CardContent className="space-y-6 relative">
+        <div className="space-y-4">
+          <div className="flex justify-between items-center py-2">
+            <span className="text-gray-700 font-medium">
+              {t("cart.subtotal")}
+            </span>
+            <span className="font-semibold text-gray-900">
+              ${subtotal.toFixed(2)}
+            </span>
           </div>
-          <div className="flex justify-between">
-            <span>Shipping</span>
-            <span>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span>
+          <div className="flex justify-between items-center py-2">
+            <span className="text-gray-700 font-medium">
+              {t("cart.shipping")}
+            </span>
+            <span className="font-semibold text-gray-900">
+              {shipping === 0 ? (
+                <span className="text-green-600 flex items-center gap-1">
+                  <Heart className="w-4 h-4" />
+                  {t("cart.free")}
+                </span>
+              ) : (
+                `$${shipping.toFixed(2)}`
+              )}
+            </span>
           </div>
-          <div className="flex justify-between">
-            <span>Tax</span>
-            <span>${tax.toFixed(2)}</span>
+          <div className="flex justify-between items-center py-2">
+            <span className="text-gray-700 font-medium">{t("cart.tax")}</span>
+            <span className="font-semibold text-gray-900">
+              ${tax.toFixed(2)}
+            </span>
           </div>
-          <div className="border-t pt-2">
-            <div className="flex justify-between font-bold text-lg">
-              <span>Total</span>
-              <span>${total.toFixed(2)}</span>
+          <div className="border-t border-rose-200 pt-4">
+            <div className="flex justify-between items-center font-bold text-xl">
+              <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 bg-clip-text text-transparent">
+                {t("cart.total")}
+              </span>
+              <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 bg-clip-text text-transparent font-bold">
+                ${total.toFixed(2)}
+              </span>
             </div>
           </div>
         </div>
 
         {shipping > 0 && (
-          <div className="text-sm text-muted-foreground text-center">
-            Add ${(50 - subtotal).toFixed(2)} more for free shipping
+          <div className="text-sm text-center p-3 bg-gradient-to-r from-rose-50 to-pink-50 rounded-lg border border-rose-200">
+            <div className="flex items-center justify-center gap-2 mb-1">
+              <Sparkles className="w-4 h-4 text-rose-500" />
+              <span className="text-rose-700 font-medium">
+                {t("cart.almostThere")}
+              </span>
+            </div>
+            <p className="text-rose-600">
+              {t("cart.addMoreForFreeShipping").replace(
+                "${amount}",
+                (50 - subtotal).toFixed(2)
+              )}
+            </p>
           </div>
         )}
 
         <Button
           onClick={handleCheckout}
-          className="w-full"
+          className="w-full bg-gradient-to-r from-rose-500 via-pink-500 to-purple-500 hover:from-rose-600 hover:via-pink-600 hover:to-purple-600 text-white font-semibold py-3 text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
           size="lg"
           disabled={disabled}
         >
-          <CreditCard className="w-4 h-4 mr-2" />
-          Proceed to Checkout
+          <CreditCard className="w-5 h-5 mr-2" />
+          {t("cart.continueLoveStory")}
         </Button>
       </CardContent>
     </Card>

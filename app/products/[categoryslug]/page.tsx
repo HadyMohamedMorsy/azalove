@@ -1,14 +1,8 @@
 "use client";
 import ProductCard from "@/components/cards/product-card";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
+import SectionPlaceholder from "@/components/placeholder/section-placeholder";
 import Skeleton from "@/components/ui/skeleton";
+import PaginationWrapper from "@/components/ui/pagination-wrapper";
 import { useFetch } from "@/hooks/use-fetch";
 import { Product } from "@/types/product";
 import { useParams } from "next/navigation";
@@ -21,7 +15,7 @@ function ProductsByCategory() {
     data: products,
     loading,
     error,
-    total,
+    totalRecords,
   } = useFetch<Product[]>(`/api/products/${params.categoryslug}`);
 
   if (loading) {
@@ -29,20 +23,30 @@ function ProductsByCategory() {
   }
 
   if (error) {
-    return <div className="text-red-500">Error loading products: {error}</div>;
-  }
-
-  if (!products || products.length === 0) {
     return (
-      <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 border-t border-l border-[#eae8e4]">
-        <div className="col-span-full p-8 text-center text-gray-500">
-          No products available at the moment.
-        </div>
+      <div className="container py-10 px-4">
+        <SectionPlaceholder
+          icon="error"
+          title="خطأ في تحميل المنتجات"
+          description="واجهنا مشكلة أثناء تحميل المنتجات. يرجى إعادة تحديث الصفحة أو التواصل مع الدعم الفني إذا استمرت المشكلة."
+        />
       </div>
     );
   }
 
-  const totalPages = Math.ceil((total || 0) / 10);
+  if (!products || products.length === 0) {
+    return (
+      <div className="container py-10 px-4">
+        <SectionPlaceholder
+          icon="package"
+          title="لا توجد منتجات متاحة"
+          description="لا توجد منتجات في هذا القسم في الوقت الحالي. تحقق مرة أخرى لاحقاً أو استكشف الأقسام الأخرى لاكتشاف أجمل قصص الحب."
+        />
+      </div>
+    );
+  }
+
+  const totalPages = Math.ceil((totalRecords || 0) / 10);
 
   return (
     <div className="container py-10 px-4">
@@ -59,54 +63,13 @@ function ProductsByCategory() {
           />
         ))}
       </div>
-      {total !== undefined && (
-        <div className="mt-4 flex justify-center">
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  href="#"
-                  onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                    e.preventDefault();
-                    if (currentPage > 1) {
-                      setCurrentPage(currentPage - 1);
-                    }
-                  }}
-                />
-              </PaginationItem>
-
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                (page) => (
-                  <PaginationItem key={page}>
-                    <PaginationLink
-                      href="#"
-                      onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                        e.preventDefault();
-                        setCurrentPage(page);
-                      }}
-                      isActive={currentPage === page}
-                    >
-                      {page}
-                    </PaginationLink>
-                  </PaginationItem>
-                )
-              )}
-
-              <PaginationItem>
-                <PaginationNext
-                  href="#"
-                  onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                    e.preventDefault();
-                    if (currentPage < totalPages) {
-                      setCurrentPage(currentPage + 1);
-                    }
-                  }}
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        </div>
-      )}
+      <PaginationWrapper
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+        showPagination={!!totalRecords}
+        className="mt-4"
+      />
     </div>
   );
 }

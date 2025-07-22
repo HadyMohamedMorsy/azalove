@@ -1,11 +1,17 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
-import { Menu, User } from "lucide-react";
+import { Menu } from "lucide-react";
+import { useState } from "react";
 import "../../styles/svgs.css";
 import { CartDropdown } from "./navbar/cart-dropdown";
 import { FavoritesDropdown } from "./navbar/favorites-dropdown";
+import { MobileMenu } from "./navbar/mobile-menu";
 import { NavigationLinks } from "./navbar/navigation-links";
+import { UserDropdown } from "./navbar/user-dropdown";
 
 export default function Navbar() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -49,17 +55,25 @@ export default function Navbar() {
           <div className="flex items-center gap-4">
             <FavoritesDropdown />
             <CartDropdown />
+            <UserDropdown />
 
-            <Button variant="ghost" size="icon">
-              <User className="w-5 h-5" />
-            </Button>
-
-            <Button variant="ghost" size="icon" className="md:hidden">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden"
+              onClick={() => setIsMobileMenuOpen(true)}
+            >
               <Menu className="w-5 h-5" />
             </Button>
           </div>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      <MobileMenu
+        isOpen={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
+      />
     </nav>
   );
 }

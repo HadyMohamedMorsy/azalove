@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --character-main-color: #ca8450;
+}
+
 @font-face {
   font-family: "Alexandria";
   src: url("/fonts/Alexandria-VariableFont_wght.ttf") format("truetype");
@@ -17,6 +21,35 @@ html {
 body {
   overflow-x: hidden;
   font-family: "Alexandria", sans-serif !important;
+}
+
+/* RTL/LTR Support */
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.ltr {
+  direction: ltr;
+  text-align: left;
+}
+
+/* RTL specific styles */
+.rtl .text-right {
+  text-align: right;
+}
+
+.rtl .text-left {
+  text-align: left;
+}
+
+/* LTR specific styles */
+.ltr .text-right {
+  text-align: right;
+}
+
+.ltr .text-left {
+  text-align: left;
 }
 
 @layer base {
@@ -198,4 +231,47 @@ body {
   .gap-responsive-lg {
     @apply gap-4 md:gap-6 lg:gap-8;
   }
+}
+
+/* Romantic Hero Section Floating Animations */
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(var(--tw-rotate));
+  }
+  50% {
+    transform: translateY(-15px) rotate(var(--tw-rotate));
+  }
+}
+
+@keyframes float-medium {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(var(--tw-rotate));
+  }
+  50% {
+    transform: translateY(-20px) rotate(var(--tw-rotate));
+  }
+}
+
+@keyframes float-fast {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(var(--tw-rotate));
+  }
+  50% {
+    transform: translateY(-25px) rotate(var(--tw-rotate));
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+.animate-float-medium {
+  animation: float-medium 4s ease-in-out infinite;
+}
+
+.animate-float-fast {
+  animation: float-fast 3s ease-in-out infinite;
 }

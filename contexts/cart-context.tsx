@@ -1,28 +1,18 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
-
-interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  finalPrice: number;
-  quantity: number;
-  image: string;
-  selectedColor?: string;
-  selectedSize?: string;
-  skuQuantity: number;
-}
+import { CartItem } from "@/types";
+import { localStorageKeys, localStorageUtils } from "@/utils/localStorage";
+import { createContext, useContext, useEffect, useState } from "react";
 
 interface CartContextType {
   cartItems: CartItem[];
+  getItemQuantity: (id: string) => number;
   addToCart: (item: CartItem) => void;
   removeFromCart: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
-  getTotalItems: () => number;
   getTotalPrice: () => number;
-  getItemQuantity: (id: string) => number;
+  getTotalItems: () => number;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -32,15 +22,18 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   // Load cart items from localStorage on initial render
   useEffect(() => {
-    const savedCart = localStorage.getItem("cart");
+    const savedCart = localStorageUtils.getItem<CartItem[]>(
+      localStorageKeys.CART,
+      []
+    );
     if (savedCart) {
-      setCartItems(JSON.parse(savedCart));
+      setCartItems(savedCart);
     }
   }, []);
 
   // Save cart items to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cartItems));
+    localStorageUtils.setItem(localStorageKeys.CART, cartItems);
   }, [cartItems]);
 
   const getItemQuantity = (id: string) => {
@@ -92,28 +85,29 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setCartItems([]);
   };
 
-  const getTotalItems = () => {
-    return cartItems.reduce((total, item) => total + item.quantity, 0);
+  const getTotalPrice = () => {
+    return cartItems.reduce((total, item) => {
+      // Use finalPrice if available, otherwise use price
+      const itemPrice = item.finalPrice || item.price;
+      return total + itemPrice * item.quantity;
+    }, 0);
   };
 
-  const getTotalPrice = () => {
-    return cartItems.reduce(
-      (total, item) => total + item.finalPrice * item.quantity,
-      0
-    );
+  const getTotalItems = () => {
+    return cartItems.reduce((total, item) => total + item.quantity, 0);
   };
 
   return (
     <CartContext.Provider
       value={{
         cartItems,
+        getItemQuantity,
         addToCart,
         removeFromCart,
         updateQuantity,
         clearCart,
-        getTotalItems,
         getTotalPrice,
-        getItemQuantity,
+        getTotalItems,
       }}
     >
       {children}

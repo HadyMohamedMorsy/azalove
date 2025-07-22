@@ -2,6 +2,8 @@ import "@/styles/globals.css";
 import "@/styles/utilities.css";
 
 import LayoutWrapper from "@/components/layout/layout-wrapper";
+import { LocaleWrapper } from "@/components/layout/locale-wrapper";
+import SplashWrapper from "@/components/layout/splash-wrapper";
 import { Toaster } from "@/components/ui/toaster";
 import { siteConfig } from "@/config/site";
 import { AuthProvider } from "@/contexts/auth-context";
@@ -66,8 +68,12 @@ export default function RootLayout({
         <AuthProvider>
           <CartProvider>
             <FavoritesProvider>
-              <LayoutWrapper>{children}</LayoutWrapper>
-              <Toaster />
+              <LocaleWrapper>
+                <SplashWrapper>
+                  <LayoutWrapper>{children}</LayoutWrapper>
+                  <Toaster />
+                </SplashWrapper>
+              </LocaleWrapper>
             </FavoritesProvider>
           </CartProvider>
         </AuthProvider>

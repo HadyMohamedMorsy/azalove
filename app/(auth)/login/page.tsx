@@ -47,58 +47,147 @@ function Login() {
   };
 
   return (
-    <div className="container flex h-screen w-screen flex-col items-center justify-center">
-      <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[450px]">
-        <Card>
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl text-center">تسجيل الدخول</CardTitle>
-            <CardDescription className="text-center">
-              أدخل بريدك الإلكتروني وكلمة المرور للدخول إلى حسابك
-            </CardDescription>
+    <div className="min-h-screen w-full bg-gradient-to-br from-azalove-50 via-cream-100 to-azalove-100 flex items-center justify-center p-4">
+      {/* Romantic background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-r from-amaranth-200 to-amaranth-300 rounded-full opacity-20 animate-float-slow flex items-center justify-center">
+          <svg
+            className="w-12 h-12 text-amaranth-400"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+          </svg>
+        </div>
+        <div className="absolute top-40 right-20 w-24 h-24 bg-gradient-to-r from-amaranth-300 to-amaranth-400 rounded-full opacity-30 animate-float-medium flex items-center justify-center">
+          <svg
+            className="w-10 h-10 text-amaranth-500"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+          </svg>
+        </div>
+        <div className="absolute bottom-32 left-1/4 w-20 h-20 bg-gradient-to-r from-amaranth-400 to-amaranth-500 rounded-full opacity-25 animate-float-fast flex items-center justify-center">
+          <svg
+            className="w-8 h-8 text-amaranth-600"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+          </svg>
+        </div>
+        <div className="absolute bottom-20 right-10 w-28 h-28 bg-gradient-to-r from-amaranth-300 to-amaranth-400 rounded-full opacity-20 animate-float-slow flex items-center justify-center">
+          <svg
+            className="w-11 h-11 text-amaranth-500"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+          </svg>
+        </div>
+      </div>
+
+      <div className="relative w-full max-w-md">
+        <Card className="backdrop-blur-sm bg-white/80 border-0 shadow-2xl shadow-amaranth-100/50">
+          <CardHeader className="space-y-4 pb-6">
+            <div className="text-center space-y-2">
+              <div className="w-16 h-16 mx-auto bg-gradient-to-r from-amaranth-500 to-royal-500 rounded-full flex items-center justify-center shadow-lg shadow-amaranth-200/50">
+                <svg
+                  className="w-5 h-5 text-white"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                </svg>
+              </div>
+              <CardTitle className="text-3xl font-bold bg-gradient-to-r from-amaranth-600 to-royal-600 bg-clip-text text-transparent">
+                تسجيل الدخول
+              </CardTitle>
+              <CardDescription className="text-royal-600/80 text-base">
+                أدخل بريدك الإلكتروني وكلمة المرور للدخول إلى حسابك
+              </CardDescription>
+            </div>
           </CardHeader>
-          <CardContent>
-            <form onSubmit={onSubmit} className="space-y-4">
+          <CardContent className="space-y-6">
+            <form onSubmit={onSubmit} className="space-y-5">
               <div className="space-y-2">
-                <Label htmlFor="email">البريد الإلكتروني</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="أدخل بريدك الإلكتروني"
-                  required
-                />
+                <Label htmlFor="email" className="text-royal-700 font-medium">
+                  البريد الإلكتروني
+                </Label>
+                <div className="relative">
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="أدخل بريدك الإلكتروني"
+                    required
+                    className="border-2 border-royal-200 focus:border-amaranth-400 focus:ring-2 focus:ring-amaranth-200/50 bg-white/70 backdrop-blur-sm transition-all duration-300 placeholder:text-royal-400/60"
+                  />
+                  <div className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-amaranth-400 to-royal-400 rounded-r-full"></div>
+                </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password">كلمة المرور</Label>
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  placeholder="أدخل كلمة المرور"
-                  required
-                />
+                <Label
+                  htmlFor="password"
+                  className="text-royal-700 font-medium"
+                >
+                  كلمة المرور
+                </Label>
+                <div className="relative">
+                  <Input
+                    id="password"
+                    name="password"
+                    type="password"
+                    placeholder="أدخل كلمة المرور"
+                    required
+                    className="border-2 border-royal-200 focus:border-amaranth-400 focus:ring-2 focus:ring-amaranth-200/50 bg-white/70 backdrop-blur-sm transition-all duration-300 placeholder:text-royal-400/60"
+                  />
+                  <div className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-amaranth-400 to-royal-400 rounded-r-full"></div>
+                </div>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                  <Checkbox id="remember" name="terms" />
-                  <Label htmlFor="remember" className="text-sm">
+                  <Checkbox
+                    id="remember"
+                    name="terms"
+                    className="border-royal-300 data-[state=checked]:bg-amaranth-500 data-[state=checked]:border-amaranth-500"
+                  />
+                  <Label
+                    htmlFor="remember"
+                    className="text-sm text-royal-600 font-medium"
+                  >
                     تذكرنى
                   </Label>
                 </div>
                 <Link
                   href="/forgot-password"
-                  className="text-sm text-red-500 hover:text-red-600"
+                  className="text-sm text-amaranth-600 hover:text-amaranth-700 font-medium transition-colors duration-200 hover:underline"
                 >
                   هل فقدت كلمة المرور؟
                 </Link>
               </div>
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "جاري التحميل..." : "تسجيل الدخول"}
+              <Button
+                type="submit"
+                className="w-full bg-gradient-to-r from-amaranth-500 to-royal-500 hover:from-amaranth-600 hover:to-royal-600 text-white font-semibold py-3 rounded-xl shadow-lg shadow-amaranth-200/50 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:transform-none"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <div className="flex items-center space-x-2">
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    <span>جاري التحميل...</span>
+                  </div>
+                ) : (
+                  "تسجيل الدخول"
+                )}
               </Button>
             </form>
-            <div className="mt-4 text-center text-sm">
-              ليس لديك حساب؟{" "}
-              <Link href="/register" className="text-primary hover:underline">
+            <div className="text-center pt-4 border-t border-royal-200/50">
+              <span className="text-royal-600 text-sm">ليس لديك حساب؟ </span>
+              <Link
+                href="/register"
+                className="text-amaranth-600 hover:text-amaranth-700 font-semibold text-sm transition-colors duration-200 hover:underline"
+              >
                 إنشاء حساب جديد
               </Link>
             </div>

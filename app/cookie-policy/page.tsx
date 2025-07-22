@@ -1,4 +1,5 @@
 "use client";
+import { BrandSVG } from "@/components/ui/brand-svg";
 import Link from "next/link";
 
 function CookiePolicy() {
@@ -22,6 +23,16 @@ function CookiePolicy() {
 
       <section className="container py-10 px-4">
         <div className="max-w-4xl mx-auto">
+          {/* Brand Identity SVG Header */}
+          <div className="text-center mb-12">
+            <BrandSVG
+              svgName="artboard-39"
+              size="xl"
+              animate={true}
+              className="mx-auto mb-6"
+            />
+          </div>
+
           <div className="mb-8">
             <h1 className="text-4xl mb-4 font-web text-right">
               سياسة ملفات تعريف الارتباط
@@ -36,17 +47,20 @@ function CookiePolicy() {
             <section>
               <h2 className="text-2xl font-web mb-4">مقدمة</h2>
               <p className="font-web leading-relaxed text-gray-700">
-                نحن في أزالوف نسعى لتوفير تجربة قراءة مميزة لعشاق الكتب الرومانسية
-                من خلال موقعنا الإلكتروني. نستخدم ملفات تعريف الارتباط (الكوكيز)
-                لتحسين تجربة التصفح وتخصيص المحتوى وفهم كيفية استخدام موقعنا.
-                توضح هذه السياسة كيفية استخدامنا لملفات تعريف الارتباط وحقوقكم
-                في إدارتها. نحن ملتزمون بحماية خصوصيتكم وشفافية استخدام بياناتكم.
+                نحن في أزالوف نسعى لتوفير تجربة قراءة مميزة لعشاق الكتب
+                الرومانسية من خلال موقعنا الإلكتروني. نستخدم ملفات تعريف
+                الارتباط (الكوكيز) لتحسين تجربة التصفح وتخصيص المحتوى وفهم كيفية
+                استخدام موقعنا. توضح هذه السياسة كيفية استخدامنا لملفات تعريف
+                الارتباط وحقوقكم في إدارتها. نحن ملتزمون بحماية خصوصيتكم وشفافية
+                استخدام بياناتكم.
               </p>
             </section>
 
             {/* ما هي ملفات تعريف الارتباط */}
             <section>
-              <h2 className="text-2xl font-web mb-4">ما هي ملفات تعريف الارتباط؟</h2>
+              <h2 className="text-2xl font-web mb-4">
+                ما هي ملفات تعريف الارتباط؟
+              </h2>
               <div className="space-y-4">
                 <p className="font-web text-gray-700">
                   ملفات تعريف الارتباط هي ملفات نصية صغيرة تُحفظ على جهازكم
@@ -65,10 +79,14 @@ function CookiePolicy() {
 
             {/* أنواع الكوكيز */}
             <section>
-              <h2 className="text-2xl font-web mb-4">أنواع ملفات تعريف الارتباط</h2>
+              <h2 className="text-2xl font-web mb-4">
+                أنواع ملفات تعريف الارتباط
+              </h2>
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-xl font-web mb-3">الكوكيز الأساسية (ضرورية)</h3>
+                  <h3 className="text-xl font-web mb-3">
+                    الكوكيز الأساسية (ضرورية)
+                  </h3>
                   <p className="font-web text-gray-700 mb-2">
                     ضرورية لتشغيل الموقع بشكل صحيح ولا يمكن إيقافها:
                   </p>
@@ -82,7 +100,9 @@ function CookiePolicy() {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-web mb-3">كوكيز الأداء والتحليلات</h3>
+                  <h3 className="text-xl font-web mb-3">
+                    كوكيز الأداء والتحليلات
+                  </h3>
                   <p className="font-web text-gray-700 mb-2">
                     تساعدنا على فهم كيفية تفاعلكم مع الموقع:
                   </p>
@@ -110,7 +130,9 @@ function CookiePolicy() {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-web mb-3">كوكيز التسويق والإعلان</h3>
+                  <h3 className="text-xl font-web mb-3">
+                    كوكيز التسويق والإعلان
+                  </h3>
                   <p className="font-web text-gray-700 mb-2">
                     تساعدنا في عرض إعلانات مناسبة لاهتماماتكم:
                   </p>
@@ -143,7 +165,9 @@ function CookiePolicy() {
                     </ul>
                   </div>
                   <div>
-                    <h3 className="text-xl font-web mb-2">منصات التواصل الاجتماعي</h3>
+                    <h3 className="text-xl font-web mb-2">
+                      منصات التواصل الاجتماعي
+                    </h3>
                     <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                       <li>Facebook وInstagram للمشاركة</li>
                       <li>تسجيل الدخول عبر الحسابات الاجتماعية</li>
@@ -214,14 +238,16 @@ function CookiePolicy() {
                 <div>
                   <h3 className="text-xl font-web mb-2">إعدادات المتصفح:</h3>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
-                    <li>Chrome: الإعدادات  الخصوصية والأمان</li>
-                    <li>Firefox: الإعدادات  الخصوصية والأمان</li>
-                    <li>Safari: التفضيلات  الخصوصية</li>
-                    <li>Edge: الإعدادات  الخصوصية والخدمات</li>
+                    <li>Chrome: الإعدادات الخصوصية والأمان</li>
+                    <li>Firefox: الإعدادات الخصوصية والأمان</li>
+                    <li>Safari: التفضيلات الخصوصية</li>
+                    <li>Edge: الإعدادات الخصوصية والخدمات</li>
                   </ul>
                 </div>
                 <div>
-                  <h3 className="text-xl font-web mb-2">تأثير إيقاف الكوكيز:</h3>
+                  <h3 className="text-xl font-web mb-2">
+                    تأثير إيقاف الكوكيز:
+                  </h3>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                     <li>فقدان محتويات سلة التسوق</li>
                     <li>عدم تذكر تفضيلاتكم</li>
@@ -241,7 +267,8 @@ function CookiePolicy() {
                     <strong>كوكيز الجلسة:</strong> تُحذف عند إغلاق المتصفح
                   </li>
                   <li>
-                    <strong>كوكيز دائمة:</strong> تبقى لمدة محددة (عادة سنة واحدة)
+                    <strong>كوكيز دائمة:</strong> تبقى لمدة محددة (عادة سنة
+                    واحدة)
                   </li>
                   <li>
                     <strong>كوكيز التحليلات:</strong> تُحذف بعد 26 شهراً
@@ -355,4 +382,4 @@ function CookiePolicy() {
   );
 }
 
-export default CookiePolicy; 
+export default CookiePolicy;

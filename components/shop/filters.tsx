@@ -8,34 +8,37 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { useFetch } from "@/hooks/use-fetch";
 import Image from "next/image";
+import { useMemo } from "react";
 
 interface Category {
-  id: string;
+  data: {
+    id: string;
+    name: string;
+    slug: string;
+    subCategories?: SubCategory[];
+  }[];
+}
+
+interface SubCategory {
+  id: number;
   name: string;
   slug: string;
 }
 
 interface FeaturedProduct {
-  id: string;
-  title: string;
-  thumb: string;
-  sku: {
-    price: number;
-  };
-}
-
-interface CategoryResponse {
-  message: string;
-  statusCode: number;
   data: {
-    data: Category[];
-  };
-  timestamp: string;
+    id: string;
+    title: string;
+    thumb: string;
+    sku: {
+      price: number;
+    };
+  }[];
 }
 
 interface FiltersData {
-  categories: CategoryResponse;
-  featuredProducts: FeaturedProduct[];
+  categories: Category;
+  featuredProducts: FeaturedProduct;
 }
 
 interface Filters {
@@ -76,6 +79,23 @@ const FiltersProducts = ({ filters, onFilterChange }: FiltersProductsProps) => {
     }
   };
 
+  const handleClearFilters = () => {
+    if (onFilterChange) {
+      onFilterChange({
+        category: "",
+        priceRange: "",
+        sortBy: "",
+      });
+    }
+  };
+
+  // Parse current price range for slider
+  const currentPriceRange = useMemo(() => {
+    if (!filters?.priceRange) return [0, 1000];
+    const [min, max] = filters.priceRange.split("-").map(Number);
+    return [isNaN(min) ? 0 : min, isNaN(max) ? 1000 : max];
+  }, [filters?.priceRange]);
+
   if (loading) {
     return (
       <div className="space-y-4">
@@ -96,113 +116,146 @@ const FiltersProducts = ({ filters, onFilterChange }: FiltersProductsProps) => {
     return <div className="text-red-500">خطأ في تحميل الفلاتر</div>;
   }
 
-  const { categories, featuredProducts } = response;
-  const categoryItems = categories.data.data;
+  const categoryItems = response.categories.data;
+  const featuredProducts = response.featuredProducts.data;
 
-  return (
-    <>
-      <div className="space-y-4">
-        <div className="px-4 py-3 border border-amaranth-200 rounded-lg bg-gradient-to-r from-cream-50 to-amaranth-50">
-          <Accordion type="single" collapsible defaultValue="categories">
-            <AccordionItem value="categories" className="border-0">
-              <AccordionTrigger className="text-amaranth-700 font-semibold hover:text-amaranth-800">
-                الفئات
-              </AccordionTrigger>
-              <AccordionContent>
-                <ul className="m-0 p-0 flex flex-col gap-3">
-                  {categoryItems.map((category) => (
-                    <li
-                      key={category.id}
-                      className="flex justify-between items-center"
-                    >
-                      <button
-                        onClick={() => handleCategoryChange(category.slug)}
-                        className={`text-right hover:text-amaranth-600 transition-colors duration-200 ${
-                          filters?.category === category.slug
-                            ? "text-amaranth-600 font-medium"
-                            : "text-gray-700"
-                        }`}
-                      >
-                        {category.name}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        </div>
+  if (!loading) {
+    return (
+      <>
+        <div className="space-y-4">
+          {/* Clear Filters Button */}
+          {(filters?.category || filters?.priceRange) && (
+            <button
+              onClick={handleClearFilters}
+              className="w-full px-4 py-2 text-sm font-medium text-amaranth-600 bg-amaranth-50 border border-amaranth-200 rounded-lg hover:bg-amaranth-100 transition-colors duration-200"
+            >
+              مسح الفلاتر
+            </button>
+          )}
 
-        <div className="px-4 py-3 border border-amaranth-200 rounded-lg bg-gradient-to-r from-cream-50 to-amaranth-50">
-          <Accordion type="single" collapsible defaultValue="price">
-            <AccordionItem value="price" className="border-0">
-              <AccordionTrigger className="text-amaranth-700 font-semibold hover:text-amaranth-800">
-                تصفية حسب السعر
-              </AccordionTrigger>
-              <AccordionContent>
-                <div className="space-y-4">
-                  <Slider
-                    defaultValue={[100, 500]}
-                    max={1000}
-                    min={0}
-                    step={50}
-                    className="w-full"
-                    onValueChange={(value) => {
-                      if (value && value.length === 2) {
-                        handlePriceChange(`${value[0]}-${value[1]}`);
-                      }
-                    }}
-                  />
-                  <div className="flex justify-between text-sm text-gray-600">
-                    <span>0 جنيه</span>
-                    <span>1000 جنيه</span>
-                  </div>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        </div>
-
-        {featuredProducts.length > 0 && (
           <div className="px-4 py-3 border border-amaranth-200 rounded-lg bg-gradient-to-r from-cream-50 to-amaranth-50">
-            <Accordion type="single" collapsible defaultValue="featured">
-              <AccordionItem value="featured" className="border-0">
+            <Accordion type="single" collapsible defaultValue="categories">
+              <AccordionItem value="categories" className="border-0">
                 <AccordionTrigger className="text-amaranth-700 font-semibold hover:text-amaranth-800">
-                  كتب مميزة
+                  الفئات
                 </AccordionTrigger>
                 <AccordionContent>
-                  <div className="space-y-3">
-                    {featuredProducts.map((product) => (
-                      <div
-                        key={product.id}
-                        className="flex gap-3 py-2 hover:bg-amaranth-50 rounded-lg transition-colors duration-200"
-                      >
-                        <Image
-                          src={product.thumb || "/media/placeholder.jpg"}
-                          className="object-contain rounded-md"
-                          alt={product.title}
-                          width={90}
-                          height={60}
-                        />
-                        <div className="flex flex-col gap-2">
-                          <h3 className="font-medium text-sm text-gray-800">
-                            {product.title}
-                          </h3>
-                          <span className="font-bold text-amaranth-600">
-                            جنيه {product.sku.price}
-                          </span>
-                        </div>
-                      </div>
+                  <ul className="m-0 p-0 flex flex-col gap-3">
+                    {categoryItems.map((category) => (
+                      <li key={category.id} className="flex flex-col gap-2">
+                        {/* Parent Category */}
+                        <button
+                          onClick={() => handleCategoryChange(category.slug)}
+                          className={`text-right text-base font-medium hover:text-amaranth-600 transition-colors duration-200 ${
+                            filters?.category === category.slug
+                              ? "text-amaranth-600 font-semibold"
+                              : "text-gray-700"
+                          }`}
+                        >
+                          {category.name}
+                        </button>
+
+                        {/* Subcategories */}
+                        {category.subCategories &&
+                          category.subCategories.length > 0 && (
+                            <ul className="mr-4 flex flex-col gap-2">
+                              {category.subCategories.map((subCategory) => (
+                                <li key={subCategory.id}>
+                                  <button
+                                    onClick={() =>
+                                      handleCategoryChange(subCategory.slug)
+                                    }
+                                    className={`text-right text-sm font-normal hover:text-amaranth-600 transition-colors duration-200 ${
+                                      filters?.category === subCategory.slug
+                                        ? "text-amaranth-600 font-medium"
+                                        : "text-gray-600"
+                                    }`}
+                                  >
+                                    • {subCategory.name}
+                                  </button>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
           </div>
-        )}
-      </div>
-    </>
-  );
+
+          {/* <div className="px-4 py-3 border border-amaranth-200 rounded-lg bg-gradient-to-r from-cream-50 to-amaranth-50">
+            <Accordion type="single" collapsible defaultValue="price">
+              <AccordionItem value="price" className="border-0">
+                <AccordionTrigger className="text-amaranth-700 font-semibold hover:text-amaranth-800">
+                  تصفية حسب السعر
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="space-y-4">
+                    <Slider
+                      value={currentPriceRange}
+                      max={1000}
+                      min={0}
+                      step={50}
+                      className="w-full"
+                      onValueChange={(value) => {
+                        if (value && value.length === 2) {
+                          handlePriceChange(`${value[0]}-${value[1]}`);
+                        }
+                      }}
+                    />
+                    <div className="flex justify-between text-sm text-gray-600">
+                      <span>{currentPriceRange[0]} جنيه</span>
+                      <span>{currentPriceRange[1]} جنيه</span>
+                    </div>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </div> */}
+
+          {featuredProducts?.length > 0 && (
+            <div className="px-4 py-3 border border-amaranth-200 rounded-lg bg-gradient-to-r from-cream-50 to-amaranth-50">
+              <Accordion type="single" collapsible defaultValue="featured">
+                <AccordionItem value="featured" className="border-0">
+                  <AccordionTrigger className="text-amaranth-700 font-semibold hover:text-amaranth-800">
+                    كتب مميزة
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div className="space-y-3">
+                      {featuredProducts.map((product) => (
+                        <div
+                          key={product.id}
+                          className="flex gap-3 py-2 hover:bg-amaranth-50 rounded-lg transition-colors duration-200"
+                        >
+                          <Image
+                            src={product.thumb || "/media/placeholder.jpg"}
+                            className="object-contain rounded-md"
+                            alt={product.title}
+                            width={90}
+                            height={60}
+                          />
+                          <div className="flex flex-col gap-2">
+                            <h3 className="font-medium text-sm text-gray-800">
+                              {product.title}
+                            </h3>
+                            <span className="font-bold text-amaranth-600">
+                              جنيه {product.sku.price}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </div>
+          )}
+        </div>
+      </>
+    );
+  }
 };
 
 export default FiltersProducts;

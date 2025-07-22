@@ -1,4 +1,4 @@
-// components/Header.jsx
+"use client";
 import { Blog } from "@/types/blogs";
 
 interface BlogCardProps {
@@ -9,10 +9,10 @@ interface BlogCardProps {
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
 import { Calendar, Eye, Heart, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import ImagePlaceholder from "../placeholder/image-placeholder";
 
 const BlogCard = ({
@@ -20,7 +20,7 @@ const BlogCard = ({
   variant = "default",
   viewMode = "grid",
 }: BlogCardProps) => {
-  const { toast } = useToast();
+  const router = useRouter();
   const {
     id,
     title,
@@ -38,10 +38,7 @@ const BlogCard = ({
   const isFeatured = variant === "featured";
 
   const handleReadMore = () => {
-    toast({
-      title: "Opening blog post",
-      description: `Reading "${title}"...`,
-    });
+    router.push(`/blog/${slug}`);
   };
 
   return (
@@ -84,7 +81,7 @@ const BlogCard = ({
             variant="secondary"
             className="bg-white/90 text-romantic-700 backdrop-blur-sm border border-romantic-200/50"
           >
-            {categories[0]?.name || "Uncategorized"}
+            {categories[0]?.name || "غير مصنف"}
           </Badge>
         </div>
 
@@ -93,7 +90,7 @@ const BlogCard = ({
           <div className="absolute top-4 right-4">
             <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-romantic-500/90 text-white backdrop-blur-sm">
               <Heart className="w-3 h-3 fill-current" />
-              <span className="text-xs font-medium">Featured</span>
+              <span className="text-xs font-medium">مميز</span>
             </div>
           </div>
         )}
@@ -143,7 +140,7 @@ const BlogCard = ({
 
           <div className="flex items-center space-x-1">
             <Eye className="w-4 h-4" />
-            <span>{views} views</span>
+            <span>{views} مشاهدة</span>
           </div>
         </div>
 
@@ -151,10 +148,10 @@ const BlogCard = ({
         <div className="mt-6">
           <Button
             onClick={handleReadMore}
-            className="group/btn relative inline-flex items-center justify-center px-6 py-2 bg-gradient-to-r from-romantic-500 to-romantic-600 text-white rounded-full font-medium transition-all duration-300 hover:from-romantic-600 hover:to-romantic-700 hover:shadow-lg hover:shadow-romantic-500/25 focus:outline-none focus:ring-2 focus:ring-romantic-500/50 focus:ring-offset-2"
+            className="bg-gradient-to-r from-amaranth-500 to-amaranth-600 hover:from-amaranth-600 hover:to-amaranth-700 text-white rounded-full px-4 transition-all duration-300 hover:scale-105"
           >
-            <span className="relative z-10">Read More</span>
-            <Heart className="w-4 h-4 ml-2 transition-transform duration-300 group-hover/btn:scale-110 fill-current" />
+            <span className="relative z-10">اقرأ المزيد</span>
+            <Heart className="w-4 h-4 mr-2 transition-transform duration-300 group-hover/btn:scale-110 fill-current" />
 
             {/* Button Shimmer */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-500 rounded-full" />

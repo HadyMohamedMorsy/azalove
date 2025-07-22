@@ -1,19 +1,15 @@
 "use client";
+import BlogFilters from "@/components/blog/filters";
 import BlogCard from "@/components/cards/blog-card";
+import SectionPlaceholder from "@/components/placeholder/section-placeholder";
 import ButtonList from "@/components/shop/button-list";
 import ShowProducts from "@/components/shop/show";
 import SortProducts from "@/components/shop/sort";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
+import PaginationWrapper from "@/components/ui/pagination-wrapper";
 import Skeleton from "@/components/ui/skeleton";
 import { API_ENDPOINTS_FROM_NEXT } from "@/config/api";
 import useFetch from "@/hooks/use-fetch";
+import { useFilteredBlogs } from "@/hooks/use-filtered-blogs";
 import type { Blog } from "@/types/blogs";
 import Link from "next/link";
 import { useState } from "react";
@@ -21,45 +17,149 @@ import { useState } from "react";
 function Blog() {
   const [currentPage, setCurrentPage] = useState(1);
   const [viewMode, setViewMode] = useState<"list" | "grid">("grid");
+  const [filters, setFilters] = useState({
+    category: "",
+    sortBy: "",
+  });
+
+  // Build filter parameters
+  const filterParams = {
+    categorySlug: filters.category || undefined,
+    length: 10,
+    start: (currentPage - 1) * 10,
+  };
+
+  const hasFilters = filters.category;
+
   const {
-    data: blogs,
-    loading,
-    error,
-    total,
+    data: filteredBlogs,
+    loading: filteredLoading,
+    error: filteredError,
+    totalRecords: filteredTotalRecords,
+  } = useFilteredBlogs(hasFilters ? filterParams : null);
+
+  // Always call original blogs endpoint
+  const {
+    data: originalBlogs,
+    loading: originalLoading,
+    error: originalError,
+    totalRecords: originalTotalRecords,
   } = useFetch<Blog[]>(API_ENDPOINTS_FROM_NEXT.BLOGS);
+
+  // Use filtered data if filters are applied, otherwise use original data
+  const blogs = hasFilters ? filteredBlogs : originalBlogs;
+  const loading = hasFilters ? filteredLoading : originalLoading;
+  const error = hasFilters ? filteredError : originalError;
+  const totalRecords = hasFilters ? filteredTotalRecords : originalTotalRecords;
+
+  const showBlogsSkeleton =
+    hasFilters && (filteredLoading || (!filteredBlogs && !filteredError));
+
+  const handleFilterChange = (newFilters: any) => {
+    setFilters(newFilters);
+    setCurrentPage(1);
+  };
 
   const handleViewModeChange = (mode: "list" | "grid") => {
     setViewMode(mode);
   };
 
   if (loading) {
-    return <Skeleton length={12} />;
+    return (
+      <>
+        <header className="container px-6 py-4 border-t border-b border-[#eae8e4]">
+          <nav className="flex" aria-label="Breadcrumb">
+            <ol className="flex items-center space-x-2">
+              <li>
+                <Link href="/" className="text-gray-500 hover:text-gray-700">
+                  الرئيسيه
+                </Link>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="text-gray-500">/</span>
+                <span className="text-gray-700">المدونة</span>
+              </li>
+            </ol>
+          </nav>
+        </header>
+        <section className="container py-10 px-4">
+          <div className="grid md:grid-cols-4 grid-cols-1 gap-6">
+            <div className="blogs col-span-3">
+              <Skeleton length={12} />
+            </div>
+            <div className="filters">
+              <Skeleton length={3} containerClassName="space-y-4" />
+            </div>
+          </div>
+        </section>
+      </>
+    );
   }
 
   if (error) {
     return (
-      <div className="text-red-500 text-center">
-        Error loading blogs: {error}
-      </div>
+      <SectionPlaceholder
+        icon="error"
+        title="حدث خطأ في تحميل المقالات"
+        description="نعتذر، حدث خطأ أثناء تحميل المقالات. يرجى المحاولة مرة أخرى لاحقاً."
+        actionLabel="إعادة التحميل"
+        onAction={() => window.location.reload()}
+      />
     );
   }
 
   if (!blogs || blogs.length === 0) {
     return (
-      <div className="blogs grid md:grid-cols-3 grid-cols-1 gap-6">
-        <div className="col-span-full p-8 text-center text-gray-500">
-          لا توجد مقالات متاحة في الوقت الحالي
-        </div>
-      </div>
+      <>
+        <header className="container px-6 py-4 border-t border-b border-[#eae8e4]">
+          <nav className="flex" aria-label="Breadcrumb">
+            <ol className="flex items-center space-x-2">
+              <li>
+                <Link href="/" className="text-gray-500 hover:text-gray-700">
+                  الرئيسيه
+                </Link>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="text-gray-500">/</span>
+                <span className="text-gray-700">المدونة</span>
+              </li>
+            </ol>
+          </nav>
+        </header>
+        <section className="container py-10 px-4">
+          <div className="grid md:grid-cols-4 grid-cols-1 gap-6">
+            <div className="blogs col-span-3">
+              <div className="text-center py-16">
+                <div className="text-gray-500 text-xl mb-4">
+                  {hasFilters
+                    ? "لا توجد مقالات تطابق الفلاتر المحددة"
+                    : "لا توجد مقالات متاحة حاليًا"}
+                </div>
+                <p className="text-gray-400">
+                  {hasFilters
+                    ? "جرب تغيير الفلاتر أو المراجعة لاحقًا"
+                    : "جرب المراجعة لاحقًا أو اتصل بنا للمساعدة"}
+                </p>
+              </div>
+            </div>
+            <div className="filters">
+              <BlogFilters
+                filters={filters}
+                onFilterChange={handleFilterChange}
+              />
+            </div>
+          </div>
+        </section>
+      </>
     );
   }
 
-  const totalPages = Math.ceil((total || 0) / 10); // Assuming 10 items per page
+  const totalPages = Math.ceil((totalRecords || 0) / 10); // Assuming 10 items per page
   const startItem = (currentPage - 1) * 10 + 1;
-  const endItem = Math.min(currentPage * 10, total || 0);
+  const endItem = Math.min(currentPage * 10, totalRecords || 0);
   const resultsText =
-    total && total > 0
-      ? `عرض ${startItem}–${endItem} من ${total} نتيجة`
+    totalRecords && totalRecords > 0
+      ? `عرض ${startItem}–${endItem} من ${totalRecords} نتيجة`
       : "لا توجد نتائج";
 
   return (
@@ -80,76 +180,54 @@ function Blog() {
         </nav>
       </header>
       <section className="container py-10 px-4">
-        <div className="flex justify-between items-center py-5">
-          <span>{resultsText}</span>
-          <div className="flex gap-4">
-            <SortProducts />
-            <ShowProducts />
-            <ButtonList
-              viewMode={viewMode}
-              onViewModeChange={handleViewModeChange}
+        <div className="grid md:grid-cols-4 grid-cols-1 gap-6">
+          <div className="blogs col-span-3">
+            <div className="flex justify-between items-center py-5">
+              <span>{resultsText}</span>
+              <div className="flex gap-4">
+                <SortProducts />
+                <ShowProducts />
+                <ButtonList
+                  viewMode={viewMode}
+                  onViewModeChange={handleViewModeChange}
+                />
+              </div>
+            </div>
+            <div className="bg-white rounded-lg overflow-hidden">
+              {showBlogsSkeleton ? (
+                <div className="p-4">
+                  <Skeleton length={8} />
+                </div>
+              ) : (
+                <div
+                  className={`blogs ${
+                    viewMode === "grid"
+                      ? "grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 p-4"
+                      : "space-y-4 p-4"
+                  }`}
+                >
+                  {blogs.map((blog) => (
+                    <BlogCard key={blog.id} blog={blog} viewMode={viewMode} />
+                  ))}
+                </div>
+              )}
+              {!showBlogsSkeleton && (
+                <PaginationWrapper
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={setCurrentPage}
+                  showPagination={!!(totalRecords && totalPages > 1)}
+                />
+              )}
+            </div>
+          </div>
+          <div className="filters">
+            <BlogFilters
+              filters={filters}
+              onFilterChange={handleFilterChange}
             />
           </div>
         </div>
-        <div
-          className={`blogs ${
-            viewMode === "grid"
-              ? "grid md:grid-cols-3 grid-cols-1 gap-6"
-              : "space-y-6"
-          }`}
-        >
-          {blogs.map((blog) => (
-            <BlogCard key={blog.id} blog={blog} viewMode={viewMode} />
-          ))}
-        </div>
-        {total !== undefined && (
-          <div className="mt-4 flex justify-center">
-            <Pagination>
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious
-                    href="#"
-                    onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                      e.preventDefault();
-                      if (currentPage > 1) {
-                        setCurrentPage(currentPage - 1);
-                      }
-                    }}
-                  />
-                </PaginationItem>
-
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                  (page) => (
-                    <PaginationItem key={page}>
-                      <PaginationLink
-                        href="#"
-                        onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                          e.preventDefault();
-                          setCurrentPage(page);
-                        }}
-                        isActive={currentPage === page}
-                      >
-                        {page}
-                      </PaginationLink>
-                    </PaginationItem>
-                  )
-                )}
-
-                <PaginationItem>
-                  <PaginationNext
-                    href="#"
-                    onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                      e.preventDefault();
-                      if (currentPage < totalPages) {
-                        setCurrentPage(currentPage + 1);
-                      }
-                    }}
-                  />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-          </div>
-        )}
       </section>
     </>
   );

@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { MapPin } from "lucide-react";
+import { Heart, MapPin } from "lucide-react";
 import { ReactNode } from "react";
 
 interface AddressCardProps {
@@ -18,22 +18,27 @@ export default function AddressCard({
   children,
 }: AddressCardProps) {
   return (
-    <Card>
-      <CardHeader>
+    <Card className="shadow-xl bg-white/80 backdrop-blur-sm border border-rose-100">
+      <CardHeader className="bg-gradient-to-r from-rose-50 to-pink-50 border-b border-rose-100">
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="flex items-center gap-2">
-              <MapPin className="w-5 h-5" />
-              Address Book
+            <CardTitle className="flex items-center gap-2 text-rose-800 font-bold text-xl">
+              <div className="relative">
+                <MapPin className="w-6 h-6 text-rose-500" />
+                <Heart className="w-3 h-3 text-rose-400 absolute -top-1 -right-1 animate-pulse" />
+              </div>
+              دليل العناوين
             </CardTitle>
-            <CardDescription>
-              Manage your shipping and billing addresses.
+            <CardDescription className="text-rose-600 font-medium">
+              إدارة عناوين الشحن والفواتير بحب ❤️
             </CardDescription>
           </div>
           {headerContent}
         </div>
       </CardHeader>
-      <CardContent>{children}</CardContent>
+      <CardContent className="bg-gradient-to-b from-white to-rose-50/30">
+        {children}
+      </CardContent>
     </Card>
   );
 }

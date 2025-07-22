@@ -5,20 +5,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { API_BASE_URL } from "@/config/api";
 import { useCart } from "@/contexts/cart-context";
-import { Minus, Plus, Trash2 } from "lucide-react";
+import { useTranslation } from "@/hooks/use-translation";
+import { CartItem } from "@/types";
+import { Heart, Minus, Plus, Sparkles, Trash2 } from "lucide-react";
 import Image from "next/image";
-
-interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  finalPrice: number;
-  quantity: number;
-  image: string;
-  selectedColor?: string;
-  selectedSize?: string;
-  skuQuantity: number;
-}
 
 interface CartItemCardProps {
   item: CartItem;
@@ -27,52 +17,75 @@ interface CartItemCardProps {
 
 export function CartItemCard({ item, variant = "list" }: CartItemCardProps) {
   const { updateQuantity, removeFromCart } = useCart();
+  const { t } = useTranslation();
+
+  // Use finalPrice if available, otherwise use price
+  const displayPrice = item.finalPrice || item.price;
+  const hasDiscount = item.finalPrice && item.finalPrice < item.price;
 
   if (variant === "dropdown") {
     return (
-      <Card>
-        <CardContent className="p-3">
+      <Card className="border border-rose-200 shadow-sm bg-gradient-to-r from-white to-rose-50">
+        <CardContent className="p-4">
           <div className="flex items-center space-x-3">
-            <Image
-              src={`${API_BASE_URL}${item.image}`}
-              alt={item.name}
-              width={100}
-              height={100}
-              className="w-12 h-12 object-cover rounded"
-            />
+            <div className="w-12 h-12 bg-gradient-to-br from-rose-100 to-pink-100 rounded-lg flex items-center justify-center overflow-hidden relative">
+              <Image
+                src={`${API_BASE_URL}${item.image}`}
+                alt={item.name}
+                width={48}
+                height={48}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute -top-1 -right-1">
+                <Heart className="w-3 h-3 text-rose-500" />
+              </div>
+            </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xl font-bold text-amaranth-600">
-                ${item.finalPrice?.toFixed(2)}
-              </p>
-              <p className="text-sm text-muted-foreground line-through">
-                ${item.price?.toFixed(2)}
-              </p>
+              <h4 className="text-sm font-medium text-gray-900 truncate">
+                {item.name}
+              </h4>
+              <div className="flex items-center space-x-2 mt-1">
+                {hasDiscount ? (
+                  <>
+                    <span className="text-sm font-bold text-rose-600">
+                      ${displayPrice.toFixed(2)}
+                    </span>
+                    <span className="text-xs text-gray-400 line-through">
+                      ${item.price.toFixed(2)}
+                    </span>
+                  </>
+                ) : (
+                  <span className="text-sm font-bold text-gray-900">
+                    ${displayPrice.toFixed(2)}
+                  </span>
+                )}
+              </div>
             </div>
             <div className="flex items-center space-x-2">
               <Button
                 variant="outline"
                 size="sm"
-                className="h-8 w-8 p-0"
+                className="h-7 w-7 p-0 border-rose-300 hover:bg-rose-50 text-rose-600"
                 onClick={() => updateQuantity(item.id, item.quantity - 1)}
               >
                 <Minus className="h-3 w-3" />
               </Button>
-              <span className="text-sm font-medium w-8 text-center">
+              <span className="text-sm font-medium w-6 text-center text-gray-700">
                 {item.quantity}
               </span>
               <Button
                 variant="outline"
                 size="sm"
-                className="h-8 w-8 p-0"
+                className="h-7 w-7 p-0 border-rose-300 hover:bg-rose-50 text-rose-600"
                 onClick={() => updateQuantity(item.id, item.quantity + 1)}
                 disabled={item.quantity >= item.skuQuantity}
               >
                 <Plus className="h-3 w-3" />
               </Button>
               <Button
-                variant="outline"
+                variant="ghost"
                 size="sm"
-                className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                className="h-7 w-7 p-0 text-gray-400 hover:text-rose-500 hover:bg-rose-50"
                 onClick={() => removeFromCart(item.id)}
               >
                 <Trash2 className="h-3 w-3" />
@@ -85,26 +98,53 @@ export function CartItemCard({ item, variant = "list" }: CartItemCardProps) {
   }
 
   return (
-    <div className="flex gap-4 p-4 border rounded-lg">
-      <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center">
+    <div className="flex gap-4 p-6 border border-rose-200 rounded-xl bg-gradient-to-r from-white via-rose-50 to-pink-50 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-r from-rose-100/10 via-pink-100/10 to-purple-100/10 pointer-events-none"></div>
+
+      <div className="relative z-10 w-24 h-24 bg-gradient-to-br from-rose-100 to-pink-100 rounded-xl flex items-center justify-center overflow-hidden shadow-sm">
         <Image
           src={`${API_BASE_URL}${item.image}`}
           alt={item.name}
-          width={100}
-          height={100}
-          className="w-16 h-16 object-cover rounded"
+          width={96}
+          height={96}
+          className="w-full h-full object-cover"
         />
+        <div className="absolute -top-1 -right-1">
+          <Heart className="w-4 h-4 text-rose-500" />
+        </div>
       </div>
 
-      <div className="flex-1 space-y-2">
-        <h3 className="font-medium">{item.name}</h3>
-        <div className="text-lg font-bold">${item.finalPrice}</div>
+      <div className="flex-1 space-y-3 relative z-10">
+        <h3 className="font-semibold text-gray-900 text-lg">{item.name}</h3>
+        <div className="flex items-center space-x-3">
+          {hasDiscount ? (
+            <>
+              <span className="text-xl font-bold bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent">
+                ${displayPrice.toFixed(2)}
+              </span>
+              <span className="text-sm text-gray-400 line-through">
+                ${item.price.toFixed(2)}
+              </span>
+              <div className="flex items-center gap-1 bg-gradient-to-r from-rose-100 to-pink-100 px-2 py-1 rounded-full">
+                <Sparkles className="w-3 h-3 text-rose-500" />
+                <span className="text-xs font-medium text-rose-700">
+                  {t("cart.specialOffer")}
+                </span>
+              </div>
+            </>
+          ) : (
+            <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-rose-600 bg-clip-text text-transparent">
+              ${displayPrice.toFixed(2)}
+            </span>
+          )}
+        </div>
       </div>
 
-      <div className="flex flex-col items-end justify-between">
+      <div className="flex flex-col items-end justify-between relative z-10">
         <Button
           variant="ghost"
           size="sm"
+          className="text-gray-400 hover:text-rose-500 hover:bg-rose-50 rounded-full"
           onClick={() => removeFromCart(item.id)}
         >
           <Trash2 className="w-4 h-4" />
@@ -114,6 +154,7 @@ export function CartItemCard({ item, variant = "list" }: CartItemCardProps) {
           <Button
             variant="outline"
             size="sm"
+            className="border-rose-300 hover:bg-rose-50 text-rose-600 rounded-full"
             onClick={() => updateQuantity(item.id, item.quantity - 1)}
           >
             <Minus className="w-3 h-3" />
@@ -123,13 +164,15 @@ export function CartItemCard({ item, variant = "list" }: CartItemCardProps) {
             onChange={(e) =>
               updateQuantity(item.id, parseInt(e.target.value) || 1)
             }
-            className="w-16 text-center"
+            className="w-16 text-center border-rose-300 focus:border-rose-500 focus:ring-rose-500 rounded-full"
             min="1"
           />
           <Button
             variant="outline"
             size="sm"
+            className="border-rose-300 hover:bg-rose-50 text-rose-600 rounded-full"
             onClick={() => updateQuantity(item.id, item.quantity + 1)}
+            disabled={item.quantity >= item.skuQuantity}
           >
             <Plus className="w-3 h-3" />
           </Button>

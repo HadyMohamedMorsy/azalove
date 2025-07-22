@@ -9,7 +9,7 @@ export const siteConfig = {
       href: "/",
     },
     {
-      label: "التسويق",
+      label: "التسوق",
       href: "/shop",
     },
     {

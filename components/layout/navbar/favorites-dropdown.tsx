@@ -20,10 +20,14 @@ export function FavoritesDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative">
-          <Heart className="w-5 h-5" />
+        <Button
+          variant="ghost"
+          size="icon"
+          className="relative hover:bg-royal-50 transition-all duration-300 group"
+        >
+          <Heart className="w-7 h-7 text-royal-500 group-hover:text-royal-600 group-hover:scale-110 transition-all duration-300" />
           {getTotalFavorites() > 0 && (
-            <Badge className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs">
+            <Badge className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 flex items-center justify-center text-xs bg-royal-500 hover:bg-royal-600 text-white border-2 border-white shadow-lg">
               {getTotalFavorites()}
             </Badge>
           )}
@@ -31,10 +35,11 @@ export function FavoritesDropdown() {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        className="w-80 bg-background border border-border shadow-lg"
+        className="w-80 bg-background shadow-lg rounded-xl"
       >
         <div className="p-4">
-          <h3 className="font-semibold mb-3">
+          <h3 className="font-semibold mb-3 text-lg text-royal-700 flex items-center gap-2">
+            <Heart className="w-5 h-5 text-royal-500" />
             Favorites ({getTotalFavorites()})
           </h3>
           {favoriteItems.length === 0 ? (
@@ -45,18 +50,37 @@ export function FavoritesDropdown() {
           ) : (
             <div className="space-y-3 max-h-60 overflow-y-auto">
               {favoriteItems.map((item: any) => (
-                <Card key={`${item.id}-${item.selectedColor}`} className="p-0">
+                <Card
+                  key={`${item.id}-${item.selectedColor}`}
+                  className="p-0 shadow-sm border-royal-100 hover:border-royal-200 transition-colors"
+                >
                   <CardContent className="p-3">
                     <div className="flex items-center gap-3">
-                      <Image
-                        src={`${domain}${item.image}`}
-                        alt={item.name}
-                        width={100}
-                        height={100}
-                        className="w-12 h-12 rounded object-cover"
-                      />
+                      <div className="relative w-12 h-12 rounded-md overflow-hidden bg-royal-50 flex items-center justify-center">
+                        {item.image ? (
+                          <Image
+                            src={`${domain}${item.image}`}
+                            alt={item.name}
+                            width={48}
+                            height={48}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.style.display = "none";
+                              target.nextElementSibling?.classList.remove(
+                                "hidden"
+                              );
+                            }}
+                          />
+                        ) : null}
+                        <div
+                          className={`absolute inset-0 flex items-center justify-center text-xs text-royal-500 ${item.image ? "hidden" : ""}`}
+                        >
+                          {item.name?.charAt(0) || "N"}
+                        </div>
+                      </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-medium text-sm truncate">
+                        <h4 className="font-medium text-sm truncate text-gray-900">
                           {item.name}
                         </h4>
                         {item.selectedColor && (
@@ -64,12 +88,20 @@ export function FavoritesDropdown() {
                             Color: {item.selectedColor}
                           </p>
                         )}
-                        <p className="text-xl font-bold text-amaranth-600">
-                          ${item.finalPrice?.toFixed(2)}
-                        </p>
-                        <p className="text-sm text-muted-foreground line-through">
-                          ${item.price?.toFixed(2)}
-                        </p>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className="text-lg font-bold text-royal-600">
+                            $
+                            {typeof item.price === "number"
+                              ? item.price.toFixed(2)
+                              : "0.00"}
+                          </span>
+                          {item.originalPrice &&
+                            item.originalPrice > item.price && (
+                              <span className="text-sm text-muted-foreground line-through">
+                                ${item.originalPrice.toFixed(2)}
+                              </span>
+                            )}
+                        </div>
                       </div>
                       <Button
                         variant="ghost"
@@ -77,7 +109,7 @@ export function FavoritesDropdown() {
                         onClick={() =>
                           removeFromFavorites(item.id, item.selectedColor)
                         }
-                        className="h-8 w-8"
+                        className="h-8 w-8 text-gray-500 hover:text-royal-500 hover:bg-royal-50 transition-colors"
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>

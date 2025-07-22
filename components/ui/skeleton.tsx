@@ -6,7 +6,7 @@ interface SkeletonProps {
 
 export const Skeleton = ({
   length = 5,
-  containerClassName = "grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-4",
+  containerClassName = "container px-4 grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-4",
 }: SkeletonProps) => {
   return (
     <div className={containerClassName}>

@@ -1,4 +1,5 @@
 "use client";
+import { BrandSVG } from "@/components/ui/brand-svg";
 import Link from "next/link";
 
 function ShippingDelivery() {
@@ -22,6 +23,16 @@ function ShippingDelivery() {
 
       <section className="container py-10 px-4">
         <div className="max-w-4xl mx-auto">
+          {/* Brand Identity SVG Header */}
+          <div className="text-center mb-12">
+            <BrandSVG
+              svgName="artboard-49"
+              size="xl"
+              animate={true}
+              className="mx-auto mb-6"
+            />
+          </div>
+
           <div className="mb-8">
             <h1 className="text-4xl mb-4 font-web text-right">
               سياسة الشحن والتوصيل

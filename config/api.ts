@@ -9,6 +9,8 @@ export const API_ENDPOINTS_FROM_NEXT = {
   PRODUCTS_IS_NEW: "/api/home/products/is-new",
   SHOP: "/api/shop",
   BLOGS: "/api/blogs",
+  BLOG_FILTERS: "/api/blog-filters",
+  BLOG_FILTER: "/api/blog/filter",
   ADDRESSES: "/api/addresses/addresses",
   ADDRESS_UPDATE: "/api/addresses/address-update",
   ADDRESS_CREATE: "/api/addresses/address-create",
@@ -18,8 +20,11 @@ export const API_ENDPOINTS_FROM_NEXT = {
 
 export const API_ENDPOINTS_FROM_SERVER = {
   CATEGORIES: `/category/front`,
+  SUB_CATEGORIES: `/sub-category/front`,
   PRODUCTS: `/product/front`,
   BLOGS: `/blog/front`,
+  MEGA_MENU_CATEGORIES: `/category/product`,
+  MEGA_MENU_BLOG_CATEGORIES: `/category/blog`,
 };
 
 export const API_ENDPOINTS_FROM_SERVER_DASHBOARD = {

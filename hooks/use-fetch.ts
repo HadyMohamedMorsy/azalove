@@ -6,7 +6,7 @@ type FetchState<T> = {
   data: T | null;
   loading: boolean;
   error: string | null;
-  total?: number;
+  totalRecords?: number;
 };
 
 export const useFetch = <T>(url: string) => {
@@ -14,7 +14,7 @@ export const useFetch = <T>(url: string) => {
     data: null,
     loading: true,
     error: null,
-    total: 0,
+    totalRecords: 0,
   });
 
   useEffect(() => {
@@ -25,14 +25,14 @@ export const useFetch = <T>(url: string) => {
           data: data.data.data,
           loading: false,
           error: null,
-          total: data.data.total || 0,
+          totalRecords: data.data.totalRecords || 0,
         });
       } catch (err) {
         setState({
           data: null,
           loading: false,
           error: err instanceof Error ? err.message : "An error occurred",
-          total: 0,
+          totalRecords: 0,
         });
       }
     }

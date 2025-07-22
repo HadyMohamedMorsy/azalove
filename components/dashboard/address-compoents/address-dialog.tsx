@@ -14,6 +14,7 @@ import { API_ENDPOINTS_FROM_NEXT } from "@/config/api";
 import { useAuth } from "@/contexts/auth-context";
 import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
+import { Heart, MapPin } from "lucide-react";
 import { useState } from "react";
 
 interface Address {
@@ -75,14 +76,14 @@ export default function AddressDialog({
         }
       );
       toast({
-        title: "Address updated",
-        description: "Your address has been successfully updated.",
+        title: "تم تحديث العنوان",
+        description: "تم تحديث عنوانك بنجاح.",
       });
       onSuccess(
         response.data.data || { ...formData, id: addressId, isDefault: false }
       );
     } catch (error) {
-      throw new Error("Failed to update address");
+      throw new Error("فشل في تحديث العنوان");
     }
   };
 
@@ -99,12 +100,12 @@ export default function AddressDialog({
         }
       );
       toast({
-        title: "Address added",
-        description: "Your new address has been added successfully.",
+        title: "تم إضافة العنوان",
+        description: "تم إضافة عنوانك الجديد بنجاح.",
       });
       onSuccess(response.data.data);
     } catch (error) {
-      throw new Error("Failed to create address");
+      throw new Error("فشل في إنشاء العنوان");
     }
   };
 
@@ -118,11 +119,11 @@ export default function AddressDialog({
       onOpenChange(false);
     } catch (error) {
       toast({
-        title: "Error",
+        title: "خطأ",
         description:
           error instanceof Error
             ? error.message
-            : "Something went wrong. Please try again.",
+            : "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
       });
     }
   };
@@ -130,130 +131,182 @@ export default function AddressDialog({
   return (
     <>
       <Dialog open={isOpen} onOpenChange={onOpenChange}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>
-              {editingAddress ? "Edit Address" : "Add New Address"}
+        <DialogContent className="sm:max-w-md border-0 shadow-2xl bg-white/95 backdrop-blur-sm">
+          <DialogHeader className="bg-gradient-to-r from-rose-50 to-pink-50 border-b border-rose-100 rounded-t-lg -mt-6 -mx-6 px-6 py-4">
+            <DialogTitle className="flex items-center gap-2 text-rose-800">
+              <div className="relative">
+                <MapPin className="w-5 h-5 text-rose-500" />
+                <Heart className="w-3 h-3 text-rose-400 absolute -top-1 -right-1" />
+              </div>
+              {editingAddress ? "تعديل العنوان" : "إضافة عنوان جديد"}
             </DialogTitle>
-            <DialogDescription>
+            <DialogDescription className="text-rose-600">
               {editingAddress
-                ? "Update your address information."
-                : "Add a new address to your address book."}
+                ? "تحديث معلومات عنوانك بحب ❤️"
+                : "أضف عنوان جديد إلى دليل العناوين الخاص بك 💕"}
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
+          <div className="space-y-4 pt-4">
             <div className="space-y-2">
-              <Label htmlFor="title">Address Title</Label>
+              <Label htmlFor="title" className="text-rose-700 font-medium">
+                عنوان العنوان
+              </Label>
               <Input
                 id="title"
-                placeholder="e.g., Home, Work, Office"
+                placeholder="مثال: المنزل، العمل، المكتب"
                 value={formData.title}
                 onChange={(e) => handleFormChange("title", e.target.value)}
+                className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="addressLine1">Address Line 1</Label>
+              <Label
+                htmlFor="addressLine1"
+                className="text-rose-700 font-medium"
+              >
+                سطر العنوان 1
+              </Label>
               <Input
                 id="addressLine1"
-                placeholder="Street address, P.O. box"
+                placeholder="عنوان الشارع، صندوق البريد"
                 value={formData.addressLine1}
                 onChange={(e) =>
                   handleFormChange("addressLine1", e.target.value)
                 }
+                className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="addressLine2">Address Line 2 (Optional)</Label>
+              <Label
+                htmlFor="addressLine2"
+                className="text-rose-700 font-medium"
+              >
+                سطر العنوان 2 (اختياري)
+              </Label>
               <Input
                 id="addressLine2"
-                placeholder="Apartment, suite, unit, building, floor, etc."
+                placeholder="شقة، جناح، وحدة، مبنى، طابق، إلخ"
                 value={formData.addressLine2}
                 onChange={(e) =>
                   handleFormChange("addressLine2", e.target.value)
                 }
+                className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="countryId">Country</Label>
+                <Label
+                  htmlFor="countryId"
+                  className="text-rose-700 font-medium"
+                >
+                  البلد
+                </Label>
                 <Input
                   id="countryId"
                   type="number"
-                  placeholder="Country ID"
+                  placeholder="رمز البلد"
                   value={formData.countryId}
                   onChange={(e) =>
                     handleFormChange("countryId", e.target.value)
                   }
+                  className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="regionId">Region</Label>
+                <Label htmlFor="regionId" className="text-rose-700 font-medium">
+                  المنطقة
+                </Label>
                 <Input
                   id="regionId"
                   type="number"
-                  placeholder="Region ID"
+                  placeholder="رمز المنطقة"
                   value={formData.regionId}
                   onChange={(e) => handleFormChange("regionId", e.target.value)}
+                  className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20"
                 />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="cityId">City</Label>
+                <Label htmlFor="cityId" className="text-rose-700 font-medium">
+                  المدينة
+                </Label>
                 <Input
                   id="cityId"
                   type="number"
-                  placeholder="City ID"
+                  placeholder="رمز المدينة"
                   value={formData.cityId}
                   onChange={(e) => handleFormChange("cityId", e.target.value)}
+                  className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="areaId">Area</Label>
+                <Label htmlFor="areaId" className="text-rose-700 font-medium">
+                  المنطقة
+                </Label>
                 <Input
                   id="areaId"
                   type="number"
-                  placeholder="Area ID"
+                  placeholder="رمز المنطقة"
                   value={formData.areaId}
                   onChange={(e) => handleFormChange("areaId", e.target.value)}
+                  className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20"
                 />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="postalCode">Postal Code</Label>
+                <Label
+                  htmlFor="postalCode"
+                  className="text-rose-700 font-medium"
+                >
+                  الرمز البريدي
+                </Label>
                 <Input
                   id="postalCode"
-                  placeholder="Postal code"
+                  placeholder="الرمز البريدي"
                   value={formData.postalCode}
                   onChange={(e) =>
                     handleFormChange("postalCode", e.target.value)
                   }
+                  className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="phoneNumber">Phone Number</Label>
+                <Label
+                  htmlFor="phoneNumber"
+                  className="text-rose-700 font-medium"
+                >
+                  رقم الهاتف
+                </Label>
                 <Input
                   id="phoneNumber"
-                  placeholder="Phone number"
+                  placeholder="رقم الهاتف"
                   value={formData.phoneNumber}
                   onChange={(e) =>
                     handleFormChange("phoneNumber", e.target.value)
                   }
+                  className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20"
                 />
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="landmark">Landmark (Optional)</Label>
+              <Label htmlFor="landmark" className="text-rose-700 font-medium">
+                معلم (اختياري)
+              </Label>
               <Input
                 id="landmark"
-                placeholder="Nearby landmark"
+                placeholder="معلم قريب"
                 value={formData.landmark}
                 onChange={(e) => handleFormChange("landmark", e.target.value)}
+                className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20"
               />
             </div>
-            <Button onClick={handleSubmit} className="w-full">
-              {editingAddress ? "Update Address" : "Add Address"}
+            <Button
+              onClick={handleSubmit}
+              className="w-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+            >
+              {editingAddress ? "تحديث العنوان" : "إضافة العنوان"}
             </Button>
           </div>
         </DialogContent>

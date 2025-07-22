@@ -39,7 +39,7 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
           height="192"
           className={`splash-logo ${isActive ? "active" : ""}`}
         >
-          <g strokeWidth="2" stroke="none" fill="none" fillRule="evenodd">
+          <g strokeWidth="2" fill="none" fillRule="evenodd">
             <path
               fill="#b12a49"
               stroke="#b12a49"

@@ -74,7 +74,6 @@ const ProductCard = ({
       id: id.toString(),
       name: name,
       price: sku?.price ?? 0,
-      finalPrice: finalPrice ?? sku?.price ?? 0,
       image: srcImage,
       quantity: 1,
       skuQuantity: sku.quantity,
@@ -100,7 +99,6 @@ const ProductCard = ({
         id,
         name,
         price: sku?.price ?? 0,
-        finalPrice: finalPrice ?? sku?.price ?? 0,
         image: srcImage,
       });
       toast({

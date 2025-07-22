@@ -1,5 +1,10 @@
 "use client";
 
+import {
+  authStorage,
+  returnUrlStorage,
+  userStorage,
+} from "@/utils/localStorage";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -9,14 +14,27 @@ interface User {
   id: string;
   name: string;
   email: string;
+  firstName?: string;
+  lastName?: string;
+  phoneNumber?: string;
+  avatar?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
+  register: (
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string
+  ) => Promise<void>;
   logout: () => void;
   isLoading: boolean;
   redirectToLogin: (returnUrl?: string) => void;
+  updateUserData: (userData: Partial<User>) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -27,22 +45,43 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  // Load user data from localStorage on mount
+  useEffect(() => {
+    const loadUserFromStorage = () => {
+      try {
+        const storedUser = userStorage.getUser() as User | null;
+        if (storedUser) {
+          setUser(storedUser);
+        }
+      } catch (error) {
+        console.error("Error loading user data from localStorage:", error);
+        userStorage.removeUser();
+      }
+    };
+
+    loadUserFromStorage();
+  }, []);
+
   useEffect(() => {
     // Check if user is logged in on mount
     const checkAuth = async () => {
       try {
-        const token = localStorage.getItem("auth_token");
+        const token = authStorage.getToken();
         if (token) {
           // Verify token with your API
           const response = await axios.post("/api/auth/verify", {
             token,
           });
           const { user } = response.data.data;
+
+          // Store complete user data in localStorage
+          userStorage.saveUser(user);
           setUser(user);
         }
       } catch (error) {
         console.error("Auth check failed:", error);
-        localStorage.removeItem("auth_token");
+        authStorage.removeToken();
+        userStorage.removeUser();
         Cookies.remove("auth_token");
       } finally {
         setIsLoading(false);
@@ -59,7 +98,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         password,
       });
       const { access_token, user } = response.data.data;
-      localStorage.setItem("auth_token", access_token);
+
+      // Store token and complete user data
+      authStorage.saveToken(access_token);
+      userStorage.saveUser(user);
 
       Cookies.set("auth_token", access_token, {
         expires: 7,
@@ -71,9 +113,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(user);
 
       // Check if there's a return URL to redirect to
-      const returnUrl = localStorage.getItem("returnUrl");
+      const returnUrl = returnUrlStorage.getReturnUrl();
       if (returnUrl) {
-        localStorage.removeItem("returnUrl");
+        returnUrlStorage.removeReturnUrl();
         router.push(returnUrl);
       } else {
         router.push("/dashboard");
@@ -84,20 +126,70 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const register = async (
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string
+  ) => {
+    try {
+      const response = await axios.post("/api/auth/register", {
+        firstName,
+        lastName,
+        email,
+        password,
+      });
+      const { access_token, user } = response.data.data;
+
+      // Store token and complete user data
+      authStorage.saveToken(access_token);
+      userStorage.saveUser(user);
+
+      Cookies.set("auth_token", access_token, {
+        expires: 7,
+        path: "/",
+        secure: process.env.NODE_ENV === "development",
+        sameSite: "strict",
+      });
+
+      setUser(user);
+
+      // Check if there's a return URL to redirect to
+      const returnUrl = returnUrlStorage.getReturnUrl();
+      if (returnUrl) {
+        returnUrlStorage.removeReturnUrl();
+        router.push(returnUrl);
+      } else {
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      console.error("Registration failed:", error);
+      throw error;
+    }
+  };
+
   const logout = () => {
-    localStorage.removeItem("auth_token");
+    authStorage.removeToken();
+    userStorage.removeUser();
     Cookies.remove("auth_token");
     setUser(null);
     router.push("/login");
   };
 
+  const updateUserData = (userData: Partial<User>) => {
+    if (user) {
+      const updatedUser = { ...user, ...userData };
+      setUser(updatedUser);
+      userStorage.saveUser(updatedUser);
+    }
+  };
+
   const redirectToLogin = (returnUrl?: string) => {
     if (returnUrl) {
-      localStorage.setItem("returnUrl", returnUrl);
+      returnUrlStorage.saveReturnUrl(returnUrl);
     } else {
       // Store current page URL as return URL
-      localStorage.setItem(
-        "returnUrl",
+      returnUrlStorage.saveReturnUrl(
         window.location.pathname + window.location.search
       );
     }
@@ -106,7 +198,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, login, logout, isLoading, redirectToLogin }}
+      value={{
+        user,
+        login,
+        register,
+        logout,
+        isLoading,
+        redirectToLogin,
+        updateUserData,
+      }}
     >
       {children}
     </AuthContext.Provider>
