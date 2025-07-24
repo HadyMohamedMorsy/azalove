@@ -1,5 +1,9 @@
 "use client";
 
+import {
+  CharacterSaveDialog,
+  SaveAnswers,
+} from "@/components/ui/character-save-dialog";
 import Character from "@/components/ui/svgs/character";
 import Chin1 from "@/components/ui/svgs/chin/chin-1";
 import Chin2 from "@/components/ui/svgs/chin/chin-2";
@@ -40,7 +44,6 @@ import Shirt from "@/components/ui/svgs/shirt/shirt";
 import TShirt from "@/components/ui/svgs/shirt/t-shirt";
 import Shoes from "@/components/ui/svgs/shoes/shoes-1";
 import Shorts from "@/components/ui/svgs/shorts/shorts";
-import Veil from "@/components/ui/svgs/veil/veil";
 import React, { useState } from "react";
 
 const TABS = [
@@ -204,6 +207,9 @@ export default function StartCharacterPage() {
   const [showChin, setShowChin] = useState(false);
   const [showPants, setShowPants] = useState(false);
   const [showClothing, setShowClothing] = useState(false);
+  const [showSaveDialog, setShowSaveDialog] = useState(false);
+
+  const handleSaveCharacter = (answers: SaveAnswers) => {};
 
   const getSelectedGlassesComponent = () => {
     const glassesType = GLASSES_TYPES.find(
@@ -248,7 +254,10 @@ export default function StartCharacterPage() {
       <div className="relative bg-white rounded-xl shadow-lg p-6 w-full max-w-4xl mx-auto flex flex-col">
         {/* Header */}
         <div className="flex justify-end items-center mb-4">
-          <button className="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold">
+          <button
+            className="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors"
+            onClick={() => setShowSaveDialog(true)}
+          >
             Save
           </button>
         </div>
@@ -819,6 +828,13 @@ export default function StartCharacterPage() {
           )}
         </div>
       </div>
+
+      {/* Save Dialog */}
+      <CharacterSaveDialog
+        open={showSaveDialog}
+        onOpenChange={setShowSaveDialog}
+        onSave={handleSaveCharacter}
+      />
     </div>
   );
 }
