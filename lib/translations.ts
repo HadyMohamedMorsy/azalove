@@ -54,6 +54,31 @@ export interface Translations {
       each: string;
     };
   };
+  character: {
+    createCouple: string;
+    saveCouple: string;
+    currentlyEditing: string;
+    character1: string;
+    character2: string;
+    saveDialog: {
+      title: string;
+      description: string;
+      coupleName: string;
+      coupleNamePlaceholder: string;
+      questions: {
+        howMet: string;
+        howMetPlaceholder: string;
+        firstDate: string;
+        firstDatePlaceholder: string;
+        favoriteMemory: string;
+        favoriteMemoryPlaceholder: string;
+        futurePlans: string;
+        futurePlansPlaceholder: string;
+      };
+      save: string;
+      cancel: string;
+    };
+  };
   common: {
     loading: string;
     error: string;
@@ -119,6 +144,31 @@ export const translations: Record<Locale, Translations> = {
         each: "لكل قطعة",
       },
     },
+    character: {
+      createCouple: "أنشئ زوجك",
+      saveCouple: "احفظ الزوج",
+      currentlyEditing: "تحرير حالياً:",
+      character1: "الشخصية الأولى",
+      character2: "الشخصية الثانية",
+      saveDialog: {
+        title: "احفظ زوجك",
+        description: "أضف اسم للزوج وأجب على بعض الأسئلة لحفظ قصتك الرومانسية",
+        coupleName: "اسم الزوج",
+        coupleNamePlaceholder: "أدخل اسم الزوج...",
+        questions: {
+          howMet: "كيف التقيتما؟",
+          howMetPlaceholder: "أخبرنا قصة لقائكما...",
+          firstDate: "موعدكما الأول",
+          firstDatePlaceholder: "صف موعدكما الأول...",
+          favoriteMemory: "ذكرياتكما المفضلة",
+          favoriteMemoryPlaceholder: "شاركنا ذكرياتكما الجميلة...",
+          futurePlans: "خططكما المستقبلية",
+          futurePlansPlaceholder: "ما هي أحلامكما معاً؟",
+        },
+        save: "احفظ",
+        cancel: "إلغاء",
+      },
+    },
     common: {
       loading: "جاري التحميل...",
       error: "حدث خطأ",
@@ -181,6 +231,32 @@ export const translations: Record<Locale, Translations> = {
         reorder: "Reorder",
         quantity: "Quantity",
         each: "each",
+      },
+    },
+    character: {
+      createCouple: "Create Your Couple",
+      saveCouple: "Save Couple",
+      currentlyEditing: "Currently editing:",
+      character1: "Character 1",
+      character2: "Character 2",
+      saveDialog: {
+        title: "Save Your Couple",
+        description:
+          "Add a name for your couple and answer some questions to save your romantic story",
+        coupleName: "Couple Name",
+        coupleNamePlaceholder: "Enter couple name...",
+        questions: {
+          howMet: "How did you meet?",
+          howMetPlaceholder: "Tell us your meeting story...",
+          firstDate: "Your first date",
+          firstDatePlaceholder: "Describe your first date...",
+          favoriteMemory: "Your favorite memories",
+          favoriteMemoryPlaceholder: "Share your beautiful memories...",
+          futurePlans: "Your future plans",
+          futurePlansPlaceholder: "What are your dreams together?",
+        },
+        save: "Save",
+        cancel: "Cancel",
       },
     },
     common: {

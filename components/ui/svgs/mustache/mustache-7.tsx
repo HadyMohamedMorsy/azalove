@@ -20,8 +20,8 @@ const MustacheSeven: React.FC<CharacterProps> = ({ color }) => {
       <path
         fill="#CA8450"
         stroke="#000000"
-        stroke-width="0.6"
-        stroke-miterlimit="10"
+        strokeWidth="0.6"
+        strokeMiterlimit="10"
         d="M24.4,21.9c-0.6,0.4-0.9,1.2-0.8,1.9    c0.1,0.7,0.6,1.2,1.3,1.4c0.9,0.1,1.7-0.5,1.9-1.4"
       />
     </g>

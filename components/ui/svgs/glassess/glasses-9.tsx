@@ -62,7 +62,7 @@ const glasses9: React.FC<CharacterProps> = ({ color }) => {
           <clipPath id="SVGID_00000111159236227166559640000010515449608949662900_">
             <use overflow="visible" />
           </clipPath>
-          <g clip-path="url(#SVGID_00000111159236227166559640000010515449608949662900_)">
+          <g clipPath="url(#SVGID_00000111159236227166559640000010515449608949662900_)">
             <rect x="18.4" y="19.9" fill="#383838" width="0.1" height="0.2" />
             <rect x="18.5" y="19.9" fill="#383838" width="0.1" height="0.2" />
             <rect x="18.7" y="19.9" fill="#F7931E" width="0" height="0.2" />
@@ -83,7 +83,7 @@ const glasses9: React.FC<CharacterProps> = ({ color }) => {
           <clipPath id="SVGID_00000078021417839299818570000009106591273097583012_">
             <use overflow="visible" />
           </clipPath>
-          <g clip-path="url(#SVGID_00000078021417839299818570000009106591273097583012_)">
+          <g clipPath="url(#SVGID_00000078021417839299818570000009106591273097583012_)">
             <rect x="31.1" y="19.9" fill="#383838" width="0.1" height="0.2" />
             <rect x="31.2" y="19.9" fill="#383838" width="0.1" height="0.2" />
             <rect x="31.3" y="19.9" fill="#F7931E" width="0" height="0.2" />

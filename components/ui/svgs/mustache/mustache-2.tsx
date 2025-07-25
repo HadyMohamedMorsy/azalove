@@ -8,8 +8,8 @@ const MustacheTwo: React.FC<CharacterProps> = ({ color }) => {
   return (
     <g xmlns="http://www.w3.org/2000/svg" id="mustache8">
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         fill={color}
         d="M28.1,26.3c-0.6,0-1.2-0.2-1.7-0.4c-0.3-0.1-0.7-0.2-1-0.3    c-0.3,0.1-0.6,0.2-0.9,0.3c-0.6,0.2-1.1,0.4-1.7,0.4c-0.4,0-0.8-0.1-1.1-0.3L21,25.6l0.7-0.2c0.4-0.2,0.8-0.4,1.2-0.7    c0.5-0.4,1.1-0.7,1.7-0.8c0.3,0,0.5,0.1,0.8,0.2c0.2-0.1,0.5-0.2,0.8-0.2c0.6,0.1,1.3,0.4,1.7,0.8c0.4,0.3,0.8,0.5,1.2,0.7    l0.7,0.2L29.2,26C28.8,26.2,28.5,26.3,28.1,26.3z"
       />
@@ -17,8 +17,8 @@ const MustacheTwo: React.FC<CharacterProps> = ({ color }) => {
       <path
         fill="#CA8450"
         stroke="#000000"
-        stroke-width="0.6"
-        stroke-miterlimit="10"
+        strokeWidth="0.6"
+        strokeMiterlimit="10"
         d="M24.4,21.9c-0.6,0.4-0.9,1.2-0.8,1.9    c0.1,0.7,0.6,1.2,1.3,1.4c0.9,0.1,1.7-0.5,1.9-1.4"
       />
     </g>

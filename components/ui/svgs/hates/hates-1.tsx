@@ -29,15 +29,15 @@ const Hates1: React.FC<CharacterProps> = ({ color }) => {
       <path
         fill="none"
         stroke="#000000"
-        stroke-width="0.6"
-        stroke-miterlimit="10"
+        strokeWidth="0.6"
+        strokeMiterlimit="10"
         d="M19.9,63c1.9,0.3,3.7,0.5,5.6,0.6    c2.4,0.1,4.8,0,7.1-0.4"
       />
       <path
         fill="none"
         stroke="#000000"
-        stroke-width="0.6"
-        stroke-miterlimit="10"
+        strokeWidth="0.6"
+        strokeMiterlimit="10"
         d="M19.1,56.7c2.3,0.2,4.7,0.1,7.2,0.2    c3.2,0.1,6.2,0.2,9,0.1"
       />
       <path
@@ -68,8 +68,8 @@ const Hates1: React.FC<CharacterProps> = ({ color }) => {
       <path
         fill={color}
         stroke="#000000"
-        stroke-width="0.6"
-        stroke-miterlimit="10"
+        strokeWidth="0.6"
+        strokeMiterlimit="10"
         d="M32.7,24.8c0,0.7-2.4,5.2-6.7,5.4    s-7.2-2.7-7.3-5.1c-0.1-1.7-0.1-5.1,0-7c0-0.8,0.2-1.6,0.6-2.3l0.4-0.7c0.8-1.4,2.4-2.2,4-2.1l4,0.2c0.6,0,1.2,0.2,1.7,0.4l0,0    c1.4,0.7,2.3,2,2.5,3.5l0.3,2.8c0,0.2,0,0.5,0,0.7v0.7"
       />
       <path
@@ -101,62 +101,62 @@ const Hates1: React.FC<CharacterProps> = ({ color }) => {
       <path
         fill={color}
         stroke="#000000"
-        stroke-width="0.6"
-        stroke-miterlimit="10"
+        strokeWidth="0.6"
+        strokeMiterlimit="10"
         d="M32.1,21.5c0.2-0.7,0.8-1.3,1.6-1.5    c1.2-0.3,2.5,2.8,0.6,4.6c-0.2,0.2-0.6,0.3-0.9,0.2c-0.4-0.1-0.7-0.4-0.7-0.8"
       />
       <path
         fill={color}
         stroke="#000000"
-        stroke-width="0.6"
-        stroke-linecap="round"
-        stroke-miterlimit="10"
+        strokeWidth="0.6"
+        strokeLinecap="round"
+        strokeMiterlimit="10"
         d="M33,22.5    c0,0,0.8-1.7,1.2-0.9"
       />
       <path
         fill={color}
         stroke="#000000"
-        stroke-width="0.6"
-        stroke-linecap="round"
-        stroke-miterlimit="10"
+        strokeWidth="0.6"
+        strokeLinecap="round"
+        strokeMiterlimit="10"
         d="M33.5,22.2    c0,0,0.6,0.7-0.1,1"
       />
       <path
         fill={color}
         stroke="#000000"
-        stroke-width="0.6"
-        stroke-miterlimit="10"
+        strokeWidth="0.6"
+        strokeMiterlimit="10"
         d="M18.5,20.9c-0.2-0.1-0.4-0.2-0.6-0.1    c-0.7,0.1-1,1.3-0.8,2.2c0.2,0.9,0.7,1.6,1.5,2"
       />
       <path
         fill="#D6B89A"
         stroke="#000000"
-        stroke-width="0.6"
-        stroke-linecap="round"
-        stroke-miterlimit="10"
+        strokeWidth="0.6"
+        strokeLinecap="round"
+        strokeMiterlimit="10"
         d="M17.8,22L17.8,22    c0.1-0.1,0.2-0.1,0.4,0l0.5,0.3"
       />
       <path
         fill="none"
         stroke="#000000"
-        stroke-width="0.6"
-        stroke-linecap="round"
-        stroke-miterlimit="10"
+        strokeWidth="0.6"
+        strokeLinecap="round"
+        strokeMiterlimit="10"
         d="M22.4,25.5    c0.7,1,1.8,1.6,3,1.6c1.3,0,2.6-0.7,3.2-1.9"
       />
       <path
         fill={color}
         stroke="#000000"
-        stroke-width="0.6"
-        stroke-miterlimit="10"
+        strokeWidth="0.6"
+        strokeMiterlimit="10"
         d="M24.4,21.9c-0.6,0.4-0.9,1.2-0.8,1.9    c0.1,0.7,0.6,1.2,1.3,1.4c0.9,0.1,1.7-0.5,1.9-1.4"
       />
       <path
         fill="none"
         stroke="#000000"
-        stroke-width="0.4"
-        stroke-linecap="round"
-        stroke-miterlimit="10"
+        strokeWidth="0.4"
+        strokeLinecap="round"
+        strokeMiterlimit="10"
         d="M24.1,27.7    c0.4,0.3,0.9,0.5,1.4,0.5c0.5,0,1-0.2,1.3-0.5"
       />
     </g>

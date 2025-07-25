@@ -10,43 +10,43 @@ const Hates9: React.FC<CharacterProps> = ({ color }) => {
       <path
         fill={color}
         stroke="#000000"
-        stroke-width="0.6"
-        stroke-linejoin="round"
+        strokeWidth="0.6"
+        strokeLinejoin="round"
         d="M27.2,4.3c-0.9-0.5-6.4,0.3-7,1    s-2,6.3-1.9,6.3c0,0.4,2.9,0.6,6.4,0.4s6.3-0.7,6.3-1.1c0,0,0,0,0-0.1C30.7,10.1,28.1,4.7,27.2,4.3z"
       />
       <path
         fill={color}
         stroke="#000000"
-        stroke-width="0.6"
-        stroke-linejoin="round"
+        strokeWidth="0.6"
+        strokeLinejoin="round"
         d="M21.4,11c-0.2-0.5,0.5-2.1,2.2-2.7    s3.1-0.2,3-0.6s-1-0.6-0.9-0.8s1.7-0.6,1.5-1.2S24,6,24.3,5.3s2.4-1,2.4-1l-1.2-0.4L19.8,5l-1.9,9.4l11.1-2.8    C28.9,11.6,21.6,11.5,21.4,11z"
       />
       <path
         fill="#C9DDE7"
         stroke="#000000"
-        stroke-width="0.6"
-        stroke-linejoin="round"
+        strokeWidth="0.6"
+        strokeLinejoin="round"
         d="M31,10.9c0,0.4-2.8,0.9-6.3,1.1    c-3.3,0.2-6,0-6.3-0.3c-0.6,0.2-0.9,0.8-0.9,1.4l0.2,2.9c0,0.6,0.4,1.1,1,1.3c0.7,0.3,3.3,0.4,6.5,0.2c2.1-0.1,4.2-0.3,6.2-0.9    c0.7-0.1,1.2-0.8,1.2-1.5l-0.2-2.9C32.3,11.5,31.7,10.9,31,10.9z"
       />
       <path
         fill="#DCD7DF"
         stroke="#000000"
-        stroke-width="0.6"
-        stroke-linejoin="round"
+        strokeWidth="0.6"
+        strokeLinejoin="round"
         d="M20.6,15.9c-0.4-1.1-1.7-1.3-1.9-1.5    s0.8-2.4,0.8-2.4c-0.4,0-0.8-0.1-1.1-0.3l0,0l-0.6,0.5c-0.2,0.3-0.3,0.6-0.3,0.9l0.2,2.9c0,0.6,0.4,1.1,1,1.3    c0.7,0.3,3.3,0.4,6.5,0.2c1.4-0.1,2.7-0.2,3.8-0.4l1.3-0.2l0,0C30.1,17,21,17,20.6,15.9z"
       />
       <path
         fill={color}
         stroke="#000000"
-        stroke-width="0.6"
-        stroke-linejoin="round"
+        strokeWidth="0.6"
+        strokeLinejoin="round"
         d="M18.7,3.7c-0.3,0.1-1.7,1.6-2,5.1    c-0.2,2.5-0.1,7,0.4,7c0.8,0,3.4-6.8,5.3-9.3c2.5-3.3,5.2-1.9,5.2-1.9C26.9,3.6,21.5,2.3,18.7,3.7z"
       />
       <circle
         fill="#C9DDE7"
         stroke="#000000"
-        stroke-width="0.6"
-        stroke-linejoin="round"
+        strokeWidth="0.6"
+        strokeLinejoin="round"
         cx="17.1"
         cy="16.7"
         r="2.4"
@@ -54,22 +54,22 @@ const Hates9: React.FC<CharacterProps> = ({ color }) => {
       <path
         fill={color}
         stroke="#000000"
-        stroke-width="0.6"
-        stroke-linejoin="round"
+        strokeWidth="0.6"
+        strokeLinejoin="round"
         d="M16.7,8.8c-0.1,1.8-0.1,3.7,0,5.5h0.2    c0,0,0-5.5,1.1-8.3c1-2.5,2.4-2.8,2.6-2.8c-0.7,0.1-1.4,0.2-2,0.5C18.4,3.8,17,5.3,16.7,8.8z"
       />
       <path
         fill="#EBF3EF"
         stroke="#000000"
-        stroke-width="0.6"
-        stroke-linejoin="round"
+        strokeWidth="0.6"
+        strokeLinejoin="round"
         d="M25.6,12.2c-4.1,0.2-5.6-0.1-5.7,0.3    s9.8,0.1,10.1,0.4s0,2.7,0.4,3.1s0.9,0.5,1.6,0.1c0.5-0.3,0.2-4-0.2-4.4C31.3,11.1,30.4,11.9,25.6,12.2z"
       />
       <circle
         fill="#EBF3EF"
         stroke="#000000"
-        stroke-width="0.6"
-        stroke-linejoin="round"
+        strokeWidth="0.6"
+        strokeLinejoin="round"
         cx="17.4"
         cy="16.5"
         r="1.7"
@@ -77,8 +77,8 @@ const Hates9: React.FC<CharacterProps> = ({ color }) => {
       <path
         fill={color}
         stroke="#000000"
-        stroke-width="0.6"
-        stroke-linejoin="round"
+        strokeWidth="0.6"
+        strokeLinejoin="round"
         d="M25.3,4.9c-0.3,0.2,1.8-0.2,2.3,0.2    s1.2,1.1,0.7,1.2c-1.9,0.6,1.3,1.6,0.4,1.8c-0.9,0.2-3.5,0.3-3.4,0.5s2.9,0.3,3.5,0.6s1.1,1.9,1.7,1.7c0.2-0.1,0.3-0.2,0.5-0.3    c-0.9-2.2-2.1-4.2-3.4-6.2C27.6,4.5,26.9,3.8,25.3,4.9z"
       />
       <path
