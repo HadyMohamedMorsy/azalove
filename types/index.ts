@@ -24,3 +24,32 @@ export interface Order {
   total: number;
   createdBy: string;
 }
+
+export interface Location {
+  label: string;
+  value: number;
+}
+
+export interface Address {
+  id?: number;
+  title: string;
+  addressLine1: string;
+  addressLine2?: string;
+  countryId: number;
+  regionId: number;
+  cityId: number;
+  areaId: number;
+  country?: Location;
+  region?: Location;
+  city?: Location;
+  area?: Location;
+  postalCode: string;
+  landmark?: string;
+  phoneNumber: string;
+  isDefault?: boolean;
+}
+
+export type AddressFormData = Omit<
+  Address,
+  "id" | "isDefault" | "country" | "region" | "city" | "area"
+>;

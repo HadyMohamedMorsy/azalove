@@ -30,8 +30,9 @@ export const API_ENDPOINTS_FROM_SERVER = {
 };
 
 export const API_ENDPOINTS_FROM_SERVER_DASHBOARD = {
-  ADDRESSES: `/address`,
+  ADDRESSES: `/api/addresses/addresses`,
   ADDRESS_UPDATE: `/address/update`,
   ADDRESS_CREATE: `/address/store`,
   ADDRESS_DELETE: `/address/delete`,
+  ADDRESS_SET_DEFAULT: `/address/set-default`,
 };

@@ -40,28 +40,28 @@ const getToken = () => {
 
 export const refreshTokens = async (): Promise<{
   access_token: string;
-  refresh_token: string;
+  refreshToken: string;
   user: any;
 } | null> => {
   try {
-    const refreshToken = getRefreshToken();
+    const token = getRefreshToken();
 
-    if (!refreshToken) {
+    if (!token) {
       throw new Error("No refresh token available");
     }
 
     const response = await axios.post("/api/auth/refresh-tokens", {
-      refreshToken,
+      token,
     });
 
-    const { access_token, refresh_token, user } = response.data.data;
+    const { access_token, refreshToken, user } = response.data.data;
 
     // Save new tokens
-    saveTokens(access_token, refresh_token);
+    saveTokens(access_token, refreshToken);
 
     return {
       access_token,
-      refresh_token,
+      refreshToken,
       user,
     };
   } catch (error) {

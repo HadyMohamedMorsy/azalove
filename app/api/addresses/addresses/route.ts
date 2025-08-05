@@ -1,16 +1,38 @@
 import { apiFetch } from "@/utils/api-interceptor";
+import { serverAuth } from "@/utils/server-auth";
 import { NextRequest, NextResponse } from "next/server";
 
+// Define User interface for server-side usage
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  username?: string;
+  birthOfDate?: string;
+  type?: string;
+  role?: string;
+  phoneNumber?: string;
+  avatar?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams;
-  const userId = searchParams.get("userId");
-
-  if (!userId) {
-    return NextResponse.json({ error: "userId is required" }, { status: 400 });
-  }
-
   try {
-    console.log("Making API call to /address/front with userId:", userId);
+    // Get user from cookies using server-side authentication
+    const user = (await serverAuth.getCurrentUser()) as User | null;
+
+    if (!user || !user.id) {
+      return NextResponse.json(
+        { error: "Authentication required" },
+        { status: 401 }
+      );
+    }
+
+    const userId = user.id;
+
     const response = await apiFetch(`/address/front`, {
       params: {
         userId,

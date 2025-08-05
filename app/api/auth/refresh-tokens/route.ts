@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ refresh_token: refreshToken }),
+        body: JSON.stringify({ refreshToken: refreshToken }),
       }
     );
 
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
       success: true,
       data: {
         access_token: data.access_token,
-        refresh_token: data.refresh_token,
+        refreshToken: data.refreshToken,
         user: data.user,
       },
     });

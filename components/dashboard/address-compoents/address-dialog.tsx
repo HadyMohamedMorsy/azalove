@@ -10,29 +10,21 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { API_ENDPOINTS_FROM_NEXT } from "@/config/api";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { API_ENDPOINTS_FROM_SERVER_DASHBOARD } from "@/config/api";
 import { useAuth } from "@/contexts/auth-context";
 import { useToast } from "@/hooks/use-toast";
+import { Address, AddressFormData, Location } from "@/types";
 import api from "@/utils/api-interceptor";
-import { Heart, MapPin } from "lucide-react";
-import { useState } from "react";
-
-interface Address {
-  id: number;
-  title: string;
-  addressLine1: string;
-  addressLine2?: string;
-  countryId: number;
-  regionId: number;
-  cityId: number;
-  areaId: number;
-  postalCode: string;
-  landmark?: string;
-  phoneNumber: string;
-  isDefault: boolean;
-}
-
-type AddressFormData = Omit<Address, "id" | "isDefault">;
+import { Heart } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface AddressDialogProps {
   isOpen: boolean;
@@ -61,18 +53,149 @@ export default function AddressDialog({
     landmark: "",
     phoneNumber: "",
   });
+  const [isDefault, setIsDefault] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleFormChange = (field: keyof AddressFormData, value: string) => {
+  // Location data states
+  const [countries, setCountries] = useState<Location[]>([]);
+  const [cities, setCities] = useState<Location[]>([]);
+  const [areas, setAreas] = useState<Location[]>([]);
+  const [loadingLocations, setLoadingLocations] = useState(false);
+
+  // Reset form when dialog opens/closes or editing address changes
+  useEffect(() => {
+    if (isOpen) {
+      if (editingAddress) {
+        // Extract IDs from nested objects if they exist, otherwise use direct IDs
+        const countryId =
+          (editingAddress.country as any)?.id || editingAddress.countryId;
+        const cityId =
+          (editingAddress.city as any)?.id || editingAddress.cityId;
+        const areaId =
+          (editingAddress.area as any)?.id || editingAddress.areaId;
+
+        setFormData({
+          title: editingAddress.title,
+          addressLine1: editingAddress.addressLine1,
+          addressLine2: editingAddress.addressLine2 || "",
+          countryId: countryId,
+          regionId: editingAddress.regionId,
+          cityId: cityId,
+          areaId: areaId,
+          postalCode: editingAddress.postalCode,
+          landmark: editingAddress.landmark || "",
+          phoneNumber: editingAddress.phoneNumber,
+        });
+        setIsDefault(editingAddress.isDefault || false);
+
+        // Load countries first, then load cities and areas for the existing address
+        loadCountries().then(() => {
+          if (countryId) {
+            loadLocationOptions(countryId).then(() => {
+              if (cityId) {
+                loadLocationOptions(cityId);
+              }
+            });
+          }
+        });
+      } else {
+        setFormData({
+          title: "",
+          addressLine1: "",
+          addressLine2: "",
+          countryId: 0,
+          regionId: 0,
+          cityId: 0,
+          areaId: 0,
+          postalCode: "",
+          landmark: "",
+          phoneNumber: "",
+        });
+        setIsDefault(false);
+        // Load countries when dialog opens
+        loadCountries();
+      }
+    }
+  }, [isOpen, editingAddress]);
+
+  // Unified function to load location options
+  const loadLocationOptions = async (parentId?: number) => {
+    setLoadingLocations(true);
+    try {
+      const url = parentId
+        ? `/location/select-options?parentId=${parentId}`
+        : "/location/select-options";
+
+      const response = await api.get(url);
+      const options = response.data.data || [];
+
+      if (!parentId) {
+        // Loading countries
+        setCountries(options);
+        setCities([]);
+        setAreas([]);
+      } else if (parentId && parentId <= 6) {
+        // Loading cities (parentId is countryId)
+        setCities(options);
+        setAreas([]);
+      } else {
+        // Loading areas (parentId is cityId)
+        setAreas(options);
+      }
+    } catch (error) {
+      console.error("Error loading location options:", error);
+      // Set empty arrays on error
+      if (!parentId) {
+        setCountries([]);
+      } else if (parentId <= 6) {
+        setCities([]);
+      } else {
+        setAreas([]);
+      }
+    } finally {
+      setLoadingLocations(false);
+    }
+  };
+
+  // Load countries
+  const loadCountries = async () => await loadLocationOptions();
+
+  // Handle country change
+  const handleCountryChange = (countryId: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      countryId,
+      cityId: 0,
+      areaId: 0,
+    }));
+    loadLocationOptions(countryId);
+  };
+
+  // Handle city change
+  const handleCityChange = (cityId: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      cityId,
+      areaId: 0,
+    }));
+    loadLocationOptions(cityId);
+  };
+
+  const handleFormChange = (
+    field: keyof AddressFormData,
+    value: string | number
+  ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const updateAddress = async (addressId: number) => {
     try {
       const response = await api.put(
-        `${API_ENDPOINTS_FROM_NEXT.ADDRESS_UPDATE}`,
+        API_ENDPOINTS_FROM_SERVER_DASHBOARD.ADDRESS_UPDATE,
         {
           ...formData,
           id: addressId,
+          isDefault,
         }
       );
       toast({
@@ -80,7 +203,7 @@ export default function AddressDialog({
         description: "تم تحديث عنوانك بنجاح.",
       });
       onSuccess(
-        response.data.data || { ...formData, id: addressId, isDefault: false }
+        response.data.data || { ...formData, id: addressId, isDefault }
       );
     } catch (error: any) {
       if (error.response?.status === 401) {
@@ -95,9 +218,13 @@ export default function AddressDialog({
 
   const createAddress = async () => {
     try {
-      const response = await api.post(API_ENDPOINTS_FROM_NEXT.ADDRESS_CREATE, {
-        ...formData,
-      });
+      const response = await api.post(
+        API_ENDPOINTS_FROM_SERVER_DASHBOARD.ADDRESS_CREATE,
+        {
+          ...formData,
+          isDefault,
+        }
+      );
       toast({
         title: "تم إضافة العنوان",
         description: "تم إضافة عنوانك الجديد بنجاح.",
@@ -115,9 +242,18 @@ export default function AddressDialog({
   };
 
   const handleSubmit = async () => {
+    if (!formData.title || !formData.addressLine1 || !formData.phoneNumber) {
+      toast({
+        title: "خطأ في البيانات",
+        description: "يرجى ملء جميع الحقول المطلوبة.",
+      });
+      return;
+    }
+
+    setIsLoading(true);
     try {
       if (editingAddress) {
-        await updateAddress(editingAddress.id);
+        await updateAddress(editingAddress.id!);
       } else {
         await createAddress();
       }
@@ -130,192 +266,220 @@ export default function AddressDialog({
             ? error.message
             : "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <>
-      <Dialog open={isOpen} onOpenChange={onOpenChange}>
-        <DialogContent className="sm:max-w-md border-0 shadow-2xl bg-white/95 backdrop-blur-sm">
-          <DialogHeader className="bg-gradient-to-r from-rose-50 to-pink-50 border-b border-rose-100 rounded-t-lg -mt-6 -mx-6 px-6 py-4">
-            <DialogTitle className="flex items-center gap-2 text-rose-800">
-              <div className="relative">
-                <MapPin className="w-5 h-5 text-rose-500" />
-                <Heart className="w-3 h-3 text-rose-400 absolute -top-1 -right-1" />
-              </div>
-              {editingAddress ? "تعديل العنوان" : "إضافة عنوان جديد"}
-            </DialogTitle>
-            <DialogDescription className="text-rose-600">
-              {editingAddress
-                ? "تحديث معلومات عنوانك بحب ❤️"
-                : "أضف عنوان جديد إلى دليل العناوين الخاص بك 💕"}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 pt-4">
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogContent
+        className="sm:max-w-2xl border-0 shadow-2xl bg-white/95 backdrop-blur-sm max-h-[90vh] overflow-y-auto"
+        showCloseButton={false}
+      >
+        <DialogHeader className="bg-gradient-to-r from-rose-50 to-pink-50 border-b border-rose-100 rounded-t-lg -mt-6 -mx-6 px-6 py-4">
+          <DialogTitle className="flex items-center gap-2 text-rose-800">
+            <div className="relative">
+              <Heart className="w-3 h-3 text-rose-400 absolute -top-1 -right-1" />
+            </div>
+            {editingAddress ? "تعديل العنوان" : "إضافة عنوان جديد"}
+          </DialogTitle>
+          <DialogDescription className="text-rose-600">
+            {editingAddress
+              ? "تحديث معلومات عنوانك بحب ❤️"
+              : "أضف عنوان جديد إلى دليل العناوين الخاص بك 💕"}
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-4 pt-4">
+          <div className="space-y-2">
+            <Label htmlFor="title" className="text-rose-700 font-medium">
+              عنوان العنوان *
+            </Label>
+            <Input
+              id="title"
+              placeholder="مثال: المنزل، العمل، المكتب"
+              value={formData.title}
+              onChange={(e) => handleFormChange("title", e.target.value)}
+              className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="addressLine1" className="text-rose-700 font-medium">
+              سطر العنوان 1 *
+            </Label>
+            <Input
+              id="addressLine1"
+              placeholder="عنوان الشارع، صندوق البريد"
+              value={formData.addressLine1}
+              onChange={(e) => handleFormChange("addressLine1", e.target.value)}
+              className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="addressLine2" className="text-rose-700 font-medium">
+              سطر العنوان 2 (اختياري)
+            </Label>
+            <Input
+              id="addressLine2"
+              placeholder="شقة، جناح، وحدة، مبنى، طابق، إلخ"
+              value={formData.addressLine2}
+              onChange={(e) => handleFormChange("addressLine2", e.target.value)}
+              className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20"
+            />
+          </div>
+
+          {/* Country Dropdown */}
+          <div className="space-y-2">
+            <Label className="text-rose-700 font-medium">البلد *</Label>
+            <Select
+              value={formData.countryId.toString()}
+              onValueChange={(value) => handleCountryChange(parseInt(value))}
+              disabled={loadingLocations}
+            >
+              <SelectTrigger className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20">
+                <SelectValue placeholder="اختر البلد" />
+              </SelectTrigger>
+              <SelectContent>
+                {countries.map((country) => (
+                  <SelectItem
+                    key={country.value}
+                    value={country.value.toString()}
+                  >
+                    {country.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* City Dropdown */}
+          <div className="space-y-2">
+            <Label className="text-rose-700 font-medium">المدينة *</Label>
+            <Select
+              value={formData.cityId.toString()}
+              onValueChange={(value) => handleCityChange(parseInt(value))}
+              disabled={!formData.countryId || loadingLocations}
+            >
+              <SelectTrigger className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20">
+                <SelectValue placeholder="اختر المدينة" />
+              </SelectTrigger>
+              <SelectContent>
+                {cities.map((city) => (
+                  <SelectItem key={city.value} value={city.value.toString()}>
+                    {city.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Area Dropdown */}
+          <div className="space-y-2">
+            <Label className="text-rose-700 font-medium">المنطقة *</Label>
+            <Select
+              value={formData.areaId.toString()}
+              onValueChange={(value) =>
+                handleFormChange("areaId", parseInt(value))
+              }
+              disabled={!formData.cityId || loadingLocations}
+            >
+              <SelectTrigger className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20">
+                <SelectValue placeholder="اختر المنطقة" />
+              </SelectTrigger>
+              <SelectContent>
+                {areas.map((area) => (
+                  <SelectItem key={area.value} value={area.value.toString()}>
+                    {area.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="title" className="text-rose-700 font-medium">
-                عنوان العنوان
+              <Label htmlFor="postalCode" className="text-rose-700 font-medium">
+                الرمز البريدي *
               </Label>
               <Input
-                id="title"
-                placeholder="مثال: المنزل، العمل، المكتب"
-                value={formData.title}
-                onChange={(e) => handleFormChange("title", e.target.value)}
+                id="postalCode"
+                placeholder="الرمز البريدي"
+                value={formData.postalCode}
+                onChange={(e) => handleFormChange("postalCode", e.target.value)}
                 className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20"
               />
             </div>
             <div className="space-y-2">
               <Label
-                htmlFor="addressLine1"
+                htmlFor="phoneNumber"
                 className="text-rose-700 font-medium"
               >
-                سطر العنوان 1
+                رقم الهاتف *
               </Label>
               <Input
-                id="addressLine1"
-                placeholder="عنوان الشارع، صندوق البريد"
-                value={formData.addressLine1}
+                id="phoneNumber"
+                placeholder="رقم الهاتف"
+                value={formData.phoneNumber}
                 onChange={(e) =>
-                  handleFormChange("addressLine1", e.target.value)
+                  handleFormChange("phoneNumber", e.target.value)
                 }
                 className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20"
               />
             </div>
-            <div className="space-y-2">
-              <Label
-                htmlFor="addressLine2"
-                className="text-rose-700 font-medium"
-              >
-                سطر العنوان 2 (اختياري)
-              </Label>
-              <Input
-                id="addressLine2"
-                placeholder="شقة، جناح، وحدة، مبنى، طابق، إلخ"
-                value={formData.addressLine2}
-                onChange={(e) =>
-                  handleFormChange("addressLine2", e.target.value)
-                }
-                className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label
-                  htmlFor="countryId"
-                  className="text-rose-700 font-medium"
-                >
-                  البلد
-                </Label>
-                <Input
-                  id="countryId"
-                  type="number"
-                  placeholder="رمز البلد"
-                  value={formData.countryId}
-                  onChange={(e) =>
-                    handleFormChange("countryId", e.target.value)
-                  }
-                  className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="regionId" className="text-rose-700 font-medium">
-                  المنطقة
-                </Label>
-                <Input
-                  id="regionId"
-                  type="number"
-                  placeholder="رمز المنطقة"
-                  value={formData.regionId}
-                  onChange={(e) => handleFormChange("regionId", e.target.value)}
-                  className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20"
-                />
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="cityId" className="text-rose-700 font-medium">
-                  المدينة
-                </Label>
-                <Input
-                  id="cityId"
-                  type="number"
-                  placeholder="رمز المدينة"
-                  value={formData.cityId}
-                  onChange={(e) => handleFormChange("cityId", e.target.value)}
-                  className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="areaId" className="text-rose-700 font-medium">
-                  المنطقة
-                </Label>
-                <Input
-                  id="areaId"
-                  type="number"
-                  placeholder="رمز المنطقة"
-                  value={formData.areaId}
-                  onChange={(e) => handleFormChange("areaId", e.target.value)}
-                  className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20"
-                />
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label
-                  htmlFor="postalCode"
-                  className="text-rose-700 font-medium"
-                >
-                  الرمز البريدي
-                </Label>
-                <Input
-                  id="postalCode"
-                  placeholder="الرمز البريدي"
-                  value={formData.postalCode}
-                  onChange={(e) =>
-                    handleFormChange("postalCode", e.target.value)
-                  }
-                  className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label
-                  htmlFor="phoneNumber"
-                  className="text-rose-700 font-medium"
-                >
-                  رقم الهاتف
-                </Label>
-                <Input
-                  id="phoneNumber"
-                  placeholder="رقم الهاتف"
-                  value={formData.phoneNumber}
-                  onChange={(e) =>
-                    handleFormChange("phoneNumber", e.target.value)
-                  }
-                  className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20"
-                />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="landmark" className="text-rose-700 font-medium">
-                معلم (اختياري)
-              </Label>
-              <Input
-                id="landmark"
-                placeholder="معلم قريب"
-                value={formData.landmark}
-                onChange={(e) => handleFormChange("landmark", e.target.value)}
-                className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20"
-              />
-            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="landmark" className="text-rose-700 font-medium">
+              معلم (اختياري)
+            </Label>
+            <Input
+              id="landmark"
+              placeholder="معلم قريب"
+              value={formData.landmark}
+              onChange={(e) => handleFormChange("landmark", e.target.value)}
+              className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20"
+            />
+          </div>
+
+          {/* Default Address Switch */}
+          <div className="flex items-center justify-between space-x-2 space-x-reverse">
+            <Label htmlFor="isDefault" className="text-rose-700 font-medium">
+              تعيين كعنوان افتراضي
+            </Label>
+            <Switch
+              id="isDefault"
+              checked={isDefault}
+              onCheckedChange={setIsDefault}
+              className="data-[state=checked]:bg-rose-500"
+            />
+          </div>
+
+          <div className="flex gap-3 pt-2">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+              disabled={isLoading}
+              className="flex-1 border-rose-200 text-rose-700 hover:bg-rose-50 hover:border-rose-300 hover:text-rose-800 transition-all duration-200 font-medium"
+            >
+              إلغاء
+            </Button>
             <Button
               onClick={handleSubmit}
-              className="w-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              disabled={isLoading}
+              className="flex-1 bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {editingAddress ? "تحديث العنوان" : "إضافة العنوان"}
+              {isLoading
+                ? "جاري الحفظ..."
+                : editingAddress
+                  ? "تحديث العنوان"
+                  : "إضافة العنوان"}
             </Button>
           </div>
-        </DialogContent>
-      </Dialog>
-    </>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }

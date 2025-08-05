@@ -1,26 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Address } from "@/types";
 import { Heart, Plus, Sparkles } from "lucide-react";
 import { useState } from "react";
 import AddressCard from "../dashboard/address-compoents/address-card";
 import AddressDialog from "../dashboard/address-compoents/address-dialog";
 import AddressesList from "../dashboard/address-compoents/addresses-list";
-
-interface Address {
-  id: number;
-  title: string;
-  addressLine1: string;
-  addressLine2?: string;
-  countryId: number;
-  regionId: number;
-  cityId: number;
-  areaId: number;
-  postalCode: string;
-  landmark?: string;
-  phoneNumber: string;
-  isDefault: boolean;
-}
 
 const AddressBook = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -76,7 +62,7 @@ const AddressBook = () => {
               isOpen={isDialogOpen}
               onOpenChange={handleDialogClose}
               editingAddress={editingAddress}
-              onSuccess={handleAddressAdded}
+              onSuccess={(address?: Address) => handleAddressAdded(address)}
             />
           </>
         }

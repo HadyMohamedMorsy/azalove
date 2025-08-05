@@ -2,10 +2,11 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { API_ENDPOINTS_FROM_NEXT } from "@/config/api";
+import { API_ENDPOINTS_FROM_SERVER_DASHBOARD } from "@/config/api";
 import { useAuth } from "@/contexts/auth-context";
 import { useFetch } from "@/hooks/use-fetch";
 import { useToast } from "@/hooks/use-toast";
+import { Address } from "@/types";
 import api from "@/utils/api-interceptor";
 import {
   Building,
@@ -17,21 +18,6 @@ import {
   Trash2,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-
-interface Address {
-  id: number;
-  title: string;
-  addressLine1: string;
-  addressLine2?: string;
-  countryId: number;
-  regionId: number;
-  cityId: number;
-  areaId: number;
-  postalCode: string;
-  landmark?: string;
-  phoneNumber: string;
-  isDefault: boolean;
-}
 
 type AddressFormData = Omit<Address, "id" | "isDefault">;
 
@@ -56,9 +42,7 @@ export default function AddressesList({
     data: addresses,
     loading,
     error,
-  } = useFetch<Address[]>(
-    `${API_ENDPOINTS_FROM_NEXT.ADDRESSES}?userId=${user?.id}`
-  );
+  } = useFetch<Address[]>(`${API_ENDPOINTS_FROM_SERVER_DASHBOARD.ADDRESSES}`);
 
   // Update local addresses when API data changes
   useEffect(() => {
@@ -85,9 +69,12 @@ export default function AddressesList({
 
   const handleDelete = async (id: number) => {
     try {
-      await api.delete(`${API_ENDPOINTS_FROM_NEXT.ADDRESS_DELETE}`, {
-        data: { id },
-      });
+      await api.delete(
+        `${API_ENDPOINTS_FROM_SERVER_DASHBOARD.ADDRESS_DELETE}`,
+        {
+          data: { id },
+        }
+      );
 
       // Remove from local state
       setLocalAddresses((prev) => prev.filter((addr) => addr.id !== id));
@@ -113,7 +100,12 @@ export default function AddressesList({
 
   const setAsDefault = async (id: number) => {
     try {
-      await api.put(`${API_ENDPOINTS_FROM_NEXT.ADDRESSES}/${id}/default`);
+      await api.put(
+        `${API_ENDPOINTS_FROM_SERVER_DASHBOARD.ADDRESS_SET_DEFAULT}`,
+        {
+          id,
+        }
+      );
 
       // Update local state to reflect default change
       setLocalAddresses((prev) =>
@@ -166,7 +158,7 @@ export default function AddressesList({
   }
 
   return (
-    <Card className="border-0 shadow-lg bg-white/60 backdrop-blur-sm">
+    <Card className="border-0 shadow-lg bg-white/60 backdrop-blur-sm ">
       <CardHeader className="bg-gradient-to-r from-rose-50 to-pink-50 border-b border-rose-100">
         <CardTitle className="flex items-center gap-2 text-rose-800">
           <MapPin className="w-5 h-5 text-rose-500" />
@@ -186,7 +178,7 @@ export default function AddressesList({
             <p className="text-rose-600">أضف عنوانك الأول للبدء! 💕</p>
           </div>
         ) : (
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid gap-6 md:grid-cols-2 mt-4">
             {localAddresses.map((address) => (
               <div
                 key={address.id}
@@ -223,7 +215,7 @@ export default function AddressesList({
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => handleDelete(address.id)}
+                      onClick={() => address.id && handleDelete(address.id)}
                       className="text-rose-400 hover:text-rose-600 hover:bg-rose-50"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -247,7 +239,7 @@ export default function AddressesList({
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setAsDefault(address.id)}
+                    onClick={() => address.id && setAsDefault(address.id)}
                     className="w-full border-rose-200 text-rose-600 hover:bg-rose-50 hover:border-rose-300 transition-colors"
                   >
                     تعيين كافتراضي

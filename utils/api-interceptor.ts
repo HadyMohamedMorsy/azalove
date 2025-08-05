@@ -130,12 +130,12 @@ api.interceptors.response.use(
       originalRequest._retry = true;
       isRefreshing = true;
 
-      const refreshToken =
+      const token =
         typeof window !== "undefined"
           ? authStorage.getRefreshToken()
           : authCookies.getRefreshToken();
 
-      if (!refreshToken) {
+      if (!token) {
         // No refresh token available, logout user
         removeAuthData();
         if (typeof window !== "undefined") {
@@ -147,13 +147,13 @@ api.interceptors.response.use(
       try {
         // Call refresh token endpoint
         const response = await axios.post("/api/auth/refresh-tokens", {
-          refreshToken,
+          token,
         });
 
-        const { access_token, refresh_token } = response.data.data;
+        const { access_token, refreshToken } = response.data.data;
 
         // Save new tokens
-        saveAuthData(access_token, refresh_token);
+        saveAuthData(access_token, refreshToken);
 
         // Update authorization header
         originalRequest.headers.Authorization = `Bearer ${access_token}`;

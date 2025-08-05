@@ -1,6 +1,6 @@
 export const cookieKeys = {
   AUTH_TOKEN: "auth_token",
-  REFRESH_TOKEN: "refresh_token",
+  REFRESH_TOKEN: "refreshToken",
   USER_DATA: "user_data",
   RETURN_URL: "returnUrl",
   CART: "cart",
