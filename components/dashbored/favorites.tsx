@@ -31,7 +31,7 @@ const Favorites = () => {
 
       <Card className="relative border-0 shadow-lg bg-gradient-to-br from-cream-50/80 via-white/90 to-azalove-50/80 backdrop-blur-sm">
         <CardHeader className="relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-azalove-100/20 to-amaranth-100/20 rounded-t-xl"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-amaranth-100/20 to-amaranth-100/20 rounded-t-xl"></div>
           <div className="relative">
             <CardTitle className="flex items-center gap-3 text-royal-800">
               <div className="relative">
@@ -109,7 +109,7 @@ const Favorites = () => {
                     }}
                   >
                     {/* Romantic card glow effect */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-azalove-100/20 to-amaranth-100/20 rounded-xl blur-sm group-hover:blur-md transition-all duration-300"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-amaranth-100/20 to-amaranth-100/20 rounded-xl blur-sm group-hover:blur-md transition-all duration-300"></div>
 
                     <div className="relative">
                       <ProductCard

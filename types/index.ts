@@ -15,3 +15,12 @@ export interface CartItem {
   selectedColor?: string;
   selectedSize?: string;
 }
+
+export interface Order {
+  id: string;
+  payment: string;
+  paymentStatus: string;
+  status: string;
+  total: number;
+  createdBy: string;
+}

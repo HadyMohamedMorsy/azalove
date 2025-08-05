@@ -16,6 +16,10 @@ interface User {
   email: string;
   firstName?: string;
   lastName?: string;
+  username?: string;
+  birthOfDate?: string;
+  type?: string;
+  role?: string;
   phoneNumber?: string;
   avatar?: string;
   createdAt?: string;
@@ -62,34 +66,63 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     loadUserFromStorage();
   }, []);
 
-  useEffect(() => {
-    // Check if user is logged in on mount
-    const checkAuth = async () => {
-      try {
-        const token = authStorage.getToken();
-        if (token) {
-          // Verify token with your API
-          const response = await axios.post("/api/auth/verify", {
-            token,
-          });
-          const { user } = response.data.data;
+  // useEffect(() => {
+  //   // Check if user is logged in on mount
+  //   const checkAuth = async () => {
+  //     try {
+  //       const token = authStorage.getToken();
+  //       const refreshToken = authStorage.getRefreshToken();
 
-          // Store complete user data in localStorage
-          userStorage.saveUser(user);
-          setUser(user);
-        }
-      } catch (error) {
-        console.error("Auth check failed:", error);
-        authStorage.removeToken();
-        userStorage.removeUser();
-        Cookies.remove("auth_token");
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  //       if (token && refreshToken) {
+  //         try {
+  //           // Verify token with your API
+  //           const response = await axios.post("/api/auth/verify", {
+  //             token,
+  //           });
+  //           const { user } = response.data.data;
+  //           console.log(user);
 
-    checkAuth();
-  }, []);
+  //           // Store complete user data in localStorage
+  //           userStorage.saveUser(user);
+  //           setUser(user);
+  //         } catch (verifyError) {
+  //           // If token verification fails, try to refresh
+  //           try {
+  //             const refreshResponse = await axios.post(
+  //               "/api/auth/refresh-tokens",
+  //               {
+  //                 refreshToken,
+  //               }
+  //             );
+
+  //             const { access_token, refresh_token, user } =
+  //               refreshResponse.data.data;
+
+  //             // Save new tokens
+  //             authStorage.saveTokens(access_token, refresh_token);
+  //             userStorage.saveUser(user);
+  //             setUser(user);
+  //           } catch (refreshError) {
+  //             // Both verification and refresh failed, logout
+  //             console.error("Auth check failed:", refreshError);
+  //             authStorage.removeTokens();
+  //             userStorage.removeUser();
+  //             Cookies.remove("auth_token");
+  //           }
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error("Auth check failed:", error);
+  //       authStorage.removeTokens();
+  //       userStorage.removeUser();
+  //       Cookies.remove("auth_token");
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+
+  //   checkAuth();
+  // }, []);
 
   const login = async (email: string, password: string) => {
     try {
@@ -97,10 +130,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         email,
         password,
       });
-      const { access_token, user } = response.data.data;
+      const { access_token, refresh_token, user } = response.data.data;
 
-      // Store token and complete user data
-      authStorage.saveToken(access_token);
+      // Store tokens and complete user data
+      authStorage.saveTokens(access_token, refresh_token);
       userStorage.saveUser(user);
 
       Cookies.set("auth_token", access_token, {
@@ -139,10 +172,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         email,
         password,
       });
-      const { access_token, user } = response.data.data;
+      const { access_token, refresh_token, user } = response.data.data;
 
-      // Store token and complete user data
-      authStorage.saveToken(access_token);
+      // Store tokens and complete user data
+      authStorage.saveTokens(access_token, refresh_token);
       userStorage.saveUser(user);
 
       Cookies.set("auth_token", access_token, {
@@ -169,7 +202,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const logout = () => {
-    authStorage.removeToken();
+    authStorage.removeTokens();
     userStorage.removeUser();
     Cookies.remove("auth_token");
     setUser(null);

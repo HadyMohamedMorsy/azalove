@@ -1,5 +1,6 @@
 export const localStorageKeys = {
   AUTH_TOKEN: "auth_token",
+  REFRESH_TOKEN: "refresh_token",
   USER_DATA: "user_data",
   RETURN_URL: "returnUrl",
   CART: "cart",
@@ -10,20 +11,29 @@ export const localStorageKeys = {
 
 export const localStorageUtils = {
   setItem: (key: string, value: any): void => {
-    localStorage.setItem(key, JSON.stringify(value));
+    if (typeof window !== "undefined") {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
   },
 
   getItem: <T>(key: string, defaultValue?: T): T | null => {
-    const item = localStorage.getItem(key);
-    return item ? JSON.parse(item) as T : defaultValue || null;
+    if (typeof window !== "undefined") {
+      const item = localStorage.getItem(key);
+      return item ? (JSON.parse(item) as T) : defaultValue || null;
+    }
+    return defaultValue || null;
   },
 
   removeItem: (key: string): void => {
-    localStorage.removeItem(key);
+    if (typeof window !== "undefined") {
+      localStorage.removeItem(key);
+    }
   },
 
   clear: (): void => {
-    localStorage.clear();
+    if (typeof window !== "undefined") {
+      localStorage.clear();
+    }
   },
 };
 
@@ -60,6 +70,28 @@ export const authStorage = {
 
   removeToken: (): void => {
     localStorageUtils.removeItem(localStorageKeys.AUTH_TOKEN);
+  },
+
+  saveRefreshToken: (refreshToken: string): void => {
+    localStorageUtils.setItem(localStorageKeys.REFRESH_TOKEN, refreshToken);
+  },
+
+  getRefreshToken: (): string | null => {
+    return localStorageUtils.getItem<string>(localStorageKeys.REFRESH_TOKEN);
+  },
+
+  removeRefreshToken: (): void => {
+    localStorageUtils.removeItem(localStorageKeys.REFRESH_TOKEN);
+  },
+
+  saveTokens: (accessToken: string, refreshToken: string): void => {
+    authStorage.saveToken(accessToken);
+    authStorage.saveRefreshToken(refreshToken);
+  },
+
+  removeTokens: (): void => {
+    authStorage.removeToken();
+    authStorage.removeRefreshToken();
   },
 
   isAuthenticated: (): boolean => {

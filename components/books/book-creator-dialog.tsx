@@ -184,7 +184,7 @@ export default function BookCreatorDialog({
                   >
                     <PagePreview page={page} />
                     {page.type !== "cover" && (
-                      <div className="absolute inset-0 bg-azalove-500/10 opacity-0 hover:opacity-100 transition-opacity duration-200 rounded-lg flex items-center justify-center">
+                      <div className="absolute inset-0 bg-royal-500/10 opacity-0 hover:opacity-100 transition-opacity duration-200 rounded-lg flex items-center justify-center">
                         <div className="bg-white/90 rounded-lg px-2 py-1 text-xs text-royal-700">
                           اسحب لإعادة الترتيب
                         </div>

@@ -182,10 +182,9 @@ function Contact() {
                   </div>
                 </div>
 
-
                 <div className="flex gap-4">
                   <Button
-                    className="w-[150px] mt-5 font-web bg-azalove-500 hover:bg-azalove-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-azalove-500 hover:border-azalove-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                    className="w-[150px] mt-5 font-web bg-royal-500 hover:bg-azalove-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-azalove-500 hover:border-azalove-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                     type="submit"
                     disabled={loading}
                   >

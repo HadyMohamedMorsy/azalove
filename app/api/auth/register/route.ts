@@ -5,25 +5,27 @@ import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
-    const { email, password } = await request.json();
+    const { firstName, lastName, email, password } = await request.json();
 
     // Validate input
-    if (!email || !password) {
+    if (!firstName || !lastName || !email || !password) {
       return NextResponse.json(
-        { error: "Email and password are required" },
+        { error: "All fields are required" },
         { status: 400 }
       );
     }
 
     const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
       {
+        firstName,
+        lastName,
         email,
         password,
       }
     );
 
-    // If login is successful, store user data and tokens in cookies
+    // If registration is successful, store user data and tokens in cookies
     if (response.data.data.access_token && response.data.data.user) {
       const { access_token, refreshToken } = response.data.data;
 
@@ -64,7 +66,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(response.data);
   } catch (error) {
-    console.error("Login error:", error);
+    console.error("Registration error:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

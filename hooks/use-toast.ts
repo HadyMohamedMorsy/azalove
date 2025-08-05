@@ -12,6 +12,7 @@ type ToasterToast = ToastProps & {
   title?: React.ReactNode;
   description?: React.ReactNode;
   action?: ToastActionElement;
+  variant?: "default" | "success" | "error" | "warning" | "info" | "romantic";
 };
 
 const actionTypes = {
@@ -167,6 +168,27 @@ function toast({ ...props }: Toast) {
   };
 }
 
+// Romantic toast helper functions
+function romanticToast({ ...props }: Toast) {
+  return toast({ ...props, variant: "romantic" });
+}
+
+function successToast({ ...props }: Toast) {
+  return toast({ ...props, variant: "success" });
+}
+
+function errorToast({ ...props }: Toast) {
+  return toast({ ...props, variant: "error" });
+}
+
+function warningToast({ ...props }: Toast) {
+  return toast({ ...props, variant: "warning" });
+}
+
+function infoToast({ ...props }: Toast) {
+  return toast({ ...props, variant: "info" });
+}
+
 function useToast() {
   const [state, setState] = React.useState<State>(memoryState);
 
@@ -183,8 +205,14 @@ function useToast() {
   return {
     ...state,
     toast,
+    romanticToast,
+    successToast,
+    errorToast,
+    warningToast,
+    infoToast,
     dismiss: (toastId?: string) => dispatch({ type: "DISMISS_TOAST", toastId }),
   };
 }
 
-export { toast, useToast };
+export { errorToast, infoToast, romanticToast, successToast, toast, useToast, warningToast };
+

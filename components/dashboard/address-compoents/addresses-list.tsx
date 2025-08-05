@@ -6,7 +6,7 @@ import { API_ENDPOINTS_FROM_NEXT } from "@/config/api";
 import { useAuth } from "@/contexts/auth-context";
 import { useFetch } from "@/hooks/use-fetch";
 import { useToast } from "@/hooks/use-toast";
-import axios from "axios";
+import api from "@/utils/api-interceptor";
 import {
   Building,
   Edit,
@@ -85,7 +85,7 @@ export default function AddressesList({
 
   const handleDelete = async (id: number) => {
     try {
-      await axios.delete(`${API_ENDPOINTS_FROM_NEXT.ADDRESS_DELETE}`, {
+      await api.delete(`${API_ENDPOINTS_FROM_NEXT.ADDRESS_DELETE}`, {
         data: { id },
       });
 
@@ -96,17 +96,24 @@ export default function AddressesList({
         title: "تم حذف العنوان",
         description: "تم إزالة العنوان من دليل العناوين الخاص بك.",
       });
-    } catch (error) {
-      toast({
-        title: "خطأ",
-        description: "فشل في حذف العنوان. يرجى المحاولة مرة أخرى.",
-      });
+    } catch (error: any) {
+      if (error.response?.status === 401) {
+        toast({
+          title: "انتهت صلاحية الجلسة",
+          description: "تم تحديث الجلسة تلقائياً. يرجى المحاولة مرة أخرى.",
+        });
+      } else {
+        toast({
+          title: "خطأ",
+          description: "فشل في حذف العنوان. يرجى المحاولة مرة أخرى.",
+        });
+      }
     }
   };
 
   const setAsDefault = async (id: number) => {
     try {
-      await axios.put(`${API_ENDPOINTS_FROM_NEXT.ADDRESSES}/${id}/default`);
+      await api.put(`${API_ENDPOINTS_FROM_NEXT.ADDRESSES}/${id}/default`);
 
       // Update local state to reflect default change
       setLocalAddresses((prev) =>
@@ -120,11 +127,19 @@ export default function AddressesList({
         title: "تم تحديث العنوان الافتراضي",
         description: "هذا العنوان هو الآن العنوان الافتراضي الخاص بك.",
       });
-    } catch (error) {
-      toast({
-        title: "خطأ",
-        description: "فشل في تحديث العنوان الافتراضي. يرجى المحاولة مرة أخرى.",
-      });
+    } catch (error: any) {
+      if (error.response?.status === 401) {
+        toast({
+          title: "انتهت صلاحية الجلسة",
+          description: "تم تحديث الجلسة تلقائياً. يرجى المحاولة مرة أخرى.",
+        });
+      } else {
+        toast({
+          title: "خطأ",
+          description:
+            "فشل في تحديث العنوان الافتراضي. يرجى المحاولة مرة أخرى.",
+        });
+      }
     }
   };
 

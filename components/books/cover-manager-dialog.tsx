@@ -447,7 +447,7 @@ export default function CoverManagerDialog({
                           {}
                         )
                       }
-                      className="flex-1 bg-gradient-to-r from-azalove-500 to-azalove-600 hover:from-azalove-600 hover:to-azalove-700 text-white border-0 shadow-lg"
+                      className="flex-1 bg-gradient-to-r from-azalove-500 to-amaranth-600 hover:from-azalove-600 hover:to-azalove-700 text-white border-0 shadow-lg"
                     >
                       انتهى التحرير
                     </Button>
@@ -572,7 +572,7 @@ export default function CoverManagerDialog({
 
                       {/* Selection Overlay */}
                       {!isUsed && (
-                        <div className="absolute inset-0 bg-azalove-500/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div className="absolute inset-0 bg-royal-500/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                           <div className="text-center text-white">
                             <Plus className="w-8 h-8 mx-auto mb-2" />
                             <p className="text-sm font-medium">

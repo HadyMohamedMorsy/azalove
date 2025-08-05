@@ -9,7 +9,15 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { SavedCouple } from "@/hooks/use-saved-couples";
-import { CheckCircle, X } from "lucide-react";
+import {
+  Calendar,
+  CheckCircle,
+  Heart,
+  Palette,
+  Star,
+  User,
+  Users,
+} from "lucide-react";
 import { Book, BookPage, PAPER_OPTIONS } from "./data/books-data";
 import PagePreview from "./page-preview";
 
@@ -46,6 +54,16 @@ export default function BookCreationSummaryDialog({
     }
   };
 
+  // Get answers from couple data
+  const getAnswers = () => {
+    if (couple?.answers) {
+      return couple.answers;
+    }
+    return null;
+  };
+
+  const answers = getAnswers();
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
@@ -67,6 +85,58 @@ export default function BookCreationSummaryDialog({
               راجع كتابك قبل إنشائه. يمكنك العودة لإجراء تغييرات.
             </p>
           </div>
+
+          {/* User Answers and Questions Section */}
+          {answers && (
+            <div className="bg-white p-6 rounded-lg border border-azalove-200 shadow-sm">
+              <h4 className="font-semibold text-lg text-royal-800 mb-4 flex items-center gap-2">
+                <User className="w-5 h-5 text-azalove-600" />
+                إجاباتك وأسئلتك
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 p-3 bg-azalove-50 rounded-lg">
+                    <Calendar className="w-4 h-4 text-azalove-600" />
+                    <div>
+                      <p className="text-sm text-royal-600 font-medium">
+                        المناسبة:
+                      </p>
+                      <p className="text-royal-800">{answers.occasion}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 p-3 bg-azalove-50 rounded-lg">
+                    <Users className="w-4 h-4 text-azalove-600" />
+                    <div>
+                      <p className="text-sm text-royal-600 font-medium">
+                        العلاقة:
+                      </p>
+                      <p className="text-royal-800">{answers.relationship}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 p-3 bg-azalove-50 rounded-lg">
+                    <Palette className="w-4 h-4 text-azalove-600" />
+                    <div>
+                      <p className="text-sm text-royal-600 font-medium">
+                        الموضوع:
+                      </p>
+                      <p className="text-royal-800">{answers.theme}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 p-3 bg-azalove-50 rounded-lg">
+                    <Star className="w-4 h-4 text-azalove-600" />
+                    <div>
+                      <p className="text-sm text-royal-600 font-medium">
+                        الأسلوب:
+                      </p>
+                      <p className="text-royal-800">{answers.style}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Book Details */}
           <div className="bg-white p-6 rounded-lg border border-azalove-200 shadow-sm">
@@ -118,7 +188,8 @@ export default function BookCreationSummaryDialog({
           {/* Couple/Characters Preview */}
           {couple && (
             <div className="bg-white p-6 rounded-lg border border-azalove-200 shadow-sm">
-              <h4 className="font-semibold text-lg text-royal-800 mb-4">
+              <h4 className="font-semibold text-lg text-royal-800 mb-4 flex items-center gap-2">
+                <Heart className="w-5 h-5 text-rose-500" />
                 الشخصيات المختارة
               </h4>
               <div className="flex flex-col md:flex-row gap-6 items-center justify-center">
@@ -195,16 +266,14 @@ export default function BookCreationSummaryDialog({
               onClick={onCreateBook}
               className="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white border-0 shadow-lg"
             >
-              <CheckCircle className="w-4 h-4 mr-2" />
               إنشاء الكتاب
             </Button>
             <Button
               onClick={onClose}
               variant="outline"
-              className="flex-1 border-azalove-300 text-azalove-700 hover:bg-azalove-50"
+              className="border-azalove-300 text-azalove-700 hover:bg-azalove-50"
             >
-              <X className="w-4 h-4 mr-2" />
-              العودة والتحرير
+              إلغاء
             </Button>
           </div>
         </div>

@@ -136,7 +136,7 @@ export default function PageTemplateSelectorDialog({
                     </div>
 
                     {/* Selection Overlay */}
-                    <div className="absolute inset-0 bg-azalove-500/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="absolute inset-0 bg-royal-500/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <div className="text-center text-white">
                         <Plus className="w-8 h-8 mx-auto mb-2" />
                         <p className="text-sm font-medium">اختر هذا القالب</p>
@@ -144,7 +144,7 @@ export default function PageTemplateSelectorDialog({
                     </div>
 
                     {/* Type Badge */}
-                    <div className="absolute top-2 left-2 bg-azalove-500 text-white text-xs px-2 py-1 rounded-full">
+                    <div className="absolute top-2 left-2 bg-royal-500 text-white text-xs px-2 py-1 rounded-full">
                       {template.type}
                     </div>
 

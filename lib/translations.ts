@@ -24,6 +24,59 @@ export interface Translations {
     reviewAndCherish: string;
     specialOffer: string;
   };
+  product: {
+    loading: string;
+    error: string;
+    notFound: string;
+    outOfStock: string;
+    inStock: string;
+    off: string;
+    offAmount: string;
+    reviews: string;
+    noReviews: string;
+    outOf: string;
+    addToCart: string;
+    buyNow: string;
+    quantity: string;
+    freeShipping: string;
+    ordersOver: string;
+    yearWarranty: string;
+    fullCoverage: string;
+    dayReturns: string;
+    noQuestionsAsked: string;
+    relatedProducts: string;
+    specifications: string;
+    customerReviews: string;
+    ratingOverview: string;
+    basedOn: string;
+    reviewsCount: string;
+    highestRating: string;
+    lowestRating: string;
+    showAllReviews: string;
+    showLessReviews: string;
+    writeReview: string;
+    hideReviewForm: string;
+    writeFirstReview: string;
+    noReviewsYet: string;
+    beFirstToShare: string;
+    shareExperience: string;
+    helpOthersDiscover: string;
+    yourRating: string;
+    yourReview: string;
+    submitReview: string;
+    cancel: string;
+    submitting: string;
+    writingTips: string;
+    beSpecific: string;
+    mentionQuality: string;
+    reviewWillHelp: string;
+    poor: string;
+    fair: string;
+    good: string;
+    veryGood: string;
+    excellent: string;
+    verifiedPurchase: string;
+  };
   orderHistory: {
     title: string;
     description: string;
@@ -175,6 +228,59 @@ export const translations: Record<Locale, Translations> = {
       notFound: "غير موجود",
       backToHome: "العودة للرئيسية",
     },
+    product: {
+      loading: "جاري تحميل منتجك الرومانسي...",
+      error: "عذراً! حدث خطأ ما",
+      notFound: "المنتج غير موجود",
+      outOfStock: "نفذت الكمية",
+      inStock: "متوفر",
+      off: "خصم",
+      offAmount: "خصم ${amount}",
+      reviews: "تقييمات",
+      noReviews: "لا توجد تقييمات",
+      outOf: "من أصل",
+      addToCart: "أضف إلى السلة",
+      buyNow: "اشتري الآن",
+      quantity: "الكمية",
+      freeShipping: "شحن مجاني",
+      ordersOver: "للطلبات أكثر من",
+      yearWarranty: "ضمان سنتين",
+      fullCoverage: "تغطية كاملة",
+      dayReturns: "إرجاع خلال 30 يوم",
+      noQuestionsAsked: "بدون أسئلة",
+      relatedProducts: "منتجات مشابهة",
+      specifications: "المواصفات",
+      customerReviews: "تقييمات العملاء",
+      ratingOverview: "نظرة عامة على التقييم",
+      basedOn: "بناءً على",
+      reviewsCount: "تقييم",
+      highestRating: "أعلى تقييم",
+      lowestRating: "أقل تقييم",
+      showAllReviews: "عرض جميع التقييمات",
+      showLessReviews: "عرض تقييمات أقل",
+      writeReview: "اكتب تقييم",
+      hideReviewForm: "إخفاء نموذج التقييم",
+      writeFirstReview: "اكتب أول تقييم",
+      noReviewsYet: "لا توجد تقييمات بعد",
+      beFirstToShare: "كن أول من يشارك تجربته مع هذا المنتج!",
+      shareExperience: "شارك تجربتك",
+      helpOthersDiscover: "ساعد الآخرين في اكتشاف هذا المنتج المذهل من خلال مشاركة أفكارك",
+      yourRating: "تقييمك",
+      yourReview: "تقييمك",
+      submitReview: "إرسال التقييم",
+      cancel: "إلغاء",
+      submitting: "جاري الإرسال...",
+      writingTips: "نصائح للكتابة",
+      beSpecific: "كن محدداً حول ما أعجبك أو لم يعجبك",
+      mentionQuality: "اذكر الجودة والقيمة والتجربة العامة",
+      reviewWillHelp: "تقييمك سيساعد العملاء الآخرين في اتخاذ القرارات",
+      poor: "ضعيف",
+      fair: "مقبول",
+      good: "جيد",
+      veryGood: "جيد جداً",
+      excellent: "ممتاز",
+      verifiedPurchase: "مشتري موثق",
+    },
   },
   en: {
     cart: {
@@ -264,6 +370,59 @@ export const translations: Record<Locale, Translations> = {
       error: "An error occurred",
       notFound: "Not found",
       backToHome: "Back to home",
+    },
+    product: {
+      loading: "Loading your romantic find...",
+      error: "Oops! Something went wrong",
+      notFound: "Product not found",
+      outOfStock: "Out of Stock",
+      inStock: "In Stock",
+      off: "OFF",
+      offAmount: "OFF ${amount}",
+      reviews: "reviews",
+      noReviews: "No reviews",
+      outOf: "out of",
+      addToCart: "Add to Cart",
+      buyNow: "Buy Now",
+      quantity: "Quantity",
+      freeShipping: "Free Shipping",
+      ordersOver: "Orders over",
+      yearWarranty: "2 Year Warranty",
+      fullCoverage: "Full coverage",
+      dayReturns: "30 Day Returns",
+      noQuestionsAsked: "No questions asked",
+      relatedProducts: "Related Products",
+      specifications: "Specifications",
+      customerReviews: "Customer Reviews",
+      ratingOverview: "Rating Overview",
+      basedOn: "Based on",
+      reviewsCount: "reviews",
+      highestRating: "Highest Rating",
+      lowestRating: "Lowest Rating",
+      showAllReviews: "Show All Reviews",
+      showLessReviews: "Show Less Reviews",
+      writeReview: "Write a Review",
+      hideReviewForm: "Hide Review Form",
+      writeFirstReview: "Write the First Review",
+      noReviewsYet: "No reviews yet",
+      beFirstToShare: "Be the first to share your experience with this product!",
+      shareExperience: "Share Your Experience",
+      helpOthersDiscover: "Help others discover this amazing product by sharing your thoughts",
+      yourRating: "Your Rating",
+      yourReview: "Your Review",
+      submitReview: "Submit Review",
+      cancel: "Cancel",
+      submitting: "Submitting...",
+      writingTips: "Writing Tips",
+      beSpecific: "Be specific about what you liked or didn't like",
+      mentionQuality: "Mention quality, value, and overall experience",
+      reviewWillHelp: "Your review will help other customers make decisions",
+      poor: "Poor",
+      fair: "Fair",
+      good: "Good",
+      veryGood: "Very Good",
+      excellent: "Excellent",
+      verifiedPurchase: "Verified Purchase",
     },
   },
 };

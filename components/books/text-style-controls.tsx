@@ -109,7 +109,7 @@ export default function TextStyleControls({
             onClick={() => onStyleChange("textAlign", "left")}
             className={`flex-1 h-8 ${
               style.textAlign === "left"
-                ? "bg-azalove-500 hover:bg-azalove-600 text-white border-azalove-500"
+                ? "bg-royal-500 hover:bg-azalove-600 text-white border-azalove-500"
                 : "border-azalove-200 text-royal-700 hover:bg-azalove-50"
             }`}
           >
@@ -122,7 +122,7 @@ export default function TextStyleControls({
             onClick={() => onStyleChange("textAlign", "center")}
             className={`flex-1 h-8 ${
               style.textAlign === "center"
-                ? "bg-azalove-500 hover:bg-azalove-600 text-white border-azalove-500"
+                ? "bg-royal-500 hover:bg-azalove-600 text-white border-azalove-500"
                 : "border-azalove-200 text-royal-700 hover:bg-azalove-50"
             }`}
           >
@@ -135,7 +135,7 @@ export default function TextStyleControls({
             onClick={() => onStyleChange("textAlign", "right")}
             className={`flex-1 h-8 ${
               style.textAlign === "right"
-                ? "bg-azalove-500 hover:bg-azalove-600 text-white border-azalove-500"
+                ? "bg-royal-500 hover:bg-azalove-600 text-white border-azalove-500"
                 : "border-azalove-200 text-royal-700 hover:bg-azalove-50"
             }`}
           >

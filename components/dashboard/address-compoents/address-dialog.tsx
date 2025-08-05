@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { API_ENDPOINTS_FROM_NEXT } from "@/config/api";
 import { useAuth } from "@/contexts/auth-context";
 import { useToast } from "@/hooks/use-toast";
-import axios from "axios";
+import api from "@/utils/api-interceptor";
 import { Heart, MapPin } from "lucide-react";
 import { useState } from "react";
 
@@ -68,7 +68,7 @@ export default function AddressDialog({
 
   const updateAddress = async (addressId: number) => {
     try {
-      const response = await axios.put(
+      const response = await api.put(
         `${API_ENDPOINTS_FROM_NEXT.ADDRESS_UPDATE}`,
         {
           ...formData,
@@ -82,29 +82,34 @@ export default function AddressDialog({
       onSuccess(
         response.data.data || { ...formData, id: addressId, isDefault: false }
       );
-    } catch (error) {
+    } catch (error: any) {
+      if (error.response?.status === 401) {
+        toast({
+          title: "انتهت صلاحية الجلسة",
+          description: "تم تحديث الجلسة تلقائياً. يرجى المحاولة مرة أخرى.",
+        });
+      }
       throw new Error("فشل في تحديث العنوان");
     }
   };
 
   const createAddress = async () => {
     try {
-      const response = await axios.post(
-        API_ENDPOINTS_FROM_NEXT.ADDRESS_CREATE,
-        { ...formData },
-        {
-          headers: {
-            "user-id": user?.id,
-            Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-          },
-        }
-      );
+      const response = await api.post(API_ENDPOINTS_FROM_NEXT.ADDRESS_CREATE, {
+        ...formData,
+      });
       toast({
         title: "تم إضافة العنوان",
         description: "تم إضافة عنوانك الجديد بنجاح.",
       });
       onSuccess(response.data.data);
-    } catch (error) {
+    } catch (error: any) {
+      if (error.response?.status === 401) {
+        toast({
+          title: "انتهت صلاحية الجلسة",
+          description: "تم تحديث الجلسة تلقائياً. يرجى المحاولة مرة أخرى.",
+        });
+      }
       throw new Error("فشل في إنشاء العنوان");
     }
   };

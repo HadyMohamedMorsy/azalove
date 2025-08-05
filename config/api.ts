@@ -16,6 +16,8 @@ export const API_ENDPOINTS_FROM_NEXT = {
   ADDRESS_CREATE: "/api/addresses/address-create",
   ADDRESS_DELETE: "/api/addresses/address-delete",
   ADDRESS_SET_DEFAULT: "/api/addresses/address-set-default",
+  USER_UPDATE: "/user/update",
+  REFRESH_TOKENS: "/api/auth/refresh-tokens",
 };
 
 export const API_ENDPOINTS_FROM_SERVER = {
