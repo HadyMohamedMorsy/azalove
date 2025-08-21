@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 
 interface OrderConfirmationProps {
-  shippingData: any;
+  shippingData?: any;
   paymentData: any;
 }
 
@@ -92,7 +92,9 @@ const OrderConfirmation = ({
                 </div>
                 <div>
                   <p className="text-sm font-medium text-royal-900">Email</p>
-                  <p className="text-sm text-royal-600">{shippingData.email}</p>
+                  <p className="text-sm text-royal-600">
+                    {shippingData?.email || "Not provided"}
+                  </p>
                 </div>
               </div>
 
@@ -113,24 +115,26 @@ const OrderConfirmation = ({
           </div>
 
           {/* Shipping Address */}
-          <div className="border-t border-cream-200 pt-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 rounded-full bg-azalove-100 flex items-center justify-center">
-                <MapPin className="w-4 h-4 text-azalove-700" />
+          {shippingData && (
+            <div className="border-t border-cream-200 pt-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-8 rounded-full bg-azalove-100 flex items-center justify-center">
+                  <MapPin className="w-4 h-4 text-azalove-700" />
+                </div>
+                <h4 className="font-medium text-royal-900">Shipping Address</h4>
               </div>
-              <h4 className="font-medium text-royal-900">Shipping Address</h4>
+              <div className="bg-cream-50/50 p-4 rounded-lg">
+                <p className="text-sm text-royal-900">
+                  {shippingData.firstName} {shippingData.lastName}
+                </p>
+                <p className="text-sm text-royal-600">{shippingData.address}</p>
+                <p className="text-sm text-royal-600">
+                  {shippingData.city}, {shippingData.postalCode}
+                </p>
+                <p className="text-sm text-royal-600">{shippingData.country}</p>
+              </div>
             </div>
-            <div className="bg-cream-50/50 p-4 rounded-lg">
-              <p className="text-sm text-royal-900">
-                {shippingData.firstName} {shippingData.lastName}
-              </p>
-              <p className="text-sm text-royal-600">{shippingData.address}</p>
-              <p className="text-sm text-royal-600">
-                {shippingData.city}, {shippingData.postalCode}
-              </p>
-              <p className="text-sm text-royal-600">{shippingData.country}</p>
-            </div>
-          </div>
+          )}
         </CardContent>
       </Card>
 

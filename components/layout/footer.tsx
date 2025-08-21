@@ -1,8 +1,13 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useGeneralSettings } from "@/contexts/general-settings-context";
 import { Facebook, Instagram, Twitter } from "lucide-react";
 
 const Footer = () => {
+  const { settings } = useGeneralSettings();
+
   return (
     <footer
       className="bg-gradient-to-br from-amaranth-50 via-amaranth-100 to-royal-50 text-foreground py-12 md:py-16"
@@ -45,7 +50,7 @@ const Footer = () => {
                 </g>
               </svg>
               <h3 className="text-xl md:text-2xl font-bold text-amaranth-800">
-                أزالوف
+                {settings?.store_name || "أزالوف"}
               </h3>
             </div>
             <p className="text-amaranth-600 text-sm md:text-base lg:text-lg mb-6 md:mb-8 italic">
@@ -151,24 +156,46 @@ const Footer = () => {
               تابعنا
             </h4>
             <div className="flex gap-3 md:gap-4">
-              <a
-                href="#"
-                className="p-2 bg-amaranth-200 rounded-full hover:bg-amaranth-300 transition-colors"
-              >
-                <Instagram className="w-4 h-4 md:w-5 md:h-5 text-amaranth-700" />
-              </a>
-              <a
-                href="#"
-                className="p-2 bg-amaranth-200 rounded-full hover:bg-amaranth-300 transition-colors"
-              >
-                <Twitter className="w-4 h-4 md:w-5 md:h-5 text-amaranth-700" />
-              </a>
-              <a
-                href="#"
-                className="p-2 bg-amaranth-200 rounded-full hover:bg-amaranth-300 transition-colors"
-              >
-                <Facebook className="w-4 h-4 md:w-5 md:h-5 text-amaranth-700" />
-              </a>
+              {settings?.instagram_url && (
+                <a
+                  href={settings.instagram_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 bg-amaranth-200 rounded-full hover:bg-amaranth-300 transition-colors"
+                  aria-label="تابعنا على إنستغرام"
+                >
+                  <Instagram className="w-4 h-4 md:w-5 md:h-5 text-amaranth-700" />
+                </a>
+              )}
+              {settings?.facebook_url && (
+                <a
+                  href={settings.facebook_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 bg-amaranth-200 rounded-full hover:bg-amaranth-300 transition-colors"
+                  aria-label="تابعنا على فيسبوك"
+                >
+                  <Facebook className="w-4 h-4 md:w-5 md:h-5 text-amaranth-700" />
+                </a>
+              )}
+              {settings?.twitter_url && (
+                <a
+                  href={settings.twitter_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 bg-amaranth-200 rounded-full hover:bg-amaranth-300 transition-colors"
+                  aria-label="تابعنا على تويتر"
+                >
+                  <Twitter className="w-4 h-4 md:w-5 md:h-5 text-amaranth-700" />
+                </a>
+              )}
+              {!settings?.instagram_url &&
+                !settings?.facebook_url &&
+                !settings?.twitter_url && (
+                  <p className="text-amaranth-500 text-xs md:text-sm">
+                    قريباً على وسائل التواصل الاجتماعي
+                  </p>
+                )}
             </div>
           </div>
         </div>
@@ -176,8 +203,8 @@ const Footer = () => {
         {/* Bottom Section */}
         <div className="border-t border-amaranth-200 pt-6 md:pt-8 text-center">
           <p className="text-amaranth-500 text-xs md:text-sm">
-            © {new Date().getFullYear()} أزالوف. جميع الحقوق محفوظة. صُنع بـ 💕
-            لعشاق الرومانسية.
+            © {new Date().getFullYear()} {settings?.store_name || "أزالوف"}.
+            جميع الحقوق محفوظة. صُنع بـ 💕 لعشاق الرومانسية.
           </p>
         </div>
       </div>

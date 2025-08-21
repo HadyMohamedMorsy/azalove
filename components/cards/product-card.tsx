@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useCart } from "@/contexts/cart-context";
 import { useFavorites } from "@/contexts/favorites-context";
+import { useCurrency } from "@/hooks/use-currency";
 import { useToast } from "@/hooks/use-toast";
 import { Category } from "@/types/category";
 import { Sku } from "@/types/product";
@@ -33,6 +34,7 @@ const ProductCard = ({
   const { toast } = useToast();
   const { addToCart, getItemQuantity } = useCart();
   const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
+  const { formatCurrency } = useCurrency();
 
   const getAvailableQuantity = (): number => {
     if (!sku?.quantity) return 0;
@@ -120,7 +122,7 @@ const ProductCard = ({
           <span className="px-2 py-1 bg-gradient-to-r from-amaranth-500 to-amaranth-600 text-white text-xs font-semibold rounded-full">
             {sku?.discountType === "percentage"
               ? `${sku?.discount}% OFF`
-              : `$${sku?.discount} OFF`}
+              : `${formatCurrency(sku?.discount)} OFF`}
           </span>
         )}
         {sku && !sku?.quantity && (
@@ -196,15 +198,15 @@ const ProductCard = ({
             {discountAmount ? (
               <>
                 <span className="text-lg md:text-xl font-bold text-amaranth-600">
-                  ${finalPrice?.toFixed(2)}
+                  {formatCurrency(finalPrice)}
                 </span>
                 <span className="text-xs md:text-sm text-muted-foreground line-through">
-                  ${originalPrice?.toFixed(2)}
+                  {formatCurrency(originalPrice)}
                 </span>
               </>
             ) : (
               <span className="text-lg md:text-xl font-bold text-amaranth-600">
-                ${finalPrice?.toFixed(2)}
+                {formatCurrency(finalPrice)}
               </span>
             )}
           </div>

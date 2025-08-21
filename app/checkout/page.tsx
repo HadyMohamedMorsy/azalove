@@ -15,22 +15,22 @@ const Checkout = () => {
   const steps = [
     {
       id: 1,
-      title: "Shipping",
-      description: "Delivery details",
+      title: "الشحن",
+      description: "تفاصيل التوصيل",
       icon: Truck,
       component: ShippingForm,
     },
     {
       id: 2,
-      title: "Payment",
-      description: "Payment method",
+      title: "الدفع",
+      description: "طريقة الدفع",
       icon: CreditCard,
       component: PaymentForm,
     },
     {
       id: 3,
-      title: "Confirmation",
-      description: "Order review",
+      title: "التأكيد",
+      description: "مراجعة الطلب",
       icon: CheckCircle,
       component: OrderConfirmation,
     },
@@ -52,21 +52,26 @@ const Checkout = () => {
   const CurrentStepComponent = steps[currentStep - 1].component;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cream-50 via-white to-azalove-50/30">
+    <div
+      className="min-h-screen bg-gradient-to-br from-cream-50 via-white to-azalove-50/30 font-arabic"
+      dir="rtl"
+      style={{
+        fontFamily:
+          "'Noto Sans Arabic', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+      }}
+    >
       {/* Enhanced Header */}
       <div className="bg-white shadow-sm border-b border-cream-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-3xl font-bold text-royal-900">Checkout</h1>
-              <p className="text-royal-600 mt-1">
-                Complete your purchase securely
-              </p>
+              <h1 className="text-3xl font-bold text-royal-900">إتمام الطلب</h1>
+              <p className="text-royal-600 mt-1">أكمل عملية الشراء بأمان</p>
             </div>
             <div className="flex items-center gap-2 bg-azalove-100 px-4 py-2 rounded-full">
               <Shield className="w-4 h-4 text-azalove-600" />
               <span className="text-sm font-medium text-azalove-700">
-                Secure Checkout
+                إتمام آمن
               </span>
             </div>
           </div>
@@ -164,45 +169,6 @@ const Checkout = () => {
           <div className="lg:col-span-1">
             <div className="sticky top-8">
               <OrderSummary />
-
-              {/* Trust Indicators */}
-              <div className="mt-6 space-y-4">
-                <Card className="border-cream-200 bg-cream-50/50">
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                        <Shield className="w-5 h-5 text-green-600" />
-                      </div>
-                      <div>
-                        <h4 className="font-medium text-royal-900">
-                          Secure Payment
-                        </h4>
-                        <p className="text-xs text-royal-600">
-                          SSL encrypted checkout
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-cream-200 bg-cream-50/50">
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-azalove-100 flex items-center justify-center">
-                        <Truck className="w-5 h-5 text-azalove-600" />
-                      </div>
-                      <div>
-                        <h4 className="font-medium text-royal-900">
-                          Fast Delivery
-                        </h4>
-                        <p className="text-xs text-royal-600">
-                          Free shipping on orders over $50
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
             </div>
           </div>
         </div>

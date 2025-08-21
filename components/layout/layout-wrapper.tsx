@@ -2,6 +2,7 @@
 
 import { CookieConsent } from "@/components/ui/cookie-consent";
 import { usePathname } from "next/navigation";
+import MaintenanceWrapper from "../maintenance-wrapper";
 import Footer from "./footer";
 import Navbar from "./navbar";
 
@@ -17,16 +18,16 @@ export default function LayoutWrapper({
 
   // For invoice pages, render only children without header/footer
   if (isInvoicePage) {
-    return <>{children}</>;
+    return <MaintenanceWrapper>{children}</MaintenanceWrapper>;
   }
 
   // For all other pages, render with header/footer
   return (
-    <>
+    <MaintenanceWrapper>
       <Navbar />
       {children}
       <Footer />
       <CookieConsent />
-    </>
+    </MaintenanceWrapper>
   );
 }

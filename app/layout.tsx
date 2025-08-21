@@ -9,6 +9,7 @@ import { siteConfig } from "@/config/site";
 import { AuthProvider } from "@/contexts/auth-context";
 import { CartProvider } from "@/contexts/cart-context";
 import { FavoritesProvider } from "@/contexts/favorites-context";
+import { GeneralSettingsProvider } from "@/contexts/general-settings-context";
 import { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 
@@ -20,6 +21,14 @@ export const metadata: Metadata = {
     template: `%s - ${siteConfig.name}`,
   },
   description: siteConfig.description,
+  openGraph: {
+    type: "website",
+    images: ["/media/opengraph-image.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/media/opengraph-image.png"],
+  },
   icons: {
     icon: "/media/main-icon.ico",
   },
@@ -42,20 +51,7 @@ export default function RootLayout({
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Romantic Blog - Love Stories & Romance</title>
-        <meta
-          name="description"
-          content="Beautiful romantic blog with love stories and relationship advice"
-        />
         <meta name="author" content="azalove" />
-        <meta
-          property="og:title"
-          content="Romantic Blog - Love Stories & Romance"
-        />
-        <meta
-          property="og:description"
-          content="Beautiful romantic blog with love stories and relationship advice"
-        />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="/media/opengraph-image.png" />
         <meta name="twitter:card" content="summary_large_image" />
@@ -68,12 +64,14 @@ export default function RootLayout({
         <AuthProvider>
           <CartProvider>
             <FavoritesProvider>
-              <LocaleWrapper>
-                <SplashWrapper>
-                  <LayoutWrapper>{children}</LayoutWrapper>
-                  <Toaster />
-                </SplashWrapper>
-              </LocaleWrapper>
+              <GeneralSettingsProvider>
+                <LocaleWrapper>
+                  <SplashWrapper>
+                    <LayoutWrapper>{children}</LayoutWrapper>
+                    <Toaster />
+                  </SplashWrapper>
+                </LocaleWrapper>
+              </GeneralSettingsProvider>
             </FavoritesProvider>
           </CartProvider>
         </AuthProvider>

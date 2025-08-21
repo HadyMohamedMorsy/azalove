@@ -25,6 +25,7 @@ export const API_ENDPOINTS_FROM_SERVER = {
   SUB_CATEGORIES: `/sub-category/front`,
   PRODUCTS: `/product/front`,
   BLOGS: `/blog/front`,
+  GENERAL_SETTINGS: `/general-settings/index`,
   MEGA_MENU_CATEGORIES: `/category/product`,
   MEGA_MENU_BLOG_CATEGORIES: `/category/blog`,
 };

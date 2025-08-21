@@ -2,20 +2,16 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "@/hooks/use-translation";
-import { CreditCard, Gift, Heart, Sparkles } from "lucide-react";
+import { CreditCard, Gift } from "lucide-react";
 
 interface CartSummaryProps {
   subtotal: number;
-  shipping: number;
-  tax: number;
   total: number;
   disabled?: boolean;
 }
 
 export default function CartSummary({
   subtotal,
-  shipping,
-  tax,
   total,
   disabled = false,
 }: CartSummaryProps) {
@@ -48,27 +44,7 @@ export default function CartSummary({
               ${subtotal.toFixed(2)}
             </span>
           </div>
-          <div className="flex justify-between items-center py-2">
-            <span className="text-gray-700 font-medium">
-              {t("cart.shipping")}
-            </span>
-            <span className="font-semibold text-gray-900">
-              {shipping === 0 ? (
-                <span className="text-green-600 flex items-center gap-1">
-                  <Heart className="w-4 h-4" />
-                  {t("cart.free")}
-                </span>
-              ) : (
-                `$${shipping.toFixed(2)}`
-              )}
-            </span>
-          </div>
-          <div className="flex justify-between items-center py-2">
-            <span className="text-gray-700 font-medium">{t("cart.tax")}</span>
-            <span className="font-semibold text-gray-900">
-              ${tax.toFixed(2)}
-            </span>
-          </div>
+
           <div className="border-t border-rose-200 pt-4">
             <div className="flex justify-between items-center font-bold text-xl">
               <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 bg-clip-text text-transparent">
@@ -80,23 +56,6 @@ export default function CartSummary({
             </div>
           </div>
         </div>
-
-        {shipping > 0 && (
-          <div className="text-sm text-center p-3 bg-gradient-to-r from-rose-50 to-pink-50 rounded-lg border border-rose-200">
-            <div className="flex items-center justify-center gap-2 mb-1">
-              <Sparkles className="w-4 h-4 text-rose-500" />
-              <span className="text-rose-700 font-medium">
-                {t("cart.almostThere")}
-              </span>
-            </div>
-            <p className="text-rose-600">
-              {t("cart.addMoreForFreeShipping").replace(
-                "${amount}",
-                (50 - subtotal).toFixed(2)
-              )}
-            </p>
-          </div>
-        )}
 
         <Button
           onClick={handleCheckout}

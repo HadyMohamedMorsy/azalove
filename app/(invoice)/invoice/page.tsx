@@ -1,4 +1,34 @@
+"use client";
+
+import { useGeneralSettings } from "@/contexts/general-settings-context";
+import { useCurrency } from "@/hooks/use-currency";
+
 export default function InvoicePage() {
+  const { formatCurrency, getTaxRate, calculateTax, calculateTotalWithTax } =
+    useCurrency();
+  const { settings } = useGeneralSettings();
+
+  // Sample data - replace with actual data
+  const invoiceData = {
+    invoiceNumber: "932 254 252",
+    date: "25 سبتمبر 2025",
+    paymentMethod: "بطاقة ائتمان",
+    subtotal: 150.0,
+    items: [
+      { name: "صنف 01", quantity: 1, price: 25.0 },
+      { name: "صنف 02", quantity: 1, price: 30.0 },
+      { name: "صنف 03", quantity: 1, price: 20.0 },
+      { name: "صنف 04", quantity: 1, price: 35.0 },
+      { name: "صنف 05", quantity: 1, price: 15.0 },
+      { name: "صنف 06", quantity: 1, price: 25.0 },
+      { name: "صنف 07", quantity: 1, price: 0.0 },
+    ],
+  };
+
+  const taxRate = getTaxRate();
+  const taxAmount = calculateTax(invoiceData.subtotal);
+  const total = calculateTotalWithTax(invoiceData.subtotal);
+
   return (
     <div className="min-h-screen bg-azalove-200">
       <div className="max-w-4xl mx-auto p-8">
@@ -74,21 +104,23 @@ export default function InvoicePage() {
           <div className="space-y-2">
             <div className="flex justify-between">
               <span className="text-gray-600">رقم الفاتورة:</span>
-              <span className="font-semibold">932 254 252</span>
+              <span className="font-semibold">{invoiceData.invoiceNumber}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">التاريخ:</span>
-              <span className="font-semibold">25 سبتمبر 2025</span>
+              <span className="font-semibold">{invoiceData.date}</span>
             </div>
           </div>
           <div className="space-y-2">
             <div className="flex justify-between">
               <span className="text-gray-600">طريقة الدفع:</span>
-              <span className="font-semibold">بطاقة ائتمان</span>
+              <span className="font-semibold">{invoiceData.paymentMethod}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">المبلغ المستحق:</span>
-              <span className="font-semibold text-[#C8356D]">$0.00</span>
+              <span className="font-semibold text-[#C8356D]">
+                {formatCurrency(total)}
+              </span>
             </div>
           </div>
         </div>
@@ -107,10 +139,15 @@ export default function InvoicePage() {
           <div>
             <h3 className="font-bold text-gray-800 mb-3">فاتورة من:</h3>
             <div className="space-y-1 text-sm text-gray-600">
-              <p className="font-semibold">أزالوف</p>
-              <p>الشارع الرئيسي، المدينة القديمة، الدولة 22304</p>
-              <p>96 123 123</p>
-              <p>younes@gmail.com</p>
+              <p className="font-semibold">
+                {settings?.store_name || "أزالوف"}
+              </p>
+              <p>
+                {settings?.store_address ||
+                  "الشارع الرئيسي، المدينة القديمة، الدولة 22304"}
+              </p>
+              <p>{settings?.store_phone || "96 123 123"}</p>
+              <p>{settings?.store_email || "younes@gmail.com"}</p>
             </div>
           </div>
         </div>
@@ -135,90 +172,22 @@ export default function InvoicePage() {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td className="border-2 border-amaranth-700 p-3">صنف 01</td>
-                <td className="border-2 border-amaranth-700 p-3 text-center">
-                  1
-                </td>
-                <td className="border-2 border-amaranth-700 p-3 text-center">
-                  $0.00
-                </td>
-                <td className="border-2 border-amaranth-700 p-3 text-center">
-                  $0.00
-                </td>
-              </tr>
-              <tr>
-                <td className="border-2 border-amaranth-700 p-3">صنف 02</td>
-                <td className="border-2 border-amaranth-700 p-3 text-center">
-                  1
-                </td>
-                <td className="border-2 border-amaranth-700 p-3 text-center">
-                  $0.00
-                </td>
-                <td className="border-2 border-amaranth-700 p-3 text-center">
-                  $0.00
-                </td>
-              </tr>
-              <tr>
-                <td className="border-2 border-amaranth-700 p-3">صنف 03</td>
-                <td className="border-2 border-amaranth-700 p-3 text-center">
-                  1
-                </td>
-                <td className="border-2 border-amaranth-700 p-3 text-center">
-                  $0.00
-                </td>
-                <td className="border-2 border-amaranth-700 p-3 text-center">
-                  $0.00
-                </td>
-              </tr>
-              <tr>
-                <td className="border-2 border-amaranth-700 p-3">صنف 04</td>
-                <td className="border-2 border-amaranth-700 p-3 text-center">
-                  1
-                </td>
-                <td className="border-2 border-amaranth-700 p-3 text-center">
-                  $0.00
-                </td>
-                <td className="border-2 border-amaranth-700 p-3 text-center">
-                  $0.00
-                </td>
-              </tr>
-              <tr>
-                <td className="border-2 border-amaranth-700 p-3">صنف 05</td>
-                <td className="border-2 border-amaranth-700 p-3 text-center">
-                  1
-                </td>
-                <td className="border-2 border-amaranth-700 p-3 text-center">
-                  $0.00
-                </td>
-                <td className="border-2 border-amaranth-700 p-3 text-center">
-                  $0.00
-                </td>
-              </tr>
-              <tr>
-                <td className="border-2 border-amaranth-700 p-3">صنف 06</td>
-                <td className="border-2 border-amaranth-700 p-3 text-center">
-                  1
-                </td>
-                <td className="border-2 border-amaranth-700 p-3 text-center">
-                  $0.00
-                </td>
-                <td className="border-2 border-amaranth-700 p-3 text-center">
-                  $0.00
-                </td>
-              </tr>
-              <tr>
-                <td className="border-2 border-amaranth-700 p-3">صنف 07</td>
-                <td className="border-2 border-amaranth-700 p-3 text-center">
-                  1
-                </td>
-                <td className="border-2 border-amaranth-700 p-3 text-center">
-                  $0.00
-                </td>
-                <td className="border-2 border-amaranth-700 p-3 text-center">
-                  $0.00
-                </td>
-              </tr>
+              {invoiceData.items.map((item, index) => (
+                <tr key={index}>
+                  <td className="border-2 border-amaranth-700 p-3">
+                    {item.name}
+                  </td>
+                  <td className="border-2 border-amaranth-700 p-3 text-center">
+                    {item.quantity}
+                  </td>
+                  <td className="border-2 border-amaranth-700 p-3 text-center">
+                    {formatCurrency(item.price)}
+                  </td>
+                  <td className="border-2 border-amaranth-700 p-3 text-center">
+                    {formatCurrency(item.price * item.quantity)}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -238,16 +207,20 @@ export default function InvoicePage() {
           <div className="space-y-3">
             <div className="flex justify-between items-center">
               <span className="text-gray-600">المجموع الفرعي:</span>
-              <span className="font-semibold">$0.00</span>
+              <span className="font-semibold">
+                {formatCurrency(invoiceData.subtotal)}
+              </span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">الضريبة (%10):</span>
-              <span className="font-semibold">-</span>
+              <span className="text-gray-600">الضريبة ({taxRate}%):</span>
+              <span className="font-semibold">{formatCurrency(taxAmount)}</span>
             </div>
             <div className="border-t pt-3">
               <div className="flex justify-between items-center">
                 <span className="font-bold text-lg">الإجمالي:</span>
-                <span className="font-bold text-lg text-[#C8356D]">$0.00</span>
+                <span className="font-bold text-lg text-[#C8356D]">
+                  {formatCurrency(total)}
+                </span>
               </div>
             </div>
           </div>
@@ -258,17 +231,21 @@ export default function InvoicePage() {
           <div className="flex justify-center items-center space-x-6 text-sm text-gray-600">
             <div className="flex items-center">
               <span className="w-4 h-4 bg-[#C8356D] rounded-full ml-2"></span>
-              <span>شارع محمد مظهر، القاهرة، مصر</span>
+              <span>
+                {settings?.store_address || "شارع محمد مظهر، القاهرة، مصر"}
+              </span>
             </div>
             <div className="flex items-center">
               <span>📧</span>
-              <span className="ml-1">azalove</span>
+              <span className="ml-1">{settings?.store_name || "azalove"}</span>
             </div>
           </div>
           <div className="flex justify-center items-center mt-2 text-sm text-gray-600">
-            <span className="ml-4">📞 +201000234567</span>
+            <span className="ml-4">
+              📞 {settings?.store_phone || "+201000234567"}
+            </span>
             <span className="ml-4">🌐 www.azalove.com</span>
-            <span>📧 info@azalove.com</span>
+            <span>📧 {settings?.store_email || "info@azalove.com"}</span>
           </div>
         </div>
       </div>

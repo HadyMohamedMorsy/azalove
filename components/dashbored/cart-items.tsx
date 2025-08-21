@@ -42,8 +42,6 @@ const CartItems = () => {
       >
         <CartSummary
           subtotal={subtotal}
-          shipping={shipping}
-          tax={tax}
           total={total}
           disabled={cartItems.length === 0}
         />

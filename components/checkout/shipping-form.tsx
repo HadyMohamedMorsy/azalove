@@ -7,16 +7,7 @@ import { Label } from "@/components/ui/label";
 import { API_ENDPOINTS_FROM_NEXT } from "@/config/api";
 import { useAuth } from "@/contexts/auth-context";
 import { useFetch } from "@/hooks/use-fetch";
-import {
-  Building,
-  Check,
-  Clock,
-  Home,
-  MapPin,
-  Plus,
-  Truck,
-  Zap,
-} from "lucide-react";
+import { Building, Check, Home, MapPin, Plus } from "lucide-react";
 import { useState } from "react";
 
 interface Address {
@@ -52,7 +43,6 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
     city: "",
     postalCode: "",
     country: "United States",
-    shippingMethod: "standard",
   });
 
   const {
@@ -62,33 +52,6 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
   } = useFetch<Address[]>(
     user ? `${API_ENDPOINTS_FROM_NEXT.ADDRESSES}?userId=${user?.id}` : ""
   );
-
-  const shippingOptions = [
-    {
-      id: "standard",
-      name: "Standard Shipping",
-      price: 5.99,
-      duration: "5-7 business days",
-      icon: Truck,
-      color: "bg-azalove-100 text-azalove-700",
-    },
-    {
-      id: "express",
-      name: "Express Shipping",
-      price: 12.99,
-      duration: "2-3 business days",
-      icon: Clock,
-      color: "bg-royal-100 text-royal-700",
-    },
-    {
-      id: "overnight",
-      name: "Overnight Shipping",
-      price: 24.99,
-      duration: "1 business day",
-      icon: Zap,
-      color: "bg-amaranth-100 text-amaranth-700",
-    },
-  ];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -110,7 +73,6 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
       city: address.postalCode, // Using postal code as city for now
       postalCode: address.postalCode,
       country: "United States",
-      shippingMethod: "standard",
       phoneNumber: address.phoneNumber,
     };
     onNext(addressData);
@@ -124,12 +86,19 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
   // If user is not authenticated, show the form directly
   if (!user) {
     return (
-      <div className="space-y-6">
+      <div
+        className="space-y-6"
+        dir="rtl"
+        style={{
+          fontFamily:
+            "'Noto Sans Arabic', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+        }}
+      >
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-4">
             <div>
               <Label htmlFor="email" className="text-royal-900 font-medium">
-                Email Address
+                عنوان البريد الإلكتروني
               </Label>
               <Input
                 id="email"
@@ -147,7 +116,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
                   htmlFor="firstName"
                   className="text-royal-900 font-medium"
                 >
-                  First Name
+                  الاسم الأول
                 </Label>
                 <Input
                   id="firstName"
@@ -164,7 +133,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
                   htmlFor="lastName"
                   className="text-royal-900 font-medium"
                 >
-                  Last Name
+                  اسم العائلة
                 </Label>
                 <Input
                   id="lastName"
@@ -180,7 +149,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
 
             <div>
               <Label htmlFor="address" className="text-royal-900 font-medium">
-                Address
+                العنوان
               </Label>
               <Input
                 id="address"
@@ -194,7 +163,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="city" className="text-royal-900 font-medium">
-                  City
+                  المدينة
                 </Label>
                 <Input
                   id="city"
@@ -209,7 +178,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
                   htmlFor="postalCode"
                   className="text-royal-900 font-medium"
                 >
-                  Postal Code
+                  الرمز البريدي
                 </Label>
                 <Input
                   id="postalCode"
@@ -221,54 +190,6 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
                   required
                 />
               </div>
-            </div>
-          </div>
-
-          {/* Shipping Method Selection */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-royal-900">
-              Shipping Method
-            </h3>
-            <div className="space-y-3">
-              {shippingOptions.map((option) => (
-                <Card
-                  key={option.id}
-                  className={`cursor-pointer transition-all hover:shadow-md border-2 ${
-                    formData.shippingMethod === option.id
-                      ? "border-azalove-500 bg-azalove-50"
-                      : "border-cream-200 hover:border-azalove-300"
-                  }`}
-                  onClick={() => handleInputChange("shippingMethod", option.id)}
-                >
-                  <CardContent className="p-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div
-                          className={`w-10 h-10 rounded-full flex items-center justify-center ${option.color}`}
-                        >
-                          <option.icon className="w-5 h-5" />
-                        </div>
-                        <div>
-                          <h4 className="font-medium text-royal-900">
-                            {option.name}
-                          </h4>
-                          <p className="text-sm text-royal-600">
-                            {option.duration}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <div className="font-semibold text-royal-900">
-                          ${option.price}
-                        </div>
-                        {formData.shippingMethod === option.id && (
-                          <Check className="w-5 h-5 text-azalove-600 mt-1" />
-                        )}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
             </div>
           </div>
 
@@ -298,10 +219,17 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
   // If user is authenticated, show saved addresses or form
   if (showForm) {
     return (
-      <div className="space-y-6">
+      <div
+        className="space-y-6"
+        dir="rtl"
+        style={{
+          fontFamily:
+            "'Noto Sans Arabic', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+        }}
+      >
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold text-royal-900">
-            Shipping Information
+            معلومات الشحن
           </h2>
           <Button
             type="button"
@@ -309,14 +237,14 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
             onClick={() => setShowForm(false)}
             className="border-cream-300 text-royal-700 hover:bg-cream-50"
           >
-            Use Saved Address
+            استخدام العنوان المحفوظ
           </Button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <Label htmlFor="email" className="text-royal-900 font-medium">
-              Email Address
+              عنوان البريد الإلكتروني
             </Label>
             <Input
               id="email"
@@ -331,7 +259,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label htmlFor="firstName" className="text-royal-900 font-medium">
-                First Name
+                الاسم الأول
               </Label>
               <Input
                 id="firstName"
@@ -343,7 +271,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
             </div>
             <div>
               <Label htmlFor="lastName" className="text-royal-900 font-medium">
-                Last Name
+                اسم العائلة
               </Label>
               <Input
                 id="lastName"
@@ -357,7 +285,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
 
           <div>
             <Label htmlFor="address" className="text-royal-900 font-medium">
-              Address
+              العنوان
             </Label>
             <Input
               id="address"
@@ -371,7 +299,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label htmlFor="city" className="text-royal-900 font-medium">
-                City
+                المدينة
               </Label>
               <Input
                 id="city"
@@ -386,7 +314,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
                 htmlFor="postalCode"
                 className="text-royal-900 font-medium"
               >
-                Postal Code
+                الرمز البريدي
               </Label>
               <Input
                 id="postalCode"
@@ -397,54 +325,6 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
                 className="border-cream-200 focus:border-azalove-500 focus:ring-azalove-500/20"
                 required
               />
-            </div>
-          </div>
-
-          {/* Shipping Method Selection */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-royal-900">
-              Shipping Method
-            </h3>
-            <div className="space-y-3">
-              {shippingOptions.map((option) => (
-                <Card
-                  key={option.id}
-                  className={`cursor-pointer transition-all hover:shadow-md border-2 ${
-                    formData.shippingMethod === option.id
-                      ? "border-azalove-500 bg-azalove-50"
-                      : "border-cream-200 hover:border-azalove-300"
-                  }`}
-                  onClick={() => handleInputChange("shippingMethod", option.id)}
-                >
-                  <CardContent className="p-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div
-                          className={`w-10 h-10 rounded-full flex items-center justify-center ${option.color}`}
-                        >
-                          <option.icon className="w-5 h-5" />
-                        </div>
-                        <div>
-                          <h4 className="font-medium text-royal-900">
-                            {option.name}
-                          </h4>
-                          <p className="text-sm text-royal-600">
-                            {option.duration}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <div className="font-semibold text-royal-900">
-                          ${option.price}
-                        </div>
-                        {formData.shippingMethod === option.id && (
-                          <Check className="w-5 h-5 text-azalove-600 mt-1" />
-                        )}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
             </div>
           </div>
 
@@ -473,10 +353,17 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
 
   // Show saved addresses for authenticated users
   return (
-    <div className="space-y-6">
+    <div
+      className="space-y-6"
+      dir="rtl"
+      style={{
+        fontFamily:
+          "'Noto Sans Arabic', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+      }}
+    >
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold text-royal-900">
-          Select Shipping Address
+          اختر عنوان الشحن
         </h2>
         <Button
           type="button"
@@ -485,34 +372,32 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
           className="border-cream-300 text-royal-700 hover:bg-cream-50"
         >
           <Plus className="w-4 h-4 mr-2" />
-          Use New Address
+          استخدام عنوان جديد
         </Button>
       </div>
 
       {loading ? (
         <div className="text-center py-8">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-azalove-500 mx-auto"></div>
-          <p className="text-royal-600 mt-2">Loading your addresses...</p>
+          <p className="text-royal-600 mt-2">جاري تحميل عناوينك...</p>
         </div>
       ) : error ? (
         <div className="text-center py-8 text-red-500">
-          Error loading addresses. Please use a new address.
+          خطأ في تحميل العناوين. يرجى استخدام عنوان جديد.
         </div>
       ) : !addresses || addresses.length === 0 ? (
         <div className="text-center py-8">
           <MapPin className="w-12 h-12 mx-auto text-royal-400 mb-4" />
           <h3 className="text-lg font-semibold mb-2 text-royal-900">
-            No saved addresses
+            لا توجد عناوين محفوظة
           </h3>
-          <p className="text-royal-600 mb-4">
-            You don't have any saved addresses yet.
-          </p>
+          <p className="text-royal-600 mb-4">ليس لديك عناوين محفوظة بعد.</p>
           <Button
             onClick={handleUseNewAddress}
             className="bg-royal-500 hover:bg-azalove-600 text-white"
           >
             <Plus className="w-4 h-4 mr-2" />
-            Add New Address
+            إضافة عنوان جديد
           </Button>
         </div>
       ) : (
@@ -555,7 +440,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
                   <div className="flex items-center gap-2">
                     {address.isDefault && (
                       <Badge className="bg-azalove-100 text-azalove-700 border-azalove-200">
-                        Default
+                        افتراضي
                       </Badge>
                     )}
                     {selectedAddress?.id === address.id && (
@@ -569,54 +454,6 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
         </div>
       )}
 
-      {/* Shipping Method Selection */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-royal-900">
-          Shipping Method
-        </h3>
-        <div className="space-y-3">
-          {shippingOptions.map((option) => (
-            <Card
-              key={option.id}
-              className={`cursor-pointer transition-all hover:shadow-md border-2 ${
-                formData.shippingMethod === option.id
-                  ? "border-azalove-500 bg-azalove-50"
-                  : "border-cream-200 hover:border-azalove-300"
-              }`}
-              onClick={() => handleInputChange("shippingMethod", option.id)}
-            >
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`w-10 h-10 rounded-full flex items-center justify-center ${option.color}`}
-                    >
-                      <option.icon className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h4 className="font-medium text-royal-900">
-                        {option.name}
-                      </h4>
-                      <p className="text-sm text-royal-600">
-                        {option.duration}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="font-semibold text-royal-900">
-                      ${option.price}
-                    </div>
-                    {formData.shippingMethod === option.id && (
-                      <Check className="w-5 h-5 text-azalove-600 mt-1" />
-                    )}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-
       <div className="flex justify-between pt-6">
         {onBack && (
           <Button
@@ -625,7 +462,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
             onClick={onBack}
             className="border-cream-300 text-royal-700 hover:bg-cream-50"
           >
-            Back
+            رجوع
           </Button>
         )}
         <Button
@@ -636,7 +473,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
             selectedAddress && handleAddressSelect(selectedAddress)
           }
         >
-          Continue to Payment
+          المتابعة إلى الدفع
         </Button>
       </div>
     </div>

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,14 +7,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ShoppingCart, Plus, Minus, Trash2, CreditCard } from "lucide-react";
+import { useCurrency } from "@/hooks/use-currency";
 import { useToast } from "@/hooks/use-toast";
+import { CreditCard, Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
 
 const CartItems = () => {
   const { toast } = useToast();
+  const { formatCurrency } = useCurrency();
   const [cartItems, setCartItems] = useState([
     {
       id: 1,
@@ -121,7 +123,9 @@ const CartItems = () => {
                       <div className="text-sm text-muted-foreground">
                         Color: {item.color} • Size: {item.size}
                       </div>
-                      <div className="text-lg font-bold">${item.price}</div>
+                      <div className="text-lg font-bold">
+                        {formatCurrency(item.price)}
+                      </div>
                     </div>
 
                     <div className="flex flex-col items-end justify-between">
@@ -182,29 +186,29 @@ const CartItems = () => {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span>Subtotal</span>
-                <span>${subtotal.toFixed(2)}</span>
+                <span>{formatCurrency(subtotal)}</span>
               </div>
               <div className="flex justify-between">
                 <span>Shipping</span>
                 <span>
-                  {shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}
+                  {shipping === 0 ? "Free" : formatCurrency(shipping)}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span>Tax</span>
-                <span>${tax.toFixed(2)}</span>
+                <span>{formatCurrency(tax)}</span>
               </div>
               <div className="border-t pt-2">
                 <div className="flex justify-between font-bold text-lg">
                   <span>Total</span>
-                  <span>${total.toFixed(2)}</span>
+                  <span>{formatCurrency(total)}</span>
                 </div>
               </div>
             </div>
 
             {shipping > 0 && (
               <div className="text-sm text-muted-foreground text-center">
-                Add ${(50 - subtotal).toFixed(2)} more for free shipping
+                Add {formatCurrency(50 - subtotal)} more for free shipping
               </div>
             )}
 
