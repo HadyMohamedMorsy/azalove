@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useCurrency } from "@/hooks/use-currency";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "@/hooks/use-translation";
 import { CreditCard, Gift } from "lucide-react";
@@ -17,6 +18,7 @@ export default function CartSummary({
 }: CartSummaryProps) {
   const { toast } = useToast();
   const { t } = useTranslation();
+  const { formatCurrency } = useCurrency();
 
   const handleCheckout = () => {
     toast({
@@ -41,7 +43,7 @@ export default function CartSummary({
               {t("cart.subtotal")}
             </span>
             <span className="font-semibold text-gray-900">
-              ${subtotal.toFixed(2)}
+              {formatCurrency(subtotal)}
             </span>
           </div>
 
@@ -51,7 +53,7 @@ export default function CartSummary({
                 {t("cart.total")}
               </span>
               <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 bg-clip-text text-transparent font-bold">
-                ${total.toFixed(2)}
+                {formatCurrency(total)}
               </span>
             </div>
           </div>

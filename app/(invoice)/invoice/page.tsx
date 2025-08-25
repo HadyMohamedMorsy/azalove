@@ -2,11 +2,13 @@
 
 import { useGeneralSettings } from "@/contexts/general-settings-context";
 import { useCurrency } from "@/hooks/use-currency";
+import { useTranslation } from "@/hooks/use-translation";
 
 export default function InvoicePage() {
   const { formatCurrency, getTaxRate, calculateTax, calculateTotalWithTax } =
     useCurrency();
   const { settings } = useGeneralSettings();
+  const { t } = useTranslation();
 
   // Sample data - replace with actual data
   const invoiceData = {
@@ -95,7 +97,9 @@ export default function InvoicePage() {
             </g>
           </svg>
           <div className="text-right">
-            <h1 className="text-4xl font-bold text-[#C8356D]">فاتورة</h1>
+            <h1 className="text-4xl font-bold text-[#C8356D]">
+              {t("invoice.title")}
+            </h1>
           </div>
         </div>
 
@@ -103,21 +107,25 @@ export default function InvoicePage() {
         <div className="grid grid-cols-2 gap-8 mb-8 p-6 ">
           <div className="space-y-2">
             <div className="flex justify-between">
-              <span className="text-gray-600">رقم الفاتورة:</span>
+              <span className="text-gray-600">
+                {t("invoice.invoiceNumber")}:
+              </span>
               <span className="font-semibold">{invoiceData.invoiceNumber}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">التاريخ:</span>
+              <span className="text-gray-600">{t("invoice.date")}:</span>
               <span className="font-semibold">{invoiceData.date}</span>
             </div>
           </div>
           <div className="space-y-2">
             <div className="flex justify-between">
-              <span className="text-gray-600">طريقة الدفع:</span>
+              <span className="text-gray-600">
+                {t("invoice.paymentMethod")}:
+              </span>
               <span className="font-semibold">{invoiceData.paymentMethod}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">المبلغ المستحق:</span>
+              <span className="text-gray-600">{t("invoice.amountDue")}:</span>
               <span className="font-semibold text-[#C8356D]">
                 {formatCurrency(total)}
               </span>
@@ -128,7 +136,9 @@ export default function InvoicePage() {
         {/* Bill To and Bill From */}
         <div className="grid grid-cols-2 gap-8 mb-8 p-6 ">
           <div>
-            <h3 className="font-bold text-gray-800 mb-3">فاتورة إلى:</h3>
+            <h3 className="font-bold text-gray-800 mb-3">
+              {t("invoice.billTo")}:
+            </h3>
             <div className="space-y-1 text-sm text-gray-600">
               <p className="font-semibold">بشير أحمد</p>
               <p>الشارع الرئيسي، المدينة القديمة، الدولة 22304</p>
@@ -137,7 +147,9 @@ export default function InvoicePage() {
             </div>
           </div>
           <div>
-            <h3 className="font-bold text-gray-800 mb-3">فاتورة من:</h3>
+            <h3 className="font-bold text-gray-800 mb-3">
+              {t("invoice.billFrom")}:
+            </h3>
             <div className="space-y-1 text-sm text-gray-600">
               <p className="font-semibold">
                 {settings?.store_name || "أزالوف"}
@@ -158,16 +170,16 @@ export default function InvoicePage() {
             <thead>
               <tr className="bg-gray-50">
                 <th className="border border-gray-200 p-3 text-right font-semibold">
-                  الصنف
+                  {t("invoice.items")}
                 </th>
                 <th className="border border-gray-200 p-3 text-center font-semibold">
-                  الكمية
+                  {t("invoice.quantity")}
                 </th>
                 <th className="border border-gray-200 p-3 text-center font-semibold">
-                  السعر
+                  {t("invoice.price")}
                 </th>
                 <th className="border border-gray-200 p-3 text-center font-semibold">
-                  المبلغ الإجمالي
+                  {t("invoice.totalAmount")}
                 </th>
               </tr>
             </thead>
@@ -196,28 +208,30 @@ export default function InvoicePage() {
         <div className="grid grid-cols-2 gap-8 mb-8 p-6 ">
           <div className="space-y-4">
             <div>
-              <h3 className="font-bold text-lg mb-2">شكراً لك!</h3>
+              <h3 className="font-bold text-lg mb-2">
+                {t("invoice.thankYou")}!
+              </h3>
               <p className="text-sm leading-relaxed">
-                إن الهدف من هذه الفاتورة هو تقديم كتب مذهلة وجميلة لك بطريقة
-                مثالية ومريحة. لقد حان الوقت لاستكشاف وسائل جديدة للتسوق وتجربة
-                الكتب الجديدة حتى نتمكن من تقديمها لك بشكل أفضل.
+                {t("invoice.thankYouMessage")}
               </p>
             </div>
           </div>
           <div className="space-y-3">
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">المجموع الفرعي:</span>
+              <span className="text-gray-600">{t("invoice.subtotal")}:</span>
               <span className="font-semibold">
                 {formatCurrency(invoiceData.subtotal)}
               </span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">الضريبة ({taxRate}%):</span>
+              <span className="text-gray-600">
+                {t("invoice.tax")} ({taxRate}%):
+              </span>
               <span className="font-semibold">{formatCurrency(taxAmount)}</span>
             </div>
             <div className="border-t pt-3">
               <div className="flex justify-between items-center">
-                <span className="font-bold text-lg">الإجمالي:</span>
+                <span className="font-bold text-lg">{t("invoice.total")}:</span>
                 <span className="font-bold text-lg text-[#C8356D]">
                   {formatCurrency(total)}
                 </span>

@@ -1,7 +1,11 @@
 "use client";
 
 import BlogCard from "@/components/blog/show/blog-card/blog-card";
-import { API_BASE_URL, API_ENDPOINTS_FROM_SERVER } from "@/config/api";
+import {
+  API_BASE_URL,
+  API_ENDPOINTS_FROM_NEXT,
+  API_ENDPOINTS_FROM_SERVER,
+} from "@/config/api";
 import { useFetch } from "@/hooks/use-fetch";
 import { Heart, Sparkles, Star } from "lucide-react";
 import Link from "next/link";
@@ -52,7 +56,7 @@ export function BlogMegaMenu({
 }: BlogMegaMenuProps) {
   const { data: blogCategories, loading: categoriesLoading } = useFetch<
     BlogCategoryData[]
-  >(`${API_BASE_URL}${API_ENDPOINTS_FROM_SERVER.MEGA_MENU_BLOG_CATEGORIES}`);
+  >(API_ENDPOINTS_FROM_NEXT.MEGA_MENU_BLOG_CATEGORIES);
 
   const { data: blogs, loading: blogsLoading } = useFetch<BlogArticle[]>(
     `${API_BASE_URL}${API_ENDPOINTS_FROM_SERVER.BLOGS}?limit=3&featured=true`

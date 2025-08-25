@@ -62,7 +62,9 @@ const OrderSummary = () => {
                     الكمية: {item.quantity}
                   </span>
                   <span className="text-sm font-medium text-royal-900">
-                    {formatCurrency((item.finalPrice ?? 0) * item.quantity)}
+                    {formatCurrency(
+                      (item.finalPrice || item.price) * item.quantity
+                    )}
                   </span>
                 </div>
               </div>

@@ -34,7 +34,7 @@ export async function GET() {
   // Add authentication info to response
   const responseData = response.error
     ? { error: response.error }
-    : response.data;
+    : response.data.data;
 
   return NextResponse.json(
     {

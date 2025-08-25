@@ -5,6 +5,7 @@ import Favorites from "@/components/dashbored/favorites";
 import OrderHistory from "@/components/dashbored/order-history";
 import ProfileSettings from "@/components/dashbored/profile-settings";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useTranslation } from "@/hooks/use-translation";
 import {
   Heart,
   MapPin,
@@ -17,6 +18,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const Dashboard = () => {
+  const { t } = useTranslation();
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState("profile");
 
@@ -41,9 +43,9 @@ const Dashboard = () => {
             </div>
             <div>
               <h1 className="text-2xl font-bold text-foreground">
-                لوحة التحكم
+                {t("dashboard.title")}
               </h1>
-              <p className="text-muted-foreground">إدارة حسابك وتفضيلاتك</p>
+              <p className="text-muted-foreground">{t("dashboard.subtitle")}</p>
             </div>
           </div>
         </div>
@@ -64,7 +66,7 @@ const Dashboard = () => {
               >
                 <Settings className="w-5 h-5" />
                 <span className="hidden sm:inline font-medium">
-                  الملف الشخصي
+                  {t("dashboard.tabs.profile")}
                 </span>
               </TabsTrigger>
               <TabsTrigger
@@ -72,28 +74,36 @@ const Dashboard = () => {
                 className="flex items-center gap-3 h-12 px-4 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-amaranth-600 text-gray-600 hover:text-amaranth-500 transition-all duration-200"
               >
                 <Package className="w-5 h-5" />
-                <span className="hidden sm:inline font-medium">الطلبات</span>
+                <span className="hidden sm:inline font-medium">
+                  {t("dashboard.tabs.orders")}
+                </span>
               </TabsTrigger>
               <TabsTrigger
                 value="favorites"
                 className="flex items-center gap-3 h-12 px-4 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-amaranth-600 text-gray-600 hover:text-amaranth-500 transition-all duration-200"
               >
                 <Heart className="w-5 h-5" />
-                <span className="hidden sm:inline font-medium">المفضلة</span>
+                <span className="hidden sm:inline font-medium">
+                  {t("dashboard.tabs.favorites")}
+                </span>
               </TabsTrigger>
               <TabsTrigger
                 value="cart"
                 className="flex items-center gap-3 h-12 px-4 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-amaranth-600 text-gray-600 hover:text-amaranth-500 transition-all duration-200"
               >
                 <ShoppingCart className="w-5 h-5" />
-                <span className="hidden sm:inline font-medium">السلة</span>
+                <span className="hidden sm:inline font-medium">
+                  {t("dashboard.tabs.cart")}
+                </span>
               </TabsTrigger>
               <TabsTrigger
                 value="addresses"
                 className="flex items-center gap-3 h-12 px-4 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-amaranth-600 text-gray-600 hover:text-amaranth-500 transition-all duration-200"
               >
                 <MapPin className="w-5 h-5" />
-                <span className="hidden sm:inline font-medium">العناوين</span>
+                <span className="hidden sm:inline font-medium">
+                  {t("dashboard.tabs.addresses")}
+                </span>
               </TabsTrigger>
             </TabsList>
           </div>

@@ -71,7 +71,15 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    return NextResponse.json(response.data, { status: response.status });
+    return NextResponse.json(
+      response.error
+        ? { error: response.error }
+        : {
+            success: true,
+            data: response.data.data,
+            message: "Addresses retrieved successfully",
+          }
+    );
   } catch (error) {
     console.error("API Error:", error);
     return NextResponse.json(

@@ -5,6 +5,7 @@ import SectionPlaceholder from "@/components/placeholder/section-placeholder";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useFetch } from "@/hooks/use-fetch";
 import { useIncrementViews } from "@/hooks/use-increment-views";
+import { useTranslation } from "@/hooks/use-translation";
 import { RelatedBlogs, ShowBlog } from "@/types/blogs";
 import { useParams } from "next/navigation";
 import { useEffect, useRef } from "react";
@@ -12,6 +13,7 @@ import { useEffect, useRef } from "react";
 const BlogView = () => {
   const params = useParams();
   const { incrementViews } = useIncrementViews();
+  const { t } = useTranslation();
   const hasIncremented = useRef(false);
 
   const { data, loading, error } = useFetch<{
@@ -55,9 +57,9 @@ const BlogView = () => {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <SectionPlaceholder
           icon="error"
-          title="Blog not found"
-          description="The blog post you're looking for doesn't exist or has been removed."
-          actionLabel="Go back"
+          title={t("blog.notFound")}
+          description={t("blog.notFoundDescription")}
+          actionLabel={t("blog.goBack")}
           onAction={() => window.history.back()}
         />
       </div>
@@ -80,7 +82,7 @@ const BlogView = () => {
             <div className="space-y-6">
               <div>
                 <h2 className="text-xl font-semibold text-foreground mb-4">
-                  Related Posts
+                  {t("blog.relatedPosts")}
                 </h2>
                 <div className="space-y-4">
                   {relatedBlogs.map((post: RelatedBlogs, index: number) => (

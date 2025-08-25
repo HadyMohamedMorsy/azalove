@@ -4,10 +4,12 @@ import OrderSummary from "@/components/checkout/order-summary";
 import PaymentForm from "@/components/checkout/payment-form";
 import ShippingForm from "@/components/checkout/shipping-form";
 import { Card, CardContent } from "@/components/ui/card";
+import { useTranslation } from "@/hooks/use-translation";
 import { Check, CheckCircle, CreditCard, Shield, Truck } from "lucide-react";
 import React, { useState } from "react";
 
 const Checkout = () => {
+  const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(1);
   const [shippingData, setShippingData] = useState({});
   const [paymentData, setPaymentData] = useState({});
@@ -15,22 +17,22 @@ const Checkout = () => {
   const steps = [
     {
       id: 1,
-      title: "الشحن",
-      description: "تفاصيل التوصيل",
+      title: t("checkout.steps.shipping"),
+      description: t("checkout.steps.shippingDescription"),
       icon: Truck,
       component: ShippingForm,
     },
     {
       id: 2,
-      title: "الدفع",
-      description: "طريقة الدفع",
+      title: t("checkout.steps.payment"),
+      description: t("checkout.steps.paymentDescription"),
       icon: CreditCard,
       component: PaymentForm,
     },
     {
       id: 3,
-      title: "التأكيد",
-      description: "مراجعة الطلب",
+      title: t("checkout.steps.confirmation"),
+      description: t("checkout.steps.confirmationDescription"),
       icon: CheckCircle,
       component: OrderConfirmation,
     },
@@ -65,13 +67,15 @@ const Checkout = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-3xl font-bold text-royal-900">إتمام الطلب</h1>
-              <p className="text-royal-600 mt-1">أكمل عملية الشراء بأمان</p>
+              <h1 className="text-3xl font-bold text-royal-900">
+                {t("checkout.title")}
+              </h1>
+              <p className="text-royal-600 mt-1">{t("checkout.subtitle")}</p>
             </div>
             <div className="flex items-center gap-2 bg-azalove-100 px-4 py-2 rounded-full">
               <Shield className="w-4 h-4 text-azalove-600" />
               <span className="text-sm font-medium text-azalove-700">
-                إتمام آمن
+                {t("checkout.secureCheckout")}
               </span>
             </div>
           </div>
@@ -157,7 +161,7 @@ const Checkout = () => {
 
                 <CurrentStepComponent
                   onNext={handleNext}
-                  onBack={currentStep > 1 ? handleBack : undefined}
+                  onBack={currentStep > 1 ? handleBack : () => {}}
                   shippingData={shippingData}
                   paymentData={paymentData}
                 />

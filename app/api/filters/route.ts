@@ -43,16 +43,14 @@ export async function GET() {
 
     // Extract the actual data arrays from nested responses
     const categories = categoriesResponse?.data?.data || [];
-    const featuredProducts = featuredProductsResponse?.data?.data || [];
+    const featuredProducts = featuredProductsResponse?.data?.data?.data || [];
 
     return NextResponse.json({
       message: "filters retrieved successfully",
       statusCode: 200,
       data: {
-        data: {
-          categories,
-          featuredProducts,
-        },
+        categories,
+        featuredProducts,
       },
       timestamp: new Date().toISOString(),
     });

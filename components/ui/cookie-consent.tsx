@@ -8,7 +8,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Switch } from "@/components/ui/switch";
-import { X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -91,22 +90,17 @@ export function CookieConsent() {
   };
 
   const initializeCookies = (prefs: CookiePreferences) => {
-    // Initialize Google Analytics if analytical cookies are enabled
-    if (prefs.analytical) {
-      // Initialize GA4 here
-      console.log("Initializing analytical cookies");
-    }
+    // Google Analytics is handled by the GoogleAnalytics component
+    // which automatically checks cookie preferences and general settings
 
     // Initialize marketing cookies if enabled
     if (prefs.marketing) {
       // Initialize marketing scripts here
-      console.log("Initializing marketing cookies");
     }
 
     // Initialize functional cookies if enabled
     if (prefs.functional) {
       // Initialize functional features here
-      console.log("Initializing functional cookies");
     }
   };
 

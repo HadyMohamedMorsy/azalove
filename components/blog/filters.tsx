@@ -11,12 +11,10 @@ import { useFetch } from "@/hooks/use-fetch";
 import Image from "next/image";
 
 interface BlogCategory {
-  data: {
-    id: string;
-    name: string;
-    slug: string;
-    subCategories?: BlogSubCategory[];
-  }[];
+  id: string;
+  name: string;
+  slug: string;
+  subCategories?: BlogSubCategory[];
 }
 
 interface BlogSubCategory {
@@ -26,20 +24,20 @@ interface BlogSubCategory {
 }
 
 interface FeaturedBlog {
-  data: {
-    id: string;
-    title: string;
-    thumb: string;
-    createdBy: {
-      firstName: string;
-      lastName: string;
-    };
-  }[];
+  id: string;
+  title: string;
+  thumb: string;
+  createdBy: {
+    firstName: string;
+    lastName: string;
+  };
 }
 
 interface BlogFiltersData {
-  categories: BlogCategory;
-  featuredBlogs: FeaturedBlog;
+  data: {
+    categories: BlogCategory[];
+    featuredBlogs: FeaturedBlog[];
+  };
 }
 
 interface BlogFilters {
@@ -94,8 +92,8 @@ const BlogFilters = ({ filters, onFilterChange }: BlogFiltersProps) => {
     return <div className="text-red-500">خطأ في تحميل فلاتر المقالات</div>;
   }
 
-  const categoryItems = response.categories.data;
-  const featuredBlogs = response.featuredBlogs.data;
+  const categoryItems = response.data.categories;
+  const featuredBlogs = response.data.featuredBlogs;
 
   if (!loading) {
     return (

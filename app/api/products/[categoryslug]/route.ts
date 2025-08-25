@@ -30,6 +30,6 @@ export async function GET(
   });
 
   return NextResponse.json(
-    response.error ? { error: response.error } : response.data
+    response.error ? { error: response.error } : response.data.data
   );
 }

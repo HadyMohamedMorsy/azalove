@@ -28,18 +28,13 @@ const AvatarCustomizer = () => {
 
   const handleSave = () => {
     setSavedCharacters((prev) => [...prev, { ...selectedFeatures }]);
-    console.log("Character saved:", selectedFeatures);
   };
 
   const handleSubmitToCover = () => {
     setCoverCharacters((prev) => [...prev, { ...selectedFeatures }]);
-    console.log("Character added to cover:", selectedFeatures);
   };
 
-  const handleDownload = () => {
-    console.log("Downloading avatar:", selectedFeatures);
-    // Here you would typically generate and download the avatar image
-  };
+  const handleDownload = () => {};
 
   const removeFromCover = (index: number) => {
     setCoverCharacters((prev) => prev.filter((_, i) => i !== index));

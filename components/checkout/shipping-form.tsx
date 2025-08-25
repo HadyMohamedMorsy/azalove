@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { API_ENDPOINTS_FROM_NEXT } from "@/config/api";
 import { useAuth } from "@/contexts/auth-context";
 import { useFetch } from "@/hooks/use-fetch";
+import { useTranslation } from "@/hooks/use-translation";
 import { Building, Check, Home, MapPin, Plus } from "lucide-react";
 import { useState } from "react";
 
@@ -31,6 +32,7 @@ interface ShippingFormProps {
 }
 
 const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
   const [showForm, setShowForm] = useState(false);
@@ -98,7 +100,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
           <div className="space-y-4">
             <div>
               <Label htmlFor="email" className="text-royal-900 font-medium">
-                عنوان البريد الإلكتروني
+                {t("checkout.shipping.email")}
               </Label>
               <Input
                 id="email"
@@ -116,7 +118,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
                   htmlFor="firstName"
                   className="text-royal-900 font-medium"
                 >
-                  الاسم الأول
+                  {t("checkout.shipping.firstName")}
                 </Label>
                 <Input
                   id="firstName"
@@ -133,7 +135,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
                   htmlFor="lastName"
                   className="text-royal-900 font-medium"
                 >
-                  اسم العائلة
+                  {t("checkout.shipping.lastName")}
                 </Label>
                 <Input
                   id="lastName"
@@ -149,7 +151,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
 
             <div>
               <Label htmlFor="address" className="text-royal-900 font-medium">
-                العنوان
+                {t("checkout.shipping.address")}
               </Label>
               <Input
                 id="address"
@@ -163,7 +165,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="city" className="text-royal-900 font-medium">
-                  المدينة
+                  {t("checkout.shipping.city")}
                 </Label>
                 <Input
                   id="city"
@@ -178,7 +180,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
                   htmlFor="postalCode"
                   className="text-royal-900 font-medium"
                 >
-                  الرمز البريدي
+                  {t("checkout.shipping.postalCode")}
                 </Label>
                 <Input
                   id="postalCode"
@@ -201,14 +203,14 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
                 onClick={onBack}
                 className="border-cream-300 text-royal-700 hover:bg-cream-50"
               >
-                Back
+                {t("checkout.shipping.back")}
               </Button>
             )}
             <Button
               type="submit"
               className="bg-royal-500 hover:bg-azalove-600 text-white"
             >
-              Continue to Payment
+              {t("checkout.shipping.continueToPayment")}
             </Button>
           </div>
         </form>
@@ -229,7 +231,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
       >
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold text-royal-900">
-            معلومات الشحن
+            {t("checkout.shipping.shippingInfo")}
           </h2>
           <Button
             type="button"
@@ -237,14 +239,14 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
             onClick={() => setShowForm(false)}
             className="border-cream-300 text-royal-700 hover:bg-cream-50"
           >
-            استخدام العنوان المحفوظ
+            {t("checkout.shipping.useSavedAddress")}
           </Button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <Label htmlFor="email" className="text-royal-900 font-medium">
-              عنوان البريد الإلكتروني
+              {t("checkout.shipping.email")}
             </Label>
             <Input
               id="email"
@@ -259,7 +261,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label htmlFor="firstName" className="text-royal-900 font-medium">
-                الاسم الأول
+                {t("checkout.shipping.firstName")}
               </Label>
               <Input
                 id="firstName"
@@ -271,7 +273,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
             </div>
             <div>
               <Label htmlFor="lastName" className="text-royal-900 font-medium">
-                اسم العائلة
+                {t("checkout.shipping.lastName")}
               </Label>
               <Input
                 id="lastName"
@@ -285,7 +287,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
 
           <div>
             <Label htmlFor="address" className="text-royal-900 font-medium">
-              العنوان
+              {t("checkout.shipping.address")}
             </Label>
             <Input
               id="address"
@@ -299,7 +301,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label htmlFor="city" className="text-royal-900 font-medium">
-                المدينة
+                {t("checkout.shipping.city")}
               </Label>
               <Input
                 id="city"
@@ -314,7 +316,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
                 htmlFor="postalCode"
                 className="text-royal-900 font-medium"
               >
-                الرمز البريدي
+                {t("checkout.shipping.postalCode")}
               </Label>
               <Input
                 id="postalCode"
@@ -336,14 +338,14 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
                 onClick={onBack}
                 className="border-cream-300 text-royal-700 hover:bg-cream-50"
               >
-                Back
+                {t("checkout.shipping.back")}
               </Button>
             )}
             <Button
               type="submit"
               className="bg-royal-500 hover:bg-azalove-600 text-white"
             >
-              Continue to Payment
+              {t("checkout.shipping.continueToPayment")}
             </Button>
           </div>
         </form>
@@ -363,7 +365,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
     >
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold text-royal-900">
-          اختر عنوان الشحن
+          {t("checkout.shipping.chooseShippingAddress")}
         </h2>
         <Button
           type="button"
@@ -372,32 +374,37 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
           className="border-cream-300 text-royal-700 hover:bg-cream-50"
         >
           <Plus className="w-4 h-4 mr-2" />
-          استخدام عنوان جديد
+          {t("checkout.shipping.useNewAddress")}
         </Button>
       </div>
 
       {loading ? (
         <div className="text-center py-8">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-azalove-500 mx-auto"></div>
-          <p className="text-royal-600 mt-2">جاري تحميل عناوينك...</p>
+          <p className="text-royal-600 mt-2">
+            {t("checkout.shipping.loadingAddresses")}
+          </p>
         </div>
       ) : error ? (
         <div className="text-center py-8 text-red-500">
-          خطأ في تحميل العناوين. يرجى استخدام عنوان جديد.
+          {t("checkout.shipping.errorLoadingAddresses")}.{" "}
+          {t("checkout.shipping.useNewAddress")}.
         </div>
       ) : !addresses || addresses.length === 0 ? (
         <div className="text-center py-8">
           <MapPin className="w-12 h-12 mx-auto text-royal-400 mb-4" />
           <h3 className="text-lg font-semibold mb-2 text-royal-900">
-            لا توجد عناوين محفوظة
+            {t("checkout.shipping.noSavedAddresses")}
           </h3>
-          <p className="text-royal-600 mb-4">ليس لديك عناوين محفوظة بعد.</p>
+          <p className="text-royal-600 mb-4">
+            {t("checkout.shipping.noSavedAddressesDescription")}
+          </p>
           <Button
             onClick={handleUseNewAddress}
             className="bg-royal-500 hover:bg-azalove-600 text-white"
           >
             <Plus className="w-4 h-4 mr-2" />
-            إضافة عنوان جديد
+            {t("checkout.shipping.addNewAddress")}
           </Button>
         </div>
       ) : (
@@ -440,7 +447,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
                   <div className="flex items-center gap-2">
                     {address.isDefault && (
                       <Badge className="bg-azalove-100 text-azalove-700 border-azalove-200">
-                        افتراضي
+                        {t("checkout.shipping.default")}
                       </Badge>
                     )}
                     {selectedAddress?.id === address.id && (
@@ -462,7 +469,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
             onClick={onBack}
             className="border-cream-300 text-royal-700 hover:bg-cream-50"
           >
-            رجوع
+            {t("checkout.shipping.back")}
           </Button>
         )}
         <Button
@@ -473,7 +480,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
             selectedAddress && handleAddressSelect(selectedAddress)
           }
         >
-          المتابعة إلى الدفع
+          {t("checkout.shipping.continueToPaymentButton")}
         </Button>
       </div>
     </div>

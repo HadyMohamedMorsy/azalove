@@ -81,17 +81,10 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Extract data and pagination info
-    const data = response.data?.data || [];
-    const totalRecords = response.data?.totalRecords || 0;
-    const recordsFiltered = response.data?.recordsFiltered;
-
-    console.log(response.data.data);
-
     return NextResponse.json({
-      data: response.data.data.data,
-      recordsFiltered: response.data.data.recordsFiltered,
-      totalRecords: response.data.data.totalRecords,
+      data: response.data.data,
+      recordsFiltered: response.data.recordsFiltered,
+      totalRecords: response.data.totalRecords,
     });
   } catch (error) {
     console.error("Error fetching user orders:", error);

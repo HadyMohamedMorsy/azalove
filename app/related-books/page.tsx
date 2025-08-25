@@ -18,6 +18,7 @@ import PageTemplateSelectorDialog from "@/components/books/page-template-selecto
 import SavedCoupleDisplay from "@/components/books/saved-couple-display";
 import UserPreferencesDisplay from "@/components/books/user-preferences-display";
 import { SavedCouple, useSavedCouples } from "@/hooks/use-saved-couples";
+import { useTranslation } from "@/hooks/use-translation";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -69,6 +70,7 @@ export default function RelatedBooksPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { savedCouples } = useSavedCouples();
+  const { t } = useTranslation();
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [coverEditor, setCoverEditor] = useState<BookCoverEditor>({
@@ -398,14 +400,6 @@ export default function RelatedBooksPage() {
   };
 
   const handleFinalCreateBook = () => {
-    // Here you would implement the actual book creation logic
-    console.log("Creating book with:", {
-      cover: bookCreationSummary.selectedCover,
-      pages: bookCreationSummary.pages,
-      paper: bookCreationSummary.selectedPaper,
-      couple: bookCreationSummary.couple,
-    });
-
     // Reset all state and navigate to home
     resetAllState();
     router.push("/");
@@ -575,7 +569,7 @@ export default function RelatedBooksPage() {
       <div className="min-h-screen bg-gradient-to-br from-cream-50 to-azalove-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-azalove-500 mx-auto mb-4"></div>
-          <p className="text-royal-700">Finding books for you...</p>
+          <p className="text-royal-700">{t("relatedBooks.loading")}</p>
         </div>
       </div>
     );
@@ -589,7 +583,7 @@ export default function RelatedBooksPage() {
 
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-royal-900 mb-4">
-            الكتب المتعلقة بتفضيلاتك
+            {t("relatedBooks.title")}
           </h1>
           <UserPreferencesDisplay userAnswers={userAnswers} />
         </div>
@@ -607,7 +601,7 @@ export default function RelatedBooksPage() {
         {books.length === 0 && (
           <div className="text-center py-12">
             <p className="text-royal-700 text-lg">
-              لم يتم العثور على كتب تطابق تفضيلاتك. جرب تعديل اختياراتك.
+              {t("relatedBooks.noBooksFound")}
             </p>
           </div>
         )}

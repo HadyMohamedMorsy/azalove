@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { API_BASE_URL } from "@/config/api";
 import { useCart } from "@/contexts/cart-context";
+import { useCurrency } from "@/hooks/use-currency";
 import { useTranslation } from "@/hooks/use-translation";
 import { CartItem } from "@/types";
 import { Heart, Minus, Plus, Sparkles, Trash2 } from "lucide-react";
@@ -18,6 +19,7 @@ interface CartItemCardProps {
 export function CartItemCard({ item, variant = "list" }: CartItemCardProps) {
   const { updateQuantity, removeFromCart } = useCart();
   const { t } = useTranslation();
+  const { formatCurrency } = useCurrency();
 
   // Use finalPrice if available, otherwise use price
   const displayPrice = item.finalPrice || item.price;
@@ -48,15 +50,15 @@ export function CartItemCard({ item, variant = "list" }: CartItemCardProps) {
                 {hasDiscount ? (
                   <>
                     <span className="text-sm font-bold text-rose-600">
-                      ${displayPrice.toFixed(2)}
+                      {formatCurrency(displayPrice)}
                     </span>
                     <span className="text-xs text-gray-400 line-through">
-                      ${item.price.toFixed(2)}
+                      {formatCurrency(item.price)}
                     </span>
                   </>
                 ) : (
                   <span className="text-sm font-bold text-gray-900">
-                    ${displayPrice.toFixed(2)}
+                    {formatCurrency(displayPrice)}
                   </span>
                 )}
               </div>
@@ -120,10 +122,10 @@ export function CartItemCard({ item, variant = "list" }: CartItemCardProps) {
           {hasDiscount ? (
             <>
               <span className="text-xl font-bold bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent">
-                ${displayPrice.toFixed(2)}
+                {formatCurrency(displayPrice)}
               </span>
               <span className="text-sm text-gray-400 line-through">
-                ${item.price.toFixed(2)}
+                {formatCurrency(item.price)}
               </span>
               <div className="flex items-center gap-1 bg-gradient-to-r from-rose-100 to-pink-100 px-2 py-1 rounded-full">
                 <Sparkles className="w-3 h-3 text-rose-500" />
@@ -134,7 +136,7 @@ export function CartItemCard({ item, variant = "list" }: CartItemCardProps) {
             </>
           ) : (
             <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-rose-600 bg-clip-text text-transparent">
-              ${displayPrice.toFixed(2)}
+              {formatCurrency(displayPrice)}
             </span>
           )}
         </div>

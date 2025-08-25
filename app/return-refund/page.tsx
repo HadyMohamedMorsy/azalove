@@ -1,8 +1,11 @@
 "use client";
 import { BrandSVG } from "@/components/ui/brand-svg";
+import { useTranslation } from "@/hooks/use-translation";
 import Link from "next/link";
 
 function ReturnRefund() {
+  const { t } = useTranslation();
+
   return (
     <>
       <header className="container px-6 py-4 border-t border-b border-[#eae8e4]">
@@ -10,12 +13,14 @@ function ReturnRefund() {
           <ol className="flex items-center space-x-2">
             <li>
               <Link href="/" className="text-gray-500 hover:text-gray-700">
-                الرئيسيه
+                {t("returnRefund.breadcrumb.home")}
               </Link>
             </li>
             <li className="flex items-center space-x-2">
               <span className="text-gray-500">/</span>
-              <span className="text-gray-700">سياسة الإرجاع والاسترداد</span>
+              <span className="text-gray-700">
+                {t("returnRefund.breadcrumb.title")}
+              </span>
             </li>
           </ol>
         </nav>
@@ -35,65 +40,80 @@ function ReturnRefund() {
 
           <div className="mb-8">
             <h1 className="text-4xl mb-4 font-web text-right">
-              سياسة الإرجاع والاسترداد
+              {t("returnRefund.title")}
             </h1>
             <p className="font-web text-gray-600 text-right">
-              آخر تحديث: {new Date().toLocaleDateString("ar-EG")}
+              {t("returnRefund.lastUpdated")}:{" "}
+              {new Date().toLocaleDateString("ar-EG")}
             </p>
           </div>
 
           <div className="space-y-8 text-right">
             {/* مقدمة */}
             <section>
-              <h2 className="text-2xl font-web mb-4">مقدمة</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("returnRefund.sections.introduction")}
+              </h2>
               <p className="font-web leading-relaxed text-gray-700">
-                نحن في أزالوف نسعى لإثراء مكتبتكم بأجمل قصص الحب والرومانسية.
-                توضح سياسة الإرجاع والاسترداد هذه حقوقكم في إرجاع الكتب
-                الرومانسية واسترداد الأموال. نحن ملتزمون بتقديم تجربة قراءة
-                مميزة، ونوفر عملية إرجاع واسترداد سهلة وعادلة لجميع عملائنا من
-                عشاق الأدب الرومانسي.
+                {t("returnRefund.sections.introduction")}
               </p>
             </section>
 
             {/* فترة الإرجاع */}
             <section>
-              <h2 className="text-2xl font-web mb-4">فترة الإرجاع</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("returnRefund.sections.returnPeriod.title")}
+              </h2>
               <div className="space-y-3">
                 <p className="font-web text-gray-700">
-                  يحق لك إرجاع الكتب الرومانسية خلال الفترات التالية:
+                  {t("returnRefund.sections.returnPeriod.description")}
                 </p>
                 <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                   <li>
-                    <strong>الكتب الورقية:</strong> 30 يوماً من تاريخ الاستلام
+                    <strong>
+                      {t("returnRefund.sections.returnPeriod.items.paperBooks")}
+                    </strong>
                   </li>
                   <li>
-                    <strong>الكتب المصورة والروايات المصورة:</strong> 21 يوماً
-                    من تاريخ الاستلام
+                    <strong>
+                      {t(
+                        "returnRefund.sections.returnPeriod.items.illustratedBooks"
+                      )}
+                    </strong>
                   </li>
                   <li>
-                    <strong>مجموعات الكتب:</strong> 30 يوماً من تاريخ الاستلام
+                    <strong>
+                      {t("returnRefund.sections.returnPeriod.items.bookSets")}
+                    </strong>
                   </li>
                   <li>
-                    <strong>الكتب المستوردة:</strong> 14 يوماً من تاريخ الاستلام
+                    <strong>
+                      {t(
+                        "returnRefund.sections.returnPeriod.items.importedBooks"
+                      )}
+                    </strong>
                   </li>
                   <li>
-                    <strong>الكتب النادرة والمحدودة:</strong> 7 أيام من تاريخ
-                    الاستلام
+                    <strong>
+                      {t("returnRefund.sections.returnPeriod.items.rareBooks")}
+                    </strong>
                   </li>
                 </ul>
                 <p className="font-web text-gray-700 mt-3">
-                  <strong>ملاحظة:</strong> يتم حساب فترة الإرجاع من تاريخ استلام
-                  الكتاب وليس من تاريخ الشراء.
+                  <strong>
+                    {t("returnRefund.sections.returnPeriod.note")}
+                  </strong>
                 </p>
               </div>
             </section>
 
             {/* شروط الإرجاع */}
             <section>
-              <h2 className="text-2xl font-web mb-4">شروط الإرجاع</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("returnRefund.sections.returnConditions.title")}
+              </h2>
               <p className="font-web text-gray-700 mb-3">
-                لضمان قبول طلب إرجاع الكتب الرومانسية، يجب أن تتوفر الشروط
-                التالية:
+                {t("returnRefund.sections.returnConditions.description")}
               </p>
               <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                 <li>أن يكون الكتاب في حالته الأصلية بدون تلف</li>
@@ -109,10 +129,10 @@ function ReturnRefund() {
             {/* المنتجات غير القابلة للإرجاع */}
             <section>
               <h2 className="text-2xl font-web mb-4">
-                الكتب غير القابلة للإرجاع
+                {t("returnRefund.sections.nonReturnable.title")}
               </h2>
               <p className="font-web text-gray-700 mb-3">
-                الكتب التالية غير قابلة للإرجاع لأسباب خاصة:
+                {t("returnRefund.sections.nonReturnable.description")}
               </p>
               <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                 <li>الكتب الرقمية المحملة (PDF، ePub)</li>
@@ -128,10 +148,14 @@ function ReturnRefund() {
 
             {/* عملية الإرجاع */}
             <section>
-              <h2 className="text-2xl font-web mb-4">عملية الإرجاع</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("returnRefund.sections.returnProcess.title")}
+              </h2>
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-xl font-web mb-2">خطوات إرجاع الكتب:</h3>
+                  <h3 className="text-xl font-web mb-2">
+                    {t("returnRefund.sections.returnProcess.steps.title")}
+                  </h3>
                   <ol className="list-decimal pr-6 space-y-2 font-web text-gray-700">
                     <li>قم بتسجيل الدخول إلى حسابك في أزالوف</li>
                     <li>اذهب إلى قسم "مكتبتي" أو "طلباتي"</li>
@@ -145,7 +169,9 @@ function ReturnRefund() {
                   </ol>
                 </div>
                 <div>
-                  <h3 className="text-xl font-web mb-2">نصائح لحماية الكتب:</h3>
+                  <h3 className="text-xl font-web mb-2">
+                    {t("returnRefund.sections.returnProcess.tips.title")}
+                  </h3>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                     <li>استخدم مغلف فقاعي أو كرتون مقوى</li>
                     <li>ضع الكتاب في كيس بلاستيكي لحمايته من الرطوبة</li>
@@ -159,45 +185,48 @@ function ReturnRefund() {
 
             {/* تكاليف الإرجاع */}
             <section>
-              <h2 className="text-2xl font-web mb-4">تكاليف الإرجاع</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("returnRefund.sections.returnCosts.title")}
+              </h2>
               <div className="space-y-3">
                 <p className="font-web text-gray-700 mb-3">
-                  تكاليف شحن الكتب للإرجاع:
+                  {t("returnRefund.sections.returnCosts.description")}
                 </p>
                 <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                   <li>
-                    <strong>إرجاع مجاني:</strong> في حالة وجود عيب في الطباعة أو
-                    التجليد
+                    <strong>
+                      {t("returnRefund.sections.returnCosts.items.freeReturn")}
+                    </strong>
                   </li>
                   <li>
-                    <strong>إرجاع مجاني:</strong> في حالة إرسال كتاب خاطئ
+                    <strong>
+                      {t("returnRefund.sections.returnCosts.items.returnFees")}
+                    </strong>
                   </li>
                   <li>
-                    <strong>إرجاع مجاني:</strong> للطلبات التي تزيد عن 200 ريال
-                  </li>
-                  <li>
-                    <strong>إرجاع مجاني:</strong> لأعضاء نادي القراء المميزين
-                  </li>
-                  <li>
-                    <strong>رسوم الإرجاع:</strong> 15 ريال للكتب الفردية
-                  </li>
-                  <li>
-                    <strong>رسوم مخفضة:</strong> 25 ريال لمجموعات الكتب
+                    <strong>
+                      {t("returnRefund.sections.returnCosts.items.reducedFees")}
+                    </strong>
                   </li>
                 </ul>
                 <p className="font-web text-gray-700 mt-3">
-                  <strong>عرض خاص:</strong> إرجاع مجاني لأول 3 كتب لكل عميل
-                  جديد.
+                  <strong>
+                    {t("returnRefund.sections.returnCosts.items.specialOffer")}
+                  </strong>
                 </p>
               </div>
             </section>
 
             {/* عمليات الاسترداد */}
             <section>
-              <h2 className="text-2xl font-web mb-4">عمليات الاسترداد</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("returnRefund.sections.refunds.title")}
+              </h2>
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-xl font-web mb-2">طرق الاسترداد:</h3>
+                  <h3 className="text-xl font-web mb-2">
+                    {t("returnRefund.sections.refunds.methods.title")}
+                  </h3>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                     <li>الاسترداد إلى نفس طريقة الدفع الأصلية</li>
                     <li>رصيد في موقع أزالوف للكتب الرومانسية</li>
@@ -206,22 +235,44 @@ function ReturnRefund() {
                   </ul>
                 </div>
                 <div>
-                  <h3 className="text-xl font-web mb-2">مواعيد الاسترداد:</h3>
+                  <h3 className="text-xl font-web mb-2">
+                    {t("returnRefund.sections.refunds.timelines.title")}
+                  </h3>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                     <li>
-                      <strong>البطاقات الائتمانية:</strong> 3-7 أيام عمل
+                      <strong>
+                        {t(
+                          "returnRefund.sections.refunds.timelines.items.creditCards"
+                        )}
+                      </strong>
                     </li>
                     <li>
-                      <strong>البطاقات مدفوعة مسبقاً:</strong> 2-5 أيام عمل
+                      <strong>
+                        {t(
+                          "returnRefund.sections.refunds.timelines.items.prepaidCards"
+                        )}
+                      </strong>
                     </li>
                     <li>
-                      <strong>المحافظ الرقمية:</strong> 1-2 أيام عمل
+                      <strong>
+                        {t(
+                          "returnRefund.sections.refunds.timelines.items.digitalWallets"
+                        )}
+                      </strong>
                     </li>
                     <li>
-                      <strong>رصيد الموقع:</strong> فوري بعد فحص الكتاب
+                      <strong>
+                        {t(
+                          "returnRefund.sections.refunds.timelines.items.siteCredit"
+                        )}
+                      </strong>
                     </li>
                     <li>
-                      <strong>بطاقات الهدايا:</strong> فوري بعد المعالجة
+                      <strong>
+                        {t(
+                          "returnRefund.sections.refunds.timelines.items.giftCards"
+                        )}
+                      </strong>
                     </li>
                   </ul>
                 </div>
@@ -230,10 +281,12 @@ function ReturnRefund() {
 
             {/* الاستبدال */}
             <section>
-              <h2 className="text-2xl font-web mb-4">الاستبدال</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("returnRefund.sections.replacement.title")}
+              </h2>
               <div className="space-y-3">
                 <p className="font-web text-gray-700 mb-3">
-                  نوفر خدمة استبدال الكتب في الحالات التالية:
+                  {t("returnRefund.sections.replacement.description")}
                 </p>
                 <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                   <li>استبدال الكتاب التالف أو المعيب في الطباعة</li>
@@ -243,18 +296,23 @@ function ReturnRefund() {
                   <li>استبدال الطبعة العادية بالطبعة المميزة (مع دفع الفرق)</li>
                 </ul>
                 <p className="font-web text-gray-700 mt-3">
-                  <strong>مميزات الاستبدال:</strong> شحن مجاني للكتاب البديل،
-                  واستشارة مجانية لاختيار كتب رومانسية تناسب ذوقك.
+                  <strong>
+                    {t("returnRefund.sections.replacement.benefits")}
+                  </strong>
                 </p>
               </div>
             </section>
 
             {/* حالات خاصة */}
             <section>
-              <h2 className="text-2xl font-web mb-4">حالات خاصة</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("returnRefund.sections.specialCases.title")}
+              </h2>
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-xl font-web mb-2">الكتب المعيبة:</h3>
+                  <h3 className="text-xl font-web mb-2">
+                    {t("returnRefund.sections.specialCases.defective.title")}
+                  </h3>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                     <li>إرجاع فوري مع استرداد كامل</li>
                     <li>شحن مجاني للكتاب البديل</li>
@@ -263,7 +321,9 @@ function ReturnRefund() {
                   </ul>
                 </div>
                 <div>
-                  <h3 className="text-xl font-web mb-2">الطلبات الخاطئة:</h3>
+                  <h3 className="text-xl font-web mb-2">
+                    {t("returnRefund.sections.specialCases.wrongOrders.title")}
+                  </h3>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                     <li>إرجاع مجاني مع استرداد كامل</li>
                     <li>إرسال الكتاب الصحيح مجاناً</li>
@@ -276,9 +336,11 @@ function ReturnRefund() {
 
             {/* تتبع الإرجاع */}
             <section>
-              <h2 className="text-2xl font-web mb-4">تتبع الإرجاع</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("returnRefund.sections.tracking.title")}
+              </h2>
               <p className="font-web text-gray-700 mb-3">
-                يمكنك تتبع حالة إرجاع الكتب من خلال:
+                {t("returnRefund.sections.tracking.description")}
               </p>
               <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                 <li>قسم "مكتبتي" في حسابك</li>
@@ -292,9 +354,11 @@ function ReturnRefund() {
 
             {/* إرجاع الهدايا */}
             <section>
-              <h2 className="text-2xl font-web mb-4">إرجاع الكتب المُهداة</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("returnRefund.sections.giftReturns.title")}
+              </h2>
               <p className="font-web text-gray-700 mb-3">
-                للكتب الرومانسية المُهداة من موقعنا:
+                {t("returnRefund.sections.giftReturns.description")}
               </p>
               <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                 <li>يمكن إرجاع الكتب المُهداة خلال 45 يوماً</li>
@@ -308,16 +372,22 @@ function ReturnRefund() {
 
             {/* التواصل */}
             <section>
-              <h2 className="text-2xl font-web mb-4">التواصل معنا</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("returnRefund.sections.contact.title")}
+              </h2>
               <p className="font-web text-gray-700 mb-3">
-                لأي استفسار حول إرجاع الكتب الرومانسية، يرجى التواصل معنا:
+                {t("returnRefund.sections.contact.description")}
               </p>
               <div className="space-y-2 font-web text-gray-700">
-                <p>البريد الإلكتروني: books@azalove.com</p>
-                <p>واتساب: +966 XX XXX XXXX</p>
-                <p>الدردشة المباشرة: متاحة من 9 صباحاً إلى 11 مساءً</p>
-                <p>استشارات القراءة: متاحة 24/7</p>
-                <p>نادي القراء: جلسات أسبوعية لمناقشة الكتب</p>
+                <p>{t("returnRefund.sections.contact.items.email")}</p>
+                <p>{t("returnRefund.sections.contact.items.whatsapp")}</p>
+                <p>{t("returnRefund.sections.contact.items.liveChat")}</p>
+                <p>
+                  {t(
+                    "returnRefund.sections.contact.items.readingConsultations"
+                  )}
+                </p>
+                <p>{t("returnRefund.sections.contact.items.bookClub")}</p>
               </div>
             </section>
           </div>

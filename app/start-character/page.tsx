@@ -35,8 +35,6 @@ export default function StartCharacterPage() {
       character2,
       answers, // Include the answers in the saved couple
     });
-
-    console.log("Saved couple:", savedCouple);
   };
 
   return (

@@ -17,10 +17,9 @@ export async function POST() {
         { status: response.status }
       );
     }
-    console.log(response.data.data);
     return NextResponse.json({
       success: true,
-      data: response.data.data.data[0],
+      data: response.data.data.data?.[0] || null,
     });
   } catch (error) {
     console.error("Error in general-settings API route:", error);

@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/auth-context";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "@/hooks/use-translation";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -19,6 +20,7 @@ const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { register } = useAuth();
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -34,8 +36,8 @@ const Register = () => {
 
       if (password !== confirmPassword) {
         toast({
-          title: "خطأ في كلمة المرور",
-          description: "كلمة المرور وتأكيد كلمة المرور غير متطابقين",
+          title: t("auth.messages.registerFailed"),
+          description: t("auth.messages.registerFailedDescription"),
         });
         return;
       }
@@ -43,13 +45,13 @@ const Register = () => {
       await register(firstName, lastName, email, password);
 
       toast({
-        title: "تم إنشاء الحساب بنجاح",
-        description: "مرحبا بك في ShopMart!",
+        title: t("auth.messages.registerSuccess"),
+        description: t("auth.messages.registerSuccessDescription"),
       });
     } catch (error) {
       toast({
-        title: "فشل إنشاء الحساب",
-        description: "يرجى التحقق من البيانات وإعادة المحاولة.",
+        title: t("auth.messages.registerFailed"),
+        description: t("auth.messages.registerFailedDescription"),
       });
     } finally {
       setIsLoading(false);
@@ -112,10 +114,10 @@ const Register = () => {
                 </svg>
               </div>
               <CardTitle className="text-3xl font-bold bg-gradient-to-r from-amaranth-600 to-royal-600 bg-clip-text text-transparent">
-                إنشاء حساب جديد
+                {t("auth.register.title")}
               </CardTitle>
               <CardDescription className="text-royal-600/80 text-base">
-                سجل معنا للبدء في رحلتك مع ShopMart
+                {t("auth.register.description")}
               </CardDescription>
             </div>
           </CardHeader>
@@ -127,14 +129,14 @@ const Register = () => {
                     htmlFor="firstName"
                     className="text-royal-700 font-medium"
                   >
-                    الاسم الأول
+                    {t("auth.register.firstName")}
                   </Label>
                   <div className="relative">
                     <Input
                       id="firstName"
                       name="firstName"
                       type="text"
-                      placeholder="الاسم الأول"
+                      placeholder={t("auth.register.firstNamePlaceholder")}
                       required
                       className="border-2 border-royal-200 focus:border-amaranth-400 focus:ring-2 focus:ring-amaranth-200/50 bg-white/70 backdrop-blur-sm transition-all duration-300 placeholder:text-royal-400/60"
                     />
@@ -146,14 +148,14 @@ const Register = () => {
                     htmlFor="lastName"
                     className="text-royal-700 font-medium"
                   >
-                    اسم العائلة
+                    {t("auth.register.lastName")}
                   </Label>
                   <div className="relative">
                     <Input
                       id="lastName"
                       name="lastName"
                       type="text"
-                      placeholder="اسم العائلة"
+                      placeholder={t("auth.register.lastNamePlaceholder")}
                       required
                       className="border-2 border-royal-200 focus:border-amaranth-400 focus:ring-2 focus:ring-amaranth-200/50 bg-white/70 backdrop-blur-sm transition-all duration-300 placeholder:text-royal-400/60"
                     />
@@ -164,14 +166,14 @@ const Register = () => {
 
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-royal-700 font-medium">
-                  البريد الإلكتروني
+                  {t("auth.register.email")}
                 </Label>
                 <div className="relative">
                   <Input
                     id="email"
                     name="email"
                     type="email"
-                    placeholder="أدخل بريدك الإلكتروني"
+                    placeholder={t("auth.register.emailPlaceholder")}
                     required
                     className="border-2 border-royal-200 focus:border-amaranth-400 focus:ring-2 focus:ring-amaranth-200/50 bg-white/70 backdrop-blur-sm transition-all duration-300 placeholder:text-royal-400/60"
                   />
@@ -184,14 +186,14 @@ const Register = () => {
                   htmlFor="password"
                   className="text-royal-700 font-medium"
                 >
-                  كلمة المرور
+                  {t("auth.register.password")}
                 </Label>
                 <div className="relative">
                   <Input
                     id="password"
                     name="password"
                     type="password"
-                    placeholder="أدخل كلمة المرور"
+                    placeholder={t("auth.register.passwordPlaceholder")}
                     required
                     className="border-2 border-royal-200 focus:border-amaranth-400 focus:ring-2 focus:ring-amaranth-200/50 bg-white/70 backdrop-blur-sm transition-all duration-300 placeholder:text-royal-400/60"
                   />
@@ -204,14 +206,14 @@ const Register = () => {
                   htmlFor="confirmPassword"
                   className="text-royal-700 font-medium"
                 >
-                  تأكيد كلمة المرور
+                  {t("auth.register.confirmPassword")}
                 </Label>
                 <div className="relative">
                   <Input
                     id="confirmPassword"
                     name="confirmPassword"
                     type="password"
-                    placeholder="أعد إدخال كلمة المرور"
+                    placeholder={t("auth.register.confirmPasswordPlaceholder")}
                     required
                     className="border-2 border-royal-200 focus:border-amaranth-400 focus:ring-2 focus:ring-amaranth-200/50 bg-white/70 backdrop-blur-sm transition-all duration-300 placeholder:text-royal-400/60"
                   />
@@ -227,20 +229,22 @@ const Register = () => {
                 {isLoading ? (
                   <div className="flex items-center space-x-2">
                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                    <span>جاري التحميل...</span>
+                    <span>{t("auth.register.loading")}</span>
                   </div>
                 ) : (
-                  "إنشاء حساب جديد"
+                  t("auth.register.registerButton")
                 )}
               </Button>
             </form>
             <div className="text-center pt-4 border-t border-royal-200/50">
-              <span className="text-royal-600 text-sm">لديك حساب بالفعل؟ </span>
+              <span className="text-royal-600 text-sm">
+                {t("auth.register.haveAccount")}{" "}
+              </span>
               <Link
                 href="/login"
                 className="text-amaranth-600 hover:text-amaranth-700 font-semibold text-sm transition-colors duration-200 hover:underline"
               >
-                تسجيل الدخول
+                {t("auth.register.signIn")}
               </Link>
             </div>
           </CardContent>

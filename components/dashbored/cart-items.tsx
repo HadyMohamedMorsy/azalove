@@ -13,9 +13,7 @@ const CartItems = () => {
   const { t, locale } = useTranslation();
 
   const subtotal = getTotalPrice();
-  const shipping = subtotal > 50 ? 0 : 9.99;
-  const tax = subtotal * 0.08;
-  const total = subtotal + shipping + tax;
+  const total = subtotal;
 
   return (
     <div className="bg-gradient-to-br from-rose-50 via-pink-50 to-purple-50">

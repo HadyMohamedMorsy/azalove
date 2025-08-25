@@ -8,6 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useCart } from "@/contexts/cart-context";
+import { useCurrency } from "@/hooks/use-currency";
 import { useTranslation } from "@/hooks/use-translation";
 import { Gift, Heart, Sparkles } from "lucide-react";
 import Link from "next/link";
@@ -24,6 +25,7 @@ export function CartDropdown() {
   } = useCart();
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation();
+  const { formatCurrency } = useCurrency();
   const domain = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   return (
@@ -97,7 +99,7 @@ export function CartDropdown() {
             <div className="border-t border-rose-200 pt-4 space-y-4">
               <div className="flex justify-between items-center">
                 <span className="text-lg font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 bg-clip-text text-transparent">
-                  {t("cart.total")}: ${getTotalPrice().toFixed(2)}
+                  {t("cart.total")}: {formatCurrency(getTotalPrice())}
                 </span>
                 <span className="text-sm text-rose-600 flex items-center gap-1">
                   <Heart className="w-4 h-4" />

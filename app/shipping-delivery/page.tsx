@@ -1,8 +1,11 @@
 "use client";
 import { BrandSVG } from "@/components/ui/brand-svg";
+import { useTranslation } from "@/hooks/use-translation";
 import Link from "next/link";
 
 function ShippingDelivery() {
+  const { t } = useTranslation();
+
   return (
     <>
       <header className="container px-6 py-4 border-t border-b border-[#eae8e4]">
@@ -10,12 +13,14 @@ function ShippingDelivery() {
           <ol className="flex items-center space-x-2">
             <li>
               <Link href="/" className="text-gray-500 hover:text-gray-700">
-                الرئيسيه
+                {t("shippingDelivery.breadcrumb.home")}
               </Link>
             </li>
             <li className="flex items-center space-x-2">
               <span className="text-gray-500">/</span>
-              <span className="text-gray-700">سياسة الشحن والتوصيل</span>
+              <span className="text-gray-700">
+                {t("shippingDelivery.breadcrumb.title")}
+              </span>
             </li>
           </ol>
         </nav>
@@ -35,200 +40,296 @@ function ShippingDelivery() {
 
           <div className="mb-8">
             <h1 className="text-4xl mb-4 font-web text-right">
-              سياسة الشحن والتوصيل
+              {t("shippingDelivery.title")}
             </h1>
             <p className="font-web text-gray-600 text-right">
-              آخر تحديث: {new Date().toLocaleDateString("ar-EG")}
+              {t("shippingDelivery.lastUpdated")}:{" "}
+              {new Date().toLocaleDateString("ar-EG")}
             </p>
           </div>
 
           <div className="space-y-8 text-right">
-            {/* مقدمة */}
+            {/* Introduction */}
             <section>
-              <h2 className="text-2xl font-web mb-4">مقدمة</h2>
               <p className="font-web leading-relaxed text-gray-700">
-                نحن في أزالوف نسعى لإيصال أجمل قصص الحب والرومانسية إلى باب
-                منزلكم بأسرع وقت ممكن وبأفضل جودة. توضح سياسة الشحن والتوصيل هذه
-                جميع التفاصيل المتعلقة بتوصيل الكتب الرومانسية، من مواعيد الشحن
-                إلى تكاليف التوصيل. نحن ملتزمون بحماية كتبكم أثناء النقل وضمان
-                وصولها في حالة مثالية لتستمتعوا بقراءتها.
+                {t("shippingDelivery.sections.introduction")}
               </p>
             </section>
 
-            {/* مناطق التوصيل */}
+            {/* Delivery Areas */}
             <section>
-              <h2 className="text-2xl font-web mb-4">مناطق التوصيل</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("shippingDelivery.sections.deliveryAreas.title")}
+              </h2>
               <div className="space-y-4">
                 <div>
                   <h3 className="text-xl font-web mb-2">
-                    داخل المملكة العربية السعودية:
+                    {t(
+                      "shippingDelivery.sections.deliveryAreas.domestic.title"
+                    )}
                   </h3>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                     <li>
-                      <strong>الرياض:</strong> توصيل سريع خلال 24-48 ساعة
+                      {t(
+                        "shippingDelivery.sections.deliveryAreas.domestic.items.riyadh"
+                      )}
                     </li>
                     <li>
-                      <strong>جدة ومكة المكرمة:</strong> 2-3 أيام عمل
+                      {t(
+                        "shippingDelivery.sections.deliveryAreas.domestic.items.jeddahMecca"
+                      )}
                     </li>
                     <li>
-                      <strong>الدمام والخبر:</strong> 2-3 أيام عمل
+                      {t(
+                        "shippingDelivery.sections.deliveryAreas.domestic.items.dammamKhobar"
+                      )}
                     </li>
                     <li>
-                      <strong>المدينة المنورة:</strong> 2-3 أيام عمل
+                      {t(
+                        "shippingDelivery.sections.deliveryAreas.domestic.items.medina"
+                      )}
                     </li>
                     <li>
-                      <strong>بقية المناطق:</strong> 3-5 أيام عمل
+                      {t(
+                        "shippingDelivery.sections.deliveryAreas.domestic.items.otherRegions"
+                      )}
                     </li>
                     <li>
-                      <strong>المناطق النائية:</strong> 5-7 أيام عمل
+                      {t(
+                        "shippingDelivery.sections.deliveryAreas.domestic.items.remoteAreas"
+                      )}
                     </li>
                   </ul>
                 </div>
                 <div>
-                  <h3 className="text-xl font-web mb-2">خارج المملكة:</h3>
+                  <h3 className="text-xl font-web mb-2">
+                    {t(
+                      "shippingDelivery.sections.deliveryAreas.international.title"
+                    )}
+                  </h3>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                     <li>
-                      <strong>دول الخليج:</strong> 5-7 أيام عمل
+                      {t(
+                        "shippingDelivery.sections.deliveryAreas.international.items.gccCountries"
+                      )}
                     </li>
                     <li>
-                      <strong>الدول العربية:</strong> 7-14 يوم عمل
+                      {t(
+                        "shippingDelivery.sections.deliveryAreas.international.items.arabCountries"
+                      )}
                     </li>
                     <li>
-                      <strong>بقية العالم:</strong> 14-21 يوم عمل
+                      {t(
+                        "shippingDelivery.sections.deliveryAreas.international.items.worldwide"
+                      )}
                     </li>
                   </ul>
                 </div>
               </div>
             </section>
 
-            {/* أوقات الشحن */}
+            {/* Shipping Times */}
             <section>
-              <h2 className="text-2xl font-web mb-4">أوقات الشحن</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("shippingDelivery.sections.shippingTimes.title")}
+              </h2>
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-xl font-web mb-2">أوقات المعالجة:</h3>
+                  <h3 className="text-xl font-web mb-2">
+                    {t(
+                      "shippingDelivery.sections.shippingTimes.processing.title"
+                    )}
+                  </h3>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                     <li>
-                      <strong>الكتب المتوفرة:</strong> 1-2 يوم عمل
+                      {t(
+                        "shippingDelivery.sections.shippingTimes.processing.items.availableBooks"
+                      )}
                     </li>
                     <li>
-                      <strong>الكتب المستوردة:</strong> 3-5 أيام عمل
+                      {t(
+                        "shippingDelivery.sections.shippingTimes.processing.items.importedBooks"
+                      )}
                     </li>
                     <li>
-                      <strong>الكتب النادرة:</strong> 5-10 أيام عمل
+                      {t(
+                        "shippingDelivery.sections.shippingTimes.processing.items.rareBooks"
+                      )}
                     </li>
                     <li>
-                      <strong>مجموعات الكتب:</strong> 2-3 أيام عمل
+                      {t(
+                        "shippingDelivery.sections.shippingTimes.processing.items.bookSets"
+                      )}
                     </li>
                     <li>
-                      <strong>الكتب المخصصة:</strong> 7-14 يوم عمل
+                      {t(
+                        "shippingDelivery.sections.shippingTimes.processing.items.customBooks"
+                      )}
                     </li>
                   </ul>
                 </div>
                 <div>
-                  <h3 className="text-xl font-web mb-2">أيام العمل:</h3>
+                  <h3 className="text-xl font-web mb-2">
+                    {t(
+                      "shippingDelivery.sections.shippingTimes.workingDays.title"
+                    )}
+                  </h3>
                   <p className="font-web text-gray-700">
-                    نقوم بمعالجة الطلبات من الأحد إلى الخميس، من الساعة 9 صباحاً
-                    إلى 6 مساءً. الطلبات المقدمة بعد الساعة 3 مساءً يوم الخميس
-                    ستتم معالجتها يوم الأحد التالي.
+                    {t(
+                      "shippingDelivery.sections.shippingTimes.workingDays.description"
+                    )}
                   </p>
                 </div>
               </div>
             </section>
 
-            {/* تكاليف الشحن */}
+            {/* Shipping Costs */}
             <section>
-              <h2 className="text-2xl font-web mb-4">تكاليف الشحن</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("shippingDelivery.sections.shippingCosts.title")}
+              </h2>
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-xl font-web mb-2">داخل المملكة:</h3>
+                  <h3 className="text-xl font-web mb-2">
+                    {t(
+                      "shippingDelivery.sections.shippingCosts.domestic.title"
+                    )}
+                  </h3>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                     <li>
-                      <strong>الشحن المجاني:</strong> للطلبات أكثر من 150 ريال
+                      {t(
+                        "shippingDelivery.sections.shippingCosts.domestic.items.freeShipping"
+                      )}
                     </li>
                     <li>
-                      <strong>الشحن العادي:</strong> 25 ريال (2-3 أيام)
+                      {t(
+                        "shippingDelivery.sections.shippingCosts.domestic.items.standardShipping"
+                      )}
                     </li>
                     <li>
-                      <strong>الشحن السريع:</strong> 35 ريال (24-48 ساعة)
+                      {t(
+                        "shippingDelivery.sections.shippingCosts.domestic.items.expressShipping"
+                      )}
                     </li>
                     <li>
-                      <strong>الشحن المستعجل:</strong> 50 ريال (نفس اليوم في
-                      الرياض)
+                      {t(
+                        "shippingDelivery.sections.shippingCosts.domestic.items.urgentShipping"
+                      )}
                     </li>
                     <li>
-                      <strong>أعضاء نادي القراء:</strong> شحن مجاني دائماً
+                      {t(
+                        "shippingDelivery.sections.shippingCosts.domestic.items.bookClubMembers"
+                      )}
                     </li>
                   </ul>
                 </div>
                 <div>
-                  <h3 className="text-xl font-web mb-2">خارج المملكة:</h3>
+                  <h3 className="text-xl font-web mb-2">
+                    {t(
+                      "shippingDelivery.sections.shippingCosts.international.title"
+                    )}
+                  </h3>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                     <li>
-                      <strong>دول الخليج:</strong> 45 ريال
+                      {t(
+                        "shippingDelivery.sections.shippingCosts.international.items.gccCountries"
+                      )}
                     </li>
                     <li>
-                      <strong>الدول العربية:</strong> 65 ريال
+                      {t(
+                        "shippingDelivery.sections.shippingCosts.international.items.arabCountries"
+                      )}
                     </li>
                     <li>
-                      <strong>بقية العالم:</strong> 85 ريال
+                      {t(
+                        "shippingDelivery.sections.shippingCosts.international.items.worldwide"
+                      )}
                     </li>
                     <li>
-                      <strong>الشحن المجاني:</strong> للطلبات أكثر من 500 ريال
+                      {t(
+                        "shippingDelivery.sections.shippingCosts.international.items.freeShipping"
+                      )}
                     </li>
                   </ul>
                 </div>
               </div>
             </section>
 
-            {/* طرق الشحن */}
+            {/* Shipping Methods */}
             <section>
-              <h2 className="text-2xl font-web mb-4">طرق الشحن</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("shippingDelivery.sections.shippingMethods.title")}
+              </h2>
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-xl font-web mb-2">شركاء الشحن:</h3>
+                  <h3 className="text-xl font-web mb-2">
+                    {t(
+                      "shippingDelivery.sections.shippingMethods.partners.title"
+                    )}
+                  </h3>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                     <li>
-                      <strong>الشحن السريع:</strong> شركة أرامكس
+                      {t(
+                        "shippingDelivery.sections.shippingMethods.partners.items.expressShipping"
+                      )}
                     </li>
                     <li>
-                      <strong>الشحن العادي:</strong> البريد السعودي
+                      {t(
+                        "shippingDelivery.sections.shippingMethods.partners.items.standardShipping"
+                      )}
                     </li>
                     <li>
-                      <strong>الشحن المحلي:</strong> شركة سمسا
+                      {t(
+                        "shippingDelivery.sections.shippingMethods.partners.items.localShipping"
+                      )}
                     </li>
                     <li>
-                      <strong>الشحن الدولي:</strong> شركة DHL
+                      {t(
+                        "shippingDelivery.sections.shippingMethods.partners.items.internationalShipping"
+                      )}
                     </li>
                   </ul>
                 </div>
                 <div>
-                  <h3 className="text-xl font-web mb-2">خيارات التوصيل:</h3>
+                  <h3 className="text-xl font-web mb-2">
+                    {t(
+                      "shippingDelivery.sections.shippingMethods.deliveryOptions.title"
+                    )}
+                  </h3>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                     <li>
-                      <strong>التوصيل للمنزل:</strong> إلى باب المنزل
+                      {t(
+                        "shippingDelivery.sections.shippingMethods.deliveryOptions.items.homeDelivery"
+                      )}
                     </li>
                     <li>
-                      <strong>التوصيل للمكتب:</strong> خلال ساعات العمل
+                      {t(
+                        "shippingDelivery.sections.shippingMethods.deliveryOptions.items.officeDelivery"
+                      )}
                     </li>
                     <li>
-                      <strong>نقاط الاستلام:</strong> من فروع شركات الشحن
+                      {t(
+                        "shippingDelivery.sections.shippingMethods.deliveryOptions.items.pickupPoints"
+                      )}
                     </li>
                     <li>
-                      <strong>الاستلام الشخصي:</strong> من مقر الشركة (بموعد
-                      مسبق)
+                      {t(
+                        "shippingDelivery.sections.shippingMethods.deliveryOptions.items.personalPickup"
+                      )}
                     </li>
                   </ul>
                 </div>
               </div>
             </section>
 
-            {/* التغليف والحماية */}
+            {/* Packaging */}
             <section>
-              <h2 className="text-2xl font-web mb-4">التغليف والحماية</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("shippingDelivery.sections.packaging.title")}
+              </h2>
               <div className="space-y-3">
                 <p className="font-web text-gray-700 mb-3">
-                  نحرص على حماية كتبكم الرومانسية بأفضل طرق التغليف:
+                  {t("shippingDelivery.sections.packaging.description")}
                 </p>
                 <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                   <li>تغليف فقاعي مقاوم للصدمات</li>
@@ -242,12 +343,16 @@ function ShippingDelivery() {
               </div>
             </section>
 
-            {/* تتبع الطلبات */}
+            {/* Tracking */}
             <section>
-              <h2 className="text-2xl font-web mb-4">تتبع الطلبات</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("shippingDelivery.sections.tracking.title")}
+              </h2>
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-xl font-web mb-2">كيفية تتبع طلبك:</h3>
+                  <h3 className="text-xl font-web mb-2">
+                    {t("shippingDelivery.sections.tracking.howToTrack.title")}
+                  </h3>
                   <ol className="list-decimal pr-6 space-y-2 font-web text-gray-700">
                     <li>سجل الدخول إلى حسابك في أزالوف</li>
                     <li>اذهب إلى قسم "طلباتي"</li>
@@ -257,34 +362,50 @@ function ShippingDelivery() {
                   </ol>
                 </div>
                 <div>
-                  <h3 className="text-xl font-web mb-2">حالات الطلب:</h3>
+                  <h3 className="text-xl font-web mb-2">
+                    {t(
+                      "shippingDelivery.sections.tracking.orderStatuses.title"
+                    )}
+                  </h3>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                     <li>
-                      <strong>قيد المعالجة:</strong> جاري تحضير الطلب
+                      {t(
+                        "shippingDelivery.sections.tracking.orderStatuses.items.processing"
+                      )}
                     </li>
                     <li>
-                      <strong>جاري التحضير:</strong> يتم تجهيز الكتب للشحن
+                      {t(
+                        "shippingDelivery.sections.tracking.orderStatuses.items.preparing"
+                      )}
                     </li>
                     <li>
-                      <strong>تم الشحن:</strong> الطلب في الطريق إليكم
+                      {t(
+                        "shippingDelivery.sections.tracking.orderStatuses.items.shipped"
+                      )}
                     </li>
                     <li>
-                      <strong>خارج للتوصيل:</strong> سيصل اليوم
+                      {t(
+                        "shippingDelivery.sections.tracking.orderStatuses.items.outForDelivery"
+                      )}
                     </li>
                     <li>
-                      <strong>تم التوصيل:</strong> وصل بنجاح
+                      {t(
+                        "shippingDelivery.sections.tracking.orderStatuses.items.delivered"
+                      )}
                     </li>
                   </ul>
                 </div>
               </div>
             </section>
 
-            {/* التوصيل المجاني */}
+            {/* Free Delivery */}
             <section>
-              <h2 className="text-2xl font-web mb-4">عروض التوصيل المجاني</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("shippingDelivery.sections.freeDelivery.title")}
+              </h2>
               <div className="space-y-3">
                 <p className="font-web text-gray-700 mb-3">
-                  استمتع بالتوصيل المجاني في الحالات التالية:
+                  {t("shippingDelivery.sections.freeDelivery.description")}
                 </p>
                 <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                   <li>طلبات أكثر من 150 ريال داخل المملكة</li>
@@ -298,13 +419,15 @@ function ShippingDelivery() {
               </div>
             </section>
 
-            {/* التوصيل السريع */}
+            {/* Fast Delivery */}
             <section>
-              <h2 className="text-2xl font-web mb-4">التوصيل السريع</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("shippingDelivery.sections.fastDelivery.title")}
+              </h2>
               <div className="space-y-4">
                 <div>
                   <h3 className="text-xl font-web mb-2">
-                    خدمة التوصيل نفس اليوم:
+                    {t("shippingDelivery.sections.fastDelivery.sameDay.title")}
                   </h3>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                     <li>متاحة في الرياض فقط</li>
@@ -315,7 +438,9 @@ function ShippingDelivery() {
                 </div>
                 <div>
                   <h3 className="text-xl font-web mb-2">
-                    خدمة التوصيل في المساء:
+                    {t(
+                      "shippingDelivery.sections.fastDelivery.eveningDelivery.title"
+                    )}
                   </h3>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                     <li>توصيل من الساعة 6 مساءً حتى 10 مساءً</li>
@@ -327,12 +452,16 @@ function ShippingDelivery() {
               </div>
             </section>
 
-            {/* عدم توفر المستلم */}
+            {/* Recipient Unavailable */}
             <section>
-              <h2 className="text-2xl font-web mb-4">عدم توفر المستلم</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("shippingDelivery.sections.recipientUnavailable.title")}
+              </h2>
               <div className="space-y-3">
                 <p className="font-web text-gray-700 mb-3">
-                  في حالة عدم توفر المستلم أثناء التوصيل:
+                  {t(
+                    "shippingDelivery.sections.recipientUnavailable.description"
+                  )}
                 </p>
                 <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                   <li>سيتم ترك بطاقة إشعار</li>
@@ -345,13 +474,17 @@ function ShippingDelivery() {
               </div>
             </section>
 
-            {/* الطلبات الخاصة */}
+            {/* Special Orders */}
             <section>
-              <h2 className="text-2xl font-web mb-4">الطلبات الخاصة</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("shippingDelivery.sections.specialOrders.title")}
+              </h2>
               <div className="space-y-4">
                 <div>
                   <h3 className="text-xl font-web mb-2">
-                    الكتب النادرة والمحدودة:
+                    {t(
+                      "shippingDelivery.sections.specialOrders.rareBooks.title"
+                    )}
                   </h3>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                     <li>شحن مجاني ومؤمن بالكامل</li>
@@ -361,7 +494,11 @@ function ShippingDelivery() {
                   </ul>
                 </div>
                 <div>
-                  <h3 className="text-xl font-web mb-2">الكتب المُهداة:</h3>
+                  <h3 className="text-xl font-web mb-2">
+                    {t(
+                      "shippingDelivery.sections.specialOrders.giftBooks.title"
+                    )}
+                  </h3>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                     <li>تغليف هدايا أنيق مجاني</li>
                     <li>رسائل شخصية مكتوبة بخط جميل</li>
@@ -372,13 +509,17 @@ function ShippingDelivery() {
               </div>
             </section>
 
-            {/* مشاكل التوصيل */}
+            {/* Delivery Problems */}
             <section>
-              <h2 className="text-2xl font-web mb-4">مشاكل التوصيل</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("shippingDelivery.sections.deliveryProblems.title")}
+              </h2>
               <div className="space-y-4">
                 <div>
                   <h3 className="text-xl font-web mb-2">
-                    في حالة تأخير التوصيل:
+                    {t(
+                      "shippingDelivery.sections.deliveryProblems.delays.title"
+                    )}
                   </h3>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                     <li>إشعار فوري بسبب التأخير</li>
@@ -388,7 +529,11 @@ function ShippingDelivery() {
                   </ul>
                 </div>
                 <div>
-                  <h3 className="text-xl font-web mb-2">في حالة تلف الكتب:</h3>
+                  <h3 className="text-xl font-web mb-2">
+                    {t(
+                      "shippingDelivery.sections.deliveryProblems.damages.title"
+                    )}
+                  </h3>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                     <li>استبدال فوري مجاني</li>
                     <li>تحمل كامل تكاليف الشحن</li>
@@ -399,12 +544,14 @@ function ShippingDelivery() {
               </div>
             </section>
 
-            {/* نصائح للعملاء */}
+            {/* Customer Tips */}
             <section>
-              <h2 className="text-2xl font-web mb-4">نصائح للعملاء</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("shippingDelivery.sections.customerTips.title")}
+              </h2>
               <div className="space-y-3">
                 <p className="font-web text-gray-700 mb-3">
-                  لضمان تجربة توصيل مميزة:
+                  {t("shippingDelivery.sections.customerTips.description")}
                 </p>
                 <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                   <li>تأكد من صحة عنوان التوصيل</li>
@@ -418,18 +565,22 @@ function ShippingDelivery() {
               </div>
             </section>
 
-            {/* التواصل */}
+            {/* Contact */}
             <section>
-              <h2 className="text-2xl font-web mb-4">التواصل معنا</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("shippingDelivery.sections.contact.title")}
+              </h2>
               <p className="font-web text-gray-700 mb-3">
-                لأي استفسار حول الشحن والتوصيل، يرجى التواصل معنا:
+                {t("shippingDelivery.sections.contact.description")}
               </p>
               <div className="space-y-2 font-web text-gray-700">
-                <p>البريد الإلكتروني: shipping@azalove.com</p>
-                <p>واتساب: +966 XX XXX XXXX</p>
-                <p>خدمة العملاء: متاحة من 9 صباحاً إلى 9 مساءً</p>
-                <p>الطوارئ: متاحة 24/7 للطلبات المستعجلة</p>
-                <p>تتبع الطلبات: متاح على الموقع والتطبيق</p>
+                <p>{t("shippingDelivery.sections.contact.items.email")}</p>
+                <p>{t("shippingDelivery.sections.contact.items.whatsapp")}</p>
+                <p>
+                  {t("shippingDelivery.sections.contact.items.customerService")}
+                </p>
+                <p>{t("shippingDelivery.sections.contact.items.emergency")}</p>
+                <p>{t("shippingDelivery.sections.contact.items.tracking")}</p>
               </div>
             </section>
           </div>

@@ -1,3 +1,9 @@
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import Breadcrumb from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
@@ -13,6 +19,7 @@ import {
   Crown,
   Gift,
   Heart,
+  HelpCircle,
   RotateCcw,
   Share2,
   Shield,
@@ -34,7 +41,6 @@ const ProductView = () => {
     `/api/product/by-slug/${params.productslug}`
   );
   const [quantity, setQuantity] = useState(1);
-  const [isFavorited, setIsFavorited] = useState(false);
   const { addToCart, getItemQuantity } = useCart();
   const { toast } = useToast();
   const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
@@ -72,6 +78,10 @@ const ProductView = () => {
   }
 
   const { product, relatedProducts } = data.data;
+
+  // Get FAQ data from the backend product data
+  const faqData = product?.faqs || [];
+
   const discount = product.sku?.discount
     ? Math.round((Number(product.sku.discount) / product.sku.price) * 100)
     : 0;
@@ -386,7 +396,9 @@ const ProductView = () => {
 
         {/* Product Details Tabs */}
         <Tabs defaultValue="reviews" className="mb-16">
-          <TabsList className="grid w-full grid-cols-2 bg-gradient-to-r from-cream-100 to-azalove-100 border-2 border-azalove-200">
+          <TabsList
+            className={`grid w-full ${faqData.length > 0 ? "grid-cols-3" : "grid-cols-2"} bg-gradient-to-r from-cream-100 to-azalove-100 border-2 border-azalove-200`}
+          >
             <TabsTrigger
               value="reviews"
               className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-azalove-500 data-[state=active]:to-amaranth-600 data-[state=active]:text-white"
@@ -399,6 +411,14 @@ const ProductView = () => {
             >
               {t("product.specifications")}
             </TabsTrigger>
+            {faqData.length > 0 && (
+              <TabsTrigger
+                value="faq"
+                className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-azalove-500 data-[state=active]:to-amaranth-600 data-[state=active]:text-white"
+              >
+                {t("product.faq")}
+              </TabsTrigger>
+            )}
           </TabsList>
           <TabsContent value="reviews" className="mt-8">
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-azalove-100 p-6">
@@ -410,6 +430,52 @@ const ProductView = () => {
               <ProductSpecs specifications={product.specifications} />
             </div>
           </TabsContent>
+          {faqData.length > 0 ? (
+            <TabsContent value="faq" className="mt-8">
+              <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-azalove-100 p-6">
+                <div className="mb-6">
+                  <h3 className="text-2xl font-bold text-royal-700 mb-2 flex items-center gap-2">
+                    <HelpCircle className="w-6 h-6 text-azalove-500" />
+                    {t("product.faq")}
+                  </h3>
+                  <p className="text-muted-foreground">
+                    Find answers to commonly asked questions about this product
+                  </p>
+                </div>
+                <Accordion type="single" collapsible className="w-full">
+                  {faqData.map((faq, index) => (
+                    <AccordionItem
+                      key={faq.id || index}
+                      value={`faq-${faq.id || index}`}
+                      className="border-b border-azalove-200 last:border-b-0"
+                    >
+                      <AccordionTrigger className="text-lg font-semibold text-royal-700 hover:text-royal-900 transition-colors py-4">
+                        {faq.question}
+                      </AccordionTrigger>
+                      <AccordionContent className="text-muted-foreground leading-relaxed">
+                        {faq.answer}
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+              </div>
+            </TabsContent>
+          ) : (
+            <TabsContent value="faq" className="mt-8">
+              <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-azalove-100 p-6">
+                <div className="text-center py-8">
+                  <HelpCircle className="w-16 h-16 text-azalove-300 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-royal-700 mb-2">
+                    No FAQs Available
+                  </h3>
+                  <p className="text-muted-foreground">
+                    This product doesn't have any frequently asked questions
+                    yet.
+                  </p>
+                </div>
+              </div>
+            </TabsContent>
+          )}
         </Tabs>
 
         {relatedProducts && relatedProducts.length > 0 && (

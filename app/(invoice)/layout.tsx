@@ -2,8 +2,8 @@ import { siteConfig } from "@/config/site";
 import { Metadata, Viewport } from "next";
 
 export const metadata: Metadata = {
-  title: `فاتورة - ${siteConfig.name}`,
-  description: "فاتورة الشراء من azalove",
+  title: `Invoice - ${siteConfig.name}`,
+  description: "Purchase invoice from azalove",
   icons: {
     icon: "/media/main-icon.ico",
   },
@@ -12,8 +12,8 @@ export const metadata: Metadata = {
     follow: false,
   },
   openGraph: {
-    title: "فاتورة - azalove",
-    description: "فاتورة الشراء من azalove",
+    title: "Invoice - azalove",
+    description: "Purchase invoice from azalove",
     type: "website",
   },
 };

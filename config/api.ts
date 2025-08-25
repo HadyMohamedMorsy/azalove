@@ -18,6 +18,8 @@ export const API_ENDPOINTS_FROM_NEXT = {
   ADDRESS_SET_DEFAULT: "/api/addresses/address-set-default",
   USER_UPDATE: "/user/update",
   REFRESH_TOKENS: "/api/auth/refresh-tokens",
+  MEGA_MENU_CATEGORIES: "/api/mega-menu/categories",
+  MEGA_MENU_BLOG_CATEGORIES: "/api/mega-menu/blog-categories",
 };
 
 export const API_ENDPOINTS_FROM_SERVER = {
@@ -28,6 +30,8 @@ export const API_ENDPOINTS_FROM_SERVER = {
   GENERAL_SETTINGS: `/general-settings/index`,
   MEGA_MENU_CATEGORIES: `/category/product`,
   MEGA_MENU_BLOG_CATEGORIES: `/category/blog`,
+  PAYMENT_METHODS: `/payment-methods/front`,
+  BANKS: `/bank/front`,
 };
 
 export const API_ENDPOINTS_FROM_SERVER_DASHBOARD = {

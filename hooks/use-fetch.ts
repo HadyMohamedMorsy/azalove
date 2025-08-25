@@ -22,10 +22,10 @@ export const useFetch = <T>(url: string) => {
       try {
         const { data } = await axios.get(url);
         setState({
-          data: data.data.data,
+          data: data.data,
           loading: false,
           error: null,
-          totalRecords: data.data.totalRecords || 0,
+          totalRecords: data.totalRecords || 0,
         });
       } catch (err) {
         setState({

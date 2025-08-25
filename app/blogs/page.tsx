@@ -10,6 +10,7 @@ import Skeleton from "@/components/ui/skeleton";
 import { API_ENDPOINTS_FROM_NEXT } from "@/config/api";
 import useFetch from "@/hooks/use-fetch";
 import { useFilteredBlogs } from "@/hooks/use-filtered-blogs";
+import { useTranslation } from "@/hooks/use-translation";
 import type { Blog } from "@/types/blogs";
 import Link from "next/link";
 import { useState } from "react";
@@ -21,6 +22,7 @@ function Blog() {
     category: "",
     sortBy: "",
   });
+  const { t } = useTranslation();
 
   // Build filter parameters
   const filterParams = {
@@ -72,12 +74,12 @@ function Blog() {
             <ol className="flex items-center space-x-2">
               <li>
                 <Link href="/" className="text-gray-500 hover:text-gray-700">
-                  الرئيسيه
+                  {t("blog.home")}
                 </Link>
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-gray-500">/</span>
-                <span className="text-gray-700">المدونة</span>
+                <span className="text-gray-700">{t("blog.blog")}</span>
               </li>
             </ol>
           </nav>
@@ -100,9 +102,9 @@ function Blog() {
     return (
       <SectionPlaceholder
         icon="error"
-        title="حدث خطأ في تحميل المقالات"
-        description="نعتذر، حدث خطأ أثناء تحميل المقالات. يرجى المحاولة مرة أخرى لاحقاً."
-        actionLabel="إعادة التحميل"
+        title={t("blog.loadError")}
+        description={t("blog.loadErrorDescription")}
+        actionLabel={t("blog.reload")}
         onAction={() => window.location.reload()}
       />
     );
@@ -116,12 +118,12 @@ function Blog() {
             <ol className="flex items-center space-x-2">
               <li>
                 <Link href="/" className="text-gray-500 hover:text-gray-700">
-                  الرئيسيه
+                  {t("blog.home")}
                 </Link>
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-gray-500">/</span>
-                <span className="text-gray-700">المدونة</span>
+                <span className="text-gray-700">{t("blog.blog")}</span>
               </li>
             </ol>
           </nav>
@@ -132,13 +134,13 @@ function Blog() {
               <div className="text-center py-16">
                 <div className="text-gray-500 text-xl mb-4">
                   {hasFilters
-                    ? "لا توجد مقالات تطابق الفلاتر المحددة"
-                    : "لا توجد مقالات متاحة حاليًا"}
+                    ? t("blog.noFilteredBlogs")
+                    : t("blog.noBlogsFound")}
                 </div>
                 <p className="text-gray-400">
                   {hasFilters
-                    ? "جرب تغيير الفلاتر أو المراجعة لاحقًا"
-                    : "جرب المراجعة لاحقًا أو اتصل بنا للمساعدة"}
+                    ? t("blog.noFilteredBlogsDescription")
+                    : t("blog.noBlogsDescription")}
                 </p>
               </div>
             </div>
@@ -159,8 +161,8 @@ function Blog() {
   const endItem = Math.min(currentPage * 10, totalRecords || 0);
   const resultsText =
     totalRecords && totalRecords > 0
-      ? `عرض ${startItem}–${endItem} من ${totalRecords} نتيجة`
-      : "لا توجد نتائج";
+      ? `${t("blog.showingResults")} ${startItem}–${endItem} ${t("blog.of")} ${totalRecords} ${t("blog.results")}`
+      : t("blog.noResults");
 
   return (
     <>
@@ -169,12 +171,12 @@ function Blog() {
           <ol className="flex items-center space-x-2">
             <li>
               <Link href="/" className="text-gray-500 hover:text-gray-700">
-                الرئيسيه
+                {t("blog.home")}
               </Link>
             </li>
             <li className="flex items-center space-x-2">
               <span className="text-gray-500">/</span>
-              <span className="text-gray-700">المدونة</span>
+              <span className="text-gray-700">{t("blog.blog")}</span>
             </li>
           </ol>
         </nav>

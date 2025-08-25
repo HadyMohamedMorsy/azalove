@@ -9,12 +9,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useFavorites } from "@/contexts/favorites-context";
+import { useCurrency } from "@/hooks/use-currency";
 import { Heart, Trash2 } from "lucide-react";
 import Image from "next/image";
 
 export function FavoritesDropdown() {
   const { favoriteItems, getTotalFavorites, removeFromFavorites } =
     useFavorites();
+  const { formatCurrency } = useCurrency();
   const domain = process.env.MAIN_DOMAIN;
 
   return (
@@ -90,15 +92,12 @@ export function FavoritesDropdown() {
                         )}
                         <div className="flex items-center gap-2 mt-1">
                           <span className="text-lg font-bold text-royal-600">
-                            $
-                            {typeof item.price === "number"
-                              ? item.price.toFixed(2)
-                              : "0.00"}
+                            {formatCurrency(item.price)}
                           </span>
                           {item.originalPrice &&
                             item.originalPrice > item.price && (
                               <span className="text-sm text-muted-foreground line-through">
-                                ${item.originalPrice.toFixed(2)}
+                                {formatCurrency(item.originalPrice)}
                               </span>
                             )}
                         </div>

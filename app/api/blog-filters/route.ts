@@ -1,11 +1,14 @@
-import { API_ENDPOINTS_FROM_SERVER } from "@/config/api";
+import {
+  API_ENDPOINTS_FROM_NEXT,
+  API_ENDPOINTS_FROM_SERVER,
+} from "@/config/api";
 import { apiFetch } from "@/utils/api-interceptor";
 import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
     const [categoriesResponse, featuredBlogsResponse] = await Promise.all([
-      apiFetch(API_ENDPOINTS_FROM_SERVER.MEGA_MENU_BLOG_CATEGORIES, {
+      apiFetch(API_ENDPOINTS_FROM_NEXT.MEGA_MENU_BLOG_CATEGORIES, {
         params: {
           query: {
             select: ["id", "name", "slug"],
@@ -43,7 +46,7 @@ export async function GET() {
 
     // Extract the actual data arrays from nested responses
     const categories = categoriesResponse?.data?.data || [];
-    const featuredBlogs = featuredBlogsResponse?.data?.data || [];
+    const featuredBlogs = featuredBlogsResponse?.data?.data?.data || [];
 
     return NextResponse.json({
       message: "blog filters retrieved successfully",

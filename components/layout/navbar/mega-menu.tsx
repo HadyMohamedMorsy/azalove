@@ -1,6 +1,6 @@
 "use client";
 
-import { API_BASE_URL, API_ENDPOINTS_FROM_SERVER } from "@/config/api";
+import { API_ENDPOINTS_FROM_NEXT } from "@/config/api";
 import { useFetch } from "@/hooks/use-fetch";
 import { Heart, Sparkles, Star } from "lucide-react";
 import Link from "next/link";
@@ -39,7 +39,7 @@ export function MegaMenu({
   onMouseLeave,
 }: MegaMenuProps) {
   const { data: categories, loading } = useFetch<CategoryData[]>(
-    `${API_BASE_URL}${API_ENDPOINTS_FROM_SERVER.MEGA_MENU_CATEGORIES}`
+    API_ENDPOINTS_FROM_NEXT.MEGA_MENU_CATEGORIES
   );
 
   if (!isOpen) return null;

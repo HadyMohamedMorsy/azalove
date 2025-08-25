@@ -487,7 +487,6 @@ const HeroSection = () => {
         {/* Main heading with animation */}
         <h1
           className="text-2xl md:text-3xl lg:text-5xl font-bold text-foreground mb-4 md:mb-6 animate-fade-in delay-300"
-          dir="rtl"
         >
           <span className="bg-gradient-to-r from-amaranth-600 via-amaranth-700 to-royal-600 bg-clip-text text-transparent">
             أزالوف

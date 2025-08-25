@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "@/hooks/use-translation";
 import { AlertTriangle, Package, Search, ShoppingBag } from "lucide-react";
 
 interface SectionPlaceholderProps {
@@ -12,12 +13,18 @@ interface SectionPlaceholderProps {
 
 const SectionPlaceholder = ({
   icon = "package",
-  title = "No products found",
-  description = "There are no products in this section yet. Check back later or explore other categories.",
+  title,
+  description,
   actionLabel,
   onAction,
   className = "",
 }: SectionPlaceholderProps) => {
+  const { t } = useTranslation();
+
+  // Use provided values or fall back to translations
+  const displayTitle = title || t("blog.noProductsFound");
+  const displayDescription = description || t("blog.noProductsDescription");
+
   const IconComponent = {
     package: Package,
     "shopping-bag": ShoppingBag,
@@ -41,10 +48,12 @@ const SectionPlaceholder = ({
         />
       </div>
 
-      <h3 className="text-xl font-semibold text-foreground mb-3">{title}</h3>
+      <h3 className="text-xl font-semibold text-foreground mb-3">
+        {displayTitle}
+      </h3>
 
       <p className="text-muted-foreground max-w-md mb-6 leading-relaxed">
-        {description}
+        {displayDescription}
       </p>
 
       {actionLabel && onAction && (

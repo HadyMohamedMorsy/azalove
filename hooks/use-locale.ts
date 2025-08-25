@@ -1,3 +1,4 @@
+"use client";
 import { Locale } from "@/lib/translations";
 import { useEffect, useState } from "react";
 

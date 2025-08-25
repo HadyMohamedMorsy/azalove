@@ -1,9 +1,13 @@
+import { useTranslation } from "@/hooks/use-translation";
+
 interface CategoryCardProps {
   bgColor?: string;
   title: string;
 }
 
 const CategoryCard = ({ bgColor = "#faf1ff", title }: CategoryCardProps) => {
+  const { t } = useTranslation();
+
   return (
     <div
       className={`relative px-[2.5rem] py-[2rem] break-words`}
@@ -40,7 +44,7 @@ const CategoryCard = ({ bgColor = "#faf1ff", title }: CategoryCardProps) => {
         href="#"
         className="font-web text-base text-gray-800 mt-2 inline-block hover:text-[#fa5e5d] transition-colors"
       >
-        تسوق الان
+        {t("categories.shopNow")}
       </a>
     </div>
   );

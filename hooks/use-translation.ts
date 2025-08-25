@@ -1,3 +1,4 @@
+"use client";
 import { getTranslation } from "@/lib/translations";
 import { useLocale } from "./use-locale";
 

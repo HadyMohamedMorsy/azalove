@@ -36,9 +36,11 @@ interface OrderDetails {
 }
 
 interface OrderApiResponse {
-  data: OrderDetails[];
-  recordsFiltered: number;
-  totalRecords: number;
+  data: {
+    data: OrderDetails[];
+    recordsFiltered: number;
+    totalRecords: number;
+  };
 }
 
 interface UseUserOrdersReturn {
@@ -88,7 +90,7 @@ export const useUserOrders = (
           limit,
         },
       });
-      const { data, recordsFiltered, totalRecords } = response.data;
+      const { data, recordsFiltered, totalRecords } = response.data.data;
       setOrders({ data, recordsFiltered, totalRecords });
       setRecordsFiltered(recordsFiltered);
       setTotalRecords(totalRecords);

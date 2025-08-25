@@ -72,9 +72,7 @@ const CartItems = () => {
   const tax = subtotal * 0.08;
   const total = subtotal + shipping + tax;
 
-  const handleCheckout = () => {
-    console.log("checkout");
-  };
+  const handleCheckout = () => {};
 
   return (
     <div className="grid gap-6 lg:grid-cols-3">

@@ -1,3 +1,5 @@
+"use client";
+import { useTranslation } from "@/hooks/use-translation";
 import Image from "next/image";
 
 interface PromoBlockProps {
@@ -11,35 +13,39 @@ interface PromoBlockProps {
 
 const PromoBlock = ({
   imageSrc = "/media/offer.png",
-  title = "احصل على المزيد",
-  discountText = "تخفيضات -25%",
-  description = "عند الطلب بقيمة 500 جنيه مصري أو أكثر",
-  buttonText = "تسوق الان",
+  title,
+  discountText,
+  description,
+  buttonText,
   buttonLink = "#",
 }: PromoBlockProps) => {
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-col items-center justify-center h-full">
       <div className="image-wrapper">
         <Image
           src={imageSrc}
           className="object-contain"
-          alt={title}
+          alt={title || t("promoBlock.defaultTitle")}
           width={345}
           height={282}
         />
       </div>
       <div className="content">
         <div className="flex flex-col gap-2">
-          <span className="font-web text-lg md:text-xl lg:text-2xl">{title}</span>
+          <span className="font-web text-lg md:text-xl lg:text-2xl">
+            {title || t("promoBlock.defaultTitle")}
+          </span>
           <span className="text-sm md:text-base lg:text-lg text-amaranth-600 font-semibold">
-            {discountText}
+            {discountText || t("promoBlock.defaultDiscountText")}
           </span>
           <span className="text-sm md:text-base lg:text-lg text-muted-foreground font-semibold">
-            {description}
+            {description || t("promoBlock.defaultDescription")}
           </span>
 
           <button className="btn text-white bg-gradient-to-r from-amaranth-500 to-amaranth-600 hover:from-amaranth-600 hover:to-amaranth-700 capitalize mt-4 w-[120px] transition-all duration-300 text-sm md:text-base lg:text-lg">
-            {buttonText}
+            {buttonText || t("promoBlock.defaultButtonText")}
           </button>
         </div>
       </div>

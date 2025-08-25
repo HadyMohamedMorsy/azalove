@@ -58,6 +58,11 @@ export interface ProductSlug {
     discount: string;
     discountType: string;
   };
+  faqs: Array<{
+    id: number;
+    question: string;
+    answer: string;
+  }>;
   attributes: Array<{
     id: number;
     name: string;

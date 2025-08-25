@@ -28,14 +28,30 @@ export interface GeneralSettings {
   gtm_container_id?: string;
   google_analytics_id?: string;
 
+  // Facebook Pixel
+  facebook_pixel_id?: string;
+  snapchat_pixel_id?: string;
+  init_tiktok_id?: string;
+
   // Omnisend Integration
   omnisend_api_key?: string;
   omnisend_enabled?: boolean;
+  gtm_enabled?: boolean;
+  google_analytics_enabled?: boolean;
+  facebook_pixel_enabled?: boolean;
+  snapchat_pixel_enabled?: boolean;
+  init_tiktok_enabled?: boolean;
 
   // Social Media
   facebook_url?: string;
   instagram_url?: string;
   twitter_url?: string;
+
+  // Social Authentication Settings
+  client_id_google?: string;
+  client_secret_google?: string;
+  client_id_facebook?: string;
+  client_secret_facebook?: string;
 
   // SEO Settings
   meta_title?: string;
@@ -89,9 +105,9 @@ export const GeneralSettingsProvider: React.FC<
       }
 
       const result = await response.json();
-     console.log(result.data);
-      if (result.data) {
-        setSettings(result.data);
+      console.log(result?.data);
+      if (result?.data) {
+        setSettings(result?.data);
       } else {
         throw new Error(result.message || "Failed to fetch settings");
       }

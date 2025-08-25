@@ -1,9 +1,10 @@
 "use client";
 import ProductCard from "@/components/cards/product-card";
 import SectionPlaceholder from "@/components/placeholder/section-placeholder";
-import Skeleton from "@/components/ui/skeleton";
 import PaginationWrapper from "@/components/ui/pagination-wrapper";
+import Skeleton from "@/components/ui/skeleton";
 import { useFetch } from "@/hooks/use-fetch";
+import { useTranslation } from "@/hooks/use-translation";
 import { Product } from "@/types/product";
 import { useParams } from "next/navigation";
 import { useState } from "react";
@@ -11,6 +12,7 @@ import { useState } from "react";
 function ProductsByCategory() {
   const params = useParams();
   const [currentPage, setCurrentPage] = useState(1);
+  const { t } = useTranslation();
   const {
     data: products,
     loading,
@@ -27,8 +29,8 @@ function ProductsByCategory() {
       <div className="container py-10 px-4">
         <SectionPlaceholder
           icon="error"
-          title="خطأ في تحميل المنتجات"
-          description="واجهنا مشكلة أثناء تحميل المنتجات. يرجى إعادة تحديث الصفحة أو التواصل مع الدعم الفني إذا استمرت المشكلة."
+          title={t("products.error.title")}
+          description={t("products.error.description")}
         />
       </div>
     );
@@ -39,8 +41,8 @@ function ProductsByCategory() {
       <div className="container py-10 px-4">
         <SectionPlaceholder
           icon="package"
-          title="لا توجد منتجات متاحة"
-          description="لا توجد منتجات في هذا القسم في الوقت الحالي. تحقق مرة أخرى لاحقاً أو استكشف الأقسام الأخرى لاكتشاف أجمل قصص الحب."
+          title={t("products.noProducts.title")}
+          description={t("products.noProducts.description")}
         />
       </div>
     );

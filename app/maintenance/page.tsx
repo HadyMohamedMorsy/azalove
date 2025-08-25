@@ -1,6 +1,7 @@
 "use client";
 
 import { useGeneralSettings } from "@/contexts/general-settings-context";
+import { useTranslation } from "@/hooks/use-translation";
 import "@/styles/maintenance.css";
 import {
   Clock,
@@ -14,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function MaintenancePage() {
+  const { t } = useTranslation();
   const { settings } = useGeneralSettings();
   const router = useRouter();
 
@@ -30,7 +32,9 @@ export default function MaintenancePage() {
       <div className="min-h-screen bg-gradient-to-br from-amaranth-50 via-royal-50 to-amaranth-100 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-amaranth-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-amaranth-600 text-lg">جاري التحميل...</p>
+          <p className="text-amaranth-600 text-lg">
+            {t("maintenance.loading")}
+          </p>
         </div>
       </div>
     );
@@ -55,10 +59,10 @@ export default function MaintenancePage() {
             </div>
           </div>
           <h1 className="text-5xl md:text-6xl font-bold text-amaranth-800 mb-4">
-            الموقع قيد الصيانة
+            {t("maintenance.title")}
           </h1>
           <p className="text-xl text-amaranth-600 max-w-2xl mx-auto leading-relaxed">
-            نعتذر عن الإزعاج، نقوم حالياً بتحديث وتحسين الموقع لخدمتك بشكل أفضل
+            {t("maintenance.subtitle")}
           </p>
         </div>
 
@@ -67,12 +71,12 @@ export default function MaintenancePage() {
           <div className="flex items-center justify-center mb-4">
             <MessageCircle className="w-6 h-6 text-amaranth-600 mr-2" />
             <h2 className="text-xl font-semibold text-amaranth-800">
-              رسالة الصيانة
+              {t("maintenance.messageCard.title")}
             </h2>
           </div>
           <p className="text-lg text-amaranth-700 leading-relaxed max-w-3xl mx-auto">
             {settings.maintenance_message ||
-              "نقوم بإجراء تحديثات مهمة على الموقع لتحسين الأداء وإضافة ميزات جديدة. نتوقع العودة قريباً مع تجربة مستخدم محسنة!"}
+              t("maintenance.messageCard.defaultMessage")}
           </p>
         </div>
 
@@ -83,9 +87,11 @@ export default function MaintenancePage() {
               <Clock className="w-6 h-6 text-amaranth-600" />
             </div>
             <h3 className="font-semibold text-amaranth-800 mb-2">
-              الوقت المتوقع
+              {t("maintenance.status.estimatedTime.title")}
             </h3>
-            <p className="text-amaranth-600">2-4 ساعات</p>
+            <p className="text-amaranth-600">
+              {t("maintenance.status.estimatedTime.value")}
+            </p>
           </div>
 
           <div className="bg-white/60 backdrop-blur-sm rounded-xl p-6 border border-amaranth-200/30">
@@ -93,17 +99,23 @@ export default function MaintenancePage() {
               <Wrench className="w-6 h-6 text-royal-600" />
             </div>
             <h3 className="font-semibold text-amaranth-800 mb-2">
-              نوع الصيانة
+              {t("maintenance.status.maintenanceType.title")}
             </h3>
-            <p className="text-amaranth-600">تحديث النظام</p>
+            <p className="text-amaranth-600">
+              {t("maintenance.status.maintenanceType.value")}
+            </p>
           </div>
 
           <div className="bg-white/60 backdrop-blur-sm rounded-xl p-6 border border-amaranth-200/30">
             <div className="w-12 h-12 bg-rose-100 rounded-lg flex items-center justify-center mx-auto mb-4">
               <Mail className="w-6 h-6 text-rose-600" />
             </div>
-            <h3 className="font-semibold text-amaranth-800 mb-2">التواصل</h3>
-            <p className="text-amaranth-600">متاح للدعم</p>
+            <h3 className="font-semibold text-amaranth-800 mb-2">
+              {t("maintenance.status.contact.title")}
+            </h3>
+            <p className="text-amaranth-600">
+              {t("maintenance.status.contact.value")}
+            </p>
           </div>
         </div>
 
@@ -114,14 +126,14 @@ export default function MaintenancePage() {
             className="px-8 py-4 bg-gradient-to-r from-amaranth-600 to-royal-600 hover:from-amaranth-700 hover:to-royal-700 text-white rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center gap-3"
           >
             <RefreshCw className="w-5 h-5" />
-            تحديث الصفحة
+            {t("maintenance.actions.refreshPage")}
           </button>
           <button
             onClick={() => router.push("/")}
             className="px-8 py-4 bg-white hover:bg-amaranth-50 text-amaranth-700 border-2 border-amaranth-300 hover:border-amaranth-400 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center gap-3"
           >
             <Home className="w-5 h-5" />
-            العودة للرئيسية
+            {t("maintenance.actions.backToHome")}
           </button>
         </div>
 
@@ -131,10 +143,12 @@ export default function MaintenancePage() {
             <div className="flex items-center justify-center mb-3">
               <Mail className="w-5 h-5 text-amaranth-600 mr-2" />
               <h3 className="font-semibold text-amaranth-800">
-                للتواصل والدعم
+                {t("maintenance.contactInfo.title")}
               </h3>
             </div>
-            <p className="text-amaranth-600 mb-2">البريد الإلكتروني:</p>
+            <p className="text-amaranth-600 mb-2">
+              {t("maintenance.contactInfo.email")}
+            </p>
             <a
               href={`mailto:${settings.store_email}`}
               className="text-amaranth-600 hover:text-amaranth-700 font-medium break-all"

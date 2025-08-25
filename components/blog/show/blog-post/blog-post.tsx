@@ -1,3 +1,4 @@
+import { useTranslation } from "@/hooks/use-translation";
 import { ShowBlog } from "@/types/blogs";
 import { Calendar, Tag, User } from "lucide-react";
 import Image from "next/image";
@@ -12,6 +13,7 @@ const BlogPost: React.FC<ShowBlog> = ({
   thumb,
 }) => {
   const domain = process.env.MAIN_DOMAIN;
+  const { t } = useTranslation();
 
   return (
     <article className="max-w-4xl mx-auto bg-card rounded-lg shadow-lg overflow-hidden">
@@ -32,12 +34,14 @@ const BlogPost: React.FC<ShowBlog> = ({
           <div className="flex items-center gap-2">
             <User className="w-4 h-4" />
             <span>
-              {createdBy.firstName} {createdBy.lastName}
+              {t("blog.author")}: {createdBy.firstName} {createdBy.lastName}
             </span>
           </div>
           <div className="flex items-center gap-2">
             <Calendar className="w-4 h-4" />
-            <span>{createdAt}</span>
+            <span>
+              {t("blog.publishedOn")}: {createdAt}
+            </span>
           </div>
         </div>
 
@@ -58,6 +62,9 @@ const BlogPost: React.FC<ShowBlog> = ({
 
         <div className="flex flex-wrap gap-2 mt-8 pt-6 border-t border-border">
           <Tag className="w-4 h-4 text-muted-foreground mt-1" />
+          <span className="text-sm text-muted-foreground mr-2">
+            {t("blog.categories")}:
+          </span>
           {categories.map((category, index) => (
             <span
               key={index}

@@ -1,288 +1,121 @@
 "use client";
-import { Badge } from "@/components/ui/badge";
+
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import {
-  Building,
-  Check,
-  CreditCard,
-  Lock,
-  Shield,
-  Smartphone,
-} from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useTranslation } from "@/hooks/use-translation";
+import { Bank, PaymentMethod } from "@/types/payment";
 import { useState } from "react";
+import { PaymentMethods } from "./payment-methods";
 
 interface PaymentFormProps {
   onNext: (data: any) => void;
-  onBack?: () => void;
+  onBack: () => void;
 }
 
-const PaymentForm = ({ onNext, onBack }: PaymentFormProps) => {
-  const [formData, setFormData] = useState({
-    paymentMethod: "card",
-    cardNumber: "",
-    expiryDate: "",
-    cvv: "",
-    cardholderName: "",
-    billingAddress: "",
-    billingCity: "",
-    billingPostalCode: "",
-  });
+export default function PaymentForm({ onNext, onBack }: PaymentFormProps) {
+  const { t } = useTranslation();
+  const [selectedPaymentMethod, setSelectedPaymentMethod] =
+    useState<PaymentMethod | null>(null);
+  const [selectedBank, setSelectedBank] = useState<Bank | null>(null);
 
-  const paymentMethods = [
-    {
-      id: "card",
-      name: "Credit/Debit Card",
-      icon: CreditCard,
-      description: "Visa, Mastercard, American Express",
-      color: "bg-azalove-100 text-azalove-700",
-    },
-    {
-      id: "paypal",
-      name: "PayPal",
-      icon: Smartphone,
-      description: "Pay with your PayPal account",
-      color: "bg-royal-100 text-royal-700",
-    },
-    {
-      id: "bank",
-      name: "Bank Transfer",
-      icon: Building,
-      description: "Direct bank transfer",
-      color: "bg-amaranth-100 text-amaranth-700",
-    },
-  ];
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onNext(formData);
+  const handlePaymentMethodSelect = (method: PaymentMethod) => {
+    setSelectedPaymentMethod(method);
+    setSelectedBank(null); // Reset bank selection when payment method changes
   };
 
-  const handleInputChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+  const handleBankSelect = (bank: Bank) => {
+    setSelectedBank(bank);
   };
+
+  const handleSubmit = () => {
+    if (!selectedPaymentMethod) {
+      alert("Please select a payment method");
+      return;
+    }
+
+    // If bank transfer is selected, require bank selection
+    if (selectedPaymentMethod.slug === "bank-transfer" && !selectedBank) {
+      alert("Please select a bank for bank transfer");
+      return;
+    }
+
+    const paymentData = {
+      paymentMethod: selectedPaymentMethod,
+      bank: selectedBank,
+      // Add other payment form data here
+    };
+
+    onNext(paymentData);
+  };
+
+  const canProceed =
+    selectedPaymentMethod &&
+    (selectedPaymentMethod.slug !== "bank-transfer" || selectedBank);
 
   return (
-    <div className="space-y-6">
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="space-y-4">
-          <div>
-            <h3 className="text-lg font-semibold text-royal-900 mb-4">
-              Payment Method
-            </h3>
-            <RadioGroup
-              value={formData.paymentMethod}
-              onValueChange={(value) =>
-                handleInputChange("paymentMethod", value)
-              }
-            >
-              <div className="space-y-3">
-                {paymentMethods.map((method) => (
-                  <Card
-                    key={method.id}
-                    className={`cursor-pointer transition-all hover:shadow-md border-2 ${
-                      formData.paymentMethod === method.id
-                        ? "border-azalove-500 bg-azalove-50"
-                        : "border-cream-200 hover:border-azalove-300"
-                    }`}
-                    onClick={() =>
-                      handleInputChange("paymentMethod", method.id)
-                    }
-                  >
-                    <CardContent className="p-4">
-                      <div className="flex items-center space-x-3">
-                        <RadioGroupItem
-                          value={method.id}
-                          id={method.id}
-                          className="text-azalove-500"
-                        />
-                        <div
-                          className={`w-10 h-10 rounded-full flex items-center justify-center ${method.color}`}
-                        >
-                          <method.icon className="w-5 h-5" />
-                        </div>
-                        <div className="flex-1">
-                          <Label
-                            htmlFor={method.id}
-                            className="font-medium cursor-pointer text-royal-900"
-                          >
-                            {method.name}
-                          </Label>
-                          <p className="text-sm text-royal-600">
-                            {method.description}
-                          </p>
-                        </div>
-                        {formData.paymentMethod === method.id && (
-                          <Check className="w-5 h-5 text-azalove-600" />
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+    <div className="max-w-4xl mx-auto space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold text-royal-900">
+            {t("checkout.payment.title")}
+          </CardTitle>
+          <p className="text-royal-600 text-sm">
+            {t("checkout.payment.description")}
+          </p>
+        </CardHeader>
+        <CardContent>
+          <PaymentMethods
+            onPaymentMethodSelect={handlePaymentMethodSelect}
+            onBankSelect={handleBankSelect}
+            selectedPaymentMethod={selectedPaymentMethod || undefined}
+            selectedBank={selectedBank || undefined}
+          />
+        </CardContent>
+      </Card>
+
+      {/* Payment Summary */}
+      {selectedPaymentMethod && (
+        <Card className="bg-azalove-50 border-azalove-200">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="font-medium text-royal-900">
+                  Selected Payment Method
+                </h4>
+                <p className="text-sm text-royal-600">
+                  {selectedPaymentMethod.name}
+                  {selectedBank && ` - ${selectedBank.bankName}`}
+                </p>
               </div>
-            </RadioGroup>
-          </div>
-
-          {formData.paymentMethod === "card" && (
-            <div className="space-y-4 p-6 border-2 border-cream-200 rounded-lg bg-cream-50/30">
-              <div className="flex items-center gap-2 mb-4">
-                <Shield className="w-5 h-5 text-green-600" />
-                <span className="text-sm font-medium text-royal-900">
-                  Secure Card Information
-                </span>
-                <Badge className="bg-green-100 text-green-700 border-green-200 text-xs">
-                  SSL Encrypted
-                </Badge>
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <Label
-                    htmlFor="cardholderName"
-                    className="text-royal-900 font-medium"
-                  >
-                    Cardholder Name
-                  </Label>
-                  <Input
-                    id="cardholderName"
-                    value={formData.cardholderName}
-                    onChange={(e) =>
-                      handleInputChange("cardholderName", e.target.value)
-                    }
-                    className="border-cream-200 focus:border-azalove-500 focus:ring-azalove-500/20"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <Label
-                    htmlFor="cardNumber"
-                    className="text-royal-900 font-medium"
-                  >
-                    Card Number
-                  </Label>
-                  <div className="relative">
-                    <Input
-                      id="cardNumber"
-                      placeholder="1234 5678 9012 3456"
-                      value={formData.cardNumber}
-                      onChange={(e) =>
-                        handleInputChange("cardNumber", e.target.value)
-                      }
-                      className="border-cream-200 focus:border-azalove-500 focus:ring-azalove-500/20 pr-10"
-                      required
-                    />
-                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                      <Lock className="w-4 h-4 text-royal-400" />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label
-                      htmlFor="expiryDate"
-                      className="text-royal-900 font-medium"
-                    >
-                      Expiry Date
-                    </Label>
-                    <Input
-                      id="expiryDate"
-                      placeholder="MM/YY"
-                      value={formData.expiryDate}
-                      onChange={(e) =>
-                        handleInputChange("expiryDate", e.target.value)
-                      }
-                      className="border-cream-200 focus:border-azalove-500 focus:ring-azalove-500/20"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="cvv" className="text-royal-900 font-medium">
-                      CVV
-                    </Label>
-                    <Input
-                      id="cvv"
-                      placeholder="123"
-                      value={formData.cvv}
-                      onChange={(e) => handleInputChange("cvv", e.target.value)}
-                      className="border-cream-200 focus:border-azalove-500 focus:ring-azalove-500/20"
-                      required
-                    />
-                  </div>
-                </div>
+              <div className="text-right">
+                <p className="text-sm text-royal-600">Payment Method</p>
+                <p className="font-medium text-royal-900">
+                  {selectedPaymentMethod.name}
+                </p>
               </div>
             </div>
-          )}
+          </CardContent>
+        </Card>
+      )}
 
-          {formData.paymentMethod === "paypal" && (
-            <div className="p-6 border-2 border-cream-200 rounded-lg bg-cream-50/30">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-full bg-royal-100 flex items-center justify-center">
-                  <Smartphone className="w-5 h-5 text-royal-700" />
-                </div>
-                <div>
-                  <h4 className="font-medium text-royal-900">
-                    PayPal Checkout
-                  </h4>
-                  <p className="text-sm text-royal-600">
-                    You'll be redirected to PayPal to complete your payment
-                  </p>
-                </div>
-              </div>
-              <p className="text-sm text-royal-600">
-                Click "Complete Order" to proceed to PayPal's secure payment
-                page.
-              </p>
-            </div>
-          )}
+      {/* Navigation Buttons */}
+      <div className="flex justify-between pt-6">
+        <Button
+          variant="outline"
+          onClick={onBack}
+          className="px-8 py-2 border-royal-300 text-royal-700 hover:bg-royal-50"
+        >
+          {t("checkout.back")}
+        </Button>
 
-          {formData.paymentMethod === "bank" && (
-            <div className="p-6 border-2 border-cream-200 rounded-lg bg-cream-50/30">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-full bg-amaranth-100 flex items-center justify-center">
-                  <Building className="w-5 h-5 text-amaranth-700" />
-                </div>
-                <div>
-                  <h4 className="font-medium text-royal-900">Bank Transfer</h4>
-                  <p className="text-sm text-royal-600">
-                    Direct bank transfer details will be provided after order
-                    confirmation
-                  </p>
-                </div>
-              </div>
-              <p className="text-sm text-royal-600">
-                You'll receive bank transfer instructions via email after
-                placing your order.
-              </p>
-            </div>
-          )}
-        </div>
-
-        <div className="flex justify-between pt-6">
-          {onBack && (
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onBack}
-              className="border-cream-300 text-royal-700 hover:bg-cream-50"
-            >
-              Back to Shipping
-            </Button>
-          )}
-          <Button
-            type="submit"
-            className="bg-royal-500 hover:bg-azalove-600 text-white"
-          >
-            Complete Order
-          </Button>
-        </div>
-      </form>
+        <Button
+          onClick={handleSubmit}
+          disabled={!canProceed}
+          className="px-8 py-2 bg-royal-600 hover:bg-royal-700 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {t("checkout.continue")}
+        </Button>
+      </div>
     </div>
   );
-};
-
-export default PaymentForm;
+}

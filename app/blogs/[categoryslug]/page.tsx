@@ -4,9 +4,10 @@ import SectionPlaceholder from "@/components/placeholder/section-placeholder";
 import ButtonList from "@/components/shop/button-list";
 import ShowProducts from "@/components/shop/show";
 import SortProducts from "@/components/shop/sort";
-import Skeleton from "@/components/ui/skeleton";
 import PaginationWrapper from "@/components/ui/pagination-wrapper";
+import Skeleton from "@/components/ui/skeleton";
 import { useFetch } from "@/hooks/use-fetch";
+import { useTranslation } from "@/hooks/use-translation";
 import { Blog } from "@/types/blogs";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -16,6 +17,7 @@ function BlogsByCategory() {
   const params = useParams();
   const [currentPage, setCurrentPage] = useState(1);
   const [viewMode, setViewMode] = useState<"list" | "grid">("grid");
+  const { t } = useTranslation();
 
   const {
     data: blogs,
@@ -37,8 +39,8 @@ function BlogsByCategory() {
       <div className="container py-10 px-4">
         <SectionPlaceholder
           icon="error"
-          title="خطأ في تحميل المقالات"
-          description="واجهنا مشكلة أثناء تحميل المقالات. يرجى إعادة تحديث الصفحة أو التواصل مع الدعم الفني إذا استمرت المشكلة."
+          title={t("blog.categoryLoadError")}
+          description={t("blog.categoryLoadErrorDescription")}
         />
       </div>
     );
@@ -49,8 +51,8 @@ function BlogsByCategory() {
       <div className="container py-10 px-4">
         <SectionPlaceholder
           icon="search"
-          title="لا توجد مقالات متاحة"
-          description="لا توجد مقالات في هذا القسم في الوقت الحالي. تحقق مرة أخرى لاحقاً أو استكشف الأقسام الأخرى لاكتشاف المزيد من المحتوى المفيد."
+          title={t("blog.noCategoryBlogs")}
+          description={t("blog.noCategoryBlogsDescription")}
         />
       </div>
     );
@@ -61,8 +63,8 @@ function BlogsByCategory() {
   const endItem = Math.min(currentPage * 6, totalRecords || 0);
   const resultsText =
     totalRecords && totalRecords > 0
-      ? `عرض ${startItem}–${endItem} من ${totalRecords} نتيجة`
-      : "لا توجد نتائج";
+      ? `${t("blog.showingResults")} ${startItem}–${endItem} ${t("blog.of")} ${totalRecords} ${t("blog.results")}`
+      : t("blog.noResults");
 
   // Get category name from first blog if available
   const categoryName = blogs[0]?.categories?.find(
@@ -76,13 +78,13 @@ function BlogsByCategory() {
           <ol className="flex items-center space-x-2">
             <li>
               <Link href="/" className="text-gray-500 hover:text-gray-700">
-                الرئيسيه
+                {t("blog.home")}
               </Link>
             </li>
             <li className="flex items-center space-x-2">
               <span className="text-gray-500">/</span>
               <Link href="/blogs" className="text-gray-500 hover:text-gray-700">
-                المدونة
+                {t("blog.blog")}
               </Link>
             </li>
             {categoryName && (
@@ -99,7 +101,7 @@ function BlogsByCategory() {
         {categoryName && (
           <div className="mb-6">
             <h1 className="text-2xl font-bold text-gray-900">
-              مقالات {categoryName}
+              {t("blog.categoryArticles")} {categoryName}
             </h1>
           </div>
         )}

@@ -6,10 +6,12 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { API_BASE_URL } from "@/config/api";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "@/hooks/use-translation";
 import Link from "next/link";
 import { useState } from "react";
 
 function Contact() {
+  const { t } = useTranslation();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
 
@@ -44,8 +46,8 @@ function Contact() {
 
       // Show success toast
       toast({
-        title: "تم إرسال الرسالة بنجاح!",
-        description: result.message || "سنتواصل معك قريباً.",
+        title: t("contact.messages.success"),
+        description: result.message || t("contact.messages.successDescription"),
       });
 
       // Reset form
@@ -53,9 +55,8 @@ function Contact() {
     } catch (error: any) {
       // Show error toast
       toast({
-        title: "خطأ في إرسال الرسالة",
-        description:
-          error.message || "حدث خطأ أثناء إرسال الرسالة. حاول مرة أخرى.",
+        title: t("contact.messages.error"),
+        description: error.message || t("contact.messages.errorDescription"),
       });
     } finally {
       setLoading(false);
@@ -69,12 +70,14 @@ function Contact() {
           <ol className="flex items-center space-x-2">
             <li>
               <Link href="/" className="text-gray-500 hover:text-gray-700">
-                الرئيسيه
+                {t("contact.breadcrumb.home")}
               </Link>
             </li>
             <li className="flex items-center space-x-2">
               <span className="text-gray-500">/</span>
-              <span className="text-gray-700">تواصل معنا</span>
+              <span className="text-gray-700">
+                {t("contact.breadcrumb.contactUs")}
+              </span>
             </li>
           </ol>
         </nav>
@@ -83,10 +86,11 @@ function Contact() {
         <div className="grid md:grid-cols-2 grid-cols-1 gap-8">
           <div className="contact">
             <div className="mb-6">
-              <h3 className="text-4xl mb-4 font-web">معلومات الاتصال</h3>
+              <h3 className="text-4xl mb-4 font-web">
+                {t("contact.contactInfo")}
+              </h3>
               <p className="font-web md:max-w-[75%] w-full">
-                سنقوم بالرد على أي أسئلة قد تكون لديكم بخصوص مبيعاتنا عبر
-                الإنترنت، أو حقوقنا، أو خدمات الشراكة هنا.
+                {t("contact.contactInfoDescription")}
               </p>
             </div>
             <form
@@ -101,13 +105,13 @@ function Contact() {
                       htmlFor="name"
                       className="text-royal-900 font-medium"
                     >
-                      الاسم
+                      {t("contact.form.name")}
                     </Label>
                     <Input
                       required
                       id="name"
                       name="name"
-                      placeholder="اكتب الاسم"
+                      placeholder={t("contact.form.namePlaceholder")}
                       className="font-web border-2 border-cream-200 bg-cream-50 text-royal-900 placeholder:text-royal-500 focus:border-azalove-500 focus:ring-2 focus:ring-azalove-200 focus:bg-white transition-all duration-300 hover:border-azalove-300"
                     />
                   </div>
@@ -117,13 +121,13 @@ function Contact() {
                       htmlFor="email"
                       className="text-royal-900 font-medium"
                     >
-                      البريد الالكتروني
+                      {t("contact.form.email")}
                     </Label>
                     <Input
                       required
                       id="email"
                       name="email"
-                      placeholder="البريد الالكتروني"
+                      placeholder={t("contact.form.emailPlaceholder")}
                       type="email"
                       className="font-web border-2 border-cream-200 bg-cream-50 text-royal-900 placeholder:text-royal-500 focus:border-azalove-500 focus:ring-2 focus:ring-azalove-200 focus:bg-white transition-all duration-300 hover:border-azalove-300"
                     />
@@ -136,13 +140,13 @@ function Contact() {
                       htmlFor="phone"
                       className="text-royal-900 font-medium"
                     >
-                      رقم الهاتف
+                      {t("contact.form.phone")}
                     </Label>
                     <Input
                       required
                       id="phone"
                       name="phone"
-                      placeholder="رقم الهاتف"
+                      placeholder={t("contact.form.phonePlaceholder")}
                       type="tel"
                       className="font-web border-2 border-cream-200 bg-cream-50 text-royal-900 placeholder:text-royal-500 focus:border-azalove-500 focus:ring-2 focus:ring-azalove-200 focus:bg-white transition-all duration-300 hover:border-azalove-300"
                     />
@@ -153,13 +157,13 @@ function Contact() {
                       htmlFor="subject"
                       className="text-royal-900 font-medium"
                     >
-                      الموضوع
+                      {t("contact.form.subject")}
                     </Label>
                     <Input
                       required
                       id="subject"
                       name="subject"
-                      placeholder="الموضوع"
+                      placeholder={t("contact.form.subjectPlaceholder")}
                       className="font-web border-2 border-cream-200 bg-cream-50 text-royal-900 placeholder:text-royal-500 focus:border-azalove-500 focus:ring-2 focus:ring-azalove-200 focus:bg-white transition-all duration-300 hover:border-azalove-300"
                     />
                   </div>
@@ -171,12 +175,12 @@ function Contact() {
                       htmlFor="message"
                       className="text-royal-900 font-medium"
                     >
-                      الرساله
+                      {t("contact.form.message")}
                     </Label>
                     <Textarea
                       id="message"
                       name="message"
-                      placeholder="ادخل الرساله"
+                      placeholder={t("contact.form.messagePlaceholder")}
                       className="w-full font-web min-h-[120px] border-2 border-cream-200 bg-cream-50 text-royal-900 placeholder:text-royal-500 focus:border-azalove-500 focus:ring-2 focus:ring-azalove-200 focus:bg-white transition-all duration-300 hover:border-azalove-300 resize-none"
                     />
                   </div>
@@ -188,7 +192,9 @@ function Contact() {
                     type="submit"
                     disabled={loading}
                   >
-                    {loading ? "جاري الارسال..." : "ارسال"}
+                    {loading
+                      ? t("contact.form.sending")
+                      : t("contact.form.submit")}
                   </Button>
                 </div>
               </div>

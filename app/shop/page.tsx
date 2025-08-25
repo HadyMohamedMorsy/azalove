@@ -7,11 +7,13 @@ import Skeleton from "@/components/ui/skeleton";
 import { API_ENDPOINTS_FROM_NEXT } from "@/config/api";
 import { useFetch } from "@/hooks/use-fetch";
 import { useFilteredProducts } from "@/hooks/use-filtered-products";
+import { useTranslation } from "@/hooks/use-translation";
 import { Product } from "@/types/product";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
 function Shop() {
+  const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
   const [viewMode, setViewMode] = useState<"list" | "grid">("grid");
   const [filters, setFilters] = useState({
@@ -80,7 +82,7 @@ function Shop() {
       <div className="container py-10 px-4">
         <div className="text-center">
           <div className="text-red-500 text-lg mb-4">
-            حدث خطأ أثناء تحميل المنتجات
+            {t("error.loading_products")}
           </div>
           <p className="text-gray-600">{error}</p>
         </div>
@@ -99,12 +101,14 @@ function Shop() {
                   href="/"
                   className="text-amaranth-600 hover:text-amaranth-700 transition-colors"
                 >
-                  الرئيسية
+                  {t("common.home")}
                 </Link>
               </li>
               <li className="flex items-center space-x-2 space-x-reverse">
                 <span className="text-amaranth-400">/</span>
-                <span className="text-amaranth-700 font-medium">التسوق</span>
+                <span className="text-amaranth-700 font-medium">
+                  {t("common.shop")}
+                </span>
               </li>
             </ol>
           </nav>
@@ -115,13 +119,13 @@ function Shop() {
               <div className="text-center py-16">
                 <div className="text-gray-500 text-xl mb-4">
                   {hasFilters
-                    ? "لا توجد منتجات تطابق الفلاتر المحددة"
-                    : "لا توجد منتجات متاحة حاليًا"}
+                    ? t("shop.no_products_match_filters")
+                    : t("shop.no_products_available")}
                 </div>
                 <p className="text-gray-400">
                   {hasFilters
-                    ? "جرب تغيير الفلاتر أو المراجعة لاحقًا"
-                    : "جرب المراجعة لاحقًا أو اتصل بنا للمساعدة"}
+                    ? t("shop.try_changing_filters")
+                    : t("shop.try_later_or_contact")}
                 </p>
               </div>
             </div>
@@ -149,12 +153,14 @@ function Shop() {
                 href="/"
                 className="text-amaranth-600 hover:text-amaranth-700 transition-colors"
               >
-                الرئيسية
+                {t("common.home")}
               </Link>
             </li>
             <li className="flex items-center space-x-2 space-x-reverse">
               <span className="text-amaranth-400">/</span>
-              <span className="text-amaranth-700 font-medium">التسوق</span>
+              <span className="text-amaranth-700 font-medium">
+                {t("common.shop")}
+              </span>
             </li>
           </ol>
         </nav>

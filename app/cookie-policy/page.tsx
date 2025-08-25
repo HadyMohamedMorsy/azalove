@@ -1,8 +1,15 @@
 "use client";
 import { BrandSVG } from "@/components/ui/brand-svg";
+import { useLocale } from "@/hooks/use-locale";
+import { useTranslation } from "@/hooks/use-translation";
+import { translations } from "@/lib/translations";
 import Link from "next/link";
 
 function CookiePolicy() {
+  const { t } = useTranslation();
+  const { locale } = useLocale();
+  const cookiePolicy = translations[locale].cookiePolicy;
+
   return (
     <>
       <header className="container px-6 py-4 border-t border-b border-[#eae8e4]">
@@ -10,12 +17,14 @@ function CookiePolicy() {
           <ol className="flex items-center space-x-2">
             <li>
               <Link href="/" className="text-gray-500 hover:text-gray-700">
-                الرئيسيه
+                {t("cookiePolicy.breadcrumb.home")}
               </Link>
             </li>
             <li className="flex items-center space-x-2">
               <span className="text-gray-500">/</span>
-              <span className="text-gray-700">سياسة ملفات تعريف الارتباط</span>
+              <span className="text-gray-700">
+                {t("cookiePolicy.breadcrumb.cookiePolicy")}
+              </span>
             </li>
           </ol>
         </nav>
@@ -35,44 +44,40 @@ function CookiePolicy() {
 
           <div className="mb-8">
             <h1 className="text-4xl mb-4 font-web text-right">
-              سياسة ملفات تعريف الارتباط
+              {t("cookiePolicy.title")}
             </h1>
             <p className="font-web text-gray-600 text-right">
-              آخر تحديث: {new Date().toLocaleDateString("ar-EG")}
+              {t("cookiePolicy.lastUpdated")}:{" "}
+              {new Date().toLocaleDateString("ar-EG")}
             </p>
           </div>
 
           <div className="space-y-8 text-right">
             {/* مقدمة */}
             <section>
-              <h2 className="text-2xl font-web mb-4">مقدمة</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("cookiePolicy.sections.introduction.title")}
+              </h2>
               <p className="font-web leading-relaxed text-gray-700">
-                نحن في أزالوف نسعى لتوفير تجربة قراءة مميزة لعشاق الكتب
-                الرومانسية من خلال موقعنا الإلكتروني. نستخدم ملفات تعريف
-                الارتباط (الكوكيز) لتحسين تجربة التصفح وتخصيص المحتوى وفهم كيفية
-                استخدام موقعنا. توضح هذه السياسة كيفية استخدامنا لملفات تعريف
-                الارتباط وحقوقكم في إدارتها. نحن ملتزمون بحماية خصوصيتكم وشفافية
-                استخدام بياناتكم.
+                {t("cookiePolicy.sections.introduction.content")}
               </p>
             </section>
 
             {/* ما هي ملفات تعريف الارتباط */}
             <section>
               <h2 className="text-2xl font-web mb-4">
-                ما هي ملفات تعريف الارتباط؟
+                {t("cookiePolicy.sections.whatAreCookies.title")}
               </h2>
               <div className="space-y-4">
                 <p className="font-web text-gray-700">
-                  ملفات تعريف الارتباط هي ملفات نصية صغيرة تُحفظ على جهازكم
-                  عندما تزورون موقعنا. تساعدنا هذه الملفات على:
+                  {t("cookiePolicy.sections.whatAreCookies.content")}
                 </p>
                 <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
-                  <li>تذكر تفضيلاتكم في القراءة والكتب المفضلة</li>
-                  <li>الحفاظ على محتويات سلة التسوق بين الزيارات</li>
-                  <li>تسجيل الدخول التلقائي لحسابكم</li>
-                  <li>تحليل استخدام الموقع لتحسين الخدمات</li>
-                  <li>عرض إعلانات مخصصة للكتب الرومانسية</li>
-                  <li>تقديم توصيات كتب مناسبة لأذواقكم</li>
+                  {cookiePolicy.sections.whatAreCookies.benefits.map(
+                    (benefit, index) => (
+                      <li key={index}>{benefit}</li>
+                    )
+                  )}
                 </ul>
               </div>
             </section>
@@ -80,68 +85,78 @@ function CookiePolicy() {
             {/* أنواع الكوكيز */}
             <section>
               <h2 className="text-2xl font-web mb-4">
-                أنواع ملفات تعريف الارتباط
+                {t("cookiePolicy.sections.cookieTypes.title")}
               </h2>
               <div className="space-y-6">
                 <div>
                   <h3 className="text-xl font-web mb-3">
-                    الكوكيز الأساسية (ضرورية)
+                    {t("cookiePolicy.sections.cookieTypes.essential.title")}
                   </h3>
                   <p className="font-web text-gray-700 mb-2">
-                    ضرورية لتشغيل الموقع بشكل صحيح ولا يمكن إيقافها:
+                    {t(
+                      "cookiePolicy.sections.cookieTypes.essential.description"
+                    )}
                   </p>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
-                    <li>كوكيز الأمان وحماية الموقع</li>
-                    <li>كوكيز جلسة تسجيل الدخول</li>
-                    <li>كوكيز سلة التسوق والدفع</li>
-                    <li>كوكيز تفضيلات اللغة</li>
-                    <li>كوكيز الموافقة على الخصوصية</li>
+                    {cookiePolicy.sections.cookieTypes.essential.items.map(
+                      (item, index) => (
+                        <li key={index}>{item}</li>
+                      )
+                    )}
                   </ul>
                 </div>
 
                 <div>
                   <h3 className="text-xl font-web mb-3">
-                    كوكيز الأداء والتحليلات
+                    {t("cookiePolicy.sections.cookieTypes.performance.title")}
                   </h3>
                   <p className="font-web text-gray-700 mb-2">
-                    تساعدنا على فهم كيفية تفاعلكم مع الموقع:
+                    {t(
+                      "cookiePolicy.sections.cookieTypes.performance.description"
+                    )}
                   </p>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
-                    <li>Google Analytics لتحليل الزيارات</li>
-                    <li>إحصائيات الصفحات الأكثر زيارة</li>
-                    <li>تتبع الكتب الأكثر مشاهدة</li>
-                    <li>قياس أداء الموقع وسرعة التحميل</li>
-                    <li>تحليل مسار المستخدم في الموقع</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="text-xl font-web mb-3">كوكيز الوظائف</h3>
-                  <p className="font-web text-gray-700 mb-2">
-                    تحسن تجربة التصفح وتخصيص المحتوى:
-                  </p>
-                  <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
-                    <li>تذكر تفضيلات عرض الكتب</li>
-                    <li>حفظ قائمة الكتب المفضلة</li>
-                    <li>تذكر إعدادات الخط وحجم النص</li>
-                    <li>تخصيص لوحة المعلومات الشخصية</li>
-                    <li>حفظ عوامل التصفية والبحث</li>
+                    {cookiePolicy.sections.cookieTypes.performance.items.map(
+                      (item, index) => (
+                        <li key={index}>{item}</li>
+                      )
+                    )}
                   </ul>
                 </div>
 
                 <div>
                   <h3 className="text-xl font-web mb-3">
-                    كوكيز التسويق والإعلان
+                    {t("cookiePolicy.sections.cookieTypes.functional.title")}
                   </h3>
                   <p className="font-web text-gray-700 mb-2">
-                    تساعدنا في عرض إعلانات مناسبة لاهتماماتكم:
+                    {t(
+                      "cookiePolicy.sections.cookieTypes.functional.description"
+                    )}
                   </p>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
-                    <li>إعلانات مخصصة للكتب الرومانسية</li>
-                    <li>توصيات الكتب بناءً على تاريخ التصفح</li>
-                    <li>إعلانات المؤلفين والإصدارات الجديدة</li>
-                    <li>عروض خاصة وخصومات مخصصة</li>
-                    <li>تتبع فعالية الحملات الإعلانية</li>
+                    {cookiePolicy.sections.cookieTypes.functional.items.map(
+                      (item, index) => (
+                        <li key={index}>{item}</li>
+                      )
+                    )}
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-xl font-web mb-3">
+                    {t("cookiePolicy.sections.cookieTypes.marketing.title")}
+                  </h3>
+                  <p className="font-web text-gray-700 mb-2">
+                    {t(
+                      "cookiePolicy.sections.cookieTypes.marketing.description"
+                    )}
+                  </p>
+                  <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
+                    {cookiePolicy.sections.cookieTypes.marketing.items.map(
+                      (item, index) => (
+                        <li key={index}>{item}</li>
+                      )
+                    )}
                   </ul>
                 </div>
               </div>
@@ -149,39 +164,52 @@ function CookiePolicy() {
 
             {/* الأطراف الثالثة */}
             <section>
-              <h2 className="text-2xl font-web mb-4">كوكيز الأطراف الثالثة</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("cookiePolicy.sections.thirdParty.title")}
+              </h2>
               <div className="space-y-4">
                 <p className="font-web text-gray-700">
-                  نستخدم خدمات من أطراف ثالثة قد تضع كوكيز على موقعنا:
+                  {t("cookiePolicy.sections.thirdParty.content")}
                 </p>
                 <div className="space-y-4">
                   <div>
-                    <h3 className="text-xl font-web mb-2">Google Analytics</h3>
+                    <h3 className="text-xl font-web mb-2">
+                      {t(
+                        "cookiePolicy.sections.thirdParty.googleAnalytics.title"
+                      )}
+                    </h3>
                     <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
-                      <li>تحليل إحصائيات الزيارات</li>
-                      <li>فهم سلوك المستخدمين</li>
-                      <li>تحسين أداء الموقع</li>
-                      <li>يمكن إيقافها من إعدادات المتصفح</li>
+                      {cookiePolicy.sections.thirdParty.googleAnalytics.items.map(
+                        (item, index) => (
+                          <li key={index}>{item}</li>
+                        )
+                      )}
                     </ul>
                   </div>
                   <div>
                     <h3 className="text-xl font-web mb-2">
-                      منصات التواصل الاجتماعي
+                      {t("cookiePolicy.sections.thirdParty.socialMedia.title")}
                     </h3>
                     <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
-                      <li>Facebook وInstagram للمشاركة</li>
-                      <li>تسجيل الدخول عبر الحسابات الاجتماعية</li>
-                      <li>عرض المحتوى المتعلق بالكتب</li>
-                      <li>التفاعل مع منشورات الكتب</li>
+                      {cookiePolicy.sections.thirdParty.socialMedia.items.map(
+                        (item, index) => (
+                          <li key={index}>{item}</li>
+                        )
+                      )}
                     </ul>
                   </div>
                   <div>
-                    <h3 className="text-xl font-web mb-2">خدمات الدفع</h3>
+                    <h3 className="text-xl font-web mb-2">
+                      {t(
+                        "cookiePolicy.sections.thirdParty.paymentServices.title"
+                      )}
+                    </h3>
                     <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
-                      <li>PayPal وApple Pay</li>
-                      <li>البطاقات الائتمانية</li>
-                      <li>محافظ رقمية محلية</li>
-                      <li>تشفير معلومات الدفع</li>
+                      {cookiePolicy.sections.thirdParty.paymentServices.items.map(
+                        (item, index) => (
+                          <li key={index}>{item}</li>
+                        )
+                      )}
                     </ul>
                   </div>
                 </div>
@@ -190,33 +218,44 @@ function CookiePolicy() {
 
             {/* كيفية استخدام الكوكيز */}
             <section>
-              <h2 className="text-2xl font-web mb-4">كيف نستخدم الكوكيز</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("cookiePolicy.sections.howWeUse.title")}
+              </h2>
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-xl font-web mb-2">تحسين تجربة التسوق:</h3>
+                  <h3 className="text-xl font-web mb-2">
+                    {t("cookiePolicy.sections.howWeUse.shopping.title")}
+                  </h3>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
-                    <li>حفظ الكتب في سلة التسوق</li>
-                    <li>تذكر تفضيلات الدفع</li>
-                    <li>عرض الكتب المشاهدة مؤخراً</li>
-                    <li>توصيات كتب مخصصة</li>
+                    {cookiePolicy.sections.howWeUse.shopping.items.map(
+                      (item, index) => (
+                        <li key={index}>{item}</li>
+                      )
+                    )}
                   </ul>
                 </div>
                 <div>
-                  <h3 className="text-xl font-web mb-2">تخصيص المحتوى:</h3>
+                  <h3 className="text-xl font-web mb-2">
+                    {t("cookiePolicy.sections.howWeUse.personalization.title")}
+                  </h3>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
-                    <li>عرض كتب حسب اهتماماتكم</li>
-                    <li>تخصيص الصفحة الرئيسية</li>
-                    <li>إشعارات الكتب الجديدة</li>
-                    <li>عروض خاصة مخصصة</li>
+                    {cookiePolicy.sections.howWeUse.personalization.items.map(
+                      (item, index) => (
+                        <li key={index}>{item}</li>
+                      )
+                    )}
                   </ul>
                 </div>
                 <div>
-                  <h3 className="text-xl font-web mb-2">تحليل الأداء:</h3>
+                  <h3 className="text-xl font-web mb-2">
+                    {t("cookiePolicy.sections.howWeUse.analytics.title")}
+                  </h3>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
-                    <li>قياس شعبية الكتب</li>
-                    <li>تحليل معدل التحويل</li>
-                    <li>فهم تفضيلات القراء</li>
-                    <li>تحسين محرك البحث</li>
+                    {cookiePolicy.sections.howWeUse.analytics.items.map(
+                      (item, index) => (
+                        <li key={index}>{item}</li>
+                      )
+                    )}
                   </ul>
                 </div>
               </div>
@@ -224,35 +263,48 @@ function CookiePolicy() {
 
             {/* إدارة الكوكيز */}
             <section>
-              <h2 className="text-2xl font-web mb-4">إدارة الكوكيز</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("cookiePolicy.sections.management.title")}
+              </h2>
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-xl font-web mb-2">إعدادات الموقع:</h3>
+                  <h3 className="text-xl font-web mb-2">
+                    {t(
+                      "cookiePolicy.sections.management.websiteSettings.title"
+                    )}
+                  </h3>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
-                    <li>مركز إعدادات الخصوصية في حسابكم</li>
-                    <li>تحكم في أنواع الكوكيز المقبولة</li>
-                    <li>إيقاف الكوكيز التسويقية</li>
-                    <li>حذف الكوكيز المحفوظة</li>
-                  </ul>
-                </div>
-                <div>
-                  <h3 className="text-xl font-web mb-2">إعدادات المتصفح:</h3>
-                  <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
-                    <li>Chrome: الإعدادات الخصوصية والأمان</li>
-                    <li>Firefox: الإعدادات الخصوصية والأمان</li>
-                    <li>Safari: التفضيلات الخصوصية</li>
-                    <li>Edge: الإعدادات الخصوصية والخدمات</li>
+                    {cookiePolicy.sections.management.websiteSettings.items.map(
+                      (item, index) => (
+                        <li key={index}>{item}</li>
+                      )
+                    )}
                   </ul>
                 </div>
                 <div>
                   <h3 className="text-xl font-web mb-2">
-                    تأثير إيقاف الكوكيز:
+                    {t(
+                      "cookiePolicy.sections.management.browserSettings.title"
+                    )}
                   </h3>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
-                    <li>فقدان محتويات سلة التسوق</li>
-                    <li>عدم تذكر تفضيلاتكم</li>
-                    <li>ضرورة تسجيل الدخول في كل زيارة</li>
-                    <li>عدم تخصيص توصيات الكتب</li>
+                    {cookiePolicy.sections.management.browserSettings.items.map(
+                      (item, index) => (
+                        <li key={index}>{item}</li>
+                      )
+                    )}
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-xl font-web mb-2">
+                    {t("cookiePolicy.sections.management.impact.title")}
+                  </h3>
+                  <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
+                    {cookiePolicy.sections.management.impact.items.map(
+                      (item, index) => (
+                        <li key={index}>{item}</li>
+                      )
+                    )}
                   </ul>
                 </div>
               </div>
@@ -260,51 +312,46 @@ function CookiePolicy() {
 
             {/* مدة الاحتفاظ */}
             <section>
-              <h2 className="text-2xl font-web mb-4">مدة الاحتفاظ بالكوكيز</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("cookiePolicy.sections.retention.title")}
+              </h2>
               <div className="space-y-3">
                 <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
-                  <li>
-                    <strong>كوكيز الجلسة:</strong> تُحذف عند إغلاق المتصفح
-                  </li>
-                  <li>
-                    <strong>كوكيز دائمة:</strong> تبقى لمدة محددة (عادة سنة
-                    واحدة)
-                  </li>
-                  <li>
-                    <strong>كوكيز التحليلات:</strong> تُحذف بعد 26 شهراً
-                  </li>
-                  <li>
-                    <strong>كوكيز التسويق:</strong> تُحذف بعد 13 شهراً
-                  </li>
-                  <li>
-                    <strong>كوكيز التفضيلات:</strong> تُحذف بعد سنتين
-                  </li>
+                  {cookiePolicy.sections.retention.items.map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
                 </ul>
               </div>
             </section>
 
             {/* الحقوق والخيارات */}
             <section>
-              <h2 className="text-2xl font-web mb-4">حقوقكم وخياراتكم</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("cookiePolicy.sections.rights.title")}
+              </h2>
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-xl font-web mb-2">حقوقكم تشمل:</h3>
+                  <h3 className="text-xl font-web mb-2">
+                    {t("cookiePolicy.sections.rights.yourRights.title")}
+                  </h3>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
-                    <li>الموافقة على أو رفض الكوكيز</li>
-                    <li>حذف الكوكيز المحفوظة</li>
-                    <li>تعديل إعدادات الكوكيز</li>
-                    <li>الوصول إلى المعلومات المحفوظة</li>
-                    <li>سحب الموافقة في أي وقت</li>
+                    {cookiePolicy.sections.rights.yourRights.items.map(
+                      (item, index) => (
+                        <li key={index}>{item}</li>
+                      )
+                    )}
                   </ul>
                 </div>
                 <div>
-                  <h3 className="text-xl font-web mb-2">خيارات التحكم:</h3>
+                  <h3 className="text-xl font-web mb-2">
+                    {t("cookiePolicy.sections.rights.controlOptions.title")}
+                  </h3>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
-                    <li>قبول جميع الكوكيز</li>
-                    <li>قبول الكوكيز الضرورية فقط</li>
-                    <li>تخصيص أنواع الكوكيز المقبولة</li>
-                    <li>إيقاف الكوكيز التسويقية</li>
-                    <li>مراجعة الإعدادات بشكل دوري</li>
+                    {cookiePolicy.sections.rights.controlOptions.items.map(
+                      (item, index) => (
+                        <li key={index}>{item}</li>
+                      )
+                    )}
                   </ul>
                 </div>
               </div>
@@ -312,67 +359,69 @@ function CookiePolicy() {
 
             {/* الأطفال */}
             <section>
-              <h2 className="text-2xl font-web mb-4">الأطفال والكوكيز</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("cookiePolicy.sections.children.title")}
+              </h2>
               <div className="space-y-3">
                 <p className="font-web text-gray-700">
-                  نحن لا نجمع عمداً معلومات من الأطفال دون سن 13 عاماً:
+                  {t("cookiePolicy.sections.children.content")}
                 </p>
                 <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
-                  <li>الموقع مخصص للبالغين</li>
-                  <li>الكتب الرومانسية للقراء الناضجين</li>
-                  <li>نطلب تأكيد العمر عند التسجيل</li>
-                  <li>نحذف فوراً أي بيانات للأطفال</li>
-                  <li>ننصح الأهالي بمراقبة استخدام الأطفال للإنترنت</li>
+                  {cookiePolicy.sections.children.items.map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
                 </ul>
               </div>
             </section>
 
             {/* التحديثات */}
             <section>
-              <h2 className="text-2xl font-web mb-4">تحديثات السياسة</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("cookiePolicy.sections.updates.title")}
+              </h2>
               <div className="space-y-3">
                 <p className="font-web text-gray-700 mb-3">
-                  قد نحدث سياسة الكوكيز من وقت لآخر:
+                  {t("cookiePolicy.sections.updates.content")}
                 </p>
                 <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
-                  <li>إشعار عبر البريد الإلكتروني بالتحديثات</li>
-                  <li>نشر التحديثات على الموقع</li>
-                  <li>إعطاء مهلة 30 يوماً قبل تطبيق التغييرات</li>
-                  <li>طلب موافقة جديدة إذا لزم الأمر</li>
-                  <li>الاحتفاظ بنسخة من السياسات السابقة</li>
+                  {cookiePolicy.sections.updates.items.map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
                 </ul>
               </div>
             </section>
 
             {/* الامتثال القانوني */}
             <section>
-              <h2 className="text-2xl font-web mb-4">الامتثال القانوني</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("cookiePolicy.sections.compliance.title")}
+              </h2>
               <div className="space-y-3">
                 <p className="font-web text-gray-700 mb-3">
-                  نلتزم بالقوانين واللوائح المحلية والدولية:
+                  {t("cookiePolicy.sections.compliance.content")}
                 </p>
                 <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
-                  <li>نظام حماية البيانات الشخصية السعودي</li>
-                  <li>اللائحة الأوروبية لحماية البيانات (GDPR)</li>
-                  <li>قانون خصوصية المستهلك في كاليفورنيا</li>
-                  <li>معايير الأمان الدولية</li>
-                  <li>أفضل الممارسات في حماية البيانات</li>
+                  {cookiePolicy.sections.compliance.items.map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
                 </ul>
               </div>
             </section>
 
             {/* التواصل */}
             <section>
-              <h2 className="text-2xl font-web mb-4">التواصل معنا</h2>
+              <h2 className="text-2xl font-web mb-4">
+                {t("cookiePolicy.sections.contact.title")}
+              </h2>
               <p className="font-web text-gray-700 mb-3">
-                لأي استفسار حول ملفات تعريف الارتباط أو الخصوصية:
+                {t("cookiePolicy.sections.contact.content")}
               </p>
               <div className="space-y-2 font-web text-gray-700">
-                <p>البريد الإلكتروني: privacy@azalove.com</p>
-                <p>واتساب: +966 XX XXX XXXX</p>
-                <p>مسؤول حماية البيانات: dpo@azalove.com</p>
-                <p>العنوان: [عنوان الشركة]</p>
-                <p>ساعات العمل: الأحد - الخميس، 9 صباحاً - 6 مساءً</p>
+                <p>{t("cookiePolicy.sections.contact.email")}</p>
+                <p>{t("cookiePolicy.sections.contact.whatsapp")}</p>
+                <p>{t("cookiePolicy.sections.contact.dpo")}</p>
+                <p>{t("cookiePolicy.sections.contact.address")}</p>
+                <p>{t("cookiePolicy.sections.contact.workingHours")}</p>
               </div>
             </section>
           </div>

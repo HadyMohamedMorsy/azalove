@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useTranslation } from "@/hooks/use-translation";
 import {
   CheckCircle,
   CreditCard,
@@ -20,6 +21,7 @@ const OrderConfirmation = ({
   shippingData,
   paymentData,
 }: OrderConfirmationProps) => {
+  const { t } = useTranslation();
   const orderNumber =
     "ORD-" + Math.random().toString(36).substr(2, 9).toUpperCase();
 
@@ -32,14 +34,13 @@ const OrderConfirmation = ({
         </div>
         <div>
           <h2 className="text-3xl font-bold text-royal-900">
-            Order Confirmed!
+            {t("checkout.confirmation.orderConfirmed")}
           </h2>
           <p className="text-royal-600 mt-2 text-lg">
-            Thank you for your purchase. Your order has been successfully
-            placed.
+            {t("checkout.confirmation.orderConfirmedDescription")}
           </p>
           <Badge className="bg-azalove-100 text-azalove-700 border-azalove-200 mt-3">
-            Order #{orderNumber}
+            {t("checkout.confirmation.orderNumber")} #{orderNumber}
           </Badge>
         </div>
       </div>
@@ -51,7 +52,7 @@ const OrderConfirmation = ({
             <div className="w-8 h-8 rounded-full bg-azalove-100 flex items-center justify-center">
               <Package className="w-4 h-4 text-azalove-600" />
             </div>
-            Order Details
+            {t("checkout.confirmation.orderDetails")}
           </CardTitle>
         </CardHeader>
         <CardContent className="p-6 space-y-6">
@@ -64,7 +65,7 @@ const OrderConfirmation = ({
                 </div>
                 <div>
                   <p className="text-sm font-medium text-royal-900">
-                    Order Number
+                    {t("checkout.confirmation.orderNumber")}
                   </p>
                   <p className="text-sm text-royal-600">{orderNumber}</p>
                 </div>
@@ -76,7 +77,7 @@ const OrderConfirmation = ({
                 </div>
                 <div>
                   <p className="text-sm font-medium text-royal-900">
-                    Order Date
+                    {t("checkout.confirmation.orderDate")}
                   </p>
                   <p className="text-sm text-royal-600">
                     {new Date().toLocaleDateString()}
@@ -104,7 +105,7 @@ const OrderConfirmation = ({
                 </div>
                 <div>
                   <p className="text-sm font-medium text-royal-900">
-                    Payment Method
+                    {t("checkout.payment.title")}
                   </p>
                   <p className="text-sm text-royal-600 capitalize">
                     {paymentData.paymentMethod}
@@ -121,7 +122,9 @@ const OrderConfirmation = ({
                 <div className="w-8 h-8 rounded-full bg-azalove-100 flex items-center justify-center">
                   <MapPin className="w-4 h-4 text-azalove-700" />
                 </div>
-                <h4 className="font-medium text-royal-900">Shipping Address</h4>
+                <h4 className="font-medium text-royal-900">
+                  {t("checkout.shipping.title")}
+                </h4>
               </div>
               <div className="bg-cream-50/50 p-4 rounded-lg">
                 <p className="text-sm text-royal-900">
@@ -141,7 +144,9 @@ const OrderConfirmation = ({
       {/* Next Steps */}
       <Card className="border-0 shadow-xl shadow-royal-900/5 bg-white/80 backdrop-blur-sm">
         <CardHeader className="border-b border-cream-200">
-          <CardTitle className="text-royal-900">What's Next?</CardTitle>
+          <CardTitle className="text-royal-900">
+            {t("checkout.confirmation.whatsNext")}
+          </CardTitle>
         </CardHeader>
         <CardContent className="p-6">
           <div className="space-y-4">
@@ -150,7 +155,7 @@ const OrderConfirmation = ({
                 <CheckCircle className="w-3 h-3 text-green-600" />
               </div>
               <p className="text-sm text-royal-700">
-                Order confirmation email sent
+                {t("checkout.confirmation.orderConfirmationEmailSent")}
               </p>
             </div>
             <div className="flex items-center gap-3">
@@ -158,7 +163,7 @@ const OrderConfirmation = ({
                 <Package className="w-3 h-3 text-azalove-600" />
               </div>
               <p className="text-sm text-royal-700">
-                Order will be processed within 24 hours
+                {t("checkout.confirmation.orderProcessedWithin24Hours")}
               </p>
             </div>
             <div className="flex items-center gap-3">
@@ -166,7 +171,7 @@ const OrderConfirmation = ({
                 <MapPin className="w-3 h-3 text-royal-600" />
               </div>
               <p className="text-sm text-royal-700">
-                Tracking information will be sent via email
+                {t("checkout.confirmation.trackingInfoSentViaEmail")}
               </p>
             </div>
           </div>
@@ -180,14 +185,14 @@ const OrderConfirmation = ({
           className="border-cream-300 text-royal-700 hover:bg-cream-50"
         >
           <Download className="w-4 h-4 mr-2" />
-          Download Receipt
+          {t("checkout.confirmation.downloadReceipt")}
         </Button>
         <Button
           onClick={() => (window.location.href = "/")}
           className="bg-royal-500 hover:bg-azalove-600 text-white"
         >
           <ShoppingBag className="w-4 h-4 mr-2" />
-          Continue Shopping
+          {t("checkout.confirmation.continueShopping")}
         </Button>
       </div>
     </div>
