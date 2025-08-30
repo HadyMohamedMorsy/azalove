@@ -1,18 +1,5 @@
 import CouplePreview from "@/components/avatars/couple-preview";
-
-interface SavedCouple {
-  id: string;
-  name: string;
-  character1: any;
-  character2: any;
-  answers: {
-    occasion: string;
-    relationship: string;
-    theme: string;
-    style: string;
-  };
-  createdAt: string;
-}
+import { SavedCouple } from "@/hooks/use-saved-couples";
 
 interface SavedCoupleDisplayProps {
   couple: SavedCouple;

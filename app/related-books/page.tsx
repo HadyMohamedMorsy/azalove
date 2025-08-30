@@ -127,36 +127,35 @@ export default function RelatedBooksPage() {
   // Get answers from URL parameters or from saved couple
   const getAnswers = (): UserAnswers => {
     // First try to get from URL parameters
-    const urlOccasion = searchParams.get("occasion");
-    const urlRelationship = searchParams.get("relationship");
-    const urlTheme = searchParams.get("theme");
-    const urlStyle = searchParams.get("style");
+    const urlAnswers = searchParams.get("answers");
+    const urlCoupleName = searchParams.get("coupleName");
 
-    if (urlOccasion && urlRelationship && urlTheme && urlStyle) {
-      return {
-        occasion: urlOccasion,
-        relationship: urlRelationship,
-        theme: urlTheme,
-        style: urlStyle,
-      };
+    if (urlAnswers && urlCoupleName) {
+      try {
+        const parsedAnswers = JSON.parse(urlAnswers);
+        // Store the quiz answers for potential future use
+        // You can implement custom filtering logic based on these answers later
+        return {
+          quizAnswers: JSON.stringify(parsedAnswers),
+          coupleName: urlCoupleName,
+        };
+      } catch (error) {
+        console.error("Error parsing answers from URL:", error);
+      }
     }
 
     // If not in URL, get from saved couple
-    if (latestCouple?.answers) {
+    if (latestCouple?.answers?.selectedAnswers) {
       return {
-        occasion: latestCouple.answers.occasion,
-        relationship: latestCouple.answers.relationship,
-        theme: latestCouple.answers.theme,
-        style: latestCouple.answers.style,
+        quizAnswers: JSON.stringify(latestCouple.answers.selectedAnswers),
+        coupleName: latestCouple.name,
       };
     }
 
     // Default values
     return {
-      occasion: "",
-      relationship: "",
-      theme: "",
-      style: "",
+      quizAnswers: "",
+      coupleName: "",
     };
   };
 

@@ -8,10 +8,10 @@ export interface Book {
 }
 
 export interface UserAnswers {
-  occasion: string;
-  relationship: string;
-  theme: string;
-  style: string;
+  // This interface is kept for backward compatibility
+  // The actual quiz answers are now stored in the SaveAnswers format
+  // You can implement custom filtering logic based on your quiz questions later
+  [key: string]: string;
 }
 
 export interface TextStyle {
@@ -314,44 +314,7 @@ export const getBooksByAnswers = (answers: UserAnswers): Book[] => {
     },
   ];
 
-  // Filter books based on answers
-  return allBooks.filter((book) => {
-    if (
-      answers.occasion === "valentine" &&
-      book.title.toLowerCase().includes("love")
-    ) {
-      return true;
-    }
-    if (
-      answers.relationship === "family" &&
-      book.title.toLowerCase().includes("family")
-    ) {
-      return true;
-    }
-    if (
-      answers.relationship === "couple" &&
-      book.title.toLowerCase().includes("love")
-    ) {
-      return true;
-    }
-    if (
-      answers.theme === "romantic" &&
-      book.title.toLowerCase().includes("romance")
-    ) {
-      return true;
-    }
-    if (
-      answers.theme === "adventure" &&
-      book.title.toLowerCase().includes("adventure")
-    ) {
-      return true;
-    }
-    if (
-      answers.theme === "fantasy" &&
-      book.title.toLowerCase().includes("fantasy")
-    ) {
-      return true;
-    }
-    return true; // Show all books for now
-  });
+  // For now, return all books since we're using the new quiz system
+  // You can implement custom filtering logic based on your quiz questions later
+  return allBooks;
 };

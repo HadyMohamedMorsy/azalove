@@ -20,6 +20,7 @@ export const API_ENDPOINTS_FROM_NEXT = {
   REFRESH_TOKENS: "/api/auth/refresh-tokens",
   MEGA_MENU_CATEGORIES: "/api/mega-menu/categories",
   MEGA_MENU_BLOG_CATEGORIES: "/api/mega-menu/blog-categories",
+  QUIZ_QUESTIONS: "/api/quiz/questions-with-answers",
 };
 
 export const API_ENDPOINTS_FROM_SERVER = {
@@ -32,6 +33,7 @@ export const API_ENDPOINTS_FROM_SERVER = {
   MEGA_MENU_BLOG_CATEGORIES: `/category/blog`,
   PAYMENT_METHODS: `/payment-methods/front`,
   BANKS: `/bank/front`,
+  QUIZ_QUESTIONS: `/quiz/questions`,
 };
 
 export const API_ENDPOINTS_FROM_SERVER_DASHBOARD = {
