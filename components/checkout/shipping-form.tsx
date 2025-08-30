@@ -53,8 +53,8 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
     error,
   } = useFetch<Address[]>(
     user ? `${API_ENDPOINTS_FROM_NEXT.ADDRESSES}?userId=${user?.id}` : ""
-  );
-
+    );
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onNext(formData);

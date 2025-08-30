@@ -75,35 +75,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         if (token && newToken) {
           try {
-            // Verify token with your API
-            const response = await axios.post("/api/auth/verify", {
+            const response = await axios.post("/api/auth/verify-token", {
               token,
             });
             const { user } = response.data.data;
 
-            // Store complete user data in localStorage
             userStorage.saveUser(user);
             setUser(user);
           } catch (verifyError) {
-            // If token verification fails, try to refresh
             try {
+              authStorage.removeTokens();
+              userStorage.removeUser();
+              Cookies.remove("auth_token");
+
               const refreshResponse = await axios.post(
                 "/api/auth/refresh-tokens",
                 {
                   refreshToken: newToken,
                 }
               );
-
-              const { access_token, refreshToken, user } =
-                refreshResponse.data.data;
-
-              // Save new tokens
+              const { access_token, refreshToken, user } = refreshResponse.data.data;
               authStorage.saveTokens(access_token, refreshToken);
               userStorage.saveUser(user);
               setUser(user);
             } catch (refreshError) {
-              // Both verification and refresh failed, logout
-              console.error("Auth check failed:", refreshError);
               authStorage.removeTokens();
               userStorage.removeUser();
               Cookies.remove("auth_token");
@@ -111,7 +106,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }
         }
       } catch (error) {
-        console.error("Auth check failed:", error);
         authStorage.removeTokens();
         userStorage.removeUser();
         Cookies.remove("auth_token");
