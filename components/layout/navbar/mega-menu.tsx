@@ -133,20 +133,6 @@ export function MegaMenu({
                   >
                     جميع المنتجات ←
                   </Link>
-                  <Link
-                    href="/shop?filter=new"
-                    onClick={onClose}
-                    className="text-amaranth-600 hover:text-amaranth-800 font-semibold transition-colors duration-200"
-                  >
-                    وصل حديثاً ←
-                  </Link>
-                  <Link
-                    href="/shop?filter=sale"
-                    onClick={onClose}
-                    className="text-amaranth-600 hover:text-amaranth-800 font-semibold transition-colors duration-200"
-                  >
-                    العروض الخاصة ←
-                  </Link>
                 </div>
                 <div className="text-sm text-gray-500">
                   💝 أكثر من 1000+ منتج متاح

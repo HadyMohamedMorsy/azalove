@@ -153,23 +153,6 @@ export function BlogMegaMenu({
                   >
                     جميع المقالات ←
                   </Link>
-                  <Link
-                    href="/blogs?filter=popular"
-                    onClick={onClose}
-                    className="text-amaranth-600 hover:text-amaranth-800 font-semibold transition-colors duration-200"
-                  >
-                    الأكثر قراءة ←
-                  </Link>
-                  <Link
-                    href="/blogs?filter=recent"
-                    onClick={onClose}
-                    className="text-amaranth-600 hover:text-amaranth-800 font-semibold transition-colors duration-200"
-                  >
-                    أحدث المقالات ←
-                  </Link>
-                </div>
-                <div className="text-sm text-gray-500">
-                  📖 أكثر من 500+ مقال مفيد
                 </div>
               </div>
             </div>
@@ -230,23 +213,6 @@ export function BlogMegaMenu({
                   لا توجد مقالات مميزة متاحة حالياً
                 </div>
               )}
-
-              {/* Newsletter Signup */}
-              <div className="bg-gradient-to-br from-amaranth-500 to-royal-600 rounded-2xl p-6 text-white relative overflow-hidden">
-                <div className="absolute inset-0 bg-[url('/media/offer.png')] bg-cover bg-center opacity-10" />
-                <div className="relative z-10">
-                  <h4 className="text-lg font-bold mb-2">
-                    📧 اشتركي في النشرة الإخبارية
-                  </h4>
-                  <p className="text-sm opacity-90 mb-4">
-                    احصلي على أحدث النصائح والمقالات المفيدة
-                  </p>
-                  <button className="w-full bg-white text-amaranth-600 py-2 rounded-lg text-sm font-semibold hover:bg-cream-50 transition-colors duration-300">
-                    اشتركي الآن 💌
-                  </button>
-                </div>
-                <Heart className="absolute top-2 right-2 w-6 h-6 text-white/20" />
-              </div>
             </div>
           </div>
         </div>

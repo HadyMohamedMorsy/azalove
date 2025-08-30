@@ -1,6 +1,6 @@
 import { apiFetch } from "@/utils/api-interceptor";
 import { serverAuth } from "@/utils/server-auth";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 // Define User interface for server-side usage
 interface User {
@@ -19,7 +19,7 @@ interface User {
   updatedAt?: string;
 }
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Get user from cookies using server-side authentication
     const user = (await serverAuth.getCurrentUser()) as User | null;
@@ -72,13 +72,7 @@ export async function GET(request: NextRequest) {
     });
 
     return NextResponse.json(
-      response.error
-        ? { error: response.error }
-        : {
-            success: true,
-            data: response.data.data,
-            message: "Addresses retrieved successfully",
-          }
+      response.error ? { error: response.error } : response.data.data
     );
   } catch (error) {
     console.error("API Error:", error);

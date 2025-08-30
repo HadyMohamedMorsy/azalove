@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
 
     // Make request to your backend API to refresh tokens
     const response = await fetch(
-      `${process.env.API_BASE_URL}/auth/refresh-tokens`,
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh-tokens`,
       {
         method: "POST",
         headers: {
@@ -33,16 +33,8 @@ export async function POST(request: NextRequest) {
 
     const data = await response.json();
 
-    return NextResponse.json({
-      success: true,
-      data: {
-        access_token: data.access_token,
-        refreshToken: data.refreshToken,
-        user: data.user,
-      },
-    });
+    return NextResponse.json({ data: data.data });
   } catch (error) {
-    console.error("Error refreshing tokens:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
