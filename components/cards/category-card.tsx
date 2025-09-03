@@ -1,3 +1,6 @@
+"use client";
+
+import { useGlobalAnalytics } from "@/hooks/use-global-analytics";
 import { useTranslation } from "@/hooks/use-translation";
 
 interface CategoryCardProps {
@@ -7,11 +10,20 @@ interface CategoryCardProps {
 
 const CategoryCard = ({ bgColor = "#faf1ff", title }: CategoryCardProps) => {
   const { t } = useTranslation();
+  const { trackCustomEvent } = useGlobalAnalytics();
+
+  const handleCategoryClick = () => {
+    trackCustomEvent("category_click", {
+      category_name: title,
+      page: "home",
+    });
+  };
 
   return (
     <div
-      className={`relative px-[2.5rem] py-[2rem] break-words`}
+      className={`relative px-[2.5rem] py-[2rem] break-words cursor-pointer hover:scale-105 transition-transform duration-300`}
       style={{ backgroundColor: bgColor }}
+      onClick={handleCategoryClick}
     >
       <svg
         fill="#000000"
@@ -43,6 +55,7 @@ const CategoryCard = ({ bgColor = "#faf1ff", title }: CategoryCardProps) => {
       <a
         href="#"
         className="font-web text-base text-gray-800 mt-2 inline-block hover:text-[#fa5e5d] transition-colors"
+        onClick={handleCategoryClick}
       >
         {t("categories.shopNow")}
       </a>

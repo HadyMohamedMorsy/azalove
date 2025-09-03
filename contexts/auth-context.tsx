@@ -7,7 +7,7 @@ import {
 } from "@/utils/localStorage";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface User {
@@ -33,6 +33,9 @@ interface AuthContextType {
     firstName: string,
     lastName: string,
     email: string,
+    username: string,
+    phoneNumber: string,
+    birthOfDate: string,
     password: string
   ) => Promise<void>;
   logout: () => void;
@@ -47,7 +50,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   // Load user data from localStorage on mount
   useEffect(() => {
@@ -66,57 +68,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     loadUserFromStorage();
   }, []);
 
-  useEffect(() => {
-    // Check if user is logged in on mount
-    const checkAuth = async () => {
-      try {
-        const token = authStorage.getToken();
-        const newToken = authStorage.getRefreshToken();
-
-        if (token && newToken) {
-          try {
-            const response = await axios.post("/api/auth/verify-token", {
-              token,
-            });
-            const { user } = response.data.data;
-
-            userStorage.saveUser(user);
-            setUser(user);
-          } catch (verifyError) {
-            try {
-              authStorage.removeTokens();
-              userStorage.removeUser();
-              Cookies.remove("auth_token");
-
-              const refreshResponse = await axios.post(
-                "/api/auth/refresh-tokens",
-                {
-                  refreshToken: newToken,
-                }
-              );
-              const { access_token, refreshToken, user } = refreshResponse.data.data;
-              authStorage.saveTokens(access_token, refreshToken);
-              userStorage.saveUser(user);
-              setUser(user);
-            } catch (refreshError) {
-              authStorage.removeTokens();
-              userStorage.removeUser();
-              Cookies.remove("auth_token");
-            }
-          }
-        }
-      } catch (error) {
-        authStorage.removeTokens();
-        userStorage.removeUser();
-        Cookies.remove("auth_token");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    checkAuth();
-  }, []);
-
   const login = async (email: string, password: string) => {
     try {
       const response = await axios.post("/api/auth/login", {
@@ -132,8 +83,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       Cookies.set("auth_token", access_token, {
         expires: 7,
         path: "/",
-        secure: process.env.NODE_ENV === "development",
-        sameSite: "strict",
+        secure: true,
+        sameSite: "lax",
       });
 
       setUser(user);
@@ -156,6 +107,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     firstName: string,
     lastName: string,
     email: string,
+    username: string,
+    phoneNumber: string,
+    birthOfDate: string,
     password: string
   ) => {
     try {
@@ -163,6 +117,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         firstName,
         lastName,
         email,
+        username,
+        phoneNumber,
+        birthOfDate,
         password,
       });
       const { access_token, refreshToken, user } = response.data.data;
@@ -174,8 +131,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       Cookies.set("auth_token", access_token, {
         expires: 7,
         path: "/",
-        secure: process.env.NODE_ENV === "development",
-        sameSite: "strict",
+        secure: true,
+        sameSite: "lax",
       });
 
       setUser(user);
@@ -194,10 +151,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      // Call server-side logout to remove httpOnly cookies
+      await axios.post("/api/auth/logout");
+    } catch (error) {
+      console.error("Logout API error:", error);
+    }
+
+    // Clean up client-side storage
     authStorage.removeTokens();
     userStorage.removeUser();
-    Cookies.remove("auth_token");
+
+    // Remove client-side cookies
+    Cookies.remove("auth_token", {
+      path: "/",
+      secure: true,
+      sameSite: "lax",
+    });
+
     setUser(null);
     router.push("/login");
   };

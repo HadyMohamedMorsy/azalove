@@ -6,8 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { API_ENDPOINTS_FROM_NEXT } from "@/config/api";
 import { useAuth } from "@/contexts/auth-context";
+import { useCart } from "@/contexts/cart-context";
 import { useFetch } from "@/hooks/use-fetch";
 import { useTranslation } from "@/hooks/use-translation";
+import axios from "axios";
 import { Building, Check, Home, MapPin, Plus } from "lucide-react";
 import { useState } from "react";
 
@@ -34,8 +36,10 @@ interface ShippingFormProps {
 const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const { updateShippingData } = useCart();
   const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -49,12 +53,12 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
 
   const {
     data: addresses,
-    loading,
-    error,
+    loading: addressesLoading,
+    error: addressesError,
   } = useFetch<Address[]>(
     user ? `${API_ENDPOINTS_FROM_NEXT.ADDRESSES}?userId=${user?.id}` : ""
-    );
-  
+  );
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onNext(formData);
@@ -64,20 +68,72 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleAddressSelect = (address: Address) => {
-    setSelectedAddress(address);
-    // Convert address to form data format
-    const addressData = {
-      email: user?.email || "",
-      firstName: address.title === "Home" ? "Home" : "Work",
-      lastName: "",
-      address: address.addressLine1,
-      city: address.postalCode, // Using postal code as city for now
-      postalCode: address.postalCode,
-      country: "United States",
-      phoneNumber: address.phoneNumber,
-    };
-    onNext(addressData);
+  const handleAddressSelect = async (address: Address) => {
+    setLoading(true);
+    try {
+      // First, set the address as default
+      await axios.patch(
+        `${API_ENDPOINTS_FROM_NEXT.ADDRESS_SET_DEFAULT}`,
+        {
+          addressId: address.id,
+        },
+        {
+          headers: {
+            "user-id": user?.id,
+          },
+        }
+      );
+
+      // Then fetch shipment information
+      const shipmentResponse = await axios.get(
+        `${API_ENDPOINTS_FROM_NEXT.ADDRESS_SHIPMENT}/${address.id}/shipment`
+      );
+
+      const shipmentData = shipmentResponse.data.data;
+      // Update cart context with shipping data
+      updateShippingData({
+        address: address,
+        shipment: shipmentData.shipment,
+        locationType: shipmentData.locationType,
+        locationName: shipmentData.locationName,
+      });
+
+      // Convert address to form data format and proceed
+      const addressData = {
+        email: user?.email || "",
+        firstName: address.title === "Home" ? "Home" : "Work",
+        lastName: "",
+        address: address.addressLine1,
+        city: address.postalCode, // Using postal code as city for now
+        postalCode: address.postalCode,
+        country: "United States",
+        phoneNumber: address.phoneNumber,
+        shipment: shipmentData.shipment,
+        locationType: shipmentData.locationType,
+        locationName: shipmentData.locationName,
+      };
+
+      onNext(addressData);
+    } catch (error) {
+      console.error(
+        "Error setting default address or fetching shipment:",
+        error
+      );
+      // Still proceed with address selection even if shipment fetch fails
+      const addressData = {
+        email: user?.email || "",
+        firstName: address.title === "Home" ? "Home" : "Work",
+        lastName: "",
+        address: address.addressLine1,
+        city: address.postalCode,
+        postalCode: address.postalCode,
+        country: "United States",
+        phoneNumber: address.phoneNumber,
+      };
+      onNext(addressData);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleUseNewAddress = () => {
@@ -378,14 +434,14 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
         </Button>
       </div>
 
-      {loading ? (
+      {addressesLoading ? (
         <div className="text-center py-8">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-azalove-500 mx-auto"></div>
           <p className="text-royal-600 mt-2">
             {t("checkout.shipping.loadingAddresses")}
           </p>
         </div>
-      ) : error ? (
+      ) : addressesError ? (
         <div className="text-center py-8 text-red-500">
           {t("checkout.shipping.errorLoadingAddresses")}.{" "}
           {t("checkout.shipping.useNewAddress")}.
@@ -475,12 +531,16 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
         <Button
           type="button"
           className="ml-auto bg-royal-500 hover:bg-azalove-600 text-white"
-          disabled={!selectedAddress}
+          disabled={!selectedAddress || loading}
           onClick={() =>
             selectedAddress && handleAddressSelect(selectedAddress)
           }
         >
-          {t("checkout.shipping.continueToPaymentButton")}
+          {loading ? (
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mx-auto"></div>
+          ) : (
+            t("checkout.shipping.continueToPaymentButton")
+          )}
         </Button>
       </div>
     </div>

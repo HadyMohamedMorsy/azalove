@@ -5,7 +5,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { API_BASE_URL } from "@/config/api";
 import { useCart } from "@/contexts/cart-context";
+import { useGeneralSettings } from "@/contexts/general-settings-context";
 import { useCurrency } from "@/hooks/use-currency";
+import { useGlobalAnalytics } from "@/hooks/use-global-analytics";
 import { useTranslation } from "@/hooks/use-translation";
 import { CartItem } from "@/types";
 import { Heart, Minus, Plus, Sparkles, Trash2 } from "lucide-react";
@@ -20,10 +22,41 @@ export function CartItemCard({ item, variant = "list" }: CartItemCardProps) {
   const { updateQuantity, removeFromCart } = useCart();
   const { t } = useTranslation();
   const { formatCurrency } = useCurrency();
+  const { trackRemoveFromCart } = useGlobalAnalytics();
+  const { settings } = useGeneralSettings();
+
+  // Get currency from settings, fallback to USD if not set
+  const currency = settings?.default_currency || "USD";
 
   // Use finalPrice if available, otherwise use price
   const displayPrice = item.finalPrice || item.price;
   const hasDiscount = item.finalPrice && item.finalPrice < item.price;
+
+  const handleRemoveFromCart = () => {
+    // Track remove from cart event
+    trackRemoveFromCart({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      quantity: item.quantity,
+      category: "General",
+      currency: currency,
+    });
+
+    removeFromCart(item.id);
+  };
+
+  const handleQuantityUpdate = (newQuantity: number) => {
+    if (newQuantity < 1) return;
+
+    // If quantity is reduced to 0, track as remove from cart
+    if (newQuantity === 0) {
+      handleRemoveFromCart();
+      return;
+    }
+
+    updateQuantity(item.id, newQuantity);
+  };
 
   if (variant === "dropdown") {
     return (
@@ -68,7 +101,7 @@ export function CartItemCard({ item, variant = "list" }: CartItemCardProps) {
                 variant="outline"
                 size="sm"
                 className="h-7 w-7 p-0 border-rose-300 hover:bg-rose-50 text-rose-600"
-                onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                onClick={() => handleQuantityUpdate(item.quantity - 1)}
               >
                 <Minus className="h-3 w-3" />
               </Button>
@@ -79,7 +112,7 @@ export function CartItemCard({ item, variant = "list" }: CartItemCardProps) {
                 variant="outline"
                 size="sm"
                 className="h-7 w-7 p-0 border-rose-300 hover:bg-rose-50 text-rose-600"
-                onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                onClick={() => handleQuantityUpdate(item.quantity + 1)}
                 disabled={item.quantity >= item.skuQuantity}
               >
                 <Plus className="h-3 w-3" />
@@ -88,7 +121,7 @@ export function CartItemCard({ item, variant = "list" }: CartItemCardProps) {
                 variant="ghost"
                 size="sm"
                 className="h-7 w-7 p-0 text-gray-400 hover:text-rose-500 hover:bg-rose-50"
-                onClick={() => removeFromCart(item.id)}
+                onClick={handleRemoveFromCart}
               >
                 <Trash2 className="h-3 w-3" />
               </Button>
@@ -147,7 +180,7 @@ export function CartItemCard({ item, variant = "list" }: CartItemCardProps) {
           variant="ghost"
           size="sm"
           className="text-gray-400 hover:text-rose-500 hover:bg-rose-50 rounded-full"
-          onClick={() => removeFromCart(item.id)}
+          onClick={handleRemoveFromCart}
         >
           <Trash2 className="w-4 h-4" />
         </Button>
@@ -157,14 +190,14 @@ export function CartItemCard({ item, variant = "list" }: CartItemCardProps) {
             variant="outline"
             size="sm"
             className="border-rose-300 hover:bg-rose-50 text-rose-600 rounded-full"
-            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+            onClick={() => handleQuantityUpdate(item.quantity - 1)}
           >
             <Minus className="w-3 h-3" />
           </Button>
           <Input
             value={item.quantity}
             onChange={(e) =>
-              updateQuantity(item.id, parseInt(e.target.value) || 1)
+              handleQuantityUpdate(parseInt(e.target.value) || 1)
             }
             className="w-16 text-center border-rose-300 focus:border-rose-500 focus:ring-rose-500 rounded-full"
             min="1"
@@ -173,7 +206,7 @@ export function CartItemCard({ item, variant = "list" }: CartItemCardProps) {
             variant="outline"
             size="sm"
             className="border-rose-300 hover:bg-rose-50 text-rose-600 rounded-full"
-            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+            onClick={() => handleQuantityUpdate(item.quantity + 1)}
             disabled={item.quantity >= item.skuQuantity}
           >
             <Plus className="w-3 h-3" />

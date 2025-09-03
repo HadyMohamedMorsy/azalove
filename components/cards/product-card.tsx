@@ -2,7 +2,9 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useCart } from "@/contexts/cart-context";
 import { useFavorites } from "@/contexts/favorites-context";
+import { useGeneralSettings } from "@/contexts/general-settings-context";
 import { useCurrency } from "@/hooks/use-currency";
+import { useGlobalAnalytics } from "@/hooks/use-global-analytics";
 import { useToast } from "@/hooks/use-toast";
 import { Category } from "@/types/category";
 import { Sku } from "@/types/product";
@@ -35,6 +37,11 @@ const ProductCard = ({
   const { addToCart, getItemQuantity } = useCart();
   const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
   const { formatCurrency } = useCurrency();
+  const { trackAddToCart, trackProductView } = useGlobalAnalytics();
+  const { settings } = useGeneralSettings();
+
+  // Get currency from settings, fallback to USD if not set
+  const currency = settings?.default_currency || "USD";
 
   const getAvailableQuantity = (): number => {
     if (!sku?.quantity) return 0;
@@ -81,6 +88,16 @@ const ProductCard = ({
       skuQuantity: sku.quantity,
     });
 
+    // Track add to cart event
+    trackAddToCart({
+      id: id.toString(),
+      name: name,
+      price: sku?.price ?? 0,
+      quantity: 1,
+      category: categories?.[0]?.name || "General",
+      currency: currency,
+    });
+
     toast({
       title: "Added to cart",
       description: `${name} has been added to your cart.`,
@@ -108,6 +125,17 @@ const ProductCard = ({
         description: `${name} has been added to your favorites.`,
       });
     }
+  };
+
+  const handleProductClick = () => {
+    // Track product view event
+    trackProductView({
+      id: id.toString(),
+      name: name,
+      price: sku?.price ?? 0,
+      category: categories?.[0]?.name || "General",
+      currency: currency,
+    });
   };
 
   return (
@@ -168,7 +196,9 @@ const ProductCard = ({
       >
         <div>
           <h3 className="font-bold text-base md:text-lg lg:text-xl text-foreground mb-1 group-hover:text-amaranth-600 transition-colors duration-300">
-            <Link href={`/product/${slug}`}>{name}</Link>
+            <Link href={`/product/${slug}`} onClick={handleProductClick}>
+              {name}
+            </Link>
           </h3>
           {categories && categories.length > 0 && (
             <p className="text-muted-foreground text-xs md:text-sm mb-3">

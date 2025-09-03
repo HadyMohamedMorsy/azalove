@@ -1,38 +1,21 @@
 import "@/styles/globals.css";
 import "@/styles/utilities.css";
 
+import AnalyticsManager from "@/components/layout/analytics-manager";
+import AnalyticsWrapper from "@/components/layout/analytics-wrapper";
+import DynamicTitle from "@/components/layout/dynamic-title";
 import LayoutWrapper from "@/components/layout/layout-wrapper";
 import { LocaleWrapper } from "@/components/layout/locale-wrapper";
 import SplashWrapper from "@/components/layout/splash-wrapper";
 import { Toaster } from "@/components/ui/toaster";
-import { siteConfig } from "@/config/site";
 import { AuthProvider } from "@/contexts/auth-context";
 import { CartProvider } from "@/contexts/cart-context";
 import { FavoritesProvider } from "@/contexts/favorites-context";
 import { GeneralSettingsProvider } from "@/contexts/general-settings-context";
-import { Metadata, Viewport } from "next";
+import { Viewport } from "next";
 import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
-
-export const metadata: Metadata = {
-  title: {
-    default: siteConfig.name,
-    template: `%s - ${siteConfig.name}`,
-  },
-  description: siteConfig.description,
-  openGraph: {
-    type: "website",
-    images: ["/media/opengraph-image.png"],
-  },
-  twitter: {
-    card: "summary_large_image",
-    images: ["/media/opengraph-image.png"],
-  },
-  icons: {
-    icon: "/media/main-icon.ico",
-  },
-};
 
 export const viewport: Viewport = {
   themeColor: [
@@ -65,12 +48,16 @@ export default function RootLayout({
           <CartProvider>
             <FavoritesProvider>
               <GeneralSettingsProvider>
-                <LocaleWrapper>
-                  <SplashWrapper>
-                    <LayoutWrapper>{children}</LayoutWrapper>
-                    <Toaster />
-                  </SplashWrapper>
-                </LocaleWrapper>
+                <DynamicTitle />
+                <AnalyticsManager />
+                <AnalyticsWrapper>
+                  <LocaleWrapper>
+                    <SplashWrapper>
+                      <LayoutWrapper>{children}</LayoutWrapper>
+                      <Toaster />
+                    </SplashWrapper>
+                  </LocaleWrapper>
+                </AnalyticsWrapper>
               </GeneralSettingsProvider>
             </FavoritesProvider>
           </CartProvider>

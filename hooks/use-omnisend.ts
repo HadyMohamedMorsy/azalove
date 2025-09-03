@@ -19,14 +19,14 @@ export const useOmnisend = () => {
 
   // Initialize Omnisend configuration when settings change
   useEffect(() => {
-    if (settings) {
+    if (settings?.omnisend_enabled && settings?.omnisend_api_key) {
       initOmnisendConfig({
-        enabled: settings.omnisend_enabled || false,
+        enabled: true,
         apiKey: settings.omnisend_api_key,
         brandId: settings.omnisend_api_key, // Using API key as brand ID, adjust as needed
       });
     }
-  }, [settings]);
+  }, [settings?.omnisend_enabled, settings?.omnisend_api_key]);
 
   // Initialize Omnisend script if enabled
   const initializeOmnisend = useCallback(

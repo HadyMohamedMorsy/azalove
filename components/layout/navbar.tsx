@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 import "../../styles/svgs.css";
 import { CartDropdown } from "./navbar/cart-dropdown";
@@ -17,12 +18,16 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <div className="flex-shrink-0 w-14 h-14">
+          <Link
+            href="/"
+            className="flex-shrink-0 w-14 h-14 hover:opacity-80 transition-opacity duration-200"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               id="Layer_2"
               data-name="Layer 2"
               viewBox="0 0 327.54 315.62"
+              className="w-full h-full"
             >
               <g id="Layer_1-2" data-name="Layer 1">
                 <g>
@@ -47,7 +52,7 @@ export default function Navbar() {
                 </g>
               </g>
             </svg>
-          </div>
+          </Link>
 
           {/* Navigation Links */}
           <NavigationLinks />

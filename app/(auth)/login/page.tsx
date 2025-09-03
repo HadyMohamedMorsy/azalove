@@ -9,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/auth-context";
@@ -150,19 +149,6 @@ function Login() {
                 </div>
               </div>
               <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="remember"
-                    name="terms"
-                    className="border-royal-300 data-[state=checked]:bg-amaranth-500 data-[state=checked]:border-amaranth-500"
-                  />
-                  <Label
-                    htmlFor="remember"
-                    className="text-sm text-royal-600 font-medium"
-                  >
-                    {t("auth.login.rememberMe")}
-                  </Label>
-                </div>
                 <Link
                   href="/forgot-password"
                   className="text-sm text-amaranth-600 hover:text-amaranth-700 font-medium transition-colors duration-200 hover:underline"

@@ -4,15 +4,24 @@ import OrderSummary from "@/components/checkout/order-summary";
 import PaymentForm from "@/components/checkout/payment-form";
 import ShippingForm from "@/components/checkout/shipping-form";
 import { Card, CardContent } from "@/components/ui/card";
+import { useCart } from "@/contexts/cart-context";
+import { useGeneralSettings } from "@/contexts/general-settings-context";
+import { useGlobalAnalytics } from "@/hooks/use-global-analytics";
 import { useTranslation } from "@/hooks/use-translation";
 import { Check, CheckCircle, CreditCard, Shield, Truck } from "lucide-react";
 import React, { useState } from "react";
 
 const Checkout = () => {
   const { t } = useTranslation();
+  const { cartItems, getTotalPrice } = useCart();
+  const { settings } = useGeneralSettings();
+  const { trackPurchase } = useGlobalAnalytics();
   const [currentStep, setCurrentStep] = useState(1);
   const [shippingData, setShippingData] = useState({});
   const [paymentData, setPaymentData] = useState({});
+
+  // Get currency from settings, fallback to USD if not set
+  const currency = settings?.default_currency || "USD";
 
   const steps = [
     {
@@ -44,6 +53,25 @@ const Checkout = () => {
     } else if (currentStep === 2) {
       setPaymentData(data);
     }
+
+    // If moving to confirmation step, track purchase event
+    if (currentStep === 2) {
+      const transactionId = `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+      trackPurchase({
+        transaction_id: transactionId,
+        value: getTotalPrice(),
+        currency: currency,
+        items: cartItems.map((item) => ({
+          item_id: item.id,
+          item_name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          category: "General",
+        })),
+      });
+    }
+
     setCurrentStep((prev) => Math.min(prev + 1, steps.length));
   };
 

@@ -51,15 +51,26 @@ export function UserDropdown() {
     return user.name || user.email;
   };
 
+  // Get welcome message
+  const getWelcomeMessage = () => {
+    const displayName = getDisplayName();
+    if (user.firstName || user.lastName || user.name) {
+      return `مرحباً، ${displayName}`;
+    }
+    return "مرحباً بك";
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          size="icon"
-          className="hover:bg-royal-50 transition-all duration-300 group"
+          className="hover:bg-royal-50 transition-all duration-300 group flex items-center gap-2 px-3 py-2"
         >
-          <User className="w-7 h-7 text-royal-600 group-hover:text-royal-700 group-hover:scale-110 transition-all duration-300" />
+          <User className="w-5 h-5 text-royal-600 group-hover:text-royal-700 transition-all duration-300" />
+          <span className="text-sm font-medium text-royal-700 group-hover:text-royal-800 transition-colors duration-300">
+            {getWelcomeMessage()}
+          </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent

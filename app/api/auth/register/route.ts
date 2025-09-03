@@ -5,10 +5,26 @@ import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
-    const { firstName, lastName, email, password } = await request.json();
+    const {
+      firstName,
+      lastName,
+      email,
+      username,
+      phoneNumber,
+      birthOfDate,
+      password,
+    } = await request.json();
 
     // Validate input
-    if (!firstName || !lastName || !email || !password) {
+    if (
+      !firstName ||
+      !lastName ||
+      !email ||
+      !username ||
+      !phoneNumber ||
+      !birthOfDate ||
+      !password
+    ) {
       return NextResponse.json(
         { error: "All fields are required" },
         { status: 400 }
@@ -21,6 +37,9 @@ export async function POST(request: Request) {
         firstName,
         lastName,
         email,
+        username,
+        phoneNumber,
+        birthOfDate,
         password,
       }
     );

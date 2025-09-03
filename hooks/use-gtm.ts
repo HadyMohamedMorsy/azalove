@@ -25,13 +25,13 @@ export const useGTM = () => {
 
   // Initialize GTM configuration when settings change
   useEffect(() => {
-    if (settings) {
+    if (settings?.gtm_container_id) {
       initGTMConfig({
-        enabled: !!settings.gtm_container_id, // Enable if GTM container ID is set
+        enabled: true,
         containerId: settings.gtm_container_id,
       });
     }
-  }, [settings]);
+  }, [settings?.gtm_container_id]);
 
   // Initialize GTM script if enabled
   const initializeGTM = useCallback(

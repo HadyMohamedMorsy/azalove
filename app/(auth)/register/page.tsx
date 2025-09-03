@@ -31,6 +31,9 @@ const Register = () => {
       const firstName = formData.get("firstName") as string;
       const lastName = formData.get("lastName") as string;
       const email = formData.get("email") as string;
+      const username = formData.get("username") as string;
+      const phoneNumber = formData.get("phoneNumber") as string;
+      const birthOfDate = formData.get("birthOfDate") as string;
       const password = formData.get("password") as string;
       const confirmPassword = formData.get("confirmPassword") as string;
 
@@ -42,7 +45,15 @@ const Register = () => {
         return;
       }
 
-      await register(firstName, lastName, email, password);
+      await register(
+        firstName,
+        lastName,
+        email,
+        username,
+        phoneNumber,
+        birthOfDate,
+        password
+      );
 
       toast({
         title: t("auth.messages.registerSuccess"),
@@ -178,6 +189,66 @@ const Register = () => {
                     className="border-2 border-royal-200 focus:border-amaranth-400 focus:ring-2 focus:ring-amaranth-200/50 bg-white/70 backdrop-blur-sm transition-all duration-300 placeholder:text-royal-400/60"
                   />
                   <div className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-amaranth-400 to-royal-400 rounded-r-full"></div>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label
+                  htmlFor="username"
+                  className="text-royal-700 font-medium"
+                >
+                  اسم المستخدم
+                </Label>
+                <div className="relative">
+                  <Input
+                    id="username"
+                    name="username"
+                    type="text"
+                    placeholder="أدخل اسم المستخدم"
+                    required
+                    className="border-2 border-royal-200 focus:border-amaranth-400 focus:ring-2 focus:ring-amaranth-200/50 bg-white/70 backdrop-blur-sm transition-all duration-300 placeholder:text-royal-400/60"
+                  />
+                  <div className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-amaranth-400 to-royal-400 rounded-r-full"></div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label
+                    htmlFor="phoneNumber"
+                    className="text-royal-700 font-medium"
+                  >
+                    رقم الهاتف
+                  </Label>
+                  <div className="relative">
+                    <Input
+                      id="phoneNumber"
+                      name="phoneNumber"
+                      type="tel"
+                      placeholder="أدخل رقم الهاتف"
+                      required
+                      className="border-2 border-royal-200 focus:border-amaranth-400 focus:ring-2 focus:ring-amaranth-200/50 bg-white/70 backdrop-blur-sm transition-all duration-300 placeholder:text-royal-400/60"
+                    />
+                    <div className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-amaranth-400 to-royal-400 rounded-r-full"></div>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label
+                    htmlFor="birthOfDate"
+                    className="text-royal-700 font-medium"
+                  >
+                    تاريخ الميلاد
+                  </Label>
+                  <div className="relative">
+                    <Input
+                      id="birthOfDate"
+                      name="birthOfDate"
+                      type="date"
+                      required
+                      className="border-2 border-royal-200 focus:border-amaranth-400 focus:ring-2 focus:ring-amaranth-200/50 bg-white/70 backdrop-blur-sm transition-all duration-300 placeholder:text-royal-400/60"
+                    />
+                    <div className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-amaranth-400 to-royal-400 rounded-r-full"></div>
+                  </div>
                 </div>
               </div>
 

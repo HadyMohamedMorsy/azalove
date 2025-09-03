@@ -1,5 +1,6 @@
 "use client";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,20 +8,169 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { API_BASE_URL } from "@/config/api";
 import { useCart } from "@/contexts/cart-context";
+import { useGeneralSettings } from "@/contexts/general-settings-context";
 import { useCurrency } from "@/hooks/use-currency";
-import { ShoppingBag, Tag } from "lucide-react";
+import { CouponService } from "@/lib/coupon-service";
+import { AppliedCoupon } from "@/types";
+import { ShoppingBag, Tag, Truck, X } from "lucide-react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 const OrderSummary = () => {
-  const { cartItems, getTotalPrice } = useCart();
+  const {
+    cartItems,
+    getTotalPrice,
+    getShippingCost,
+    getTotalWithShipping,
+    shippingData,
+    appliedCoupon,
+    applyCoupon,
+    removeCoupon,
+    getDiscountAmount,
+    getTotalWithDiscount,
+  } = useCart();
   const { formatCurrency } = useCurrency();
+  const { settings, loading } = useGeneralSettings();
+
+  const [promoCode, setPromoCode] = useState("");
+  const [promoError, setPromoError] = useState("");
+  const [isValidating, setIsValidating] = useState(false);
 
   const subtotal = getTotalPrice();
-  const tax = subtotal * 0.08;
-  const total = subtotal + tax;
-  const discount = subtotal * 0.1;
+  const shippingCost = getShippingCost();
+  const taxRate = settings?.tax_rate || 0;
+  const tax = subtotal * (taxRate / 100); // Convert percentage to decimal
+  const total = getTotalWithShipping() + tax;
+  const discount = getDiscountAmount();
+
+  // Check if applied coupon is still valid when cart changes
+  useEffect(() => {
+    if (appliedCoupon) {
+      const currentSubtotal = getTotalPrice();
+      const currentItemCount = cartItems.reduce(
+        (sum, item) => sum + item.quantity,
+        0
+      );
+
+      if (
+        currentSubtotal < appliedCoupon.minOrderTotalPrice ||
+        currentItemCount < appliedCoupon.minOrderItemCount
+      ) {
+        removeCoupon();
+        setPromoError("لم يعد الكوبون صالحاً بسبب تغيير محتويات السلة");
+      }
+    }
+  }, [cartItems, appliedCoupon, getTotalPrice, removeCoupon]);
+
+  // Clear error when cart changes
+  useEffect(() => {
+    if (promoError && promoError.includes("لم يعد الكوبون صالحاً")) {
+      const timer = setTimeout(() => {
+        setPromoError("");
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [promoError]);
+
+  const handleApplyPromoCode = async () => {
+    if (!promoCode.trim()) {
+      setPromoError("يرجى إدخال كود الخصم");
+      return;
+    }
+
+    if (cartItems.length === 0) {
+      setPromoError("يجب إضافة منتجات إلى السلة أولاً");
+      return;
+    }
+
+    // Clear any previous errors
+    setPromoError("");
+    setIsValidating(true);
+
+    try {
+      // Prepare products data for backend validation
+      const products = cartItems.map((item) => ({
+        id: parseInt(item.id),
+        amount: item.quantity,
+        price: item.price,
+      }));
+
+      const response = await CouponService.validateCoupon({
+        code: promoCode.trim(),
+        products,
+      });
+
+      // Check if order meets minimum requirements
+      if (subtotal < response.data.minOrderTotalPrice) {
+        setPromoError(
+          `يجب أن يكون إجمالي الطلب ${response.data.minOrderTotalPrice} ريال على الأقل (المجموع الحالي: ${subtotal} ريال)`
+        );
+        return;
+      }
+
+      if (
+        cartItems.reduce((sum, item) => sum + item.quantity, 0) <
+        response.data.minOrderItemCount
+      ) {
+        setPromoError(
+          `يجب أن يكون عدد المنتجات ${response.data.minOrderItemCount} على الأقل (العدد الحالي: ${cartItems.reduce((sum, item) => sum + item.quantity, 0)})`
+        );
+        return;
+      }
+
+      // Apply the coupon
+      const couponData: AppliedCoupon = {
+        code: promoCode.trim(),
+        discount: response.data.discount,
+        type: response.data.type,
+        couponType: response.data.couponType,
+        minOrderTotalPrice: response.data.minOrderTotalPrice,
+        minOrderItemCount: response.data.minOrderItemCount,
+      };
+
+      applyCoupon(couponData);
+      setPromoCode("");
+      setPromoError("");
+    } catch (error: any) {
+      console.error("Coupon validation error:", error);
+
+      if (error.name === "TypeError" && error.message.includes("fetch")) {
+        setPromoError("فشل في الاتصال بالخادم. يرجى المحاولة مرة أخرى");
+      } else {
+        setPromoError(error.message || "فشل في التحقق من كود الخصم");
+      }
+    } finally {
+      setIsValidating(false);
+    }
+  };
+
+  const handleRemovePromoCode = () => {
+    removeCoupon();
+    setPromoError("");
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && promoCode.trim()) {
+      handleApplyPromoCode();
+    }
+  };
+
+  if (loading) {
+    return (
+      <Card className="sticky top-8 border-0 shadow-xl shadow-royal-900/5 bg-white/80 backdrop-blur-sm">
+        <CardContent className="p-6">
+          <div className="animate-pulse space-y-4">
+            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+            <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="sticky top-8 border-0 shadow-xl shadow-royal-900/5 bg-white/80 backdrop-blur-sm">
@@ -72,20 +222,137 @@ const OrderSummary = () => {
           ))}
         </div>
 
+        {/* Shipping Information */}
+        {shippingData && (
+          <div className="border-t border-cream-200 pt-4 space-y-3">
+            <div className="flex items-center gap-2 text-sm text-royal-600">
+              <div className="w-6 h-6 rounded-full bg-azalove-100 flex items-center justify-center">
+                <Truck className="w-3 h-3 text-azalove-600" />
+              </div>
+              <span>معلومات الشحن</span>
+            </div>
+            <div className="p-3 bg-azalove-50 rounded-lg border border-azalove-200">
+              <div className="text-sm text-royal-900 font-medium">
+                {shippingData.locationName}
+              </div>
+              <div className="text-xs text-royal-600 mt-1">
+                نوع الموقع:{" "}
+                {shippingData.locationType === "region" ? "منطقة" : "مدينة"}
+              </div>
+              <div className="text-xs text-royal-600 mt-1">
+                تكلفة الشحن: {formatCurrency(shippingData.shipment?.cost || 0)}
+              </div>
+              {settings?.shipping_days && (
+                <div className="text-xs text-royal-600 mt-1">
+                  مدة التوصيل: {settings.shipping_days} أيام عمل
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Promo Code */}
-        <div className="border-t border-cream-200 pt-4">
+        <div className="border-t border-cream-200 pt-4 space-y-3">
           <div className="flex items-center gap-2 text-sm text-royal-600">
             <div className="w-6 h-6 rounded-full bg-azalove-100 flex items-center justify-center">
               <Tag className="w-3 h-3 text-azalove-600" />
             </div>
-            <span>كود الخصم</span>
-            <Badge
-              variant="secondary"
-              className="ml-auto bg-azalove-100 text-azalove-700 border-azalove-200"
-            >
-              SAVE10
-            </Badge>
+            <span className="font-medium">كود الخصم</span>
+            {appliedCoupon && (
+              <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded-full font-medium">
+                مطبق
+              </span>
+            )}
           </div>
+
+          {!appliedCoupon ? (
+            <div className="flex gap-2">
+              <Input
+                type="text"
+                placeholder="أدخل كود الخصم"
+                value={promoCode}
+                onChange={(e) => setPromoCode(e.target.value)}
+                onKeyPress={handleKeyPress}
+                className="flex-1 text-sm focus:ring-2 focus:ring-azalove-500 focus:border-azalove-500 transition-all duration-200"
+                disabled={isValidating}
+                maxLength={20}
+              />
+              <Button
+                onClick={handleApplyPromoCode}
+                size="sm"
+                className="bg-azalove-600 hover:bg-azalove-700 text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                disabled={isValidating || !promoCode.trim()}
+              >
+                {isValidating ? (
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    جاري التحقق...
+                  </div>
+                ) : (
+                  "تطبيق"
+                )}
+              </Button>
+            </div>
+          ) : (
+            <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
+              <div className="flex items-center gap-2">
+                <Badge
+                  variant="secondary"
+                  className="bg-green-100 text-green-700 border-green-200"
+                >
+                  {appliedCoupon.code}
+                </Badge>
+                <span className="text-sm text-green-700">
+                  تم تطبيق الخصم بنجاح!
+                  <span className="font-medium">
+                    {appliedCoupon.type === "percentage"
+                      ? ` ${appliedCoupon.discount}%`
+                      : ` ${appliedCoupon.discount} ريال`}
+                  </span>
+                </span>
+              </div>
+              <Button
+                onClick={handleRemovePromoCode}
+                size="sm"
+                variant="ghost"
+                className="text-green-600 hover:text-green-700 hover:bg-green-100"
+              >
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+          )}
+
+          {/* Coupon requirements info */}
+          {appliedCoupon && (
+            <div className="text-xs text-green-600 bg-green-50 p-2 rounded border border-green-200">
+              <div className="font-medium mb-1">متطلبات الكوبون:</div>
+              <div>
+                • الحد الأدنى للطلب:{" "}
+                {formatCurrency(appliedCoupon.minOrderTotalPrice)} ريال
+              </div>
+              <div>
+                • الحد الأدنى لعدد المنتجات: {appliedCoupon.minOrderItemCount}{" "}
+                منتج
+              </div>
+            </div>
+          )}
+
+          {promoError && (
+            <div className="text-red-600 text-sm bg-red-50 p-3 rounded-lg border border-red-200 shadow-sm">
+              <div className="flex items-start gap-2">
+                <div className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0">
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fillRule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <span className="leading-relaxed">{promoError}</span>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Order Totals */}
@@ -97,21 +364,50 @@ const OrderSummary = () => {
             </span>
           </div>
 
-          <div className="flex justify-between text-sm">
-            <span className="text-royal-700">الضريبة</span>
-            <span className="text-royal-900 font-medium">
-              {formatCurrency(tax)}
-            </span>
-          </div>
-          <div className="flex justify-between text-sm text-green-600">
-            <span>الخصم (SAVE10)</span>
-            <span className="font-medium">-{formatCurrency(discount)}</span>
-          </div>
+          {shippingCost > 0 && (
+            <div className="flex justify-between text-sm">
+              <span className="text-royal-700">تكلفة الشحن</span>
+              <span className="text-royal-900 font-medium">
+                {formatCurrency(shippingCost)}
+              </span>
+            </div>
+          )}
+
+          {settings?.shipping_days && (
+            <div className="flex justify-between text-sm">
+              <span className="text-royal-700">مدة التوصيل</span>
+              <span className="text-royal-900 font-medium">
+                {settings.shipping_days} أيام عمل
+              </span>
+            </div>
+          )}
+
+          {taxRate > 0 && (
+            <div className="flex justify-between text-sm">
+              <span className="text-royal-700">الضريبة ({taxRate}%)</span>
+              <span className="text-royal-900 font-medium">
+                {formatCurrency(tax)}
+              </span>
+            </div>
+          )}
+
+          {appliedCoupon && discount > 0 && (
+            <div className="flex justify-between text-sm text-green-600">
+              <span>
+                الخصم ({appliedCoupon.code}) -{" "}
+                {appliedCoupon.type === "percentage"
+                  ? `${appliedCoupon.discount}%`
+                  : "مبلغ ثابت"}
+              </span>
+              <span className="font-medium">-{formatCurrency(discount)}</span>
+            </div>
+          )}
+
           <div className="border-t border-cream-200 pt-3">
             <div className="flex justify-between font-bold text-lg">
               <span className="text-royal-900">المجموع الكلي</span>
               <span className="text-royal-900">
-                {formatCurrency(total - discount)}
+                {formatCurrency(getTotalWithDiscount() + tax)}
               </span>
             </div>
           </div>

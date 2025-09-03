@@ -1,7 +1,12 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-const protectedPaths = ["/dashboard"];
+const protectedPaths = [
+  "/dashboard",
+  "/checkout",
+  "/start-character",
+  "/related-books",
+];
 const authPaths = ["/login", "/register"];
 
 export function middleware(request: NextRequest) {

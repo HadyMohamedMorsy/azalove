@@ -53,3 +53,6 @@ export type AddressFormData = Omit<
   Address,
   "id" | "isDefault" | "country" | "region" | "city" | "area"
 >;
+
+// Re-export coupon types
+export * from "./coupon";

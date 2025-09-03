@@ -23,13 +23,13 @@ export const useFacebookPixel = () => {
 
   // Initialize Facebook Pixel configuration when settings change
   useEffect(() => {
-    if (settings) {
+    if (settings?.facebook_pixel_enabled && settings?.facebook_pixel_id) {
       initFacebookPixelConfig({
-        enabled: !!settings.facebook_pixel_id, // Enable if Facebook Pixel ID is set
+        enabled: true,
         pixelId: settings.facebook_pixel_id,
       });
     }
-  }, [settings]);
+  }, [settings?.facebook_pixel_enabled, settings?.facebook_pixel_id]);
 
   // Initialize Facebook Pixel script if enabled
   const initializeFacebookPixel = useCallback(

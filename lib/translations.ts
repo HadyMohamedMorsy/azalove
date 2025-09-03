@@ -40,6 +40,50 @@ export interface Translations {
       google: string;
       facebook: string;
     };
+    forgotPassword: {
+      title: string;
+      description: string;
+      email: string;
+      emailPlaceholder: string;
+      sendResetLink: string;
+      loading: string;
+      backToLogin: string;
+      checkEmailTitle: string;
+      checkEmailDescription: string;
+      checkEmailMessage: string;
+      resendEmail: string;
+      successTitle: string;
+      successDescription: string;
+      errorTitle: string;
+      errorDescription: string;
+    };
+    resetPassword: {
+      title: string;
+      description: string;
+      newPassword: string;
+      newPasswordPlaceholder: string;
+      confirmPassword: string;
+      confirmPasswordPlaceholder: string;
+      resetPasswordButton: string;
+      loading: string;
+      backToLogin: string;
+      successTitle: string;
+      successDescription: string;
+      successMessage: string;
+      loginNow: string;
+      passwordsMismatchTitle: string;
+      passwordsMismatchDescription: string;
+      errorTitle: string;
+      errorDescription: string;
+      verifyingToken: string;
+      invalidToken: string;
+      tokenExpired: string;
+      userDataNotFound: string;
+      tokenValidationError: string;
+      resetPasswordError: string;
+      fillBothFields: string;
+      passwordTooShort: string;
+    };
     messages: {
       loginSuccess: string;
       loginSuccessDescription: string;
@@ -1135,6 +1179,58 @@ export const translations: Record<Locale, Translations> = {
         orSignInWith: "أو تسجيل الدخول باستخدام",
         google: "Google",
         facebook: "Facebook",
+      },
+      forgotPassword: {
+        title: "نسيت كلمة المرور؟",
+        description:
+          "أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة تعيين كلمة المرور",
+        email: "البريد الإلكتروني",
+        emailPlaceholder: "أدخل بريدك الإلكتروني...",
+        sendResetLink: "إرسال رابط إعادة التعيين",
+        loading: "جاري الإرسال...",
+        backToLogin: "العودة لتسجيل الدخول",
+        checkEmailTitle: "تحقق من بريدك الإلكتروني",
+        checkEmailDescription:
+          "تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني",
+        checkEmailMessage:
+          "إذا لم تجد الرسالة، تحقق من مجلد الرسائل غير المرغوب فيها",
+        resendEmail: "إعادة إرسال البريد الإلكتروني",
+        successTitle: "تم الإرسال بنجاح!",
+        successDescription:
+          "تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني",
+        errorTitle: "خطأ في الإرسال",
+        errorDescription:
+          "حدث خطأ أثناء إرسال رابط إعادة تعيين كلمة المرور. حاول مرة أخرى",
+      },
+      resetPassword: {
+        title: "إعادة تعيين كلمة المرور",
+        description: "أدخل كلمة المرور الجديدة لحسابك",
+        newPassword: "كلمة المرور الجديدة",
+        newPasswordPlaceholder: "أدخل كلمة المرور الجديدة...",
+        confirmPassword: "تأكيد كلمة المرور",
+        confirmPasswordPlaceholder: "أعد إدخال كلمة المرور الجديدة...",
+        resetPasswordButton: "إعادة تعيين كلمة المرور",
+        loading: "جاري إعادة التعيين...",
+        backToLogin: "العودة لتسجيل الدخول",
+        successTitle: "تم إعادة تعيين كلمة المرور بنجاح!",
+        successDescription:
+          "تم تغيير كلمة المرور بنجاح. يمكنك الآن تسجيل الدخول",
+        successMessage:
+          "تم إعادة تعيين كلمة المرور بنجاح. يمكنك الآن تسجيل الدخول بحسابك",
+        loginNow: "تسجيل الدخول الآن",
+        passwordsMismatchTitle: "كلمات المرور غير متطابقة",
+        passwordsMismatchDescription: "تأكد من أن كلمات المرور متطابقة",
+        errorTitle: "خطأ في إعادة التعيين",
+        errorDescription:
+          "حدث خطأ أثناء إعادة تعيين كلمة المرور. حاول مرة أخرى",
+        verifyingToken: "جاري التحقق من الرمز...",
+        invalidToken: "رابط إعادة التعيين غير صالح",
+        tokenExpired: "انتهت صلاحية رابط إعادة التعيين",
+        userDataNotFound: "لم يتم العثور على بيانات المستخدم. حاول مرة أخرى",
+        tokenValidationError: "فشل في التحقق من الرمز. حاول مرة أخرى",
+        resetPasswordError: "فشل في إعادة تعيين كلمة المرور. حاول مرة أخرى",
+        fillBothFields: "يرجى ملء كلا حقل كلمة المرور",
+        passwordTooShort: "يجب أن تكون كلمة المرور 6 أحرف على الأقل",
       },
       messages: {
         loginSuccess: "تم تسجيل الدخول بنجاح!",
@@ -2688,6 +2784,56 @@ export const translations: Record<Locale, Translations> = {
         orSignInWith: "Or sign in with",
         google: "Google",
         facebook: "Facebook",
+      },
+      forgotPassword: {
+        title: "Forgot Password?",
+        description:
+          "Enter your email and we'll send you a password reset link",
+        email: "Email",
+        emailPlaceholder: "Enter your email...",
+        sendResetLink: "Send Reset Link",
+        loading: "Sending...",
+        backToLogin: "Back to Login",
+        checkEmailTitle: "Check Your Email",
+        checkEmailDescription:
+          "Password reset link has been sent to your email",
+        checkEmailMessage: "If you don't see the email, check your spam folder",
+        resendEmail: "Resend Email",
+        successTitle: "Email Sent Successfully!",
+        successDescription: "Password reset link has been sent to your email",
+        errorTitle: "Failed to Send",
+        errorDescription:
+          "An error occurred while sending the password reset link. Please try again",
+      },
+      resetPassword: {
+        title: "Reset Password",
+        description: "Enter your new password for your account",
+        newPassword: "New Password",
+        newPasswordPlaceholder: "Enter your new password...",
+        confirmPassword: "Confirm Password",
+        confirmPasswordPlaceholder: "Re-enter your new password...",
+        resetPasswordButton: "Reset Password",
+        loading: "Resetting...",
+        backToLogin: "Back to Login",
+        successTitle: "Password Reset Successfully!",
+        successDescription:
+          "Your password has been changed successfully. You can now log in",
+        successMessage:
+          "Password has been reset successfully. You can now log in to your account",
+        loginNow: "Login Now",
+        passwordsMismatchTitle: "Passwords Don't Match",
+        passwordsMismatchDescription: "Please make sure the passwords match",
+        errorTitle: "Reset Failed",
+        errorDescription:
+          "An error occurred while resetting your password. Please try again",
+        verifyingToken: "Verifying token...",
+        invalidToken: "Invalid reset link",
+        tokenExpired: "Reset link has expired",
+        userDataNotFound: "User data not found. Please try again",
+        tokenValidationError: "Failed to verify token. Please try again",
+        resetPasswordError: "Failed to reset password. Please try again",
+        fillBothFields: "Please fill in both password fields",
+        passwordTooShort: "Password must be at least 6 characters long",
       },
       messages: {
         loginSuccess: "Login successful!",

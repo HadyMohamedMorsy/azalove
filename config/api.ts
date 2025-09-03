@@ -15,11 +15,13 @@ export const API_ENDPOINTS_FROM_NEXT = {
   ADDRESS_UPDATE: "/api/addresses/address-update",
   ADDRESS_CREATE: "/api/addresses/address-create",
   ADDRESS_DELETE: "/api/addresses/address-delete",
-  ADDRESS_SET_DEFAULT: "/api/addresses/address-set-default",
+  ADDRESS_SET_DEFAULT: "/api/address/set-default-address",
+  ADDRESS_SHIPMENT: "/api/addresses",
   USER_UPDATE: "/user/update",
   REFRESH_TOKENS: "/api/auth/refresh-tokens",
   MEGA_MENU_CATEGORIES: "/api/mega-menu/categories",
   MEGA_MENU_BLOG_CATEGORIES: "/api/mega-menu/blog-categories",
+  COUPON_VALIDATE: "/api/coupon/validate",
 };
 
 export const API_ENDPOINTS_FROM_SERVER = {
@@ -32,6 +34,7 @@ export const API_ENDPOINTS_FROM_SERVER = {
   MEGA_MENU_BLOG_CATEGORIES: `/category/blog`,
   PAYMENT_METHODS: `/payment-methods/front`,
   BANKS: `/bank/front`,
+  COUPON_VALIDATE: `/coupon/validate`,
 };
 
 export const API_ENDPOINTS_FROM_SERVER_DASHBOARD = {
