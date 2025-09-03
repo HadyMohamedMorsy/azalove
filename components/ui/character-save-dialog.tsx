@@ -1,8 +1,10 @@
 "use client";
 
+import { useQuizQuestions } from "@/hooks/use-quiz-questions";
 import { useTranslation } from "@/hooks/use-translation";
+import { SelectedAnswer } from "@/types/quiz";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "./button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./dialog";
 import { Input } from "./input";
@@ -23,47 +25,8 @@ interface CharacterSaveDialogProps {
 
 export interface SaveAnswers {
   coupleName: string;
-  occasion: string;
-  relationship: string;
-  theme: string;
-  style: string;
+  selectedAnswers: SelectedAnswer[];
 }
-
-const OCCASIONS = [
-  { value: "valentine", label: "Valentine's Day" },
-  { value: "birthday", label: "Birthday" },
-  { value: "anniversary", label: "Anniversary" },
-  { value: "wedding", label: "Wedding" },
-  { value: "graduation", label: "Graduation" },
-  { value: "christmas", label: "Christmas" },
-  { value: "easter", label: "Easter" },
-  { value: "halloween", label: "Halloween" },
-];
-
-const RELATIONSHIPS = [
-  { value: "couple", label: "Couple" },
-  { value: "family", label: "Family" },
-  { value: "friends", label: "Friends" },
-  { value: "parent-child", label: "Parent & Child" },
-  { value: "siblings", label: "Siblings" },
-];
-
-const THEMES = [
-  { value: "romantic", label: "Romantic" },
-  { value: "adventure", label: "Adventure" },
-  { value: "fantasy", label: "Fantasy" },
-  { value: "sci-fi", label: "Sci-Fi" },
-  { value: "nature", label: "Nature" },
-  { value: "urban", label: "Urban" },
-];
-
-const STYLES = [
-  { value: "modern", label: "Modern" },
-  { value: "vintage", label: "Vintage" },
-  { value: "cartoon", label: "Cartoon" },
-  { value: "realistic", label: "Realistic" },
-  { value: "minimalist", label: "Minimalist" },
-];
 
 export function CharacterSaveDialog({
   open,
@@ -72,29 +35,41 @@ export function CharacterSaveDialog({
 }: CharacterSaveDialogProps) {
   const router = useRouter();
   const { t } = useTranslation();
+  const { questions, loading, error } = useQuizQuestions();
+
   const [step, setStep] = useState(1);
   const [coupleName, setCoupleName] = useState("");
-  const [answers, setAnswers] = useState<Omit<SaveAnswers, "coupleName">>({
-    occasion: "",
-    relationship: "",
-    theme: "",
-    style: "",
-  });
+  const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswer[]>([]);
+
+  // Total steps: 1 (couple name) + number of quiz questions
+  const totalSteps = 1 + questions.length;
+
+  useEffect(() => {
+    // Initialize selected answers when questions are loaded
+    if (questions.length > 0) {
+      const initialAnswers = questions.map((q: any) => ({
+        questionId: q.id,
+        answerId: 0, // 0 means not selected yet
+      }));
+      setSelectedAnswers(initialAnswers);
+    }
+  }, [questions]);
 
   const handleNext = () => {
-    if (step < 5) {
+    if (step < totalSteps) {
       setStep(step + 1);
     } else {
       // Save everything and navigate
-      onSave(coupleName, { coupleName, ...answers });
+      const finalAnswers = selectedAnswers.filter(
+        (answer) => answer.answerId !== 0
+      );
+      onSave(coupleName, { coupleName, selectedAnswers: finalAnswers });
       onOpenChange(false);
+
       // Navigate to related books page with answers as URL parameters
       const params = new URLSearchParams({
         coupleName,
-        occasion: answers.occasion,
-        relationship: answers.relationship,
-        theme: answers.theme,
-        style: answers.style,
+        answers: JSON.stringify(finalAnswers),
       });
       router.push(`/related-books?${params.toString()}`);
     }
@@ -106,26 +81,28 @@ export function CharacterSaveDialog({
     }
   };
 
-  const handleAnswerChange = (
-    field: keyof Omit<SaveAnswers, "coupleName">,
-    value: string
-  ) => {
-    setAnswers((prev) => ({ ...prev, [field]: value }));
+  const handleAnswerChange = (questionId: number, answerId: number) => {
+    setSelectedAnswers((prev) =>
+      prev.map((answer) =>
+        answer.questionId === questionId ? { ...answer, answerId } : answer
+      )
+    );
   };
 
   const canProceed = () => {
     switch (step) {
       case 1:
         return coupleName.trim() !== "";
-      case 2:
-        return answers.occasion !== "";
-      case 3:
-        return answers.relationship !== "";
-      case 4:
-        return answers.theme !== "";
-      case 5:
-        return answers.style !== "";
       default:
+        // For quiz questions, check if an answer is selected
+        const questionIndex = step - 2; // -2 because step 1 is couple name
+        if (questionIndex >= 0 && questionIndex < questions.length) {
+          const question = questions[questionIndex];
+          const selectedAnswer = selectedAnswers.find(
+            (a) => a.questionId === question.id
+          );
+          return selectedAnswer && selectedAnswer.answerId !== 0;
+        }
         return false;
     }
   };
@@ -162,143 +139,75 @@ export function CharacterSaveDialog({
           </div>
         );
 
-      case 2:
-        return (
-          <div className="space-y-4">
-            <div className="text-center">
-              <h3 className="text-lg font-semibold mb-2">
-                {t("character.saveDialog.questions.howMet")}
-              </h3>
-              <p className="text-gray-600 mb-4">
-                {t("character.saveDialog.questions.howMetPlaceholder")}
-              </p>
-            </div>
-            <div className="space-y-3">
-              <Label htmlFor="occasion">Occasion Type</Label>
-              <Select
-                value={answers.occasion}
-                onValueChange={(value) => handleAnswerChange("occasion", value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select an occasion" />
-                </SelectTrigger>
-                <SelectContent>
-                  {OCCASIONS.map((occasion) => (
-                    <SelectItem key={occasion.value} value={occasion.value}>
-                      {occasion.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        );
-
-      case 3:
-        return (
-          <div className="space-y-4">
-            <div className="text-center">
-              <h3 className="text-lg font-semibold mb-2">
-                {t("character.saveDialog.questions.firstDate")}
-              </h3>
-              <p className="text-gray-600 mb-4">
-                {t("character.saveDialog.questions.firstDatePlaceholder")}
-              </p>
-            </div>
-            <div className="space-y-3">
-              <Label htmlFor="relationship">Relationship Type</Label>
-              <Select
-                value={answers.relationship}
-                onValueChange={(value) =>
-                  handleAnswerChange("relationship", value)
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select relationship type" />
-                </SelectTrigger>
-                <SelectContent>
-                  {RELATIONSHIPS.map((relationship) => (
-                    <SelectItem
-                      key={relationship.value}
-                      value={relationship.value}
-                    >
-                      {relationship.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        );
-
-      case 4:
-        return (
-          <div className="space-y-4">
-            <div className="text-center">
-              <h3 className="text-lg font-semibold mb-2">
-                {t("character.saveDialog.questions.favoriteMemory")}
-              </h3>
-              <p className="text-gray-600 mb-4">
-                {t("character.saveDialog.questions.favoriteMemoryPlaceholder")}
-              </p>
-            </div>
-            <div className="space-y-3">
-              <Label htmlFor="theme">Theme</Label>
-              <Select
-                value={answers.theme}
-                onValueChange={(value) => handleAnswerChange("theme", value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a theme" />
-                </SelectTrigger>
-                <SelectContent>
-                  {THEMES.map((theme) => (
-                    <SelectItem key={theme.value} value={theme.value}>
-                      {theme.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        );
-
-      case 5:
-        return (
-          <div className="space-y-4">
-            <div className="text-center">
-              <h3 className="text-lg font-semibold mb-2">
-                {t("character.saveDialog.questions.futurePlans")}
-              </h3>
-              <p className="text-gray-600 mb-4">
-                {t("character.saveDialog.questions.futurePlansPlaceholder")}
-              </p>
-            </div>
-            <div className="space-y-3">
-              <Label htmlFor="style">Style</Label>
-              <Select
-                value={answers.style}
-                onValueChange={(value) => handleAnswerChange("style", value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a style" />
-                </SelectTrigger>
-                <SelectContent>
-                  {STYLES.map((style) => (
-                    <SelectItem key={style.value} value={style.value}>
-                      {style.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        );
-
       default:
+        // Render quiz questions
+        const questionIndex = step - 2; // -2 because step 1 is couple name
+        if (questionIndex >= 0 && questionIndex < questions.length) {
+          const question = questions[questionIndex];
+          const selectedAnswer = selectedAnswers.find(
+            (a) => a.questionId === question.id
+          );
+
+          return (
+            <div className="space-y-4">
+              <div className="text-center">
+                <h3 className="text-lg font-semibold mb-2">
+                  {question.question}
+                </h3>
+                <p className="text-gray-600 mb-4">Please select your answer</p>
+              </div>
+              <div className="space-y-3">
+                <Label htmlFor={`question-${question.id}`}>Answer</Label>
+                <Select
+                  value={selectedAnswer?.answerId?.toString() || ""}
+                  onValueChange={(value) =>
+                    handleAnswerChange(question.id, parseInt(value))
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select an answer" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {question.answers.map((answer: any) => (
+                      <SelectItem key={answer.id} value={answer.id.toString()}>
+                        {answer.answerText}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          );
+        }
         return null;
     }
   };
+
+  if (loading) {
+    return (
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="sm:max-w-md">
+          <div className="text-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-600 mx-auto mb-4"></div>
+            <p>Loading questions...</p>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  if (error) {
+    return (
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="sm:max-w-md">
+          <div className="text-center py-8">
+            <p className="text-red-600 mb-4">Error loading questions</p>
+            <Button onClick={() => window.location.reload()}>Retry</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -311,14 +220,16 @@ export function CharacterSaveDialog({
           {/* Progress indicator */}
           <div className="flex justify-center mb-4">
             <div className="flex space-x-2">
-              {[1, 2, 3, 4, 5].map((stepNumber) => (
-                <div
-                  key={stepNumber}
-                  className={`w-3 h-3 rounded-full ${
-                    stepNumber <= step ? "bg-red-600" : "bg-gray-300"
-                  }`}
-                />
-              ))}
+              {Array.from({ length: totalSteps }, (_, i) => i + 1).map(
+                (stepNumber) => (
+                  <div
+                    key={stepNumber}
+                    className={`w-3 h-3 rounded-full ${
+                      stepNumber <= step ? "bg-red-600" : "bg-gray-300"
+                    }`}
+                  />
+                )
+              )}
             </div>
           </div>
 
@@ -337,7 +248,7 @@ export function CharacterSaveDialog({
               disabled={!canProceed()}
               className="bg-red-600 hover:bg-red-700"
             >
-              {step === 5 ? t("character.saveDialog.save") : "Next"}
+              {step === totalSteps ? t("character.saveDialog.save") : "Next"}
             </Button>
           </div>
         </div>
