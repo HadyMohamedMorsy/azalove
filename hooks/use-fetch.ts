@@ -38,7 +38,7 @@ export const useFetch = <T>(url: string) => {
     }
 
     fetchData();
-  }, [url]);
+  }, []);
 
   return state;
 };

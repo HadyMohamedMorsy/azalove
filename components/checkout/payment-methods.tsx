@@ -1,14 +1,12 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Separator } from "@/components/ui/separator";
 import { useCurrency } from "@/hooks/use-currency";
+import { useFetch } from "@/hooks/use-fetch";
 import { Bank, PaymentMethod } from "@/types/payment";
-import { Banknote, Building2, CreditCard, MapPin, Truck } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Banknote, CreditCard, Truck } from "lucide-react";
 
 interface PaymentMethodsProps {
   onPaymentMethodSelect: (method: PaymentMethod) => void;
@@ -23,42 +21,19 @@ export function PaymentMethods({
   selectedPaymentMethod,
   selectedBank,
 }: PaymentMethodsProps) {
-  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
-  const [banks, setBanks] = useState<Bank[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const { currencySymbol, defaultCurrency } = useCurrency();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
+  // Use useFetch for payment methods only
+  const {
+    data: paymentMethodsData,
+    loading: paymentMethodsLoading,
+    error: paymentMethodsError,
+  } = useFetch<PaymentMethod[]>("/api/payment-methods/front");
 
-        // Fetch payment methods
-        const paymentResponse = await fetch("/api/payment-methods/front");
-        const paymentData = await paymentResponse.json();
-
-        if (paymentData.success) {
-          setPaymentMethods(paymentData.data);
-        }
-
-        // Fetch banks
-        const bankResponse = await fetch("/api/bank/front");
-        const bankData = await bankResponse.json();
-
-        if (bankData.success) {
-          setBanks(bankData.data);
-        }
-      } catch (err) {
-        setError("Failed to load payment methods");
-        console.error("Error fetching payment data:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+  // Extract data from response
+  const paymentMethods = paymentMethodsData || [];
+  const loading = paymentMethodsLoading;
+  const error = paymentMethodsError;
 
   const getPaymentIcon = (icon: string) => {
     switch (icon) {
@@ -125,33 +100,52 @@ export function PaymentMethods({
             }
           }}
         >
-          <div className="grid gap-4">
+          <div className="grid gap-3">
             {paymentMethods.map((method) => (
               <Card
                 key={method.id}
-                className={`cursor-pointer transition-all ${
+                className={`cursor-pointer transition-all duration-200 ${
                   selectedPaymentMethod?.id === method.id
-                    ? "ring-2 ring-blue-500 border-blue-500"
-                    : "hover:border-gray-300"
+                    ? "ring-2 ring-azalove-500 border-azalove-500 bg-azalove-50"
+                    : "hover:border-azalove-300 hover:shadow-md"
                 }`}
+                onClick={() => {
+                  onPaymentMethodSelect(method);
+                }}
               >
                 <CardContent className="p-4">
-                  <div className="flex items-center space-x-3">
-                    <RadioGroupItem
-                      value={method.id.toString()}
-                      id={`method-${method.id}`}
-                    />
-                    <div className="flex items-center space-x-3 flex-1">
-                      <div className="text-blue-600">
-                        {getPaymentIcon(method.icon)}
+                  <div className="flex items-center space-x-4">
+                    <div className="flex items-center justify-center w-6 h-6">
+                      <RadioGroupItem
+                        value={method.id.toString()}
+                        id={`method-${method.id}`}
+                        className="w-5 h-5"
+                      />
+                    </div>
+
+                    <div className="flex items-center space-x-4 flex-1">
+                      <div className="w-12 h-12 bg-gradient-to-br from-azalove-50 to-azalove-100 rounded-lg flex items-center justify-center">
+                        <div className="text-azalove-600">
+                          {getPaymentIcon(method.icon)}
+                        </div>
                       </div>
+
                       <div className="flex-1">
                         <Label
                           htmlFor={`method-${method.id}`}
-                          className="text-base font-medium cursor-pointer"
+                          className="text-base font-semibold cursor-pointer text-gray-900"
                         >
                           {method.name}
                         </Label>
+                        <p className="text-sm text-gray-500 mt-1">
+                          Secure payment method
+                        </p>
+                      </div>
+
+                      <div className="text-right">
+                        <div className="text-xs text-gray-400">
+                          {method.is_active ? "Available" : "Unavailable"}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -161,103 +155,6 @@ export function PaymentMethods({
           </div>
         </RadioGroup>
       </div>
-
-      {/* Bank Transfer Section - Only show if bank transfer is selected */}
-      {selectedPaymentMethod?.slug === "bank-transfer" && (
-        <>
-          <Separator />
-          <div>
-            <h4 className="text-md font-medium mb-4 flex items-center gap-2">
-              <Building2 className="w-4 h-4" />
-              Available Banks
-            </h4>
-            {banks.length === 0 ? (
-              <div className="text-center py-4 text-gray-500">
-                No banks available for bank transfer
-              </div>
-            ) : (
-              <div className="grid gap-4">
-                {banks.map((bank) => (
-                  <Card
-                    key={bank.id}
-                    className={`cursor-pointer transition-all ${
-                      selectedBank?.id === bank.id
-                        ? "ring-2 ring-green-500 border-green-500"
-                        : "hover:border-gray-300"
-                    }`}
-                    onClick={() => onBankSelect?.(bank)}
-                  >
-                    <CardContent className="p-4">
-                      <div className="flex items-start space-x-4">
-                        <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                          {bank.featuredImage ? (
-                            <img
-                              src={bank.featuredImage}
-                              alt={bank.bankName}
-                              className="w-8 h-8 object-contain"
-                            />
-                          ) : (
-                            <Building2 className="w-6 h-6 text-gray-500" />
-                          )}
-                        </div>
-
-                        <div className="flex-1 space-y-2">
-                          <div className="flex items-center justify-between">
-                            <h5 className="font-medium text-gray-900">
-                              {bank.bankName}
-                            </h5>
-                            <Badge variant="secondary" className="text-xs">
-                              {bank.branchName}
-                            </Badge>
-                          </div>
-
-                          <div className="text-sm text-gray-600 space-y-1">
-                            <div className="flex items-center gap-2">
-                              <span className="font-medium">Account:</span>
-                              <span>{bank.accountName}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <span className="font-medium">Number:</span>
-                              <span className="font-mono">
-                                {bank.accountNumber}
-                              </span>
-                            </div>
-                          </div>
-
-                          <div className="text-xs text-gray-500 space-y-1">
-                            <div className="flex items-center gap-2">
-                              <MapPin className="w-3 h-3" />
-                              <span>
-                                {bank.area.name}, {bank.city.name},{" "}
-                                {bank.region.name}, {bank.country.name}
-                              </span>
-                            </div>
-                          </div>
-
-                          <div className="pt-2 space-y-1">
-                            <div className="text-xs">
-                              <span className="font-medium">IBAN:</span>
-                              <span className="font-mono ml-2">
-                                {bank.iban}
-                              </span>
-                            </div>
-                            <div className="text-xs">
-                              <span className="font-medium">SWIFT:</span>
-                              <span className="font-mono ml-2">
-                                {bank.swiftCode}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            )}
-          </div>
-        </>
-      )}
     </div>
   );
 }

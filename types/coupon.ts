@@ -21,6 +21,7 @@ export interface CouponValidationResponse {
 }
 
 export interface AppliedCoupon {
+  id?: number;
   code: string;
   discount: number;
   type: "percentage" | "fixed";

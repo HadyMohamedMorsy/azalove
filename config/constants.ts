@@ -34,7 +34,6 @@ export const PAYMENT_METHOD_SELECT = [
   "name",
   "icon",
   "slug",
-  "is_active",
 ] as const;
 
 export const BANK_SELECT = [

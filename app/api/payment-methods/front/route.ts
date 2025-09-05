@@ -8,9 +8,6 @@ export async function GET() {
     params: {
       query: {
         select: PAYMENT_METHOD_SELECT,
-        where: {
-          is_active: true,
-        },
       },
     },
   });
@@ -20,7 +17,7 @@ export async function GET() {
       ? { error: response.error }
       : {
           success: true,
-          data: response.data.data,
+          data: response.data.data.data,
           message: "Payment methods retrieved successfully",
         }
   );

@@ -1,8 +1,12 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useCart } from "@/contexts/cart-context";
+import { useCreateOrder } from "@/hooks/use-create-order";
 import { useTranslation } from "@/hooks/use-translation";
+import { CreateOrderRequest } from "@/types/order";
 import {
+  AlertCircle,
   CheckCircle,
   CreditCard,
   Download,
@@ -11,19 +15,75 @@ import {
   Package,
   ShoppingBag,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface OrderConfirmationProps {
   shippingData?: any;
   paymentData: any;
+  orderData?: any;
 }
 
 const OrderConfirmation = ({
   shippingData,
   paymentData,
+  orderData: propOrderData,
 }: OrderConfirmationProps) => {
   const { t } = useTranslation();
-  const orderNumber =
-    "ORD-" + Math.random().toString(36).substr(2, 9).toUpperCase();
+  const { createOrder, loading, error } = useCreateOrder();
+  const [orderError, setOrderError] = useState<string | null>(null);
+  const [orderData, setOrderData] = useState<any>(null);
+
+  // Use propOrderData if available, otherwise create order
+
+  useEffect(() => {
+    setOrderData(propOrderData);
+  }, [propOrderData]);
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div className="text-center space-y-4">
+          <div className="w-20 h-20 bg-azalove-100 rounded-full flex items-center justify-center mx-auto">
+            <Package className="w-10 h-10 text-azalove-600 animate-pulse" />
+          </div>
+          <div>
+            <h2 className="text-3xl font-bold text-royal-900">
+              {t("checkout.confirmation.processingOrder")}
+            </h2>
+            <p className="text-royal-600 mt-2 text-lg">
+              {t("checkout.confirmation.pleaseWait")}
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (orderError) {
+    return (
+      <div className="space-y-6">
+        <div className="text-center space-y-4">
+          <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto">
+            <AlertCircle className="w-10 h-10 text-red-600" />
+          </div>
+          <div>
+            <h2 className="text-3xl font-bold text-red-900">
+              {t("checkout.confirmation.orderFailed")}
+            </h2>
+            <p className="text-red-600 mt-2 text-lg">{orderError}</p>
+            <Button
+              onClick={() => window.location.reload()}
+              className="mt-4 bg-red-600 hover:bg-red-700 text-white"
+            >
+              {t("checkout.confirmation.tryAgain")}
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -40,7 +100,7 @@ const OrderConfirmation = ({
             {t("checkout.confirmation.orderConfirmedDescription")}
           </p>
           <Badge className="bg-azalove-100 text-azalove-700 border-azalove-200 mt-3">
-            {t("checkout.confirmation.orderNumber")} #{orderNumber}
+            {t("checkout.confirmation.orderNumber")} #{orderData?.order_number}
           </Badge>
         </div>
       </div>
@@ -67,7 +127,7 @@ const OrderConfirmation = ({
                   <p className="text-sm font-medium text-royal-900">
                     {t("checkout.confirmation.orderNumber")}
                   </p>
-                  <p className="text-sm text-royal-600">{orderNumber}</p>
+                  <p className="text-sm text-royal-600">{orderData?.order_number}</p>
                 </div>
               </div>
 
@@ -108,7 +168,7 @@ const OrderConfirmation = ({
                     {t("checkout.payment.title")}
                   </p>
                   <p className="text-sm text-royal-600 capitalize">
-                    {paymentData.paymentMethod}
+                    {paymentData?.paymentMethod?.name || "Not selected"}
                   </p>
                 </div>
               </div>

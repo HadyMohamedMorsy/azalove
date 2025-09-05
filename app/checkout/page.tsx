@@ -19,6 +19,8 @@ const Checkout = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [shippingData, setShippingData] = useState({});
   const [paymentData, setPaymentData] = useState({});
+  const [orderConfirmed, setOrderConfirmed] = useState(false);
+  const [orderData, setOrderData] = useState(null);
 
   // Get currency from settings, fallback to USD if not set
   const currency = settings?.default_currency || "USD";
@@ -79,7 +81,34 @@ const Checkout = () => {
     setCurrentStep((prev) => Math.max(prev - 1, 1));
   };
 
+  const handleConfirmOrder = (orderResult: any) => {
+    setOrderData(orderResult);
+    setOrderConfirmed(true);
+  };
+
   const CurrentStepComponent = steps[currentStep - 1].component;
+
+  // Show order confirmation if order is confirmed
+  if (orderConfirmed) {
+    return (
+      <div
+        className="min-h-screen bg-gradient-to-br from-cream-50 via-white to-azalove-50/30 font-arabic"
+        dir="rtl"
+        style={{
+          fontFamily:
+            "'Noto Sans Arabic', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+        }}
+      >
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <OrderConfirmation
+            shippingData={shippingData}
+            paymentData={paymentData}
+            orderData={orderData}
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -190,6 +219,9 @@ const Checkout = () => {
                 <CurrentStepComponent
                   onNext={handleNext}
                   onBack={currentStep > 1 ? handleBack : () => {}}
+                  onOrderConfirmed={
+                    currentStep === 2 ? handleConfirmOrder : undefined
+                  }
                   shippingData={shippingData}
                   paymentData={paymentData}
                 />
