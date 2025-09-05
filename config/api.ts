@@ -19,9 +19,12 @@ export const API_ENDPOINTS_FROM_NEXT = {
   ADDRESS_SHIPMENT: "/api/addresses",
   USER_UPDATE: "/user/update",
   REFRESH_TOKENS: "/api/auth/refresh-tokens",
+  QUIZ_QUESTIONS: "/api/quiz/questions-with-answers",
   MEGA_MENU_CATEGORIES: "/api/mega-menu/categories",
   MEGA_MENU_BLOG_CATEGORIES: "/api/mega-menu/blog-categories",
   COUPON_VALIDATE: "/api/coupon/validate",
+  SHAPES_GROUPED: "/api/shapes/grouped",
+  BOOKS_FINDER: "/api/books/finder",
 };
 
 export const API_ENDPOINTS_FROM_SERVER = {
@@ -34,7 +37,10 @@ export const API_ENDPOINTS_FROM_SERVER = {
   MEGA_MENU_BLOG_CATEGORIES: `/category/blog`,
   PAYMENT_METHODS: `/payment-methods/front`,
   BANKS: `/bank/front`,
+  QUIZ_QUESTIONS: `/quiz/questions-with-answers`,
   COUPON_VALIDATE: `/coupon/validate`,
+  SHAPES_GROUPED: `/shapes/grouped`,
+  BOOKS_FINDER: `/books/finder`,
 };
 
 export const API_ENDPOINTS_FROM_SERVER_DASHBOARD = {

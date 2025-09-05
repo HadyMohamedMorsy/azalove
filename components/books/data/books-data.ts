@@ -7,11 +7,28 @@ export interface Book {
   description: string;
 }
 
+// API Response interface for dynamic books
+export interface DynamicBook {
+  id: string;
+  price: number;
+  svg: string; // SVG content - will be used as imageUrl
+  title: string;
+  type: "PAGE" | "COVER"; // PAGE = Page template, COVER = Cover template
+}
+
 export interface UserAnswers {
-  // This interface is kept for backward compatibility
-  // The actual quiz answers are now stored in the SaveAnswers format
-  // You can implement custom filtering logic based on your quiz questions later
-  [key: string]: string;
+  [key: string]: any;
+  quizAnswers?: string;
+  characterSelection?: Array<{
+    character: string;
+    colorsCode: string[];
+    bodyType: string[];
+    body: Array<{
+      bodyType: string;
+      label?: string;
+      color?: string;
+    }>;
+  }>;
 }
 
 export interface TextStyle {
@@ -82,79 +99,7 @@ export const defaultTextStyle: TextStyle = {
   textAlign: "center",
 };
 
-export const COVER_TEMPLATES = [
-  {
-    id: "romantic-sunset",
-    title: "Love Under the Setting Sun",
-    subtitle: "Our romantic journey together",
-    description: "Every sunset reminds me of the warmth of your love",
-    imageUrl: "/media/10-150x200.jpg",
-  },
-  {
-    id: "adventure-mountains",
-    title: "Our Mountain Adventures",
-    subtitle: "Climbing life's peaks together",
-    description: "With you, every challenge becomes an adventure worth taking",
-    imageUrl: "/media/22-200x327.jpg",
-  },
-  {
-    id: "cozy-home",
-    title: "Home is Where You Are",
-    subtitle: "Building our perfect sanctuary",
-    description: "In your arms, I found my forever home",
-    imageUrl: "/media/cover-bog.jpg",
-  },
-  {
-    id: "ocean-love",
-    title: "Deep as the Ocean",
-    subtitle: "Our love knows no bounds",
-    description: "My love for you runs as deep as the ocean's depths",
-    imageUrl: "/media/contact.jpg",
-  },
-  {
-    id: "starry-night",
-    title: "Starry-Eyed Love",
-    subtitle: "Counting stars and blessings",
-    description: "Every star in the sky reminds me of the sparkle in your eyes",
-    imageUrl: "/media/section-hero.jpg",
-  },
-  {
-    id: "garden-romance",
-    title: "Love Blooms Like Flowers",
-    subtitle: "Growing together in love",
-    description: "Our love grows stronger with each passing season",
-    imageUrl: "/media/image-blog.jpg",
-  },
-  {
-    id: "city-lights",
-    title: "Bright Lights, Big Love",
-    subtitle: "Our urban love story",
-    description: "In this city of lights, you're the brightest star in my sky",
-    imageUrl: "/media/10-150x200.jpg",
-  },
-  {
-    id: "forest-walk",
-    title: "Walking Through Life Together",
-    subtitle: "Nature's path leads to love",
-    description: "Every step we take together brings us closer to forever",
-    imageUrl: "/media/22-200x327.jpg",
-  },
-  {
-    id: "beach-memories",
-    title: "Sandy Toes, Salty Kisses",
-    subtitle: "Beachside romance",
-    description:
-      "Our love story is written in the sand and sealed with ocean waves",
-    imageUrl: "/media/cover-bog.jpg",
-  },
-  {
-    id: "winter-warmth",
-    title: "Warm Hearts in Cold Weather",
-    subtitle: "Cozy winter love",
-    description: "Your love keeps me warm even on the coldest winter nights",
-    imageUrl: "/media/contact.jpg",
-  },
-];
+// COVER_TEMPLATES removed - now using dynamic data from API
 
 export const PAPER_OPTIONS = [
   { id: "standard", label: "ورق عادي (Standard)", price: 0 },
@@ -162,159 +107,195 @@ export const PAPER_OPTIONS = [
   { id: "deluxe", label: "ورق ديلوكس (Deluxe)", price: 20 },
 ];
 
-export const PAGE_TEMPLATES = [
-  {
-    id: "travel",
-    title: "Travel Adventures",
-    subtitle: "Exploring the world together",
-    description: "I love traveling and exploring the world with you",
-    imageUrl: "/media/10-150x200.jpg",
-  },
-  {
-    id: "romance",
-    title: "Romantic Moments",
-    subtitle: "Our special times",
-    description: "Every moment with you feels like magic",
-    imageUrl: "/media/22-200x327.jpg",
-  },
-  {
-    id: "food",
-    title: "Food Adventures",
-    subtitle: "Culinary journeys together",
-    description: "I love trying new foods and cooking with you",
-    imageUrl: "/media/cover-bog.jpg",
-  },
-  {
-    id: "music",
-    title: "Musical Memories",
-    subtitle: "Songs of our love",
-    description: "Every song reminds me of you",
-    imageUrl: "/media/contact.jpg",
-  },
-  {
-    id: "nature",
-    title: "Nature Walks",
-    subtitle: "Exploring the great outdoors",
-    description: "Walking hand in hand through nature's beauty",
-    imageUrl: "/media/section-hero.jpg",
-  },
-  {
-    id: "coffee",
-    title: "Coffee Dates",
-    subtitle: "Our morning rituals",
-    description: "Every cup of coffee tastes better with you",
-    imageUrl: "/media/image-blog.jpg",
-  },
-  {
-    id: "movies",
-    title: "Movie Nights",
-    subtitle: "Cinema and cuddles",
-    description: "Watching movies together is our favorite pastime",
-    imageUrl: "/media/10-150x200.jpg",
-  },
-  {
-    id: "dancing",
-    title: "Dance Together",
-    subtitle: "Moving to our own rhythm",
-    description: "Dancing with you makes every day feel special",
-    imageUrl: "/media/22-200x327.jpg",
-  },
-];
+// PAGE_TEMPLATES removed - now using dynamic data from API
 
-export const getBooksByAnswers = (answers: UserAnswers): Book[] => {
-  // Mock data - in a real app, this would come from an API
-  const allBooks: Book[] = [
-    {
-      id: "1",
-      title: "Our Wild Little Love Story",
-      subtitle: "The Adventures of ahmed & myar",
-      imageUrl: "/media/example-product.jpg",
-      price: 29.99,
-      description: "A romantic adventure story for couples.",
-    },
-    {
-      id: "2",
-      title: "All the Reasons Why You're Out of This World!",
-      subtitle: "Forever yours, ahmed",
-      imageUrl: "/media/example-product.jpg",
-      price: 24.99,
-      description: "A sci-fi themed love story.",
-    },
-    {
-      id: "3",
-      title: "My Reasons Why You Mean The World To Me",
-      subtitle: "A global love story",
-      imageUrl: "/media/example-product.jpg",
-      price: 19.99,
-      description: "A world-themed romantic story.",
-    },
-    {
-      id: "4",
-      title: "My Reasons Why every time is like the first time",
-      subtitle: "Travel adventures together",
-      imageUrl: "/media/example-product.jpg",
-      price: 34.99,
-      description: "A travel-themed romantic adventure.",
-    },
-    {
-      id: "5",
-      title: "All My Reasons I Love You More Than Pizza",
-      subtitle: "A foodie love story",
-      imageUrl: "/media/example-product.jpg",
-      price: 27.99,
-      description: "A fun food-themed romantic story.",
-    },
-    {
-      id: "6",
-      title: "My Reasons Why love, ahmed",
-      subtitle: "Tropical romance",
-      imageUrl: "/media/example-product.jpg",
-      price: 22.99,
-      description: "A tropical vacation love story.",
-    },
-    {
-      id: "7",
-      title: "My Reasons Why love, ahmed",
-      subtitle: "Night sky romance",
-      imageUrl: "/media/example-product.jpg",
-      price: 25.99,
-      description: "A romantic night sky story.",
-    },
-    {
-      id: "8",
-      title: "A Valentine To Remember",
-      subtitle: "My Reasons Why I Love myar",
-      imageUrl: "/media/example-product.jpg",
-      price: 28.99,
-      description: "A special Valentine's Day story.",
-    },
-    {
-      id: "9",
-      title: "My Reasons Why love, ahmed",
-      subtitle: "Musical romance",
-      imageUrl: "/media/example-product.jpg",
-      price: 23.99,
-      description: "A musical-themed love story.",
-    },
-    {
-      id: "10",
-      title: "My Reasons Why love, ahmed",
-      subtitle: "Street light romance",
-      imageUrl: "/media/example-product.jpg",
-      price: 26.99,
-      description: "A romantic street light story.",
-    },
-    {
-      id: "11",
-      title: "My Reasons Why love, ahmed",
-      subtitle: "Cloud love story",
-      imageUrl: "/media/example-product.jpg",
-      price: 21.99,
-      description: "A dreamy cloud-themed romance.",
-    },
-  ];
+// Convert DynamicBook to Book for compatibility
+export const convertDynamicBookToBook = (
+  dynamicBook: DynamicBook,
+  characterSelection?: any[]
+): Book => {
+  // Filter SVG based on character selection if provided
+  let filteredSvg = dynamicBook.svg;
+  if (characterSelection && characterSelection.length > 0) {
+    filteredSvg = filterSvgByCharacters(dynamicBook.svg, characterSelection);
+  }
 
-  // For now, return all books since we're using the new quiz system
-  // You can implement custom filtering logic based on your quiz questions later
-  return allBooks;
+  return {
+    id: dynamicBook.id,
+    title: dynamicBook.title,
+    subtitle: getSubtitleByType(dynamicBook.type),
+    imageUrl: `data:image/svg+xml;base64,${btoa(filteredSvg)}`, // Convert filtered SVG to data URL
+    price: +dynamicBook.price,
+    description: getDescriptionByType(dynamicBook.type),
+  };
+};
+
+// Function to filter SVG based on selected characters
+const filterSvgByCharacters = (
+  svgContent: string,
+  characterSelection: any[]
+): string => {
+  if (!svgContent || !characterSelection || characterSelection.length === 0) {
+    return svgContent;
+  }
+
+  try {
+    // Parse SVG
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(svgContent, "image/svg+xml");
+    const svgElement = doc.querySelector("svg");
+
+    if (!svgElement) {
+      return svgContent;
+    }
+
+    // Get selected body types and their labels for each character
+    const selectedBodyTypes = characterSelection.reduce((acc, char) => {
+      if (char.bodyType && Array.isArray(char.bodyType)) {
+        acc.push(...char.bodyType);
+      }
+      return acc;
+    }, [] as string[]);
+
+    // Get selected labels for each character with body type mapping
+    const selectedLabelsByBodyType = characterSelection.reduce(
+      (acc, char) => {
+        if (char.body && Array.isArray(char.body)) {
+          char.body.forEach((bodyItem: any) => {
+            if (bodyItem.label && bodyItem.bodyType) {
+              if (!acc[bodyItem.bodyType]) {
+                acc[bodyItem.bodyType] = [];
+              }
+              acc[bodyItem.bodyType].push(bodyItem.label);
+            }
+          });
+        }
+        return acc;
+      },
+      {} as Record<string, string[]>
+    );
+
+    // Flatten all selected labels for general filtering
+    const selectedLabels = Object.values(selectedLabelsByBodyType).flat();
+
+    // Process Layer_2
+    const layer2 = svgElement.querySelector('g[id="Layer_2"]');
+    if (layer2) {
+      filterLayerByBodyTypes(
+        layer2,
+        selectedBodyTypes,
+        selectedLabelsByBodyType,
+        "Layer_2"
+      );
+    }
+
+    // Process Layer_4
+    const layer4 = svgElement.querySelector('g[id="Layer_4"]');
+    if (layer4) {
+      filterLayerByBodyTypes(
+        layer4,
+        selectedBodyTypes,
+        selectedLabelsByBodyType,
+        "Layer_4"
+      );
+    }
+
+    // Return the filtered SVG
+    return new XMLSerializer().serializeToString(svgElement);
+  } catch (error) {
+    console.error("Error filtering SVG:", error);
+    return svgContent;
+  }
+};
+
+// Helper function to filter a layer by body types and their labels
+const filterLayerByBodyTypes = (
+  layerElement: Element,
+  selectedBodyTypes: string[],
+  selectedLabelsByBodyType: Record<string, string[]>,
+  layerName: string
+) => {
+  // Get all direct child groups (body types)
+  const bodyTypeGroups = Array.from(layerElement.children).filter(
+    (child) => child.tagName === "g" && child.hasAttribute("id")
+  );
+
+  bodyTypeGroups.forEach((group) => {
+    const groupId = group.getAttribute("id");
+
+    // Check if this body type is selected (case-insensitive comparison)
+    const isBodyTypeSelected =
+      groupId &&
+      selectedBodyTypes.some(
+        (selectedBodyType) =>
+          selectedBodyType.toLowerCase() === groupId.toLowerCase()
+      );
+
+    if (groupId && !isBodyTypeSelected) {
+      group.remove();
+    } else if (groupId) {
+      // If this body type is selected, filter its labels (children)
+      // Find the matching body type key (case-insensitive)
+      const matchingBodyTypeKey = selectedBodyTypes.find(
+        (selectedBodyType) =>
+          selectedBodyType.toLowerCase() === groupId.toLowerCase()
+      );
+      const labelsForThisBodyType = matchingBodyTypeKey
+        ? selectedLabelsByBodyType[matchingBodyTypeKey] || []
+        : [];
+
+      filterLabelsInBodyType(group, labelsForThisBodyType, groupId);
+    }
+  });
+};
+
+// Helper function to filter labels within a body type
+const filterLabelsInBodyType = (
+  bodyTypeElement: Element,
+  selectedLabels: string[],
+  bodyTypeName: string
+) => {
+  // Get all direct child groups (labels) within this body type
+  const labelGroups = Array.from(bodyTypeElement.children).filter(
+    (child) => child.tagName === "g" && child.hasAttribute("id")
+  );
+
+  labelGroups.forEach((labelGroup) => {
+    const labelId = labelGroup.getAttribute("id");
+
+    // Check if this label is selected (case-insensitive comparison)
+    const isLabelSelected =
+      labelId &&
+      selectedLabels.some(
+        (selectedLabel) => selectedLabel.toLowerCase() === labelId.toLowerCase()
+      );
+
+    if (labelId && !isLabelSelected) {
+      labelGroup.remove();
+    }
+  });
+};
+
+// Helper function to get subtitle based on book type
+const getSubtitleByType = (type: "PAGE" | "PR" | "COVER"): string => {
+  switch (type) {
+    case "COVER":
+      return "غلاف مخصص";
+    case "PAGE":
+      return "صفحة محتوى";
+    default:
+      return "";
+  }
+};
+
+// Helper function to get description based on book type
+const getDescriptionByType = (type: "PAGE" | "PR" | "COVER"): string => {
+  switch (type) {
+    case "COVER":
+      return "غلاف مخصص لكتابك الرومانسي";
+    case "PAGE":
+      return "صفحة محتوى قابلة للتخصيص";
+    default:
+      return "";
+  }
 };

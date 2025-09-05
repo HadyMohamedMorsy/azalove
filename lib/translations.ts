@@ -902,6 +902,14 @@ export interface Translations {
     currentlyEditing: string;
     character1: string;
     character2: string;
+    bodyType: {
+      title: string;
+      slim: string;
+      big: string;
+      chooseType: string;
+      chooseShape: string;
+      changeType: string;
+    };
     saveDialog: {
       title: string;
       description: string;
@@ -2392,6 +2400,14 @@ export const translations: Record<Locale, Translations> = {
       currentlyEditing: "تحرير حالياً:",
       character1: "الشخصية الأولى",
       character2: "الشخصية الثانية",
+      bodyType: {
+        title: "نوع الجسم",
+        slim: "نحيف",
+        big: "كبير",
+        chooseType: "اختر نوع الجسم",
+        chooseShape: "اختر شكل الجسم",
+        changeType: "تغيير نوع الجسم",
+      },
       saveDialog: {
         title: "احفظ زوجك",
         description: "أضف اسم للزوج وأجب على بعض الأسئلة لحفظ قصتك الرومانسية",
@@ -3064,6 +3080,14 @@ export const translations: Record<Locale, Translations> = {
       currentlyEditing: "Currently editing:",
       character1: "Character 1",
       character2: "Character 2",
+      bodyType: {
+        title: "Body Type",
+        slim: "Slim",
+        big: "Big",
+        chooseType: "Choose Body Type",
+        chooseShape: "Choose Body Shape",
+        changeType: "Change Body Type",
+      },
       saveDialog: {
         title: "Save Your Couple",
         description:

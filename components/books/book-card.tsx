@@ -21,11 +21,20 @@ export default function BookCard({ book, onBookSelect }: BookCardProps) {
       onClick={() => onBookSelect(book)}
     >
       <div className="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden relative">
-        <img
-          src={book.imageUrl}
-          alt={book.title}
-          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-        />
+        {book.imageUrl.startsWith("data:image/svg+xml") ? (
+          <div
+            className="w-full h-full transition-transform duration-300 group-hover:scale-110"
+            dangerouslySetInnerHTML={{
+              __html: atob(book.imageUrl.split(",")[1]),
+            }}
+          />
+        ) : (
+          <img
+            src={book.imageUrl}
+            alt={book.title}
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+          />
+        )}
 
         {/* Hover Cover Overlay */}
         <div
@@ -40,6 +49,24 @@ export default function BookCard({ book, onBookSelect }: BookCardProps) {
             <p className="font-semibold text-lg">Customize Cover</p>
             <p className="text-sm opacity-90">Click to edit text</p>
           </div>
+        </div>
+      </div>
+
+      {/* Book Info */}
+      <div className="p-3">
+        <h3 className="font-semibold text-royal-900 text-sm mb-1 line-clamp-2">
+          {book.title}
+        </h3>
+        <p className="text-azalove-600 text-xs mb-2 line-clamp-1">
+          {book.subtitle}
+        </p>
+        <div className="flex items-center justify-between">
+          <span className="text-royal-700 font-bold text-sm">
+            ${book.price.toFixed(2)}
+          </span>
+          <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+            {book.description}
+          </span>
         </div>
       </div>
     </div>

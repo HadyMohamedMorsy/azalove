@@ -55,7 +55,6 @@ export const refreshTokens = async (): Promise<{
     });
 
     const { access_token, refreshToken, user } = response.data.data;
-    console.log(response);
 
     // Save new tokens
     saveTokens(access_token, refreshToken);

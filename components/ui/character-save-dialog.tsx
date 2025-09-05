@@ -2,10 +2,11 @@
 
 import { useQuizQuestions } from "@/hooks/use-quiz-questions";
 import { useTranslation } from "@/hooks/use-translation";
-import { SelectedAnswer } from "@/types/quiz";
+import { QuizQuestion, SelectedAnswer } from "@/types/quiz";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "./button";
+import { Checkbox } from "./checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./dialog";
 import { Input } from "./input";
 import { Label } from "./label";
@@ -20,11 +21,10 @@ import {
 interface CharacterSaveDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSave: (coupleName: string, answers: SaveAnswers) => void;
+  onSave: (answers: SaveAnswers) => void;
 }
 
 export interface SaveAnswers {
-  coupleName: string;
   selectedAnswers: SelectedAnswer[];
 }
 
@@ -38,19 +38,25 @@ export function CharacterSaveDialog({
   const { questions, loading, error } = useQuizQuestions();
 
   const [step, setStep] = useState(1);
-  const [coupleName, setCoupleName] = useState("");
   const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswer[]>([]);
 
-  // Total steps: 1 (couple name) + number of quiz questions
-  const totalSteps = 1 + questions.length;
+  // Total steps: just the number of quiz questions
+  const totalSteps = questions.length;
 
   useEffect(() => {
     // Initialize selected answers when questions are loaded
     if (questions.length > 0) {
-      const initialAnswers = questions.map((q: any) => ({
-        questionId: q.id,
-        answerId: 0, // 0 means not selected yet
-      }));
+      const initialAnswers = questions.map((q: QuizQuestion) => {
+        const baseAnswer = { questionId: q.id };
+
+        if (q.questionType === "checkbox") {
+          return { ...baseAnswer, answerIds: [] };
+        } else if (q.questionType === "input") {
+          return { ...baseAnswer, textAnswer: "" };
+        } else {
+          return { ...baseAnswer, answerId: 0 }; // 0 means not selected yet
+        }
+      });
       setSelectedAnswers(initialAnswers);
     }
   }, [questions]);
@@ -60,15 +66,31 @@ export function CharacterSaveDialog({
       setStep(step + 1);
     } else {
       // Save everything and navigate
-      const finalAnswers = selectedAnswers.filter(
-        (answer) => answer.answerId !== 0
-      );
-      onSave(coupleName, { coupleName, selectedAnswers: finalAnswers });
+      const finalAnswers = selectedAnswers.filter((answer) => {
+        // Filter out empty answers based on question type
+        const question = questions.find(
+          (q: QuizQuestion) => q.id === answer.questionId
+        );
+        if (!question) return false;
+
+        switch (question.questionType) {
+          case "select":
+            return answer.answerId !== undefined && answer.answerId !== 0;
+          case "checkbox":
+            return answer.answerIds && answer.answerIds.length > 0;
+          case "input":
+            return answer.textAnswer && answer.textAnswer.trim() !== "";
+          default:
+            return false;
+        }
+      });
+      onSave({
+        selectedAnswers: finalAnswers,
+      });
       onOpenChange(false);
 
       // Navigate to related books page with answers as URL parameters
       const params = new URLSearchParams({
-        coupleName,
         answers: JSON.stringify(finalAnswers),
       });
       router.push(`/related-books?${params.toString()}`);
@@ -89,97 +111,184 @@ export function CharacterSaveDialog({
     );
   };
 
-  const canProceed = () => {
-    switch (step) {
-      case 1:
-        return coupleName.trim() !== "";
-      default:
-        // For quiz questions, check if an answer is selected
-        const questionIndex = step - 2; // -2 because step 1 is couple name
-        if (questionIndex >= 0 && questionIndex < questions.length) {
-          const question = questions[questionIndex];
-          const selectedAnswer = selectedAnswers.find(
-            (a) => a.questionId === question.id
-          );
-          return selectedAnswer && selectedAnswer.answerId !== 0;
+  const handleCheckboxChange = (
+    questionId: number,
+    answerId: number,
+    checked: boolean
+  ) => {
+    setSelectedAnswers((prev) =>
+      prev.map((answer) => {
+        if (answer.questionId === questionId) {
+          const currentIds = answer.answerIds || [];
+          if (checked) {
+            return { ...answer, answerIds: [...currentIds, answerId] };
+          } else {
+            return {
+              ...answer,
+              answerIds: currentIds.filter((id) => id !== answerId),
+            };
+          }
         }
-        return false;
+        return answer;
+      })
+    );
+  };
+
+  const handleTextAnswerChange = (questionId: number, text: string) => {
+    setSelectedAnswers((prev) =>
+      prev.map((answer) =>
+        answer.questionId === questionId
+          ? { ...answer, textAnswer: text }
+          : answer
+      )
+    );
+  };
+
+  const canProceed = () => {
+    // For quiz questions, check if an answer is provided based on question type
+    const questionIndex = step - 1; // -1 because we start from step 1
+    if (questionIndex >= 0 && questionIndex < questions.length) {
+      const question = questions[questionIndex];
+      const selectedAnswer = selectedAnswers.find(
+        (a) => a.questionId === question.id
+      );
+
+      if (!selectedAnswer) return false;
+
+      switch (question.questionType) {
+        case "select":
+          return (
+            selectedAnswer.answerId !== undefined &&
+            selectedAnswer.answerId !== 0
+          );
+        case "checkbox":
+          return (
+            selectedAnswer.answerIds && selectedAnswer.answerIds.length > 0
+          );
+        case "input":
+          return (
+            selectedAnswer.textAnswer && selectedAnswer.textAnswer.trim() !== ""
+          );
+        default:
+          return false;
+      }
     }
+    return false;
   };
 
   const renderStep = () => {
-    switch (step) {
-      case 1:
-        return (
-          <div className="space-y-4">
-            <div className="text-center">
-              <h3 className="text-lg font-semibold mb-2">
-                {t("character.saveDialog.title")}
-              </h3>
-              <p className="text-gray-600 mb-4">
-                {t("character.saveDialog.description")}
-              </p>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="coupleName">
-                {t("character.saveDialog.coupleName")}
-              </Label>
-              <Input
-                id="coupleName"
-                placeholder={t("character.saveDialog.coupleNamePlaceholder")}
-                value={coupleName}
-                onChange={(e) => setCoupleName(e.target.value)}
-                onKeyPress={(e) => {
-                  if (e.key === "Enter" && canProceed()) {
-                    handleNext();
-                  }
-                }}
-              />
-            </div>
+    // Render quiz questions dynamically based on question type
+    const questionIndex = step - 1; // -1 because we start from step 1
+    if (questionIndex >= 0 && questionIndex < questions.length) {
+      const question = questions[questionIndex];
+      const selectedAnswer = selectedAnswers.find(
+        (a) => a.questionId === question.id
+      );
+
+      return (
+        <div className="space-y-4">
+          <div className="text-center">
+            <h3 className="text-lg font-semibold mb-2">{question.question}</h3>
+            <p className="text-gray-600 mb-4">
+              {question.questionType === "input"
+                ? "Please provide your answer"
+                : "Please select your answer"}
+            </p>
           </div>
+          <div className="space-y-3">
+            {renderQuestionInput(question, selectedAnswer)}
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  const renderQuestionInput = (
+    question: QuizQuestion,
+    selectedAnswer?: SelectedAnswer
+  ) => {
+    switch (question.questionType) {
+      case "select":
+        return (
+          <>
+            <Label htmlFor={`question-${question.id}`}>Answer</Label>
+            <Select
+              value={selectedAnswer?.answerId?.toString() || ""}
+              onValueChange={(value) =>
+                handleAnswerChange(question.id, parseInt(value))
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select an answer" />
+              </SelectTrigger>
+              <SelectContent>
+                {question.answers.map((answer) => (
+                  <SelectItem key={answer.id} value={answer.id.toString()}>
+                    {answer.answerText}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </>
+        );
+
+      case "checkbox":
+        return (
+          <>
+            <Label>Select all that apply</Label>
+            <div className="space-y-2">
+              {question.answers.map((answer) => {
+                const isChecked =
+                  selectedAnswer?.answerIds?.includes(answer.id) || false;
+                return (
+                  <div key={answer.id} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={`answer-${answer.id}`}
+                      checked={isChecked}
+                      onCheckedChange={(checked) =>
+                        handleCheckboxChange(
+                          question.id,
+                          answer.id,
+                          checked as boolean
+                        )
+                      }
+                    />
+                    <Label
+                      htmlFor={`answer-${answer.id}`}
+                      className="text-sm font-normal cursor-pointer"
+                    >
+                      {answer.answerText}
+                    </Label>
+                  </div>
+                );
+              })}
+            </div>
+          </>
+        );
+
+      case "input":
+        return (
+          <>
+            <Label htmlFor={`question-${question.id}`}>Your answer</Label>
+            <Input
+              id={`question-${question.id}`}
+              placeholder="Type your answer here..."
+              value={selectedAnswer?.textAnswer || ""}
+              onChange={(e) =>
+                handleTextAnswerChange(question.id, e.target.value)
+              }
+              onKeyPress={(e) => {
+                if (e.key === "Enter" && canProceed()) {
+                  handleNext();
+                }
+              }}
+            />
+          </>
         );
 
       default:
-        // Render quiz questions
-        const questionIndex = step - 2; // -2 because step 1 is couple name
-        if (questionIndex >= 0 && questionIndex < questions.length) {
-          const question = questions[questionIndex];
-          const selectedAnswer = selectedAnswers.find(
-            (a) => a.questionId === question.id
-          );
-
-          return (
-            <div className="space-y-4">
-              <div className="text-center">
-                <h3 className="text-lg font-semibold mb-2">
-                  {question.question}
-                </h3>
-                <p className="text-gray-600 mb-4">Please select your answer</p>
-              </div>
-              <div className="space-y-3">
-                <Label htmlFor={`question-${question.id}`}>Answer</Label>
-                <Select
-                  value={selectedAnswer?.answerId?.toString() || ""}
-                  onValueChange={(value) =>
-                    handleAnswerChange(question.id, parseInt(value))
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select an answer" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {question.answers.map((answer: any) => (
-                      <SelectItem key={answer.id} value={answer.id.toString()}>
-                        {answer.answerText}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          );
-        }
-        return null;
+        return <div>Unsupported question type</div>;
     }
   };
 

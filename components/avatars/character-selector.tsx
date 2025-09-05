@@ -1,37 +1,42 @@
 "use client";
+import { useShapes } from "@/hooks/use-shapes";
+import { useEffect, useRef } from "react";
 
 interface CharacterSelectorProps {
-  activeCharacter: "first" | "second";
-  onCharacterChange: (character: "first" | "second") => void;
+  activeCharacter: string;
+  onCharacterChange: (character: string) => void;
 }
 
 export default function CharacterSelector({
   activeCharacter,
   onCharacterChange,
 }: CharacterSelectorProps) {
+  const { shapes } = useShapes();
+  const hasInitialized = useRef(false);
+
+  useEffect(() => {
+    if (shapes.types && shapes.types.length > 0 && !hasInitialized.current) {
+      onCharacterChange(shapes.types[0]);
+      hasInitialized.current = true;
+    }
+  }, [shapes.types, onCharacterChange]);
+
   return (
     <div className="flex justify-center mb-6">
       <div className="flex gap-4">
-        <button
-          className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
-            activeCharacter === "first"
-              ? "bg-red-600 text-white"
-              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-          }`}
-          onClick={() => onCharacterChange("first")}
-        >
-          Character 1
-        </button>
-        <button
-          className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
-            activeCharacter === "second"
-              ? "bg-red-600 text-white"
-              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-          }`}
-          onClick={() => onCharacterChange("second")}
-        >
-          Character 2
-        </button>
+        {shapes.types?.map((type: string) => (
+          <button
+            key={type}
+            className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
+              activeCharacter === type
+                ? "bg-red-600 text-white"
+                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+            }`}
+            onClick={() => onCharacterChange(type)}
+          >
+            {type.charAt(0).toUpperCase() + type.slice(1)}
+          </button>
+        ))}
       </div>
     </div>
   );

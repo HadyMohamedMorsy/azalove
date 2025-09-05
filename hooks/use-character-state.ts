@@ -1,67 +1,142 @@
 import {
-  BODY_COLORS,
-  CHIN_COLORS,
-  CLOTHING_COLORS,
-  GLASSES_COLORS,
-  HAT_COLORS,
-  MUSTACHE_COLORS,
-  SHOES_COLORS,
-} from "@/data/characterData";
-import { CharacterState } from "@/types/avatar";
-import { useState } from "react";
+  CharacterLayer,
+  CharacterSelection,
+  CharacterState,
+} from "@/types/avatar";
+import { useCallback, useState } from "react";
 
-const createInitialCharacterState = (
-  bodyColorIndex: number = 0
-): CharacterState => ({
-  bodyColor: BODY_COLORS[bodyColorIndex],
-  shoesColor: SHOES_COLORS[0],
-  glassesColor: GLASSES_COLORS[0],
-  glassesType: "glasses1",
-  hatColor: HAT_COLORS[0],
-  hatType: "hat2",
-  mustacheColor: MUSTACHE_COLORS[0],
-  mustacheType: "mustache1",
-  chinColor: CHIN_COLORS[0],
-  chinType: "chin1",
-  pantsColor: CLOTHING_COLORS[0],
-  pantsType: "pants",
-  clothingColor: CLOTHING_COLORS[0],
-  clothingType: "shirt",
-  showShoes: false,
-  showGlasses: false,
-  showHat: false,
-  showMustache: false,
-  showChin: false,
-  showPants: false,
-  showClothing: false,
+const createInitialCharacterState = (): CharacterState => ({
+  Layer_2: [],
+  Layer_4: [],
 });
 
 export function useCharacterState() {
-  const [character1, setCharacter1] = useState<CharacterState>(() =>
-    createInitialCharacterState(0)
+  const [characterState, setCharacterState] = useState<CharacterState>(() =>
+    createInitialCharacterState()
   );
 
-  const [character2, setCharacter2] = useState<CharacterState>(() =>
-    createInitialCharacterState(1)
+  const [selection, setSelection] = useState<CharacterSelection>({
+    activeCharacter: "Layer_2",
+    activeBodyType: "",
+    activeColor: "",
+  });
+
+  const currentLayers = characterState?.[selection.activeCharacter] || [];
+
+  // Function to add or update a character layer
+  const updateCharacterLayer = useCallback(
+    (bodyType: string, svg: string, color?: string, label?: string) => {
+      // Check if characterState is undefined
+      if (!characterState) {
+        return;
+      }
+
+      setCharacterState((prev) => {
+        const newState = { ...prev };
+
+        // Ensure the layer exists
+        if (!newState[selection.activeCharacter]) {
+          newState[selection.activeCharacter] = [];
+        }
+
+        const layer = newState[selection.activeCharacter];
+
+        // Check if this body type already exists
+        const existingIndex = layer.findIndex(
+          (item) => item.bodyType === bodyType
+        );
+
+        const newLayer: CharacterLayer = {
+          bodyType,
+          svg,
+          color,
+          label,
+        };
+
+        if (existingIndex >= 0) {
+          // Update existing layer
+          layer[existingIndex] = newLayer;
+        } else {
+          // Add new layer
+          layer.push(newLayer);
+        }
+
+        return newState;
+      });
+    },
+    [characterState, selection.activeCharacter]
   );
 
-  const [activeCharacter, setActiveCharacter] = useState<"first" | "second">(
-    "first"
+  // Function to remove a character layer
+  const removeCharacterLayer = useCallback(
+    (bodyType: string) => {
+      // Check if characterState is undefined
+      if (!characterState) {
+        return;
+      }
+
+      setCharacterState((prev) => {
+        const newState = { ...prev };
+
+        // Ensure the layer exists
+        if (!newState[selection.activeCharacter]) {
+          newState[selection.activeCharacter] = [];
+        }
+
+        const layer = newState[selection.activeCharacter];
+        newState[selection.activeCharacter] = layer.filter(
+          (item) => item.bodyType !== bodyType
+        );
+        return newState;
+      });
+    },
+    [characterState, selection.activeCharacter]
   );
 
-  const currentCharacter =
-    activeCharacter === "first" ? character1 : character2;
-  const setCurrentCharacter =
-    activeCharacter === "first" ? setCharacter1 : setCharacter2;
+  // Function to get a specific layer by body type
+  const getCharacterLayer = useCallback(
+    (bodyType: string) => {
+      return currentLayers.find((layer) => layer.bodyType === bodyType);
+    },
+    [currentLayers]
+  );
+
+  // Function to switch active character
+  const switchActiveCharacter = useCallback(
+    (character: "Layer_2" | "Layer_4") => {
+      setSelection((prev) => ({
+        ...prev,
+        activeCharacter: character,
+      }));
+    },
+    []
+  );
+
+  // Function to set active body type
+  const setActiveBodyType = useCallback((bodyType: string) => {
+    setSelection((prev) => ({
+      ...prev,
+      activeBodyType: bodyType,
+    }));
+  }, []);
+
+  // Function to set active color
+  const setActiveColor = useCallback((color: string) => {
+    setSelection((prev) => ({
+      ...prev,
+      activeColor: color,
+    }));
+  }, []);
 
   return {
-    character1,
-    character2,
-    activeCharacter,
-    currentCharacter,
-    setCharacter1,
-    setCharacter2,
-    setActiveCharacter,
-    setCurrentCharacter,
+    characterState,
+    selection,
+    currentLayers,
+    updateCharacterLayer,
+    removeCharacterLayer,
+    getCharacterLayer,
+    switchActiveCharacter,
+    setActiveBodyType,
+    setActiveColor,
   };
 }

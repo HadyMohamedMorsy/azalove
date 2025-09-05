@@ -7,20 +7,17 @@ import CoverManagerDialog from "@/components/books/cover-manager-dialog";
 import {
   Book,
   BookPage,
-  COVER_TEMPLATES,
+  convertDynamicBookToBook,
   defaultTextStyle,
-  getBooksByAnswers,
   PAPER_OPTIONS,
-  UserAnswers,
   UserCustomCover,
 } from "@/components/books/data/books-data";
 import PageTemplateSelectorDialog from "@/components/books/page-template-selector-dialog";
 import SavedCoupleDisplay from "@/components/books/saved-couple-display";
-import UserPreferencesDisplay from "@/components/books/user-preferences-display";
 import { SavedCouple, useSavedCouples } from "@/hooks/use-saved-couples";
 import { useTranslation } from "@/hooks/use-translation";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface BookCoverEditor {
   isOpen: boolean;
@@ -124,51 +121,66 @@ export default function RelatedBooksPage() {
   const latestCouple =
     savedCouples.length > 0 ? savedCouples[savedCouples.length - 1] : null;
 
-  // Get answers from URL parameters or from saved couple
-  const getAnswers = (): UserAnswers => {
-    // First try to get from URL parameters
-    const urlAnswers = searchParams.get("answers");
-    const urlCoupleName = searchParams.get("coupleName");
-
-    if (urlAnswers && urlCoupleName) {
-      try {
-        const parsedAnswers = JSON.parse(urlAnswers);
-        // Store the quiz answers for potential future use
-        // You can implement custom filtering logic based on these answers later
-        return {
-          quizAnswers: JSON.stringify(parsedAnswers),
-          coupleName: urlCoupleName,
-        };
-      } catch (error) {
-        console.error("Error parsing answers from URL:", error);
-      }
-    }
-
-    // If not in URL, get from saved couple
-    if (latestCouple?.answers?.selectedAnswers) {
-      return {
-        quizAnswers: JSON.stringify(latestCouple.answers.selectedAnswers),
-        coupleName: latestCouple.name,
-      };
-    }
-
-    // Default values
-    return {
-      quizAnswers: "",
-      coupleName: "",
-    };
-  };
-
-  const userAnswers = getAnswers();
+  const isFetchingRef = useRef(false);
 
   useEffect(() => {
-    // Simulate fetching books based on answers
-    setTimeout(() => {
-      const filteredBooks = getBooksByAnswers(userAnswers);
-      setBooks(filteredBooks);
-      setLoading(false);
-    }, 1000);
-  }, [userAnswers]);
+    // Prevent multiple simultaneous requests
+    if (isFetchingRef.current) {
+      return;
+    }
+
+    let isMounted = true;
+
+    const fetchBooks = async () => {
+      try {
+        isFetchingRef.current = true;
+        setLoading(true);
+
+        if (
+          latestCouple?.characterSelection &&
+          latestCouple?.answers?.selectedAnswers
+        ) {
+          const response = await fetch("/api/books/finder", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              answers: latestCouple.answers.selectedAnswers,
+              characterSelection: latestCouple.characterSelection,
+            }),
+          });
+
+          if (isMounted) {
+            if (response.ok) {
+              const data = await response.json();
+              const dynamicBooks = data.data.data || [];
+              const convertedBooks = dynamicBooks.map((dynamicBook: any) =>
+                convertDynamicBookToBook(
+                  dynamicBook,
+                  latestCouple?.characterSelection
+                )
+              );
+              setBooks(convertedBooks);
+            }
+          }
+        }
+      } catch (error) {
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+        isFetchingRef.current = false;
+      }
+    };
+
+    fetchBooks();
+
+    // Cleanup function to prevent state updates if component unmounts
+    return () => {
+      isMounted = false;
+    };
+  }, [latestCouple]);
 
   const handleBookSelect = (book: Book) => {
     setCoverManager((prev) => ({
@@ -584,7 +596,6 @@ export default function RelatedBooksPage() {
           <h1 className="text-3xl font-bold text-royal-900 mb-4">
             {t("relatedBooks.title")}
           </h1>
-          <UserPreferencesDisplay userAnswers={userAnswers} />
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
@@ -618,7 +629,7 @@ export default function RelatedBooksPage() {
         onCancelDeleteCover={cancelDeleteCover}
         onSelectCoverTemplate={handleSelectCoverTemplate}
         onCloseCoverTemplateSelector={handleCloseCoverTemplateSelector}
-        coverTemplates={COVER_TEMPLATES}
+        coverTemplates={[]}
       />
 
       {/* Book Creator Dialog */}

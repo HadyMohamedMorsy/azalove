@@ -1,14 +1,24 @@
 import { SaveAnswers } from "@/components/ui/character-save-dialog";
-import { CharacterState } from "@/types/avatar";
+import { CharacterLayer } from "@/types/avatar";
 import { useEffect, useState } from "react";
 
 export interface SavedCouple {
   id: string;
   name: string;
-  character1: CharacterState;
-  character2: CharacterState;
+  character1: CharacterLayer[];
+  character2: CharacterLayer[];
   createdAt: string;
   answers: SaveAnswers;
+  characterSelection?: Array<{
+    character: string;
+    colorsCode: string[];
+    bodyType: string[];
+    body: Array<{
+      bodyType: string;
+      label?: string;
+      color?: string;
+    }>;
+  }>;
 }
 
 export function useSavedCouples() {

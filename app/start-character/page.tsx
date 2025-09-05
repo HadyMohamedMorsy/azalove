@@ -7,34 +7,71 @@ import {
   CharacterSaveDialog,
   SaveAnswers,
 } from "@/components/ui/character-save-dialog";
-import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { useCharacterState } from "@/hooks/use-character-state";
 import { useSavedCouples } from "@/hooks/use-saved-couples";
 import { useTranslation } from "@/hooks/use-translation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function StartCharacterPage() {
   const {
-    character1,
-    character2,
-    activeCharacter,
-    currentCharacter,
-    setActiveCharacter,
-    setCurrentCharacter,
+    characterState,
+    selection,
+    currentLayers,
+    updateCharacterLayer,
+    switchActiveCharacter,
+    setActiveBodyType,
+    setActiveColor,
   } = useCharacterState();
 
   const { saveCouple } = useSavedCouples();
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const { t } = useTranslation();
+  const router = useRouter();
 
-  const handleSaveCharacter = (coupleName: string, answers: SaveAnswers) => {
-    // Save characters using the hook with answers
+  const handleSaveCharacter = (answers: SaveAnswers) => {
+    // Prepare character selection data with null safety
+    const characterSelection = [
+      {
+        character: "layer_2",
+        colorsCode: (characterState.Layer_2 || [])
+          .map((layer: any) => layer.color)
+          .filter(Boolean),
+        bodyType: (characterState.Layer_2 || []).map(
+          (layer: any) => layer.bodyType
+        ),
+        body: (characterState.Layer_2 || []).map((layer: any) => ({
+          bodyType: layer.bodyType,
+          label: layer.label,
+          color: layer.color,
+        })),
+      },
+      {
+        character: "layer_4",
+        colorsCode: (characterState.Layer_4 || [])
+          .map((layer: any) => layer.color)
+          .filter(Boolean),
+        bodyType: (characterState.Layer_4 || []).map(
+          (layer: any) => layer.bodyType
+        ),
+        body: (characterState.Layer_4 || []).map((layer: any) => ({
+          bodyType: layer.bodyType,
+          label: layer.label,
+          color: layer.color,
+        })),
+      },
+    ];
+
     const savedCouple = saveCouple({
-      name: coupleName,
-      character1,
-      character2,
-      answers, // Include the answers in the saved couple
+      name: `Couple ${Date.now()}`,
+      character1: characterState.Layer_2,
+      character2: characterState.Layer_4,
+      answers,
+      characterSelection,
     });
+
+    // Navigate to related books page - data will be retrieved from saved couple
+    router.push("/related-books");
   };
 
   return (
@@ -45,32 +82,34 @@ export default function StartCharacterPage() {
           <h1 className="text-2xl font-bold text-gray-800">
             {t("character.createCouple")}
           </h1>
-          <div className="flex items-center gap-4">
-            <LanguageSwitcher />
-            <button
-              className="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors"
-              onClick={() => setShowSaveDialog(true)}
-            >
-              {t("character.saveCouple")}
-            </button>
-          </div>
+          <button
+            onClick={() => setShowSaveDialog(true)}
+            className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+          >
+            Create Couples
+          </button>
         </div>
 
         {/* Character Selector */}
         <CharacterSelector
-          activeCharacter={activeCharacter}
-          onCharacterChange={setActiveCharacter}
+          activeCharacter={selection.activeCharacter}
+          onCharacterChange={(character: string) =>
+            switchActiveCharacter(character as "Layer_2" | "Layer_4")
+          }
         />
 
         {/* Characters Preview */}
-        <CouplePreview character1={character1} character2={character2} />
+        <CouplePreview
+          character1={characterState.Layer_2}
+          character2={characterState.Layer_4}
+        />
 
         {/* Active Character Indicator */}
         <div className="text-center mb-4">
           <p className="text-lg font-semibold text-gray-700">
             {t("character.currentlyEditing")}{" "}
             <span className="text-red-600">
-              {activeCharacter === "first"
+              {selection.activeCharacter === "Layer_2"
                 ? t("character.character1")
                 : t("character.character2")}
             </span>
@@ -79,8 +118,12 @@ export default function StartCharacterPage() {
 
         {/* Character Customizer */}
         <CharacterCustomizer
-          currentCharacter={currentCharacter}
-          setCurrentCharacter={setCurrentCharacter}
+          characterState={characterState}
+          selection={selection}
+          currentLayers={currentLayers}
+          updateCharacterLayer={updateCharacterLayer}
+          setActiveBodyType={setActiveBodyType}
+          setActiveColor={setActiveColor}
         />
       </div>
 
