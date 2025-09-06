@@ -51,6 +51,7 @@ export interface BookPage {
   subtitleStyle: TextStyle;
   descriptionStyle: TextStyle;
   order: number;
+  price?: number;
 }
 
 export interface UserCustomCover {

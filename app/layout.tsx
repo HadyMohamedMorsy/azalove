@@ -12,6 +12,7 @@ import { AuthProvider } from "@/contexts/auth-context";
 import { CartProvider } from "@/contexts/cart-context";
 import { FavoritesProvider } from "@/contexts/favorites-context";
 import { GeneralSettingsProvider } from "@/contexts/general-settings-context";
+import { StartCharacterShapesProvider } from "@/contexts/start-character-shapes-context";
 import { Viewport } from "next";
 import { Inter } from "next/font/google";
 
@@ -48,16 +49,18 @@ export default function RootLayout({
           <CartProvider>
             <FavoritesProvider>
               <GeneralSettingsProvider>
-                <DynamicTitle />
-                <AnalyticsManager />
-                <AnalyticsWrapper>
-                  <LocaleWrapper>
-                    <SplashWrapper>
-                      <LayoutWrapper>{children}</LayoutWrapper>
-                      <Toaster />
-                    </SplashWrapper>
-                  </LocaleWrapper>
-                </AnalyticsWrapper>
+                <StartCharacterShapesProvider>
+                  <DynamicTitle />
+                  <AnalyticsManager />
+                  <AnalyticsWrapper>
+                    <LocaleWrapper>
+                      <SplashWrapper>
+                        <LayoutWrapper>{children}</LayoutWrapper>
+                        <Toaster />
+                      </SplashWrapper>
+                    </LocaleWrapper>
+                  </AnalyticsWrapper>
+                </StartCharacterShapesProvider>
               </GeneralSettingsProvider>
             </FavoritesProvider>
           </CartProvider>

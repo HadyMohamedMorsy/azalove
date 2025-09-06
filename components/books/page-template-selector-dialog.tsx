@@ -34,6 +34,7 @@ const convertApiDataToPageTemplate = (
     description: "صفحة محتوى قابلة للتخصيص",
     imageUrl: `data:image/svg+xml;base64,${btoa(filteredSvg)}`, // Convert filtered SVG to data URL
     type: "mixed" as const,
+    price: Number(item.price) || 0,
   };
 };
 
@@ -44,6 +45,7 @@ interface PageTemplate {
   description: string;
   imageUrl: string;
   type: "text" | "image" | "mixed";
+  price?: number;
 }
 
 interface PageTemplateSelectorDialogProps {

@@ -517,6 +517,7 @@ export default function RelatedBooksPage() {
         subtitleStyle: { ...defaultTextStyle, fontSize: 18 },
         descriptionStyle: { ...defaultTextStyle, fontSize: 14 },
         order: 1,
+        price: coverManager.selectedCover?.price || 0,
       };
 
       // Create a content page from the selected template
@@ -531,6 +532,7 @@ export default function RelatedBooksPage() {
         subtitleStyle: { ...defaultTextStyle, fontSize: 16 },
         descriptionStyle: { ...defaultTextStyle, fontSize: 12 },
         order: 2,
+        price: template.price || 0,
       };
 
       // Open book creator with both cover and content page
@@ -553,6 +555,7 @@ export default function RelatedBooksPage() {
         subtitleStyle: { ...defaultTextStyle, fontSize: 16 },
         descriptionStyle: { ...defaultTextStyle, fontSize: 12 },
         order: bookCreator.pages.length + 1,
+        price: template.price || 0,
       };
 
       setBookCreator((prev) => ({
