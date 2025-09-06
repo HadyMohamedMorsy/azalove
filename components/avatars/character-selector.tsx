@@ -1,5 +1,5 @@
 "use client";
-import { useShapes } from "@/hooks/use-shapes";
+import { useStartCharacterShapes } from "@/hooks/use-start-character-shapes";
 import { useEffect, useRef } from "react";
 
 interface CharacterSelectorProps {
@@ -11,7 +11,7 @@ export default function CharacterSelector({
   activeCharacter,
   onCharacterChange,
 }: CharacterSelectorProps) {
-  const { shapes } = useShapes();
+  const { shapes } = useStartCharacterShapes();
   const hasInitialized = useRef(false);
 
   useEffect(() => {

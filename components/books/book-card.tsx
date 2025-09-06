@@ -1,5 +1,6 @@
 "use client";
 
+import { useCurrency } from "@/hooks/use-currency";
 import { Edit3 } from "lucide-react";
 import { useState } from "react";
 
@@ -12,6 +13,7 @@ interface BookCardProps {
 
 export default function BookCard({ book, onBookSelect }: BookCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const { formatCurrency } = useCurrency();
 
   return (
     <div
@@ -36,6 +38,16 @@ export default function BookCard({ book, onBookSelect }: BookCardProps) {
           />
         )}
 
+        {/* Title overlay on image */}
+        <div className="absolute top-0 left-0 right-0 p-4 text-white">
+          <h3 className="font-bold text-lg mb-1 drop-shadow-lg">
+            {book.title}
+          </h3>
+          {book.subtitle && (
+            <p className="text-sm opacity-90 drop-shadow-lg">{book.subtitle}</p>
+          )}
+        </div>
+
         {/* Hover Cover Overlay */}
         <div
           className={`absolute inset-0 bg-gradient-to-br from-royal-900/80 to-amaranth-900/80 flex items-center justify-center transition-opacity duration-300 ${
@@ -46,23 +58,17 @@ export default function BookCard({ book, onBookSelect }: BookCardProps) {
             <div className="mb-2">
               <Edit3 className="w-8 h-8 mx-auto mb-2 text-azalove-300" />
             </div>
-            <p className="font-semibold text-lg">Customize Cover</p>
-            <p className="text-sm opacity-90">Click to edit text</p>
+            <p className="font-semibold text-lg">تخصيص الغلاف</p>
+            <p className="text-sm opacity-90">انقر لتعديل النص</p>
           </div>
         </div>
       </div>
 
       {/* Book Info */}
       <div className="p-3">
-        <h3 className="font-semibold text-royal-900 text-sm mb-1 line-clamp-2">
-          {book.title}
-        </h3>
-        <p className="text-azalove-600 text-xs mb-2 line-clamp-1">
-          {book.subtitle}
-        </p>
         <div className="flex items-center justify-between">
-          <span className="text-royal-700 font-bold text-sm">
-            ${book.price.toFixed(2)}
+          <span className="text-royal-700 font-bold text-sm bg-gradient-to-r from-azalove-500 to-azalove-600 text-white px-3 py-1 rounded-full shadow-sm">
+            {formatCurrency(book.price)}
           </span>
           <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
             {book.description}

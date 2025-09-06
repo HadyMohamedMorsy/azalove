@@ -65,7 +65,7 @@ export default function PaymentForm({
   shippingData,
 }: PaymentFormProps) {
   const { t } = useTranslation();
-  const { cartItems, appliedCoupon } = useCart();
+  const { cartItems, appliedCoupon, clearCart, removeCoupon } = useCart();
   const { createOrder, loading, error } = useCreateOrder();
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
     useState<PaymentMethod | null>(null);
@@ -84,13 +84,7 @@ export default function PaymentForm({
 
   const handleSubmit = () => {
     if (!selectedPaymentMethod) {
-      alert("Please select a payment method");
-      return;
-    }
-
-    // If bank transfer is selected, require bank selection
-    if (selectedPaymentMethod.slug === "bank-transfer" && !selectedBank) {
-      alert("Please select a bank for bank transfer");
+      alert(t("checkout.payment.selectPaymentMethod"));
       return;
     }
 
@@ -124,26 +118,25 @@ export default function PaymentForm({
 
       const result = await createOrder(orderRequest);
 
-      if (result?.success && onOrderConfirmed) {
-        onOrderConfirmed(result.data);
+      if (result?.statusCode === 201) {
+        clearCart();
+        removeCoupon();
+        onOrderConfirmed?.(result.data);
       } else {
+        console.error("Order creation failed:", result);
         setOrderError(
-          result?.message || "Failed to create order. Please try again."
+          result?.message || t("checkout.payment.orderCreationFailed")
         );
       }
     } catch (error) {
       console.error("Order creation failed:", error);
-      setOrderError(
-        "An error occurred while creating your order. Please try again."
-      );
+      setOrderError(t("checkout.payment.orderCreationFailed"));
     } finally {
       setIsCreatingOrder(false);
     }
   };
 
-  const canProceed =
-    selectedPaymentMethod &&
-    (selectedPaymentMethod.slug !== "bank-transfer" || selectedBank);
+  const canProceed = selectedPaymentMethod;
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
@@ -153,7 +146,7 @@ export default function PaymentForm({
             {t("checkout.payment.title")}
           </CardTitle>
           <p className="text-royal-600 text-sm">
-            {t("checkout.payment.description")}
+            {t("checkout.payment.subtitle")}
           </p>
         </CardHeader>
         <CardContent>
@@ -184,13 +177,13 @@ export default function PaymentForm({
                   <p className="text-sm text-royal-600">
                     {selectedBank
                       ? `${selectedBank.bankName}`
-                      : "Secure payment method"}
+                      : t("checkout.payment.securePaymentMethod")}
                   </p>
                 </div>
               </div>
               <div className="text-right">
                 <div className="inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-800 text-sm font-medium">
-                  ✓ Selected
+                  ✓ {t("checkout.payment.selected")}
                 </div>
               </div>
             </div>
@@ -220,7 +213,7 @@ export default function PaymentForm({
               </div>
               <div className="flex-1">
                 <h4 className="text-sm font-medium text-red-800">
-                  Order Creation Failed
+                  {t("checkout.payment.orderCreationFailed")}
                 </h4>
                 <p className="text-sm text-red-600 mt-1">{orderError}</p>
               </div>
@@ -267,7 +260,7 @@ export default function PaymentForm({
               d="M15 19l-7-7 7-7"
             />
           </svg>
-          {t("checkout.back")}
+          {t("checkout.payment.back")}
         </Button>
 
         {onOrderConfirmed ? (
@@ -289,7 +282,9 @@ export default function PaymentForm({
                 d="M5 13l4 4L19 7"
               />
             </svg>
-            {isCreatingOrder ? "Creating Order..." : t("checkout.confirmOrder")}
+            {isCreatingOrder
+              ? t("checkout.payment.creatingOrder")
+              : t("checkout.payment.confirmOrder")}
           </Button>
         ) : (
           <Button
@@ -310,7 +305,7 @@ export default function PaymentForm({
                 d="M9 5l7 7-7 7"
               />
             </svg>
-            {t("checkout.continue")}
+            {t("checkout.payment.continue")}
           </Button>
         )}
       </div>

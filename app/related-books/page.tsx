@@ -63,6 +63,15 @@ interface PageTemplateSelector {
   isOpen: boolean;
 }
 
+interface PaginationInfo {
+  currentPage: number;
+  totalPages: number;
+  totalCount: number;
+  limit: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+}
+
 export default function RelatedBooksPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -70,6 +79,14 @@ export default function RelatedBooksPage() {
   const { t } = useTranslation();
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
+  const [pagination, setPagination] = useState<PaginationInfo>({
+    currentPage: 1,
+    totalPages: 1,
+    totalCount: 0,
+    limit: 10,
+    hasNextPage: false,
+    hasPrevPage: false,
+  });
   const [coverEditor, setCoverEditor] = useState<BookCoverEditor>({
     isOpen: false,
     selectedBook: null,
@@ -162,6 +179,18 @@ export default function RelatedBooksPage() {
                 )
               );
               setBooks(convertedBooks);
+              console.log(data.data.pagination);
+              // Handle pagination
+              if (data.data.pagination) {
+                setPagination({
+                  currentPage: data.data.pagination.currentPage,
+                  totalPages: data.data.pagination.totalPages,
+                  totalCount: data.data.pagination.totalCount,
+                  limit: data.data.pagination.limit,
+                  hasNextPage: data.data.pagination.hasNextPage,
+                  hasPrevPage: data.data.pagination.hasPrevPage,
+                });
+              }
             }
           }
         }
@@ -190,6 +219,61 @@ export default function RelatedBooksPage() {
       isAddingNewCover: false,
       currentEditingCover: null,
     }));
+  };
+
+  // Pagination handlers
+  const handlePageChange = async (page: number) => {
+    if (page < 1 || page > pagination.totalPages) return;
+
+    try {
+      setLoading(true);
+
+      if (
+        latestCouple?.characterSelection &&
+        latestCouple?.answers?.selectedAnswers
+      ) {
+        const response = await fetch("/api/books/finder", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            answers: latestCouple.answers.selectedAnswers,
+            characterSelection: latestCouple.characterSelection,
+            page: page,
+            limit: pagination.limit,
+          }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const dynamicBooks = data.data.data || [];
+          const convertedBooks = dynamicBooks.map((dynamicBook: any) =>
+            convertDynamicBookToBook(
+              dynamicBook,
+              latestCouple?.characterSelection
+            )
+          );
+          setBooks(convertedBooks);
+
+          // Update pagination
+          if (data.data.pagination) {
+            setPagination({
+              currentPage: data.data.pagination.currentPage,
+              totalPages: data.data.pagination.totalPages,
+              totalCount: data.data.pagination.totalCount,
+              limit: data.data.pagination.limit,
+              hasNextPage: data.data.pagination.hasNextPage,
+              hasPrevPage: data.data.pagination.hasPrevPage,
+            });
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching books:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSaveCover = () => {
@@ -503,7 +587,7 @@ export default function RelatedBooksPage() {
 
   // Function to reset all state completely
   const resetAllState = () => {
-    setBooks([]);
+    // Don't reset books - keep them for display
     setSelectedPaper(PAPER_OPTIONS[0]);
 
     setBookCreator({
@@ -612,6 +696,71 @@ export default function RelatedBooksPage() {
           <div className="text-center py-12">
             <p className="text-royal-700 text-lg">
               {t("relatedBooks.noBooksFound")}
+            </p>
+          </div>
+        )}
+
+        {/* Pagination */}
+        {pagination.totalPages > 1 && (
+          <div className="flex justify-center items-center mt-8 space-x-2">
+            {/* Previous Button */}
+            <button
+              onClick={() => handlePageChange(pagination.currentPage - 1)}
+              disabled={!pagination.hasPrevPage}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                pagination.hasPrevPage
+                  ? "bg-azalove-500 text-white hover:bg-azalove-600"
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+              }`}
+            >
+              السابق
+            </button>
+
+            {/* Page Numbers */}
+            <div className="flex space-x-1">
+              {Array.from(
+                { length: pagination.totalPages },
+                (_, i) => i + 1
+              ).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => handlePageChange(page)}
+                  className={`px-3 py-2 rounded-lg font-medium transition-colors ${
+                    page === pagination.currentPage
+                      ? "bg-royal-500 text-white"
+                      : "bg-white text-royal-700 hover:bg-royal-50 border border-royal-200"
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+            </div>
+
+            {/* Next Button */}
+            <button
+              onClick={() => handlePageChange(pagination.currentPage + 1)}
+              disabled={!pagination.hasNextPage}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                pagination.hasNextPage
+                  ? "bg-azalove-500 text-white hover:bg-azalove-600"
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+              }`}
+            >
+              التالي
+            </button>
+          </div>
+        )}
+
+        {/* Pagination Info */}
+        {pagination.totalCount > 0 && (
+          <div className="text-center mt-4 text-royal-600">
+            <p className="text-sm">
+              عرض {(pagination.currentPage - 1) * pagination.limit + 1} -{" "}
+              {Math.min(
+                pagination.currentPage * pagination.limit,
+                pagination.totalCount
+              )}{" "}
+              من {pagination.totalCount} كتاب
             </p>
           </div>
         )}

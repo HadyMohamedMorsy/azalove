@@ -12,11 +12,10 @@ export default function SavedCoupleDisplay({
     <div className="mb-8 bg-white rounded-lg p-6 shadow-sm border border-azalove-100">
       <div className="text-center mb-4">
         <h2 className="text-2xl font-bold text-royal-900 mb-2">
-          Your Saved Couple: {couple.name}
+          زوجك المحفوظ: {couple.name}
         </h2>
         <p className="text-royal-600">
-          Here are your characters! Choose a book cover to create your
-          personalized story.
+          إليك شخصياتك! اختر غلاف كتاب لإنشاء قصتك المخصصة
         </p>
       </div>
 
@@ -31,7 +30,7 @@ export default function SavedCoupleDisplay({
 
       <div className="text-center mt-4">
         <p className="text-sm text-royal-600">
-          Created on {new Date(couple.createdAt).toLocaleDateString()}
+          تم الإنشاء في {new Date(couple.createdAt).toLocaleDateString()}
         </p>
       </div>
     </div>

@@ -1,5 +1,5 @@
 "use client";
-import { useShapes } from "@/hooks/use-shapes";
+import { useStartCharacterShapes } from "@/hooks/use-start-character-shapes";
 
 interface CharacterPreviewProps {
   shapeId: string;
@@ -12,7 +12,7 @@ export default function CharacterPreview({
   size = 300,
   className = "",
 }: CharacterPreviewProps) {
-  const { shapes } = useShapes();
+  const { shapes } = useStartCharacterShapes();
 
   const getBodyShapeSVG = () => {
     if (!shapes.bodyShapes || !shapeId) {

@@ -5,12 +5,14 @@ interface MultiLayerPreviewProps {
   layers: CharacterLayer[];
   size?: number;
   className?: string;
+  characterType?: "Layer_2" | "Layer_4";
 }
 
 export default function MultiLayerPreview({
   layers,
   size = 300,
   className = "",
+  characterType,
 }: MultiLayerPreviewProps) {
   if (!layers || layers.length === 0) {
     return (
@@ -34,9 +36,11 @@ export default function MultiLayerPreview({
         width={size}
         height={size}
         className="absolute top-0 left-0"
+        id={characterType ? `${characterType}` : "character-unknown"}
       >
         {layers.map((layer, index) => (
           <g
+            id={layer.bodyType}
             key={`${layer.bodyType}-${index}`}
             dangerouslySetInnerHTML={{ __html: layer.svg }}
           />

@@ -1,5 +1,6 @@
 "use client";
-import { useShapes } from "@/hooks/use-shapes";
+import { useStartCharacterShapes } from "@/hooks/use-start-character-shapes";
+import { useTranslation } from "@/hooks/use-translation";
 import {
   CharacterLayer,
   CharacterSelection,
@@ -29,12 +30,46 @@ export default function CharacterCustomizer({
   setActiveBodyType,
   setActiveColor,
 }: CharacterCustomizerProps) {
-  const { shapes } = useShapes();
+  const { shapes, loading } = useStartCharacterShapes();
+  const { t } = useTranslation();
   const [activeType, setActiveType] = useState("");
   useEffect(() => {
     if (selection.activeCharacter) {
       setActiveType(selection.activeCharacter);
     }
+
+    // Auto-select first body type if none selected
+    if (
+      shapes.bodyTypes &&
+      shapes.bodyTypes.length > 0 &&
+      !selection.activeBodyType
+    ) {
+      const firstBodyType = shapes.bodyTypes[0].id;
+      setActiveBodyType(firstBodyType);
+
+      // Auto-select first available color and shape for the first body type
+      if (
+        shapes.bodyShapes?.[firstBodyType] &&
+        shapes.bodyShapes[firstBodyType].length > 0
+      ) {
+        const firstShape = shapes.bodyShapes[firstBodyType][0];
+        if (firstShape.colorCode) {
+          setActiveColor(firstShape.colorCode);
+        }
+        if (firstShape.type) {
+          setActiveType(firstShape.type);
+        }
+        // Auto-apply the first shape
+        updateCharacterLayer(
+          firstBodyType,
+          firstShape.svg,
+          firstShape.colorCode,
+          firstShape.label
+        );
+      }
+    }
+
+    // Set default color if none selected and we have colors
     if (
       shapes.bodyColors &&
       shapes.bodyColors.length > 0 &&
@@ -42,22 +77,17 @@ export default function CharacterCustomizer({
     ) {
       setActiveColor(shapes.bodyColors[0]);
     }
-    if (
-      shapes.bodyTypes &&
-      shapes.bodyTypes.length > 0 &&
-      !selection.activeBodyType
-    ) {
-      setActiveBodyType(shapes.bodyTypes[0].id);
-    }
   }, [
     selection.activeCharacter,
     shapes.bodyColors,
     shapes.bodyTypes,
+    shapes.bodyShapes,
     activeType,
     selection.activeColor,
     selection.activeBodyType,
     setActiveColor,
     setActiveBodyType,
+    updateCharacterLayer,
   ]);
 
   const filteredShapes =
@@ -65,10 +95,11 @@ export default function CharacterCustomizer({
       ? (shapes.bodyShapes?.[selection.activeBodyType] || []).filter(
           (shape: any) => {
             const matchesType = shape.type === activeType;
+            const matchesCharacter = shape.type === selection.activeCharacter;
             const matchesColor =
               !selection.activeColor ||
               shape.colorCode === selection.activeColor;
-            return matchesType && matchesColor;
+            return matchesType && matchesCharacter && matchesColor;
           }
         )
       : [];
@@ -83,7 +114,8 @@ export default function CharacterCustomizer({
     }
 
     const availableShapes = shapes.bodyShapes[selection.activeBodyType].filter(
-      (shape: any) => shape.type === activeType
+      (shape: any) =>
+        shape.type === activeType && shape.type === selection.activeCharacter
     );
 
     const availableColors = Array.from(
@@ -94,41 +126,86 @@ export default function CharacterCustomizer({
 
   const availableColors = getAvailableColors();
 
+  // Helper function to ensure first child is always selected for the active character
+  const selectFirstAvailable = (
+    bodyType: string,
+    type?: string,
+    color?: string
+  ) => {
+    if (!shapes.bodyShapes?.[bodyType]) return;
+
+    let availableShapes = shapes.bodyShapes[bodyType];
+
+    // Filter by type if provided
+    if (type) {
+      availableShapes = availableShapes.filter(
+        (shape: any) => shape.type === type
+      );
+    }
+
+    // Filter by color if provided
+    if (color) {
+      availableShapes = availableShapes.filter(
+        (shape: any) => shape.colorCode === color
+      );
+    }
+
+    // Filter by active character type (Layer_2 or Layer_4)
+    const activeCharacterType = selection.activeCharacter;
+    if (activeCharacterType) {
+      availableShapes = availableShapes.filter(
+        (shape: any) => shape.type === activeCharacterType
+      );
+    }
+
+    if (availableShapes.length > 0) {
+      const firstShape = availableShapes[0];
+
+      // Set type if not provided
+      if (!type && firstShape.type) {
+        setActiveType(firstShape.type);
+      }
+
+      // Set color if not provided
+      if (!color && firstShape.colorCode) {
+        setActiveColor(firstShape.colorCode);
+      }
+
+      // Always apply the first shape
+      updateCharacterLayer(
+        bodyType,
+        firstShape.svg,
+        firstShape.colorCode,
+        firstShape.label
+      );
+    }
+  };
+
+  // Don't render if still loading
+  if (loading) {
+    return null;
+  }
+
   const handleTabClick = (tabId: string) => {
     setActiveBodyType(tabId);
-    if (activeType && shapes.bodyShapes?.[tabId]) {
-      const availableShapes = shapes.bodyShapes[tabId].filter(
-        (shape: any) => shape.type === activeType
-      );
-      if (availableShapes.length > 0) {
-        const firstColor = availableShapes[0].colorCode;
-        if (firstColor) {
-          setActiveColor(firstColor);
-        }
-      }
-    }
+    // Auto-select first available type and color for this body type
+    selectFirstAvailable(tabId);
   };
 
   const handleTypeClick = (type: string) => {
     setActiveType(type);
-    if (
-      selection.activeBodyType &&
-      shapes.bodyShapes?.[selection.activeBodyType]
-    ) {
-      const availableShapes = shapes.bodyShapes[
-        selection.activeBodyType
-      ].filter((shape: any) => shape.type === type);
-      if (availableShapes.length > 0) {
-        const firstColor = availableShapes[0].colorCode;
-        if (firstColor) {
-          setActiveColor(firstColor);
-        }
-      }
+    // Auto-select first available color and shape for this type
+    if (selection.activeBodyType) {
+      selectFirstAvailable(selection.activeBodyType, type);
     }
   };
 
   const handleColorClick = (color: string) => {
     setActiveColor(color);
+    // Auto-select first available shape for this color
+    if (selection.activeBodyType) {
+      selectFirstAvailable(selection.activeBodyType, activeType, color);
+    }
   };
 
   const handleShapeClick = (shape: any) => {
@@ -189,7 +266,7 @@ export default function CharacterCustomizer({
                     (bt: any) => bt.id === selection.activeBodyType
                   )?.label
                 }{" "}
-                Shapes
+                {t("character.shapes")}
               </h3>
               <div className="grid grid-cols-4 gap-3 max-w-2xl mx-auto">
                 {filteredShapes.map((shape: any) => {

@@ -191,8 +191,8 @@ export function CharacterSaveDialog({
             <h3 className="text-lg font-semibold mb-2">{question.question}</h3>
             <p className="text-gray-600 mb-4">
               {question.questionType === "input"
-                ? "Please provide your answer"
-                : "Please select your answer"}
+                ? t("character.yourAnswer")
+                : t("character.selectAnswer")}
             </p>
           </div>
           <div className="space-y-3">
@@ -212,7 +212,9 @@ export function CharacterSaveDialog({
       case "select":
         return (
           <>
-            <Label htmlFor={`question-${question.id}`}>Answer</Label>
+            <Label htmlFor={`question-${question.id}`}>
+              {t("character.answer")}
+            </Label>
             <Select
               value={selectedAnswer?.answerId?.toString() || ""}
               onValueChange={(value) =>
@@ -220,7 +222,7 @@ export function CharacterSaveDialog({
               }
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select an answer" />
+                <SelectValue placeholder={t("character.selectAnswer")} />
               </SelectTrigger>
               <SelectContent>
                 {question.answers.map((answer) => (
@@ -236,7 +238,7 @@ export function CharacterSaveDialog({
       case "checkbox":
         return (
           <>
-            <Label>Select all that apply</Label>
+            <Label>{t("character.selectAllThatApply")}</Label>
             <div className="space-y-2">
               {question.answers.map((answer) => {
                 const isChecked =
@@ -270,10 +272,12 @@ export function CharacterSaveDialog({
       case "input":
         return (
           <>
-            <Label htmlFor={`question-${question.id}`}>Your answer</Label>
+            <Label htmlFor={`question-${question.id}`}>
+              {t("character.yourAnswer")}
+            </Label>
             <Input
               id={`question-${question.id}`}
-              placeholder="Type your answer here..."
+              placeholder={t("character.typeAnswerHere")}
               value={selectedAnswer?.textAnswer || ""}
               onChange={(e) =>
                 handleTextAnswerChange(question.id, e.target.value)
@@ -298,7 +302,7 @@ export function CharacterSaveDialog({
         <DialogContent className="sm:max-w-md">
           <div className="text-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-600 mx-auto mb-4"></div>
-            <p>Loading questions...</p>
+            <p>{t("character.loadingQuestions")}</p>
           </div>
         </DialogContent>
       </Dialog>
@@ -310,8 +314,12 @@ export function CharacterSaveDialog({
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="sm:max-w-md">
           <div className="text-center py-8">
-            <p className="text-red-600 mb-4">Error loading questions</p>
-            <Button onClick={() => window.location.reload()}>Retry</Button>
+            <p className="text-red-600 mb-4">
+              {t("character.errorLoadingQuestions")}
+            </p>
+            <Button onClick={() => window.location.reload()}>
+              {t("character.retry")}
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
@@ -357,7 +365,9 @@ export function CharacterSaveDialog({
               disabled={!canProceed()}
               className="bg-red-600 hover:bg-red-700"
             >
-              {step === totalSteps ? t("character.saveDialog.save") : "Next"}
+              {step === totalSteps
+                ? t("character.saveDialog.save")
+                : t("character.next")}
             </Button>
           </div>
         </div>

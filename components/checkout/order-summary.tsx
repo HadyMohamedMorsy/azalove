@@ -13,6 +13,7 @@ import { API_BASE_URL } from "@/config/api";
 import { useCart } from "@/contexts/cart-context";
 import { useGeneralSettings } from "@/contexts/general-settings-context";
 import { useCurrency } from "@/hooks/use-currency";
+import { useTranslation } from "@/hooks/use-translation";
 import { CouponService } from "@/lib/coupon-service";
 import { AppliedCoupon } from "@/types";
 import { ShoppingBag, Tag, Truck, X } from "lucide-react";
@@ -20,6 +21,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const OrderSummary = () => {
+  const { t } = useTranslation();
   const {
     cartItems,
     getTotalPrice,
@@ -77,12 +79,12 @@ const OrderSummary = () => {
 
   const handleApplyPromoCode = async () => {
     if (!promoCode.trim()) {
-      setPromoError("يرجى إدخال كود الخصم");
+      setPromoError(t("checkout.orderSummary.promoCodeError"));
       return;
     }
 
     if (cartItems.length === 0) {
-      setPromoError("يجب إضافة منتجات إلى السلة أولاً");
+      setPromoError(t("checkout.orderSummary.addProductsFirst"));
       return;
     }
 
@@ -106,7 +108,9 @@ const OrderSummary = () => {
       // Check if order meets minimum requirements
       if (subtotal < response.data.minOrderTotalPrice) {
         setPromoError(
-          `يجب أن يكون إجمالي الطلب ${response.data.minOrderTotalPrice} ريال على الأقل (المجموع الحالي: ${subtotal} ريال)`
+          t("checkout.orderSummary.minOrderRequired")
+            .replace("{minAmount}", response.data.minOrderTotalPrice.toString())
+            .replace("{currentAmount}", subtotal.toString())
         );
         return;
       }
@@ -116,7 +120,12 @@ const OrderSummary = () => {
         response.data.minOrderItemCount
       ) {
         setPromoError(
-          `يجب أن يكون عدد المنتجات ${response.data.minOrderItemCount} على الأقل (العدد الحالي: ${cartItems.reduce((sum, item) => sum + item.quantity, 0)})`
+          t("checkout.orderSummary.minProductCountRequired")
+            .replace("{minCount}", response.data.minOrderItemCount.toString())
+            .replace(
+              "{currentCount}",
+              cartItems.reduce((sum, item) => sum + item.quantity, 0).toString()
+            )
         );
         return;
       }
@@ -138,9 +147,11 @@ const OrderSummary = () => {
       console.error("Coupon validation error:", error);
 
       if (error.name === "TypeError" && error.message.includes("fetch")) {
-        setPromoError("فشل في الاتصال بالخادم. يرجى المحاولة مرة أخرى");
+        setPromoError(t("checkout.orderSummary.promoCodeServerError"));
       } else {
-        setPromoError(error.message || "فشل في التحقق من كود الخصم");
+        setPromoError(
+          error.message || t("checkout.orderSummary.promoCodeValidationError")
+        );
       }
     } finally {
       setIsValidating(false);
@@ -179,11 +190,11 @@ const OrderSummary = () => {
           <div className="w-8 h-8 rounded-full bg-azalove-100 flex items-center justify-center">
             <ShoppingBag className="w-4 h-4 text-azalove-600" />
           </div>
-          ملخص الطلب
+          {t("checkout.orderSummary.title")}
         </CardTitle>
         <CardDescription className="text-royal-600">
-          {cartItems.reduce((sum, item) => sum + item.quantity, 0)} منتجات في
-          طلبك
+          {cartItems.reduce((sum, item) => sum + item.quantity, 0)}{" "}
+          {t("checkout.orderSummary.itemsInOrder")}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4 p-6">
@@ -236,15 +247,20 @@ const OrderSummary = () => {
                 {shippingData.locationName}
               </div>
               <div className="text-xs text-royal-600 mt-1">
-                نوع الموقع:{" "}
-                {shippingData.locationType === "region" ? "منطقة" : "مدينة"}
+                {t("checkout.orderSummary.locationType")}{" "}
+                {shippingData.locationType === "region"
+                  ? t("checkout.orderSummary.region")
+                  : t("checkout.orderSummary.city")}
               </div>
               <div className="text-xs text-royal-600 mt-1">
-                تكلفة الشحن: {formatCurrency(shippingData.shipment?.cost || 0)}
+                {t("checkout.orderSummary.shippingCostLabel")}{" "}
+                {formatCurrency(shippingData.shipment?.cost || 0)}
               </div>
               {settings?.shipping_days && (
                 <div className="text-xs text-royal-600 mt-1">
-                  مدة التوصيل: {settings.shipping_days} أيام عمل
+                  {t("checkout.orderSummary.deliveryTimeLabel")}{" "}
+                  {settings.shipping_days}{" "}
+                  {t("checkout.orderSummary.workingDays")}
                 </div>
               )}
             </div>
@@ -257,10 +273,12 @@ const OrderSummary = () => {
             <div className="w-6 h-6 rounded-full bg-azalove-100 flex items-center justify-center">
               <Tag className="w-3 h-3 text-azalove-600" />
             </div>
-            <span className="font-medium">كود الخصم</span>
+            <span className="font-medium">
+              {t("checkout.orderSummary.promoCode")}
+            </span>
             {appliedCoupon && (
               <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded-full font-medium">
-                مطبق
+                {t("checkout.orderSummary.applied")}
               </span>
             )}
           </div>
@@ -269,7 +287,7 @@ const OrderSummary = () => {
             <div className="flex gap-2">
               <Input
                 type="text"
-                placeholder="أدخل كود الخصم"
+                placeholder={t("checkout.orderSummary.promoCodePlaceholder")}
                 value={promoCode}
                 onChange={(e) => setPromoCode(e.target.value)}
                 onKeyPress={handleKeyPress}
@@ -286,10 +304,10 @@ const OrderSummary = () => {
                 {isValidating ? (
                   <div className="flex items-center gap-2">
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    جاري التحقق...
+                    {t("checkout.payment.processing")}
                   </div>
                 ) : (
-                  "تطبيق"
+                  t("checkout.orderSummary.applyPromoCode")
                 )}
               </Button>
             </div>
@@ -303,11 +321,11 @@ const OrderSummary = () => {
                   {appliedCoupon.code}
                 </Badge>
                 <span className="text-sm text-green-700">
-                  تم تطبيق الخصم بنجاح!
+                  {t("checkout.orderSummary.promoCodeApplied")}
                   <span className="font-medium">
                     {appliedCoupon.type === "percentage"
                       ? ` ${appliedCoupon.discount}%`
-                      : ` ${appliedCoupon.discount} ريال`}
+                      : ` ${appliedCoupon.discount} ${t("checkout.orderSummary.currency")}`}
                   </span>
                 </span>
               </div>
@@ -325,14 +343,18 @@ const OrderSummary = () => {
           {/* Coupon requirements info */}
           {appliedCoupon && (
             <div className="text-xs text-green-600 bg-green-50 p-2 rounded border border-green-200">
-              <div className="font-medium mb-1">متطلبات الكوبون:</div>
-              <div>
-                • الحد الأدنى للطلب:{" "}
-                {formatCurrency(appliedCoupon.minOrderTotalPrice)} ريال
+              <div className="font-medium mb-1">
+                {t("checkout.orderSummary.couponRequirements")}
               </div>
               <div>
-                • الحد الأدنى لعدد المنتجات: {appliedCoupon.minOrderItemCount}{" "}
-                منتج
+                • {t("checkout.orderSummary.minOrderAmount")}{" "}
+                {formatCurrency(appliedCoupon.minOrderTotalPrice)}{" "}
+                {t("checkout.orderSummary.currency")}
+              </div>
+              <div>
+                • {t("checkout.orderSummary.minProductCount")}{" "}
+                {appliedCoupon.minOrderItemCount}{" "}
+                {t("checkout.orderSummary.products")}
               </div>
             </div>
           )}
@@ -358,7 +380,9 @@ const OrderSummary = () => {
         {/* Order Totals */}
         <div className="border-t border-cream-200 pt-4 space-y-3">
           <div className="flex justify-between text-sm">
-            <span className="text-royal-700">المجموع الفرعي</span>
+            <span className="text-royal-700">
+              {t("checkout.orderSummary.subtotal")}
+            </span>
             <span className="text-royal-900 font-medium">
               {formatCurrency(subtotal)}
             </span>
@@ -366,7 +390,9 @@ const OrderSummary = () => {
 
           {shippingCost > 0 && (
             <div className="flex justify-between text-sm">
-              <span className="text-royal-700">تكلفة الشحن</span>
+              <span className="text-royal-700">
+                {t("checkout.orderSummary.shippingCost")}
+              </span>
               <span className="text-royal-900 font-medium">
                 {formatCurrency(shippingCost)}
               </span>
@@ -375,16 +401,21 @@ const OrderSummary = () => {
 
           {settings?.shipping_days && (
             <div className="flex justify-between text-sm">
-              <span className="text-royal-700">مدة التوصيل</span>
+              <span className="text-royal-700">
+                {t("checkout.orderSummary.deliveryTime")}
+              </span>
               <span className="text-royal-900 font-medium">
-                {settings.shipping_days} أيام عمل
+                {settings.shipping_days}{" "}
+                {t("checkout.orderSummary.workingDays")}
               </span>
             </div>
           )}
 
           {taxRate > 0 && (
             <div className="flex justify-between text-sm">
-              <span className="text-royal-700">الضريبة ({taxRate}%)</span>
+              <span className="text-royal-700">
+                {t("checkout.orderSummary.tax")} ({taxRate}%)
+              </span>
               <span className="text-royal-900 font-medium">
                 {formatCurrency(tax)}
               </span>
@@ -394,10 +425,10 @@ const OrderSummary = () => {
           {appliedCoupon && discount > 0 && (
             <div className="flex justify-between text-sm text-green-600">
               <span>
-                الخصم ({appliedCoupon.code}) -{" "}
+                {t("checkout.orderSummary.discount")} ({appliedCoupon.code}) -{" "}
                 {appliedCoupon.type === "percentage"
                   ? `${appliedCoupon.discount}%`
-                  : "مبلغ ثابت"}
+                  : t("checkout.orderSummary.fixedAmount")}
               </span>
               <span className="font-medium">-{formatCurrency(discount)}</span>
             </div>
@@ -405,7 +436,9 @@ const OrderSummary = () => {
 
           <div className="border-t border-cream-200 pt-3">
             <div className="flex justify-between font-bold text-lg">
-              <span className="text-royal-900">المجموع الكلي</span>
+              <span className="text-royal-900">
+                {t("checkout.orderSummary.total")}
+              </span>
               <span className="text-royal-900">
                 {formatCurrency(getTotalWithDiscount() + tax)}
               </span>

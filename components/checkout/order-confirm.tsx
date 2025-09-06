@@ -1,10 +1,8 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useCart } from "@/contexts/cart-context";
 import { useCreateOrder } from "@/hooks/use-create-order";
 import { useTranslation } from "@/hooks/use-translation";
-import { CreateOrderRequest } from "@/types/order";
 import {
   AlertCircle,
   CheckCircle,
@@ -36,6 +34,7 @@ const OrderConfirmation = ({
   // Use propOrderData if available, otherwise create order
 
   useEffect(() => {
+    console.log("OrderConfirmation received orderData:", propOrderData);
     setOrderData(propOrderData);
   }, [propOrderData]);
 
@@ -127,7 +126,9 @@ const OrderConfirmation = ({
                   <p className="text-sm font-medium text-royal-900">
                     {t("checkout.confirmation.orderNumber")}
                   </p>
-                  <p className="text-sm text-royal-600">{orderData?.order_number}</p>
+                  <p className="text-sm text-royal-600">
+                    {orderData?.order_number}
+                  </p>
                 </div>
               </div>
 

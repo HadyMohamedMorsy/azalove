@@ -88,7 +88,6 @@ export function PaymentMethods({
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-semibold mb-4">Payment Methods</h3>
         <RadioGroup
           value={selectedPaymentMethod?.id?.toString()}
           onValueChange={(value) => {

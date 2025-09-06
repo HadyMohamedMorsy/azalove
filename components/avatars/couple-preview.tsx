@@ -13,17 +13,26 @@ export default function CouplePreview({
   character2,
   size = 300,
 }: CouplePreviewProps) {
-
   return (
     <div className="flex justify-center mb-6">
       <div className="flex items-center">
         {/* Character 1 - Layer 2 */}
-        <MultiLayerPreview layers={character1} size={size} className="mr-4" />
+        <MultiLayerPreview
+          layers={character1}
+          size={size}
+          className="mr-4"
+          characterType="Layer_2"
+        />
 
         <div className="text-4xl text-red-500 mx-4">❤️</div>
 
         {/* Character 2 - Layer 4 */}
-        <MultiLayerPreview layers={character2} size={size} className="ml-4" />
+        <MultiLayerPreview
+          layers={character2}
+          size={size}
+          className="ml-4"
+          characterType="Layer_4"
+        />
       </div>
     </div>
   );

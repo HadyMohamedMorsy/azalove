@@ -15,16 +15,16 @@ export interface CreateOrderRequest {
 }
 
 export interface CreateOrderResponse {
-  success: boolean;
+  statusCode: number;
+  status: string;
   message: string;
-  data?: {
+  data: {
     order_id: string;
     order_number: string;
     total_amount: number;
     status: string;
     created_at: string;
   };
-  error?: string;
 }
 
 export interface Order {

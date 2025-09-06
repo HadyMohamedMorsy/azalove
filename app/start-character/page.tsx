@@ -3,17 +3,20 @@
 import CharacterCustomizer from "@/components/avatars/character-customizer";
 import CharacterSelector from "@/components/avatars/character-selector";
 import CouplePreview from "@/components/avatars/couple-preview";
+import CharacterCustomizerSkeleton from "@/components/ui/character-customizer-skeleton";
 import {
   CharacterSaveDialog,
   SaveAnswers,
 } from "@/components/ui/character-save-dialog";
+import { StartCharacterShapesProvider } from "@/contexts/start-character-shapes-context";
 import { useCharacterState } from "@/hooks/use-character-state";
 import { useSavedCouples } from "@/hooks/use-saved-couples";
+import { useStartCharacterShapes } from "@/hooks/use-start-character-shapes";
 import { useTranslation } from "@/hooks/use-translation";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function StartCharacterPage() {
+function StartCharacterContent() {
   const {
     characterState,
     selection,
@@ -24,10 +27,18 @@ export default function StartCharacterPage() {
     setActiveColor,
   } = useCharacterState();
 
+  const { loading } = useStartCharacterShapes();
   const { saveCouple } = useSavedCouples();
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const { t } = useTranslation();
   const router = useRouter();
+
+  // Check if both characters have layers
+  const hasCharacter1 =
+    characterState.Layer_2 && characterState.Layer_2.length > 0;
+  const hasCharacter2 =
+    characterState.Layer_4 && characterState.Layer_4.length > 0;
+  const canCreateCouple = hasCharacter1 && hasCharacter2;
 
   const handleSaveCharacter = (answers: SaveAnswers) => {
     // Prepare character selection data with null safety
@@ -82,12 +93,28 @@ export default function StartCharacterPage() {
           <h1 className="text-2xl font-bold text-gray-800">
             {t("character.createCouple")}
           </h1>
-          <button
-            onClick={() => setShowSaveDialog(true)}
-            className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
-          >
-            Create Couples
-          </button>
+          <div className="flex flex-col items-end">
+            <button
+              onClick={() => setShowSaveDialog(true)}
+              disabled={!canCreateCouple}
+              className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+                canCreateCouple
+                  ? "bg-red-600 hover:bg-red-700 text-white cursor-pointer"
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+              }`}
+            >
+              {t("character.createCouples")}
+            </button>
+            {!canCreateCouple && (
+              <p className="text-xs text-gray-500 mt-1">
+                {!hasCharacter1 && !hasCharacter2
+                  ? "يرجى إنشاء الشخصيتين أولاً"
+                  : !hasCharacter1
+                    ? "يرجى إنشاء الشخصية الأولى (Layer_2)"
+                    : "يرجى إنشاء الشخصية الثانية (Layer_4)"}
+              </p>
+            )}
+          </div>
         </div>
 
         {/* Character Selector */}
@@ -117,14 +144,18 @@ export default function StartCharacterPage() {
         </div>
 
         {/* Character Customizer */}
-        <CharacterCustomizer
-          characterState={characterState}
-          selection={selection}
-          currentLayers={currentLayers}
-          updateCharacterLayer={updateCharacterLayer}
-          setActiveBodyType={setActiveBodyType}
-          setActiveColor={setActiveColor}
-        />
+        {loading ? (
+          <CharacterCustomizerSkeleton />
+        ) : (
+          <CharacterCustomizer
+            characterState={characterState}
+            selection={selection}
+            currentLayers={currentLayers}
+            updateCharacterLayer={updateCharacterLayer}
+            setActiveBodyType={setActiveBodyType}
+            setActiveColor={setActiveColor}
+          />
+        )}
       </div>
 
       {/* Save Dialog */}
@@ -134,5 +165,13 @@ export default function StartCharacterPage() {
         onSave={handleSaveCharacter}
       />
     </div>
+  );
+}
+
+export default function StartCharacterPage() {
+  return (
+    <StartCharacterShapesProvider>
+      <StartCharacterContent />
+    </StartCharacterShapesProvider>
   );
 }

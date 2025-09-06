@@ -220,6 +220,49 @@ export interface Translations {
       confirmPayment: string;
       processing: string;
       secureCardInformation: string;
+      selectPaymentMethod: string;
+      selectBankForTransfer: string;
+      securePaymentMethod: string;
+      selected: string;
+      orderCreationFailed: string;
+      creatingOrder: string;
+      continue: string;
+      confirmOrder: string;
+    };
+    orderSummary: {
+      title: string;
+      promoCode: string;
+      promoCodePlaceholder: string;
+      applyPromoCode: string;
+      promoCodeError: string;
+      promoCodeServerError: string;
+      promoCodeValidationError: string;
+      promoCodeApplied: string;
+      subtotal: string;
+      shippingCost: string;
+      deliveryTime: string;
+      workingDays: string;
+      tax: string;
+      discount: string;
+      fixedAmount: string;
+      total: string;
+      shippingCostLabel: string;
+      deliveryTimeLabel: string;
+      addProductsFirst: string;
+      minOrderRequired: string;
+      currentTotal: string;
+      locationType: string;
+      region: string;
+      city: string;
+      applied: string;
+      currency: string;
+      minOrderAmount: string;
+      couponRequirements: string;
+      minProductCount: string;
+      products: string;
+      minProductCountRequired: string;
+      currentCount: string;
+      itemsInOrder: string;
     };
     confirmation: {
       title: string;
@@ -239,6 +282,10 @@ export interface Translations {
       orderProcessedWithin24Hours: string;
       trackingInfoSentViaEmail: string;
       downloadReceipt: string;
+      processingOrder: string;
+      pleaseWait: string;
+      orderFailed: string;
+      tryAgain: string;
     };
   };
   cart: {
@@ -898,10 +945,23 @@ export interface Translations {
   };
   character: {
     createCouple: string;
+    createCouples: string;
     saveCouple: string;
     currentlyEditing: string;
     character1: string;
     character2: string;
+    shapes: string;
+    loading: string;
+    error: string;
+    retry: string;
+    answer: string;
+    selectAnswer: string;
+    selectAllThatApply: string;
+    yourAnswer: string;
+    typeAnswerHere: string;
+    next: string;
+    loadingQuestions: string;
+    errorLoadingQuestions: string;
     bodyType: {
       title: string;
       slim: string;
@@ -1380,6 +1440,51 @@ export const translations: Record<Locale, Translations> = {
         confirmPayment: "تأكيد الدفع",
         processing: "جاري المعالجة...",
         secureCardInformation: "تفاصيل البطاقة الآمنة",
+        selectPaymentMethod: "يرجى اختيار طريقة الدفع",
+        selectBankForTransfer: "يرجى اختيار البنك للتحويل البنكي",
+        securePaymentMethod: "طريقة دفع آمنة",
+        selected: "محدد",
+        orderCreationFailed: "فشل في إنشاء الطلب",
+        creatingOrder: "جاري إنشاء الطلب...",
+        continue: "متابعة",
+        confirmOrder: "تأكيد الطلب",
+      },
+      orderSummary: {
+        title: "ملخص الطلب",
+        promoCode: "كود الخصم",
+        promoCodePlaceholder: "أدخل كود الخصم",
+        applyPromoCode: "تطبيق",
+        promoCodeError: "يرجى إدخال كود الخصم",
+        promoCodeServerError: "فشل في الاتصال بالخادم. يرجى المحاولة مرة أخرى",
+        promoCodeValidationError: "فشل في التحقق من كود الخصم",
+        promoCodeApplied: "تم تطبيق الخصم بنجاح!",
+        subtotal: "المجموع الفرعي",
+        shippingCost: "تكلفة الشحن",
+        deliveryTime: "مدة التوصيل",
+        workingDays: "أيام عمل",
+        tax: "الضريبة",
+        discount: "الخصم",
+        fixedAmount: "مبلغ ثابت",
+        total: "المجموع الكلي",
+        shippingCostLabel: "تكلفة الشحن:",
+        deliveryTimeLabel: "مدة التوصيل:",
+        addProductsFirst: "يجب إضافة منتجات إلى السلة أولاً",
+        minOrderRequired:
+          "يجب أن يكون إجمالي الطلب {minAmount} ريال على الأقل (المجموع الحالي: {currentAmount} ريال)",
+        currentTotal: "المجموع الحالي",
+        locationType: "نوع الموقع:",
+        region: "منطقة",
+        city: "مدينة",
+        applied: "مطبق",
+        currency: "ريال",
+        minOrderAmount: "الحد الأدنى للطلب:",
+        couponRequirements: "متطلبات الكوبون:",
+        minProductCount: "الحد الأدنى لعدد المنتجات:",
+        products: "منتج",
+        minProductCountRequired:
+          "يجب أن يكون عدد المنتجات {minCount} على الأقل (العدد الحالي: {currentCount})",
+        currentCount: "العدد الحالي",
+        itemsInOrder: "منتجات في طلبك",
       },
       confirmation: {
         title: "تأكيد الطلب",
@@ -1401,6 +1506,10 @@ export const translations: Record<Locale, Translations> = {
         trackingInfoSentViaEmail:
           "تم إرسال معلومات التتبع إلى بريدك الإلكتروني.",
         downloadReceipt: "قم بتحميل إيصال الدفع",
+        processingOrder: "جاري معالجة طلبك",
+        pleaseWait: "يرجى الانتظار...",
+        orderFailed: "فشل في تأكيد الطلب",
+        tryAgain: "حاول مرة أخرى",
       },
     },
     cart: {
@@ -2396,10 +2505,23 @@ export const translations: Record<Locale, Translations> = {
     },
     character: {
       createCouple: "أنشئ زوجك",
+      createCouples: "أنشئ الأزواج",
       saveCouple: "احفظ الزوج",
       currentlyEditing: "تحرير حالياً:",
       character1: "الشخصية الأولى",
       character2: "الشخصية الثانية",
+      shapes: "الأشكال",
+      loading: "جاري التحميل...",
+      error: "خطأ",
+      retry: "إعادة المحاولة",
+      answer: "الإجابة",
+      selectAnswer: "اختر إجابة",
+      selectAllThatApply: "اختر كل ما ينطبق",
+      yourAnswer: "إجابتك",
+      typeAnswerHere: "اكتب إجابتك هنا...",
+      next: "التالي",
+      loadingQuestions: "جاري تحميل الأسئلة...",
+      errorLoadingQuestions: "خطأ في تحميل الأسئلة",
       bodyType: {
         title: "نوع الجسم",
         slim: "نحيف",
@@ -2995,6 +3117,51 @@ export const translations: Record<Locale, Translations> = {
         confirmPayment: "Confirm Payment",
         processing: "Processing...",
         secureCardInformation: "Secure Card Information",
+        selectPaymentMethod: "Please select a payment method",
+        selectBankForTransfer: "Please select a bank for bank transfer",
+        securePaymentMethod: "Secure payment method",
+        selected: "Selected",
+        orderCreationFailed: "Order Creation Failed",
+        creatingOrder: "Creating Order...",
+        continue: "Continue",
+        confirmOrder: "Confirm Order",
+      },
+      orderSummary: {
+        title: "Order Summary",
+        promoCode: "Promo Code",
+        promoCodePlaceholder: "Enter promo code",
+        applyPromoCode: "Apply",
+        promoCodeError: "Please enter a promo code",
+        promoCodeServerError: "Failed to connect to server. Please try again",
+        promoCodeValidationError: "Failed to validate promo code",
+        promoCodeApplied: "Discount applied successfully!",
+        subtotal: "Subtotal",
+        shippingCost: "Shipping Cost",
+        deliveryTime: "Delivery Time",
+        workingDays: "working days",
+        tax: "Tax",
+        discount: "Discount",
+        fixedAmount: "Fixed Amount",
+        total: "Total",
+        shippingCostLabel: "Shipping Cost:",
+        deliveryTimeLabel: "Delivery Time:",
+        addProductsFirst: "Please add products to cart first",
+        minOrderRequired:
+          "Order total must be at least {minAmount} SAR (Current total: {currentAmount} SAR)",
+        currentTotal: "Current Total",
+        locationType: "Location Type:",
+        region: "Region",
+        city: "City",
+        applied: "Applied",
+        currency: "SAR",
+        minOrderAmount: "Minimum Order Amount:",
+        couponRequirements: "Coupon Requirements:",
+        minProductCount: "Minimum Product Count:",
+        products: "products",
+        minProductCountRequired:
+          "Product count must be at least {minCount} (Current count: {currentCount})",
+        currentCount: "Current Count",
+        itemsInOrder: "items in your order",
       },
       confirmation: {
         title: "Order Confirmation",
@@ -3016,6 +3183,10 @@ export const translations: Record<Locale, Translations> = {
         orderProcessedWithin24Hours: "Order processed within 24 hours.",
         trackingInfoSentViaEmail: "Tracking information sent to your email.",
         downloadReceipt: "Download Receipt",
+        processingOrder: "Processing Your Order",
+        pleaseWait: "Please wait...",
+        orderFailed: "Order Confirmation Failed",
+        tryAgain: "Try Again",
       },
     },
     cart: {
@@ -3076,10 +3247,23 @@ export const translations: Record<Locale, Translations> = {
     },
     character: {
       createCouple: "Create Your Couple",
+      createCouples: "Create Couples",
       saveCouple: "Save Couple",
       currentlyEditing: "Currently editing:",
       character1: "Character 1",
       character2: "Character 2",
+      shapes: "Shapes",
+      loading: "Loading...",
+      error: "Error",
+      retry: "Retry",
+      answer: "Answer",
+      selectAnswer: "Select an answer",
+      selectAllThatApply: "Select all that apply",
+      yourAnswer: "Your answer",
+      typeAnswerHere: "Type your answer here...",
+      next: "Next",
+      loadingQuestions: "Loading questions...",
+      errorLoadingQuestions: "Error loading questions",
       bodyType: {
         title: "Body Type",
         slim: "Slim",

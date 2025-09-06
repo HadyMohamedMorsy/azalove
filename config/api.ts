@@ -25,6 +25,7 @@ export const API_ENDPOINTS_FROM_NEXT = {
   COUPON_VALIDATE: "/api/coupon/validate",
   SHAPES_GROUPED: "/api/shapes/grouped",
   BOOKS_FINDER: "/api/books/finder",
+  BOOKS_PAGES : "/api/books/pages"
 };
 
 export const API_ENDPOINTS_FROM_SERVER = {
@@ -41,6 +42,7 @@ export const API_ENDPOINTS_FROM_SERVER = {
   COUPON_VALIDATE: `/coupon/validate`,
   SHAPES_GROUPED: `/shapes/grouped`,
   BOOKS_FINDER: `/books/finder`,
+  BOOKE_PAGES : '/books/pages'
 };
 
 export const API_ENDPOINTS_FROM_SERVER_DASHBOARD = {

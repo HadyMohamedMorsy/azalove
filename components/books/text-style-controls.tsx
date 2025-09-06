@@ -29,11 +29,11 @@ export default function TextStyleControls({
 }: TextStyleControlsProps) {
   return (
     <div className="space-y-4 p-4 border border-azalove-200 rounded-lg bg-gradient-to-br from-cream-50 to-azalove-50">
-      <h4 className="font-semibold text-sm text-royal-800">{label} Style</h4>
+      <h4 className="font-semibold text-sm text-royal-800">تنسيق {label}</h4>
 
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <Label className="text-xs text-royal-700">Font Family</Label>
+          <Label className="text-xs text-royal-700">نوع الخط</Label>
           <Select
             value={style.fontFamily}
             onValueChange={(value) => onStyleChange("fontFamily", value)}
@@ -56,7 +56,7 @@ export default function TextStyleControls({
         </div>
 
         <div>
-          <Label className="text-xs text-royal-700">Font Size</Label>
+          <Label className="text-xs text-royal-700">حجم الخط</Label>
           <Input
             type="number"
             value={style.fontSize}
@@ -71,7 +71,7 @@ export default function TextStyleControls({
       </div>
 
       <div>
-        <Label className="text-xs text-royal-700">Text Color</Label>
+        <Label className="text-xs text-royal-700">لون النص</Label>
         <Select
           value={style.color}
           onValueChange={(value) => onStyleChange("color", value)}
@@ -100,7 +100,7 @@ export default function TextStyleControls({
       </div>
 
       <div>
-        <Label className="text-xs text-royal-700">Text Alignment</Label>
+        <Label className="text-xs text-royal-700">محاذاة النص</Label>
         <div className="flex gap-1 mt-1">
           <Button
             type="button"
