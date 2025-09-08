@@ -192,7 +192,7 @@ const OrderSummary = () => {
           </div>
           {t("checkout.orderSummary.title")}
         </CardTitle>
-        <CardDescription className="text-royal-600">
+        <CardDescription className="text-royal-600 text-base">
           {cartItems.reduce((sum, item) => sum + item.quantity, 0)}{" "}
           {t("checkout.orderSummary.itemsInOrder")}
         </CardDescription>
@@ -215,14 +215,14 @@ const OrderSummary = () => {
                 />
               </div>
               <div className="flex-1 min-w-0">
-                <h4 className="text-sm font-medium truncate text-royal-900">
+                <h4 className="text-base font-medium truncate text-royal-900">
                   {item.name}
                 </h4>
                 <div className="flex items-center justify-between mt-1">
-                  <span className="text-sm text-royal-600">
+                  <span className="text-base text-royal-600">
                     الكمية: {item.quantity}
                   </span>
-                  <span className="text-sm font-medium text-royal-900">
+                  <span className="text-base font-medium text-royal-900">
                     {formatCurrency(
                       (item.finalPrice || item.price) * item.quantity
                     )}
@@ -236,28 +236,28 @@ const OrderSummary = () => {
         {/* Shipping Information */}
         {shippingData && (
           <div className="border-t border-cream-200 pt-4 space-y-3">
-            <div className="flex items-center gap-2 text-sm text-royal-600">
+            <div className="flex items-center gap-2 text-base text-royal-600">
               <div className="w-6 h-6 rounded-full bg-azalove-100 flex items-center justify-center">
                 <Truck className="w-3 h-3 text-azalove-600" />
               </div>
               <span>معلومات الشحن</span>
             </div>
             <div className="p-3 bg-azalove-50 rounded-lg border border-azalove-200">
-              <div className="text-sm text-royal-900 font-medium">
+              <div className="text-base text-royal-900 font-medium">
                 {shippingData.locationName}
               </div>
-              <div className="text-xs text-royal-600 mt-1">
+              <div className="text-sm text-royal-600 mt-1">
                 {t("checkout.orderSummary.locationType")}{" "}
                 {shippingData.locationType === "region"
                   ? t("checkout.orderSummary.region")
                   : t("checkout.orderSummary.city")}
               </div>
-              <div className="text-xs text-royal-600 mt-1">
+              <div className="text-sm text-royal-600 mt-1">
                 {t("checkout.orderSummary.shippingCostLabel")}{" "}
                 {formatCurrency(shippingData.shipment?.cost || 0)}
               </div>
               {settings?.shipping_days && (
-                <div className="text-xs text-royal-600 mt-1">
+                <div className="text-sm text-royal-600 mt-1">
                   {t("checkout.orderSummary.deliveryTimeLabel")}{" "}
                   {settings.shipping_days}{" "}
                   {t("checkout.orderSummary.workingDays")}
@@ -269,7 +269,7 @@ const OrderSummary = () => {
 
         {/* Promo Code */}
         <div className="border-t border-cream-200 pt-4 space-y-3">
-          <div className="flex items-center gap-2 text-sm text-royal-600">
+          <div className="flex items-center gap-2 text-base text-royal-600">
             <div className="w-6 h-6 rounded-full bg-azalove-100 flex items-center justify-center">
               <Tag className="w-3 h-3 text-azalove-600" />
             </div>
@@ -277,7 +277,7 @@ const OrderSummary = () => {
               {t("checkout.orderSummary.promoCode")}
             </span>
             {appliedCoupon && (
-              <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded-full font-medium">
+              <span className="text-sm text-green-600 bg-green-100 px-2 py-1 rounded-full font-medium">
                 {t("checkout.orderSummary.applied")}
               </span>
             )}
@@ -291,7 +291,7 @@ const OrderSummary = () => {
                 value={promoCode}
                 onChange={(e) => setPromoCode(e.target.value)}
                 onKeyPress={handleKeyPress}
-                className="flex-1 text-sm focus:ring-2 focus:ring-azalove-500 focus:border-azalove-500 transition-all duration-200"
+                className="flex-1 text-base focus:ring-2 focus:ring-azalove-500 focus:border-azalove-500 transition-all duration-200"
                 disabled={isValidating}
                 maxLength={20}
               />
@@ -320,7 +320,7 @@ const OrderSummary = () => {
                 >
                   {appliedCoupon.code}
                 </Badge>
-                <span className="text-sm text-green-700">
+                <span className="text-base text-green-700">
                   {t("checkout.orderSummary.promoCodeApplied")}
                   <span className="font-medium">
                     {appliedCoupon.type === "percentage"
@@ -342,7 +342,7 @@ const OrderSummary = () => {
 
           {/* Coupon requirements info */}
           {appliedCoupon && (
-            <div className="text-xs text-green-600 bg-green-50 p-2 rounded border border-green-200">
+            <div className="text-sm text-green-600 bg-green-50 p-2 rounded border border-green-200">
               <div className="font-medium mb-1">
                 {t("checkout.orderSummary.couponRequirements")}
               </div>
@@ -360,7 +360,7 @@ const OrderSummary = () => {
           )}
 
           {promoError && (
-            <div className="text-red-600 text-sm bg-red-50 p-3 rounded-lg border border-red-200 shadow-sm">
+            <div className="text-red-600 text-base bg-red-50 p-3 rounded-lg border border-red-200 shadow-sm">
               <div className="flex items-start gap-2">
                 <div className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0">
                   <svg fill="currentColor" viewBox="0 0 20 20">
@@ -379,7 +379,7 @@ const OrderSummary = () => {
 
         {/* Order Totals */}
         <div className="border-t border-cream-200 pt-4 space-y-3">
-          <div className="flex justify-between text-sm">
+          <div className="flex justify-between text-base">
             <span className="text-royal-700">
               {t("checkout.orderSummary.subtotal")}
             </span>
@@ -389,7 +389,7 @@ const OrderSummary = () => {
           </div>
 
           {shippingCost > 0 && (
-            <div className="flex justify-between text-sm">
+            <div className="flex justify-between text-base">
               <span className="text-royal-700">
                 {t("checkout.orderSummary.shippingCost")}
               </span>
@@ -400,7 +400,7 @@ const OrderSummary = () => {
           )}
 
           {settings?.shipping_days && (
-            <div className="flex justify-between text-sm">
+            <div className="flex justify-between text-base">
               <span className="text-royal-700">
                 {t("checkout.orderSummary.deliveryTime")}
               </span>
@@ -412,7 +412,7 @@ const OrderSummary = () => {
           )}
 
           {taxRate > 0 && (
-            <div className="flex justify-between text-sm">
+            <div className="flex justify-between text-base">
               <span className="text-royal-700">
                 {t("checkout.orderSummary.tax")} ({taxRate}%)
               </span>
@@ -423,7 +423,7 @@ const OrderSummary = () => {
           )}
 
           {appliedCoupon && discount > 0 && (
-            <div className="flex justify-between text-sm text-green-600">
+            <div className="flex justify-between text-base text-green-600">
               <span>
                 {t("checkout.orderSummary.discount")} ({appliedCoupon.code}) -{" "}
                 {appliedCoupon.type === "percentage"
@@ -435,7 +435,7 @@ const OrderSummary = () => {
           )}
 
           <div className="border-t border-cream-200 pt-3">
-            <div className="flex justify-between font-bold text-lg">
+            <div className="flex justify-between font-bold text-xl">
               <span className="text-royal-900">
                 {t("checkout.orderSummary.total")}
               </span>

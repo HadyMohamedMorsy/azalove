@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useState } from "react";
+import StructuredData from "../../seo/structured-data";
 import ProductGrid from "../product-grid";
 import ImageGallery from "./image-gallary";
 import ProductReviews from "./product-reviews";
@@ -458,6 +459,22 @@ const ProductView = () => {
                     </AccordionItem>
                   ))}
                 </Accordion>
+
+                {/* FAQ Structured Data */}
+                <StructuredData
+                  data={{
+                    "@context": "https://schema.org",
+                    "@type": "FAQPage",
+                    mainEntity: faqData.map((faq, index) => ({
+                      "@type": "Question",
+                      name: faq.question,
+                      acceptedAnswer: {
+                        "@type": "Answer",
+                        text: faq.answer,
+                      },
+                    })),
+                  }}
+                />
               </div>
             </TabsContent>
           ) : (

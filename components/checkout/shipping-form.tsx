@@ -155,7 +155,10 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-4">
             <div>
-              <Label htmlFor="email" className="text-royal-900 font-medium">
+              <Label
+                htmlFor="email"
+                className="text-royal-900 font-medium text-base"
+              >
                 {t("checkout.shipping.email")}
               </Label>
               <Input
@@ -172,7 +175,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
               <div>
                 <Label
                   htmlFor="firstName"
-                  className="text-royal-900 font-medium"
+                  className="text-royal-900 font-medium text-base"
                 >
                   {t("checkout.shipping.firstName")}
                 </Label>
@@ -189,7 +192,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
               <div>
                 <Label
                   htmlFor="lastName"
-                  className="text-royal-900 font-medium"
+                  className="text-royal-900 font-medium text-base"
                 >
                   {t("checkout.shipping.lastName")}
                 </Label>
@@ -206,7 +209,10 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
             </div>
 
             <div>
-              <Label htmlFor="address" className="text-royal-900 font-medium">
+              <Label
+                htmlFor="address"
+                className="text-royal-900 font-medium text-base"
+              >
                 {t("checkout.shipping.address")}
               </Label>
               <Input
@@ -220,7 +226,10 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="city" className="text-royal-900 font-medium">
+                <Label
+                  htmlFor="city"
+                  className="text-royal-900 font-medium text-base"
+                >
                   {t("checkout.shipping.city")}
                 </Label>
                 <Input
@@ -234,7 +243,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
               <div>
                 <Label
                   htmlFor="postalCode"
-                  className="text-royal-900 font-medium"
+                  className="text-royal-900 font-medium text-base"
                 >
                   {t("checkout.shipping.postalCode")}
                 </Label>
@@ -286,7 +295,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
         }}
       >
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-royal-900">
+          <h2 className="text-2xl font-semibold text-royal-900">
             {t("checkout.shipping.shippingInfo")}
           </h2>
           <Button
@@ -301,7 +310,10 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <Label htmlFor="email" className="text-royal-900 font-medium">
+            <Label
+              htmlFor="email"
+              className="text-royal-900 font-medium text-base"
+            >
               {t("checkout.shipping.email")}
             </Label>
             <Input
@@ -316,7 +328,10 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="firstName" className="text-royal-900 font-medium">
+              <Label
+                htmlFor="firstName"
+                className="text-royal-900 font-medium text-base"
+              >
                 {t("checkout.shipping.firstName")}
               </Label>
               <Input
@@ -328,7 +343,10 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
               />
             </div>
             <div>
-              <Label htmlFor="lastName" className="text-royal-900 font-medium">
+              <Label
+                htmlFor="lastName"
+                className="text-royal-900 font-medium text-base"
+              >
                 {t("checkout.shipping.lastName")}
               </Label>
               <Input
@@ -342,7 +360,10 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
           </div>
 
           <div>
-            <Label htmlFor="address" className="text-royal-900 font-medium">
+            <Label
+              htmlFor="address"
+              className="text-royal-900 font-medium text-base"
+            >
               {t("checkout.shipping.address")}
             </Label>
             <Input
@@ -356,7 +377,10 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="city" className="text-royal-900 font-medium">
+              <Label
+                htmlFor="city"
+                className="text-royal-900 font-medium text-base"
+              >
                 {t("checkout.shipping.city")}
               </Label>
               <Input
@@ -370,7 +394,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
             <div>
               <Label
                 htmlFor="postalCode"
-                className="text-royal-900 font-medium"
+                className="text-royal-900 font-medium text-base"
               >
                 {t("checkout.shipping.postalCode")}
               </Label>
@@ -420,7 +444,7 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
       }}
     >
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-royal-900">
+        <h2 className="text-2xl font-semibold text-royal-900">
           {t("checkout.shipping.chooseShippingAddress")}
         </h2>
         <Button
@@ -437,22 +461,22 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
       {addressesLoading ? (
         <div className="text-center py-8">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-azalove-500 mx-auto"></div>
-          <p className="text-royal-600 mt-2">
+          <p className="text-royal-600 mt-2 text-base">
             {t("checkout.shipping.loadingAddresses")}
           </p>
         </div>
       ) : addressesError ? (
-        <div className="text-center py-8 text-red-500">
+        <div className="text-center py-8 text-red-500 text-base">
           {t("checkout.shipping.errorLoadingAddresses")}.{" "}
           {t("checkout.shipping.useNewAddress")}.
         </div>
       ) : !addresses || addresses.length === 0 ? (
         <div className="text-center py-8">
           <MapPin className="w-12 h-12 mx-auto text-royal-400 mb-4" />
-          <h3 className="text-lg font-semibold mb-2 text-royal-900">
+          <h3 className="text-xl font-semibold mb-2 text-royal-900">
             {t("checkout.shipping.noSavedAddresses")}
           </h3>
-          <p className="text-royal-600 mb-4">
+          <p className="text-royal-600 mb-4 text-base">
             {t("checkout.shipping.noSavedAddressesDescription")}
           </p>
           <Button
@@ -484,10 +508,10 @@ const ShippingForm = ({ onNext, onBack }: ShippingFormProps) => {
                       <Building className="w-5 h-5 text-royal-400" />
                     )}
                     <div>
-                      <h3 className="font-medium text-royal-900">
+                      <h3 className="font-medium text-royal-900 text-base">
                         {address.title}
                       </h3>
-                      <div className="text-sm text-royal-600 space-y-1 mt-1">
+                      <div className="text-base text-royal-600 space-y-1 mt-1">
                         <div>{address.addressLine1}</div>
                         {address.addressLine2 && (
                           <div>{address.addressLine2}</div>

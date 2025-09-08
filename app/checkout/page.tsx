@@ -127,11 +127,13 @@ const Checkout = () => {
               <h1 className="text-3xl font-bold text-royal-900">
                 {t("checkout.title")}
               </h1>
-              <p className="text-royal-600 mt-1">{t("checkout.subtitle")}</p>
+              <p className="text-royal-600 mt-1 text-lg">
+                {t("checkout.subtitle")}
+              </p>
             </div>
             <div className="flex items-center gap-2 bg-azalove-100 px-4 py-2 rounded-full">
               <Shield className="w-4 h-4 text-azalove-600" />
-              <span className="text-sm font-medium text-azalove-700">
+              <span className="text-base font-medium text-azalove-700">
                 {t("checkout.secureCheckout")}
               </span>
             </div>
@@ -157,7 +159,7 @@ const Checkout = () => {
                   </div>
                   <div className="mt-2 text-center">
                     <span
-                      className={`text-sm font-medium ${
+                      className={`text-base font-medium ${
                         currentStep >= step.id
                           ? "text-royal-900"
                           : "text-royal-400"
@@ -166,7 +168,7 @@ const Checkout = () => {
                       {step.title}
                     </span>
                     <p
-                      className={`text-xs ${
+                      className={`text-sm ${
                         currentStep >= step.id
                           ? "text-royal-600"
                           : "text-royal-300"
@@ -206,10 +208,10 @@ const Checkout = () => {
                       })}
                     </div>
                     <div>
-                      <h2 className="text-xl font-semibold text-royal-900">
+                      <h2 className="text-2xl font-semibold text-royal-900">
                         {steps[currentStep - 1].title}
                       </h2>
-                      <p className="text-royal-600 text-sm">
+                      <p className="text-royal-600 text-base">
                         {steps[currentStep - 1].description}
                       </p>
                     </div>

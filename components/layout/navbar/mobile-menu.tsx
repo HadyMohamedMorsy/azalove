@@ -6,16 +6,53 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { API_ENDPOINTS_FROM_NEXT } from "@/config/api";
 import { siteConfig } from "@/config/site";
-import { BookOpen, Home, Phone, ShoppingBag } from "lucide-react";
+import { useFetch } from "@/hooks/use-fetch";
+import { BookOpen, Home, Phone, ShoppingBag, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
+
+interface Subcategory {
+  id: number;
+  name: string;
+  slug: string;
+  icon: string;
+  description: string;
+  image: string;
+}
+
+interface CategoryData {
+  id: number;
+  name: string;
+  slug: string;
+  icon: string;
+  categoryType: string;
+  description: string;
+  image: string;
+  subCategories: Subcategory[];
+}
+
+interface BlogSubcategory {
+  id: number;
+  name: string;
+  slug: string;
+  icon: string;
+  description: string;
+  image: string;
+}
+
+interface BlogCategoryData {
+  id: number;
+  name: string;
+  slug: string;
+  icon: string;
+  categoryType: string;
+  description: string;
+  image: string;
+  subCategories: BlogSubcategory[];
+}
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -25,73 +62,34 @@ interface MobileMenuProps {
 export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const pathname = usePathname();
 
-  // Shopping categories
-  const shoppingCategories = [
-    {
-      title: "منتجات العناية",
-      items: [
-        { name: "العناية بالبشرة", href: "/products/skincare" },
-        { name: "العناية بالشعر", href: "/products/haircare" },
-        { name: "منتجات الاستحمام", href: "/products/bath" },
-        { name: "العطور", href: "/products/perfumes" },
-        { name: "مكياج", href: "/products/makeup" },
-      ],
-    },
-    {
-      title: "الهدايا الرومانسية",
-      items: [
-        { name: "باقات الورود", href: "/products/flowers" },
-        { name: "شوكولاتة فاخرة", href: "/products/chocolate" },
-        { name: "مجوهرات", href: "/products/jewelry" },
-        { name: "هدايا شخصية", href: "/products/personalized" },
-        { name: "بطاقات معايدة", href: "/products/cards" },
-      ],
-    },
-    {
-      title: "منتجات المنزل",
-      items: [
-        { name: "شموع معطرة", href: "/products/candles" },
-        { name: "ديكورات رومانسية", href: "/products/decor" },
-        { name: "أقمشة وستائر", href: "/products/fabrics" },
-        { name: "إضاءة", href: "/products/lighting" },
-        { name: "وسائد ومفروشات", href: "/products/bedding" },
-      ],
-    },
-  ];
+  // Fetch dynamic categories
+  const { data: shoppingCategories, loading: shoppingLoading } = useFetch<
+    CategoryData[]
+  >(API_ENDPOINTS_FROM_NEXT.MEGA_MENU_CATEGORIES);
 
-  // Blog categories
-  const blogCategories = [
-    {
-      title: "نصائح العناية",
-      items: [
-        { name: "العناية بالبشرة", href: "/blogs/skincare-tips" },
-        { name: "العناية بالشعر", href: "/blogs/haircare-tips" },
-        { name: "روتين العناية اليومي", href: "/blogs/daily-routine" },
-        { name: "منتجات طبيعية", href: "/blogs/natural-products" },
-        { name: "نصائح للجمال", href: "/blogs/beauty-tips" },
-      ],
-    },
-    {
-      title: "أفكار الهدايا",
-      items: [
-        { name: "هدايا رومانسية", href: "/blogs/romantic-gifts" },
-        { name: "هدايا عيد الحب", href: "/blogs/valentines-gifts" },
-        { name: "هدايا الذكرى", href: "/blogs/anniversary-gifts" },
-        { name: "هدايا المناسبات", href: "/blogs/occasion-gifts" },
-        { name: "هدايا محلية الصنع", href: "/blogs/diy-gifts" },
-      ],
-    },
-    {
-      title: "نمط الحياة",
-      items: [
-        { name: "الحياة الصحية", href: "/blogs/healthy-lifestyle" },
-        { name: "الثقة بالنفس", href: "/blogs/self-confidence" },
-        { name: "العلاقات", href: "/blogs/relationships" },
-        { name: "التوازن النفسي", href: "/blogs/mental-wellness" },
-        { name: "الاسترخاء", href: "/blogs/relaxation" },
-      ],
-    },
-  ];
+  const { data: blogCategories, loading: blogLoading } = useFetch<
+    BlogCategoryData[]
+  >(API_ENDPOINTS_FROM_NEXT.MEGA_MENU_BLOG_CATEGORIES);
+
+  // Close menu on Escape key
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen) {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("keydown", handleEscape);
+      // Prevent body scroll when menu is open
+      document.body.style.overflow = "hidden";
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen, onClose]);
 
   const getIcon = (label: string) => {
     switch (label) {
@@ -108,17 +106,37 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
     }
   };
 
-  return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="h-full max-h-screen w-full max-w-full m-0 p-0 rounded-none md:hidden">
-        <DialogHeader className="p-4 pr-12 border-b">
-          <DialogTitle className="text-right text-xl font-bold text-amaranth-700">
-            القائمة
-          </DialogTitle>
-        </DialogHeader>
+  if (!isOpen) return null;
 
-        <div className="flex-1 overflow-y-auto p-3">
-          <div className="space-y-2">
+  return (
+    <div className="fixed inset-0 z-50 md:hidden">
+      {/* Backdrop */}
+      <div
+        className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+        onClick={onClose}
+      />
+
+      {/* Menu Panel */}
+      <div className="fixed right-0 top-0 h-full w-80 max-w-[85vw] bg-white shadow-2xl transform transition-transform duration-300 ease-in-out animate-in slide-in-from-right">
+        {/* Header */}
+        <div className="p-4 border-b border-gray-200 bg-white shadow-sm">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <X className="w-5 h-5 text-gray-600" />
+            </button>
+            <h2 className="text-center text-lg font-bold text-gray-800">
+              القائمة
+            </h2>
+            <div className="w-9"></div> {/* Spacer for balance */}
+          </div>
+        </div>
+
+        {/* Menu Content */}
+        <div className="flex-1 overflow-y-auto p-4 bg-gray-50 h-[calc(100vh-80px)]">
+          <div className="space-y-3">
             {siteConfig.navItems.map((item) => {
               const isActive = pathname === item.href;
               const isShoppingItem = item.label === "التسوق";
@@ -131,46 +149,89 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                     <Link
                       href={item.href}
                       onClick={onClose}
-                      className={`flex items-center gap-3 p-4 rounded-lg transition-colors ${
+                      className={`flex items-center gap-4 p-5 rounded-xl transition-all duration-200 shadow-sm ${
                         isActive
-                          ? "bg-amaranth-100 text-amaranth-700"
-                          : "hover:bg-gray-100"
+                          ? "bg-gradient-to-r from-amaranth-100 to-royal-100 text-amaranth-700 border-r-4 border-amaranth-500"
+                          : "hover:bg-white hover:shadow-md hover:scale-[1.02] bg-white"
                       }`}
                     >
-                      {getIcon(item.label)}
-                      <span className="font-medium">{item.label}</span>
+                      <div
+                        className={`p-2 rounded-lg ${
+                          isActive ? "bg-amaranth-200" : "bg-gray-100"
+                        }`}
+                      >
+                        {getIcon(item.label)}
+                      </div>
+                      <span className="font-semibold text-lg">
+                        {item.label}
+                      </span>
                     </Link>
 
                     {/* Shopping Categories Accordion */}
-                    <Accordion type="single" collapsible className="pr-4">
+                    <Accordion
+                      type="single"
+                      collapsible
+                      className="pr-4 bg-white rounded-xl shadow-sm"
+                    >
                       <AccordionItem value="shopping" className="border-none">
-                        <AccordionTrigger className="text-right hover:no-underline py-3">
-                          <span className="text-sm font-medium text-gray-600">
+                        <AccordionTrigger className="text-right hover:no-underline py-4 px-4 rounded-xl hover:bg-gray-50">
+                          <span className="text-base font-semibold text-amaranth-600">
                             تصفح الأقسام
                           </span>
                         </AccordionTrigger>
                         <AccordionContent className="pb-0">
                           <div className="space-y-4">
-                            {shoppingCategories.map((category, index) => (
-                              <div key={index} className="space-y-2">
-                                <h3 className="font-semibold text-amaranth-700 text-sm">
-                                  {category.title}
-                                </h3>
-                                <ul className="space-y-1 pr-4">
-                                  {category.items.map((subItem, subIndex) => (
-                                    <li key={subIndex}>
-                                      <Link
-                                        href={subItem.href}
-                                        onClick={onClose}
-                                        className="block text-sm text-gray-600 hover:text-amaranth-600 py-2 hover:bg-amaranth-50 px-2 rounded transition-colors"
-                                      >
-                                        {subItem.name}
-                                      </Link>
-                                    </li>
-                                  ))}
-                                </ul>
+                            {shoppingLoading ? (
+                              <div className="text-center py-4">
+                                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-amaranth-600 mx-auto"></div>
+                                <p className="text-sm text-gray-500 mt-2">
+                                  جاري التحميل...
+                                </p>
                               </div>
-                            ))}
+                            ) : shoppingCategories &&
+                              shoppingCategories.length > 0 ? (
+                              shoppingCategories.map((category) => (
+                                <div key={category.id} className="space-y-2">
+                                  <h3 className="font-bold text-amaranth-700 text-base mb-3 border-b border-amaranth-200 pb-2">
+                                    {category.name}
+                                  </h3>
+                                  <ul className="space-y-2 pr-4">
+                                    {category.subCategories &&
+                                    category.subCategories.length > 0 ? (
+                                      category.subCategories.map(
+                                        (subcategory) => (
+                                          <li key={subcategory.id}>
+                                            <Link
+                                              href={`/products/${subcategory.slug}`}
+                                              onClick={onClose}
+                                              className="block text-sm text-gray-700 hover:text-amaranth-600 py-3 hover:bg-gradient-to-r hover:from-amaranth-50 hover:to-royal-50 px-3 rounded-lg transition-all duration-200 hover:shadow-sm"
+                                            >
+                                              {subcategory.name}
+                                            </Link>
+                                          </li>
+                                        )
+                                      )
+                                    ) : (
+                                      <li>
+                                        <Link
+                                          href={`/products/${category.slug}`}
+                                          onClick={onClose}
+                                          className="block text-sm text-gray-700 hover:text-amaranth-600 py-3 hover:bg-gradient-to-r hover:from-amaranth-50 hover:to-royal-50 px-3 rounded-lg transition-all duration-200 hover:shadow-sm"
+                                        >
+                                          عرض جميع المنتجات
+                                        </Link>
+                                      </li>
+                                    )}
+                                  </ul>
+                                </div>
+                              ))
+                            ) : (
+                              <div className="text-center py-4">
+                                <p className="text-sm text-gray-500">
+                                  لا توجد فئات متاحة
+                                </p>
+                              </div>
+                            )}
                           </div>
                         </AccordionContent>
                       </AccordionItem>
@@ -186,46 +247,88 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                     <Link
                       href={item.href}
                       onClick={onClose}
-                      className={`flex items-center gap-3 p-4 rounded-lg transition-colors ${
+                      className={`flex items-center gap-4 p-5 rounded-xl transition-all duration-200 shadow-sm ${
                         isActive
-                          ? "bg-amaranth-100 text-amaranth-700"
-                          : "hover:bg-gray-100"
+                          ? "bg-gradient-to-r from-amaranth-100 to-royal-100 text-amaranth-700 border-r-4 border-amaranth-500"
+                          : "hover:bg-white hover:shadow-md hover:scale-[1.02] bg-white"
                       }`}
                     >
-                      {getIcon(item.label)}
-                      <span className="font-medium">{item.label}</span>
+                      <div
+                        className={`p-2 rounded-lg ${
+                          isActive ? "bg-amaranth-200" : "bg-gray-100"
+                        }`}
+                      >
+                        {getIcon(item.label)}
+                      </div>
+                      <span className="font-semibold text-lg">
+                        {item.label}
+                      </span>
                     </Link>
 
                     {/* Blog Categories Accordion */}
-                    <Accordion type="single" collapsible className="pr-4">
+                    <Accordion
+                      type="single"
+                      collapsible
+                      className="pr-4 bg-white rounded-xl shadow-sm"
+                    >
                       <AccordionItem value="blogs" className="border-none">
-                        <AccordionTrigger className="text-right hover:no-underline py-3">
-                          <span className="text-sm font-medium text-gray-600">
+                        <AccordionTrigger className="text-right hover:no-underline py-4 px-4 rounded-xl hover:bg-gray-50">
+                          <span className="text-base font-semibold text-amaranth-600">
                             تصفح المواضيع
                           </span>
                         </AccordionTrigger>
                         <AccordionContent className="pb-0">
                           <div className="space-y-4">
-                            {blogCategories.map((category, index) => (
-                              <div key={index} className="space-y-2">
-                                <h3 className="font-semibold text-amaranth-700 text-sm">
-                                  {category.title}
-                                </h3>
-                                <ul className="space-y-1 pr-4">
-                                  {category.items.map((subItem, subIndex) => (
-                                    <li key={subIndex}>
-                                      <Link
-                                        href={subItem.href}
-                                        onClick={onClose}
-                                        className="block text-sm text-gray-600 hover:text-amaranth-600 py-2 hover:bg-amaranth-50 px-2 rounded transition-colors"
-                                      >
-                                        {subItem.name}
-                                      </Link>
-                                    </li>
-                                  ))}
-                                </ul>
+                            {blogLoading ? (
+                              <div className="text-center py-4">
+                                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-amaranth-600 mx-auto"></div>
+                                <p className="text-sm text-gray-500 mt-2">
+                                  جاري التحميل...
+                                </p>
                               </div>
-                            ))}
+                            ) : blogCategories && blogCategories.length > 0 ? (
+                              blogCategories.map((category) => (
+                                <div key={category.id} className="space-y-2">
+                                  <h3 className="font-bold text-amaranth-700 text-base mb-3 border-b border-amaranth-200 pb-2">
+                                    {category.name}
+                                  </h3>
+                                  <ul className="space-y-2 pr-4">
+                                    {category.subCategories &&
+                                    category.subCategories.length > 0 ? (
+                                      category.subCategories.map(
+                                        (subcategory) => (
+                                          <li key={subcategory.id}>
+                                            <Link
+                                              href={`/blogs/${subcategory.slug}`}
+                                              onClick={onClose}
+                                              className="block text-sm text-gray-700 hover:text-amaranth-600 py-3 hover:bg-gradient-to-r hover:from-amaranth-50 hover:to-royal-50 px-3 rounded-lg transition-all duration-200 hover:shadow-sm"
+                                            >
+                                              {subcategory.name}
+                                            </Link>
+                                          </li>
+                                        )
+                                      )
+                                    ) : (
+                                      <li>
+                                        <Link
+                                          href={`/blogs/${category.slug}`}
+                                          onClick={onClose}
+                                          className="block text-sm text-gray-700 hover:text-amaranth-600 py-3 hover:bg-gradient-to-r hover:from-amaranth-50 hover:to-royal-50 px-3 rounded-lg transition-all duration-200 hover:shadow-sm"
+                                        >
+                                          عرض جميع المقالات
+                                        </Link>
+                                      </li>
+                                    )}
+                                  </ul>
+                                </div>
+                              ))
+                            ) : (
+                              <div className="text-center py-4">
+                                <p className="text-sm text-gray-500">
+                                  لا توجد فئات متاحة
+                                </p>
+                              </div>
+                            )}
                           </div>
                         </AccordionContent>
                       </AccordionItem>
@@ -240,20 +343,26 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                   key={item.href}
                   href={item.href}
                   onClick={onClose}
-                  className={`flex items-center gap-3 p-4 rounded-lg transition-colors ${
+                  className={`flex items-center gap-4 p-5 rounded-xl transition-all duration-200 shadow-sm ${
                     isActive
-                      ? "bg-amaranth-100 text-amaranth-700"
-                      : "hover:bg-gray-100"
+                      ? "bg-gradient-to-r from-amaranth-100 to-royal-100 text-amaranth-700 border-r-4 border-amaranth-500"
+                      : "hover:bg-white hover:shadow-md hover:scale-[1.02] bg-white"
                   }`}
                 >
-                  {getIcon(item.label)}
-                  <span className="font-medium">{item.label}</span>
+                  <div
+                    className={`p-2 rounded-lg ${
+                      isActive ? "bg-amaranth-200" : "bg-gray-100"
+                    }`}
+                  >
+                    {getIcon(item.label)}
+                  </div>
+                  <span className="font-semibold text-lg">{item.label}</span>
                 </Link>
               );
             })}
           </div>
         </div>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   );
 }

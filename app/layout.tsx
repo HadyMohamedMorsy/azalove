@@ -20,9 +20,13 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" },
+    { media: "(prefers-color-scheme: light)", color: "#ec4899" },
+    { media: "(prefers-color-scheme: dark)", color: "#be185d" },
   ],
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
 };
 
 export default function RootLayout({
@@ -41,30 +45,57 @@ export default function RootLayout({
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@azalove" />
         <meta name="twitter:image" content="/media/opengraph-image.png" />
+
+        {/* PWA Meta Tags */}
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="application-name" content="Azalove" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Azalove" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="msapplication-TileColor" content="#ec4899" />
+        <meta name="msapplication-tap-highlight" content="no" />
+
+        {/* Apple Touch Icons */}
+        <link rel="apple-touch-icon" href="/media/logo/main-icon.ico" />
+
+        {/* Favicons */}
+        <link rel="icon" type="image/x-icon" href="/media/logo/main-icon.ico" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+
+        {/* Preconnect to external domains */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+
+        {/* DNS Prefetch for performance */}
+        <link rel="dns-prefetch" href="//localhost:3001" />
       </head>
       <body className={inter.className}>
-        <AuthProvider>
-          <CartProvider>
-            <FavoritesProvider>
-              <GeneralSettingsProvider>
-                <StartCharacterShapesProvider>
-                  <DynamicTitle />
-                  <AnalyticsManager />
-                  <AnalyticsWrapper>
-                    <LocaleWrapper>
-                      <SplashWrapper>
-                        <LayoutWrapper>{children}</LayoutWrapper>
-                        <Toaster />
-                      </SplashWrapper>
-                    </LocaleWrapper>
-                  </AnalyticsWrapper>
-                </StartCharacterShapesProvider>
-              </GeneralSettingsProvider>
-            </FavoritesProvider>
-          </CartProvider>
-        </AuthProvider>
+          <AuthProvider>
+            <CartProvider>
+              <FavoritesProvider>
+                <GeneralSettingsProvider>
+                  <StartCharacterShapesProvider>
+                    <DynamicTitle />
+                    <AnalyticsManager />
+                    <AnalyticsWrapper>
+                      <LocaleWrapper>
+                        <SplashWrapper>
+                          <LayoutWrapper>{children}</LayoutWrapper>
+                          <Toaster />
+                        </SplashWrapper>
+                      </LocaleWrapper>
+                    </AnalyticsWrapper>
+                  </StartCharacterShapesProvider>
+                </GeneralSettingsProvider>
+              </FavoritesProvider>
+            </CartProvider>
+          </AuthProvider>
       </body>
     </html>
   );
