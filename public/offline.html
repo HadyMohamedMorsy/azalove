@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>غير متصل - Azalove</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-align: center;
+        padding: 20px;
+      }
+
+      .offline-container {
+        max-width: 400px;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 40px 30px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .offline-icon {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 20px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+      }
+
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 15px;
+        font-weight: 700;
+      }
+
+      .subtitle {
+        font-size: 1rem;
+        margin-bottom: 30px;
+        opacity: 0.9;
+        line-height: 1.6;
+      }
+
+      .retry-btn {
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 50px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .retry-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: translateY(-2px);
+      }
+
+      .status {
+        margin-top: 20px;
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        font-size: 0.9rem;
+      }
+
+      .online-indicator {
+        display: none;
+        color: #10b981;
+        font-weight: 600;
+      }
+
+      .offline-indicator {
+        color: #f59e0b;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="offline-container">
+      <div class="offline-icon">📱</div>
+
+      <h1>غير متصل بالإنترنت</h1>
+
+      <p class="subtitle">
+        يبدو أنك غير متصل بالإنترنت حالياً.<br />
+        تحقق من اتصالك وحاول مرة أخرى.
+      </p>
+
+      <div class="status">
+        <div class="offline-indicator" id="offlineStatus">🔴 غير متصل</div>
+        <div class="online-indicator" id="onlineStatus">
+          🟢 متصل - جاري إعادة التوجيه...
+        </div>
+      </div>
+
+      <div>
+        <button class="retry-btn" onclick="retryConnection()">
+          🔄 إعادة المحاولة
+        </button>
+        <a href="/" class="retry-btn"> 🏠 الصفحة الرئيسية </a>
+      </div>
+    </div>
+
+    <script>
+      // Check connection status
+      function updateConnectionStatus() {
+        const offlineStatus = document.getElementById("offlineStatus");
+        const onlineStatus = document.getElementById("onlineStatus");
+
+        if (navigator.onLine) {
+          offlineStatus.style.display = "none";
+          onlineStatus.style.display = "block";
+
+          // Redirect to home page after 2 seconds
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 2000);
+        } else {
+          offlineStatus.style.display = "block";
+          onlineStatus.style.display = "none";
+        }
+      }
+
+      // Retry connection
+      function retryConnection() {
+        if (navigator.onLine) {
+          window.location.href = "/";
+        } else {
+          // Show loading state
+          const btn = event.target;
+          const originalText = btn.textContent;
+          btn.textContent = "🔄 جاري المحاولة...";
+          btn.disabled = true;
+
+          // Check again after 2 seconds
+          setTimeout(() => {
+            if (navigator.onLine) {
+              window.location.href = "/";
+            } else {
+              btn.textContent = originalText;
+              btn.disabled = false;
+              alert(
+                "لا يزال غير متصل بالإنترنت. تحقق من اتصالك وحاول مرة أخرى."
+              );
+            }
+          }, 2000);
+        }
+      }
+
+      // Listen for online/offline events
+      window.addEventListener("online", updateConnectionStatus);
+      window.addEventListener("offline", updateConnectionStatus);
+
+      // Initial status check
+      updateConnectionStatus();
+
+      // Periodic connection check
+      setInterval(updateConnectionStatus, 5000);
+    </script>
+  </body>
+</html>

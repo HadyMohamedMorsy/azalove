@@ -7,6 +7,7 @@ import DynamicTitle from "@/components/layout/dynamic-title";
 import LayoutWrapper from "@/components/layout/layout-wrapper";
 import { LocaleWrapper } from "@/components/layout/locale-wrapper";
 import SplashWrapper from "@/components/layout/splash-wrapper";
+import { PWAProvider } from "@/components/pwa/pwa-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from "@/contexts/auth-context";
 import { CartProvider } from "@/contexts/cart-context";
@@ -76,6 +77,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="//localhost:3001" />
       </head>
       <body className={inter.className}>
+        <PWAProvider>
           <AuthProvider>
             <CartProvider>
               <FavoritesProvider>
@@ -96,6 +98,7 @@ export default function RootLayout({
               </FavoritesProvider>
             </CartProvider>
           </AuthProvider>
+        </PWAProvider>
       </body>
     </html>
   );

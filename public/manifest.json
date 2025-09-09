@@ -1,0 +1,34 @@
+{
+  "name": "Azalove",
+  "short_name": "Azalove",
+  "description": "تطبيق إنشاء الشخصيات والقصص الرومانسية",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ec4899",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "16x16 32x32 48x48",
+      "type": "image/x-icon"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "إنشاء شخصية",
+      "short_name": "شخصية",
+      "description": "إنشاء شخصية جديدة",
+      "url": "/start-character"
+    },
+    {
+      "name": "المتجر",
+      "short_name": "متجر",
+      "description": "تصفح المنتجات",
+      "url": "/shop"
+    }
+  ]
+}
