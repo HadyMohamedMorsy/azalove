@@ -30,7 +30,6 @@ self.addEventListener("activate", (event) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
             if (cacheName !== STATIC_CACHE) {
-              console.log("Service Worker: Deleting old cache:", cacheName);
               return caches.delete(cacheName);
             }
           })

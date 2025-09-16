@@ -951,6 +951,11 @@ export interface Translations {
     character1: string;
     character2: string;
     shapes: string;
+    availableParts: string;
+    availableColors: string;
+    parts: string;
+    noPartsForColor: string;
+    showingAllParts: string;
     loading: string;
     error: string;
     retry: string;
@@ -2511,6 +2516,11 @@ export const translations: Record<Locale, Translations> = {
       character1: "الشخصية الأولى",
       character2: "الشخصية الثانية",
       shapes: "الأشكال",
+      availableParts: "الأجزاء المتاحة",
+      availableColors: "الألوان المتاحة",
+      parts: "الأجزاء",
+      noPartsForColor: "لا توجد أجزاء متاحة بهذا اللون",
+      showingAllParts: "عرض جميع الأجزاء المتاحة",
       loading: "جاري التحميل...",
       error: "خطأ",
       retry: "إعادة المحاولة",
@@ -3253,6 +3263,11 @@ export const translations: Record<Locale, Translations> = {
       character1: "Character 1",
       character2: "Character 2",
       shapes: "Shapes",
+      availableParts: "Available Parts",
+      availableColors: "Available Colors",
+      parts: "Parts",
+      noPartsForColor: "No parts available for this color",
+      showingAllParts: "Showing all available parts",
       loading: "Loading...",
       error: "Error",
       retry: "Retry",

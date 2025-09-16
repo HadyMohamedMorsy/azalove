@@ -12,7 +12,8 @@ interface ProductPageProps {
 export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
-  const { productslug } = params;
+  const resolvedParams = await params;
+  const { productslug } = resolvedParams;
 
   return {
     title: `${productslug} - أزالوف | كتب رومانسية`,
@@ -42,8 +43,9 @@ export async function generateMetadata({
   };
 }
 
-export default function ProductSlug({ params }: ProductPageProps) {
-  const { productslug } = params;
+export default async function ProductSlug({ params }: ProductPageProps) {
+  const resolvedParams = await params;
+  const { productslug } = resolvedParams;
 
   // Generate structured data for the product
   const structuredData = {
@@ -123,7 +125,7 @@ export default function ProductSlug({ params }: ProductPageProps) {
     <>
       <StructuredData data={structuredData} />
       <div className="min-h-screen bg-background">
-        <ProductView />
+        <ProductView params={resolvedParams} />
       </div>
     </>
   );

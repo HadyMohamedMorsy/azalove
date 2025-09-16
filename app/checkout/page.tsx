@@ -1,14 +1,24 @@
 "use client";
+import { BankAccounts } from "@/components/checkout/bank-accounts";
 import OrderConfirmation from "@/components/checkout/order-confirm";
 import OrderSummary from "@/components/checkout/order-summary";
 import PaymentForm from "@/components/checkout/payment-form";
 import ShippingForm from "@/components/checkout/shipping-form";
 import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCart } from "@/contexts/cart-context";
 import { useGeneralSettings } from "@/contexts/general-settings-context";
 import { useGlobalAnalytics } from "@/hooks/use-global-analytics";
 import { useTranslation } from "@/hooks/use-translation";
-import { Check, CheckCircle, CreditCard, Shield, Truck } from "lucide-react";
+import { Bank } from "@/types/payment";
+import {
+  Building2,
+  Check,
+  CheckCircle,
+  CreditCard,
+  Shield,
+  Truck,
+} from "lucide-react";
 import React, { useState } from "react";
 
 const Checkout = () => {
@@ -21,6 +31,8 @@ const Checkout = () => {
   const [paymentData, setPaymentData] = useState({});
   const [orderConfirmed, setOrderConfirmed] = useState(false);
   const [orderData, setOrderData] = useState(null);
+  const [activeTab, setActiveTab] = useState("account");
+  const [selectedBank, setSelectedBank] = useState<Bank | null>(null);
 
   // Get currency from settings, fallback to USD if not set
   const currency = settings?.default_currency || "USD";
@@ -28,20 +40,27 @@ const Checkout = () => {
   const steps = [
     {
       id: 1,
+      title: "طريقة الدفع",
+      description: "اختر طريقة الدفع المناسبة لك",
+      icon: CreditCard,
+      component: null, // Will be handled with tabs
+    },
+    {
+      id: 2,
       title: t("checkout.steps.shipping"),
       description: t("checkout.steps.shippingDescription"),
       icon: Truck,
       component: ShippingForm,
     },
     {
-      id: 2,
+      id: 3,
       title: t("checkout.steps.payment"),
       description: t("checkout.steps.paymentDescription"),
       icon: CreditCard,
       component: PaymentForm,
     },
     {
-      id: 3,
+      id: 4,
       title: t("checkout.steps.confirmation"),
       description: t("checkout.steps.confirmationDescription"),
       icon: CheckCircle,
@@ -51,13 +70,22 @@ const Checkout = () => {
 
   const handleNext = (data: any) => {
     if (currentStep === 1) {
-      setShippingData(data);
+      // Payment method selection - store the choice
+      setPaymentData({
+        paymentType: activeTab,
+        selectedBank: selectedBank,
+      });
     } else if (currentStep === 2) {
-      setPaymentData(data);
+      setShippingData(data);
+    } else if (currentStep === 3) {
+      setPaymentData({
+        ...paymentData,
+        ...data,
+      });
     }
 
     // If moving to confirmation step, track purchase event
-    if (currentStep === 2) {
+    if (currentStep === 3) {
       const transactionId = `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
       trackPurchase({
@@ -218,15 +246,166 @@ const Checkout = () => {
                   </div>
                 </div>
 
-                <CurrentStepComponent
-                  onNext={handleNext}
-                  onBack={currentStep > 1 ? handleBack : () => {}}
-                  onOrderConfirmed={
-                    currentStep === 2 ? handleConfirmOrder : undefined
-                  }
-                  shippingData={shippingData}
-                  paymentData={paymentData}
-                />
+                {currentStep === 1 ? (
+                  <Tabs
+                    value={activeTab}
+                    onValueChange={setActiveTab}
+                    className="w-full"
+                  >
+                    <TabsList className="grid w-full grid-cols-2 mb-6 bg-cream-100 p-1 rounded-xl">
+                      <TabsTrigger
+                        value="account"
+                        className="flex items-center gap-2 data-[state=active]:bg-azalove-500 data-[state=active]:text-white data-[state=inactive]:text-royal-600 data-[state=inactive]:hover:text-azalove-600 transition-all duration-200 rounded-lg text-base font-medium py-2"
+                      >
+                        <CreditCard className="w-5 h-5" />
+                        الدفع الإلكتروني
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="bank"
+                        className="flex items-center gap-2 data-[state=active]:bg-azalove-500 data-[state=active]:text-white data-[state=inactive]:text-royal-600 data-[state=inactive]:hover:text-azalove-600 transition-all duration-200 rounded-lg text-base font-medium py-2"
+                      >
+                        <Building2 className="w-5 h-5" />
+                        التحويل البنكي
+                      </TabsTrigger>
+                    </TabsList>
+
+                    <TabsContent value="account">
+                      <div className="space-y-6">
+                        <div className="text-center py-4">
+                          <h3 className="text-2xl font-semibold text-royal-900 mb-3">
+                            الدفع الإلكتروني
+                          </h3>
+                          <p className="text-lg text-royal-600">
+                            أكمل عملية الشراء عبر الموقع باستخدام طرق الدفع
+                            المتاحة
+                          </p>
+                        </div>
+
+                        <div className="bg-azalove-50 border border-azalove-200 rounded-lg p-6">
+                          <div className="flex items-start space-x-4">
+                            <div className="flex-shrink-0">
+                              <div className="w-12 h-12 bg-azalove-100 rounded-lg flex items-center justify-center">
+                                <CreditCard className="w-6 h-6 text-azalove-600" />
+                              </div>
+                            </div>
+                            <div className="flex-1">
+                              <h4 className="text-xl font-semibold text-royal-800 mb-4">
+                                طرق الدفع المتاحة
+                              </h4>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="flex items-center space-x-3 text-royal-700">
+                                  <div className="w-2 h-2 bg-azalove-500 rounded-full"></div>
+                                  <span className="text-base">
+                                    بطاقات الائتمان والخصم
+                                  </span>
+                                </div>
+                                <div className="flex items-center space-x-3 text-royal-700">
+                                  <div className="w-2 h-2 bg-azalove-500 rounded-full"></div>
+                                  <span className="text-base">PayPal</span>
+                                </div>
+                                <div className="flex items-center space-x-3 text-royal-700">
+                                  <div className="w-2 h-2 bg-azalove-500 rounded-full"></div>
+                                  <span className="text-base">
+                                    محافظ إلكترونية
+                                  </span>
+                                </div>
+                                <div className="flex items-center space-x-3 text-royal-700">
+                                  <div className="w-2 h-2 bg-azalove-500 rounded-full"></div>
+                                  <span className="text-base">
+                                    طرق دفع آمنة ومضمونة
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex justify-center pt-4">
+                          <button
+                            onClick={() => handleNext({})}
+                            className="px-10 py-4 bg-gradient-to-r from-azalove-600 to-azalove-700 hover:from-azalove-700 hover:to-azalove-800 text-white transition-all duration-200 font-semibold shadow-lg hover:shadow-xl rounded-lg flex items-center justify-center text-lg"
+                          >
+                            <svg
+                              className="w-5 h-5 mr-2"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9 5l7 7-7 7"
+                              />
+                            </svg>
+                            متابعة
+                          </button>
+                        </div>
+                      </div>
+                    </TabsContent>
+
+                    <TabsContent value="bank">
+                      <div className="space-y-6">
+                        <div className="text-center py-4">
+                          <h3 className="text-2xl font-semibold text-royal-900 mb-3">
+                            التحويل البنكي
+                          </h3>
+                          <p className="text-lg text-royal-600">
+                            اختر أحد الحسابات البنكية التالية وقم بتحويل المبلغ
+                            المطلوب
+                          </p>
+                        </div>
+
+                        <div className="space-y-6">
+                          <BankAccounts
+                            onBankSelect={setSelectedBank}
+                            selectedBank={selectedBank || undefined}
+                          />
+
+                          <div className="bg-azalove-50 border border-azalove-200 rounded-lg p-6">
+                            <div className="flex items-start space-x-4">
+                              <div className="flex-shrink-0">
+                                <div className="w-10 h-10 bg-azalove-100 rounded-lg flex items-center justify-center">
+                                  <svg
+                                    className="w-5 h-5 text-azalove-600"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div className="flex-1">
+                                <h4 className="text-lg font-semibold text-royal-800 mb-2">
+                                  تعليمات مهمة
+                                </h4>
+                                <p className="text-base text-royal-700 leading-relaxed">
+                                  بعد إتمام التحويل، يرجى التواصل معنا عبر
+                                  الواتساب أو الهاتف لتأكيد الطلب. سيتم إرسال
+                                  رقم الطلب لك بعد إتمام العملية.
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </TabsContent>
+                  </Tabs>
+                ) : CurrentStepComponent ? (
+                  <CurrentStepComponent
+                    onNext={handleNext}
+                    onBack={currentStep > 1 ? handleBack : () => {}}
+                    onOrderConfirmed={
+                      currentStep === 3 ? handleConfirmOrder : undefined
+                    }
+                    shippingData={shippingData}
+                    paymentData={paymentData}
+                  />
+                ) : null}
               </CardContent>
             </Card>
           </div>

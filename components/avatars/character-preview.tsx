@@ -33,7 +33,6 @@ export default function CharacterPreview({
     return null;
   };
   const bodyShapeSVG = getBodyShapeSVG();
-  console.log(bodyShapeSVG);
 
   return (
     <div

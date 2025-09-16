@@ -247,7 +247,6 @@ const ProductReviews = ({ reviews: initialReviews }: ProductReviewsProps) => {
 
         {/* Rating Overview */}
         <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-cream-50 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-amaranth-100/20 to-amaranth-100/20"></div>
           <CardHeader className="relative">
             <CardTitle className="text-xl font-bold bg-gradient-to-r from-royal-700 to-amaranth-700 bg-clip-text text-transparent flex items-center gap-2">
               <Award className="w-5 h-5 text-azalove-500" />

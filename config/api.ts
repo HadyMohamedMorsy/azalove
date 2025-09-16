@@ -24,8 +24,9 @@ export const API_ENDPOINTS_FROM_NEXT = {
   MEGA_MENU_BLOG_CATEGORIES: "/api/mega-menu/blog-categories",
   COUPON_VALIDATE: "/api/coupon/validate",
   SHAPES_GROUPED: "/api/shapes/grouped",
+  SHAPES_PARTS: "/api/shapes/parts",
   BOOKS_FINDER: "/api/books/finder",
-  BOOKS_PAGES : "/api/books/pages"
+  BOOKS_PAGES: "/api/books/pages",
 };
 
 export const API_ENDPOINTS_FROM_SERVER = {
@@ -41,8 +42,9 @@ export const API_ENDPOINTS_FROM_SERVER = {
   QUIZ_QUESTIONS: `/quiz/questions-with-answers`,
   COUPON_VALIDATE: `/coupon/validate`,
   SHAPES_GROUPED: `/shapes/grouped`,
+  SHAPES_PARTS: `/shapes/parts`,
   BOOKS_FINDER: `/books/finder`,
-  BOOKE_PAGES : '/books/pages'
+  BOOKE_PAGES: "/books/pages",
 };
 
 export const API_ENDPOINTS_FROM_SERVER_DASHBOARD = {

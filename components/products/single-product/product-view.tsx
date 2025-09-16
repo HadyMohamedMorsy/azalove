@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Accordion,
   AccordionContent,
@@ -28,7 +30,7 @@ import {
   Star,
   Truck,
 } from "lucide-react";
-import { useParams } from "next/navigation";
+
 import { useState } from "react";
 import StructuredData from "../../seo/structured-data";
 import ProductGrid from "../product-grid";
@@ -36,8 +38,11 @@ import ImageGallery from "./image-gallary";
 import ProductReviews from "./product-reviews";
 import ProductSpecs from "./product-spec";
 
-const ProductView = () => {
-  const params = useParams();
+interface ProductViewProps {
+  params: { productslug: string };
+}
+
+const ProductView = ({ params }: ProductViewProps) => {
   const { data, loading, error } = useFetch<productBySlug>(
     `/api/product/by-slug/${params.productslug}`
   );
@@ -107,7 +112,7 @@ const ProductView = () => {
 
   const getAvailableQuantity = () => {
     const currentQuantity = getItemQuantity(product.id.toString());
-    return (product.sku?.quantity || 0) - currentQuantity;
+    return Math.max(0, (product.sku?.quantity || 0) - currentQuantity);
   };
 
   const handleAddToCart = () => {
@@ -162,6 +167,42 @@ const ProductView = () => {
     }
   };
 
+  const handleShare = async () => {
+    const shareData = {
+      title: product.name,
+      text: `Check out this amazing product: ${product.name}`,
+      url: window.location.href,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        // Fallback for browsers that don't support Web Share API
+        await navigator.clipboard.writeText(window.location.href);
+        toast({
+          title: "Link Copied!",
+          description: "Product link has been copied to clipboard.",
+        });
+      }
+    } catch (error) {
+      console.error("Error sharing:", error);
+      // Fallback: copy to clipboard
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        toast({
+          title: "Link Copied!",
+          description: "Product link has been copied to clipboard.",
+        });
+      } catch (clipboardError) {
+        toast({
+          title: "Share Error",
+          description: "Unable to share. Please try again.",
+        });
+      }
+    }
+  };
+
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-cream-50 via-white to-azalove-50">
       {/* Romantic Background Elements */}
@@ -193,7 +234,6 @@ const ProductView = () => {
           {product.images && (
             <div className="space-y-4">
               <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-br from-amaranth-100/20 to-amaranth-100/20 rounded-2xl blur-sm group-hover:blur-md transition-all duration-500"></div>
                 <div className="relative">
                   <ImageGallery images={product.images} />
                 </div>
@@ -276,6 +316,31 @@ const ProductView = () => {
               </div>
             </div>
 
+            {/* Stock Information */}
+            <div className="p-4 bg-gradient-to-r from-azalove-50 to-royal-50 rounded-xl border border-azalove-200">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  <span className="text-sm font-medium text-royal-700">
+                    {t("product.availableStock")}
+                  </span>
+                </div>
+                <div className="text-right">
+                  <span className="text-2xl font-bold text-azalove-600">
+                    {getAvailableQuantity()}
+                  </span>
+                  <span className="text-sm text-muted-foreground ml-1">
+                    {t("product.units")}
+                  </span>
+                </div>
+              </div>
+              {getAvailableQuantity() <= 10 && getAvailableQuantity() > 0 && (
+                <div className="mt-2 text-xs text-amaranth-600 font-medium">
+                  ⚠️ {t("product.lowStock")} - {t("product.hurryUp")}
+                </div>
+              )}
+            </div>
+
             {/* Description */}
             <div className="p-6 bg-white/80 backdrop-blur-sm rounded-2xl border border-azalove-100">
               <p className="body-medium text-muted-foreground leading-relaxed">
@@ -297,23 +362,31 @@ const ProductView = () => {
                     {quantity}
                   </span>
                   <button
-                    disabled={quantity >= product.sku?.quantity}
+                    disabled={quantity >= getAvailableQuantity()}
                     onClick={() => setQuantity(quantity + 1)}
                     className="px-4 py-3 hover:bg-azalove-50 transition-colors text-azalove-600 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     +
                   </button>
                 </div>
+                <div className="text-sm text-muted-foreground">
+                  {t("product.availableQuantity")}: {getAvailableQuantity()}
+                </div>
                 <Button
-                  disabled={quantity >= product.sku?.quantity}
+                  disabled={
+                    quantity > getAvailableQuantity() ||
+                    getAvailableQuantity() <= 0
+                  }
                   size="lg"
-                  className="flex-1 bg-gradient-to-r from-azalove-500 to-amaranth-600 hover:from-azalove-600 hover:to-azalove-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                  className="flex-1 bg-gradient-to-r from-azalove-500 to-amaranth-600 hover:from-azalove-600 hover:to-azalove-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={handleAddToCart}
                 >
                   <ShoppingCart className="w-5 h-5 mr-2" />
-                  {quantity >= product.sku?.quantity
+                  {getAvailableQuantity() <= 0
                     ? t("product.outOfStock")
-                    : t("product.addToCart")}
+                    : quantity > getAvailableQuantity()
+                      ? t("product.exceedsAvailable")
+                      : t("product.addToCart")}
                 </Button>
                 <Button
                   variant="outline"
@@ -333,6 +406,7 @@ const ProductView = () => {
                   variant="outline"
                   size="lg"
                   className="border-2 border-royal-200 hover:border-royal-300 hover:bg-royal-50 transition-all duration-300"
+                  onClick={handleShare}
                 >
                   <Share2 className="w-5 h-5 text-royal-500" />
                 </Button>
@@ -340,16 +414,25 @@ const ProductView = () => {
               <Button
                 variant="outline"
                 size="lg"
-                className="w-full bg-gradient-to-r from-royal-500 to-royal-600 hover:from-royal-600 hover:to-royal-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                className="w-full bg-gradient-to-r from-royal-500 to-royal-600 hover:from-royal-600 hover:to-royal-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={
+                  quantity > getAvailableQuantity() ||
+                  getAvailableQuantity() <= 0
+                }
+                onClick={handleAddToCart}
               >
-                {t("product.buyNow")}
+                {getAvailableQuantity() <= 0
+                  ? t("product.outOfStock")
+                  : quantity > getAvailableQuantity()
+                    ? t("product.exceedsAvailable")
+                    : t("product.buyNow")}
               </Button>
             </div>
 
             {/* Shipping Info */}
             <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-cream-50">
               <CardContent className="p-6">
-                <div className="grid grid-cols-3 gap-6 text-center">
+                <div className="grid grid-cols-4 gap-6 text-center">
                   <div className="flex flex-col items-center gap-3 group">
                     <div className="p-3 bg-gradient-to-br from-azalove-100 to-azalove-200 rounded-full group-hover:scale-110 transition-transform duration-300">
                       <Truck className="w-6 h-6 text-azalove-600" />
@@ -386,6 +469,21 @@ const ProductView = () => {
                       </p>
                       <p className="text-xs text-muted-foreground">
                         {t("product.noQuestionsAsked")}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-center gap-3 group">
+                    <div className="p-3 bg-gradient-to-br from-green-100 to-green-200 rounded-full group-hover:scale-110 transition-transform duration-300">
+                      <div className="w-6 h-6 text-green-600 font-bold text-lg">
+                        📦
+                      </div>
+                    </div>
+                    <div>
+                      <p className="body-tiny font-semibold text-royal-700">
+                        {t("product.inStock")}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {getAvailableQuantity()} {t("product.units")}
                       </p>
                     </div>
                   </div>

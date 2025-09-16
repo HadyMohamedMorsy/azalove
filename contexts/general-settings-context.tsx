@@ -105,7 +105,6 @@ export const GeneralSettingsProvider: React.FC<
       }
 
       const result = await response.json();
-      console.log(result?.data);
       if (result?.data) {
         setSettings(result?.data);
       } else {

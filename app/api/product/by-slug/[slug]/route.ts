@@ -15,8 +15,7 @@ export async function GET(
     if (!response.data) {
       return NextResponse.json({ error: "Product not found" }, { status: 404 });
     }
-
-    return NextResponse.json({ data: response.data });
+    return NextResponse.json({ data: response.data.data });
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to fetch product data" },

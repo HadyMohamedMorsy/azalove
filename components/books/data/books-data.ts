@@ -102,14 +102,6 @@ export const defaultTextStyle: TextStyle = {
   textAlign: "center",
 };
 
-// COVER_TEMPLATES removed - now using dynamic data from API
-
-export const PAPER_OPTIONS = [
-  { id: "standard", label: "ورق عادي (Standard)", price: 0 },
-  { id: "premium", label: "ورق فاخر (Premium)", price: 10 },
-  { id: "deluxe", label: "ورق ديلوكس (Deluxe)", price: 20 },
-];
-
 // PAGE_TEMPLATES removed - now using dynamic data from API
 
 // Convert DynamicBook to Book for compatibility
@@ -122,6 +114,7 @@ export const convertDynamicBookToBook = (
   if (characterSelection && characterSelection.length > 0) {
     filteredSvg = filterSvgByCharacters(dynamicBook.svg, characterSelection);
   }
+
 
   return {
     id: dynamicBook.id,

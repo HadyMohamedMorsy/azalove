@@ -21,10 +21,12 @@ function StartCharacterContent() {
     characterState,
     selection,
     currentLayers,
+    getCurrentLayersForBodyType,
     updateCharacterLayer,
     switchActiveCharacter,
     setActiveBodyType,
     setActiveColor,
+    setCharacterState,
   } = useCharacterState();
 
   const { loading } = useStartCharacterShapes();
@@ -127,8 +129,8 @@ function StartCharacterContent() {
 
         {/* Characters Preview */}
         <CouplePreview
-          character1={characterState.Layer_2}
-          character2={characterState.Layer_4}
+          character1={characterState.Layer_2 || []}
+          character2={characterState.Layer_4 || []}
         />
 
         {/* Active Character Indicator */}
@@ -154,6 +156,7 @@ function StartCharacterContent() {
             updateCharacterLayer={updateCharacterLayer}
             setActiveBodyType={setActiveBodyType}
             setActiveColor={setActiveColor}
+            setCharacterState={setCharacterState}
           />
         )}
       </div>

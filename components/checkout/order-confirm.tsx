@@ -34,7 +34,6 @@ const OrderConfirmation = ({
   // Use propOrderData if available, otherwise create order
 
   useEffect(() => {
-    console.log("OrderConfirmation received orderData:", propOrderData);
     setOrderData(propOrderData);
   }, [propOrderData]);
 

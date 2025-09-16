@@ -64,9 +64,6 @@ const ReviewForm = ({ onSubmit, onCancel }: ReviewFormProps) => {
 
   return (
     <Card className="border-0 shadow-xl bg-gradient-to-br from-white to-cream-50 overflow-hidden">
-      {/* Romantic Background Elements */}
-      <div className="absolute inset-0 bg-gradient-to-br from-amaranth-100/20 to-amaranth-100/20"></div>
-
       <CardHeader className="relative">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-gradient-to-br from-azalove-100 to-azalove-200 rounded-full">

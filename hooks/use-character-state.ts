@@ -23,9 +23,27 @@ export function useCharacterState() {
 
   const currentLayers = characterState?.[selection.activeCharacter] || [];
 
+  // Get layers filtered by active body type for a specific character
+  const getCurrentLayersForBodyType = (
+    bodyType: string,
+    character?: "Layer_2" | "Layer_4"
+  ) => {
+    const targetCharacter = character || selection.activeCharacter;
+    if (!characterState?.[targetCharacter]) return [];
+    return characterState[targetCharacter].filter(
+      (layer) => layer.bodyType === bodyType
+    );
+  };
+
   // Function to add or update a character layer
   const updateCharacterLayer = useCallback(
-    (bodyType: string, svg: string, color?: string, label?: string) => {
+    (
+      bodyType: string,
+      svg: string,
+      color?: string,
+      label?: string,
+      isPart: boolean = false
+    ) => {
       // Check if characterState is undefined
       if (!characterState) {
         return;
@@ -41,10 +59,26 @@ export function useCharacterState() {
 
         const layer = newState[selection.activeCharacter];
 
-        // Check if this body type already exists
+        // Check if this exact part already exists
         const existingIndex = layer.findIndex(
-          (item) => item.bodyType === bodyType
+          (item) =>
+            item.bodyType === bodyType &&
+            item.svg === svg &&
+            item.color === color
         );
+
+        // If we're clearing (empty svg or undefined), remove the layer
+        if (
+          !svg ||
+          svg.trim() === "" ||
+          svg === undefined ||
+          (color === "" && label === "")
+        ) {
+          newState[selection.activeCharacter] = layer.filter(
+            (item) => item.bodyType !== bodyType
+          );
+          return newState;
+        }
 
         const newLayer: CharacterLayer = {
           bodyType,
@@ -53,12 +87,27 @@ export function useCharacterState() {
           label,
         };
 
-        if (existingIndex >= 0) {
-          // Update existing layer
-          layer[existingIndex] = newLayer;
+        if (isPart) {
+          // For parts: add new layer (multi-layer support)
+          if (existingIndex >= 0) {
+            // Remove if already exists (toggle off)
+            layer.splice(existingIndex, 1);
+          } else {
+            // Add new part only if it has valid content
+            if (svg && svg.trim() !== "") {
+              layer.push(newLayer);
+            }
+          }
         } else {
-          // Add new layer
-          layer.push(newLayer);
+          // For body: replace existing body type
+          if (existingIndex >= 0) {
+            layer[existingIndex] = newLayer;
+          } else {
+            // Add new layer only if it has valid content
+            if (svg && svg.trim() !== "") {
+              layer.push(newLayer);
+            }
+          }
         }
 
         return newState;
@@ -132,11 +181,13 @@ export function useCharacterState() {
     characterState,
     selection,
     currentLayers,
+    getCurrentLayersForBodyType,
     updateCharacterLayer,
     removeCharacterLayer,
     getCharacterLayer,
     switchActiveCharacter,
     setActiveBodyType,
     setActiveColor,
+    setCharacterState,
   };
 }

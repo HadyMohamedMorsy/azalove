@@ -9,12 +9,14 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useGeneralSettings } from "@/contexts/general-settings-context";
+import { useCreateCustomOrder } from "@/hooks/use-create-custom-order";
 import { useCurrency } from "@/hooks/use-currency";
-import { useFetch } from "@/hooks/use-fetch";
+import { PaperType, usePaperTypes } from "@/hooks/use-paper-types";
+import { PaymentMethod, usePaymentMethods } from "@/hooks/use-payment-methods";
 import { SavedCouple } from "@/hooks/use-saved-couples";
 import { CouponService } from "@/lib/coupon-service";
 import { AppliedCoupon, ValidateCouponDto } from "@/types";
-import { PaymentMethod } from "@/types/payment";
+import { blobToFile, svgToImage } from "@/utils/svg-to-image";
 import {
   CheckCircle,
   CreditCard,
@@ -24,18 +26,18 @@ import {
   X,
 } from "lucide-react";
 import { useState } from "react";
-import { Book, BookPage, PAPER_OPTIONS } from "./data/books-data";
+import { Book, BookPage } from "./data/books-data";
 import PagePreview from "./page-preview";
 
 interface BookCreationSummaryDialogProps {
   isOpen: boolean;
   selectedCover: Book | null;
   pages: BookPage[];
-  selectedPaper: { id: string; label: string; price: number };
+  selectedPaper: PaperType | null;
   couple: SavedCouple | null;
   onClose: () => void;
   onCreateBook: () => void;
-  onPaperChange?: (paper: { id: string; label: string; price: number }) => void;
+  onPaperChange?: (paper: PaperType) => void;
 }
 
 export default function BookCreationSummaryDialog({
@@ -50,13 +52,19 @@ export default function BookCreationSummaryDialog({
 }: BookCreationSummaryDialogProps) {
   const { formatCurrency } = useCurrency();
   const { settings } = useGeneralSettings();
+  const { paperTypes, loading: paperTypesLoading } = usePaperTypes();
+  const {
+    createCustomOrder,
+    loading: isCreatingOrder,
+    error: createOrderError,
+  } = useCreateCustomOrder();
 
   // Payment methods state
   const {
-    data: paymentMethodsData,
+    paymentMethods: paymentMethodsData,
     loading: paymentMethodsLoading,
     error: paymentMethodsError,
-  } = useFetch<PaymentMethod[]>("/api/payment-methods/front");
+  } = usePaymentMethods();
 
   // Coupon state
   const [promoCode, setPromoCode] = useState("");
@@ -73,7 +81,7 @@ export default function BookCreationSummaryDialog({
   const pagesPrice = pages
     .filter((page) => page.type === "page")
     .reduce((sum, page) => sum + (Number(page.price) || 0), 0);
-  const paperPrice = Number(selectedPaper?.price) || 0;
+  const paperPrice = Number(selectedPaper?.value) || 0;
   const subtotal = coverPrice + pagesPrice + paperPrice;
 
   // Calculate discount
@@ -90,7 +98,7 @@ export default function BookCreationSummaryDialog({
     selectedCover && selectedPaper && selectedPaymentMethod && pages.length > 0;
 
   const handlePaperChange = (paperId: string) => {
-    const paper = PAPER_OPTIONS.find((p) => p.id === paperId);
+    const paper = paperTypes.find((p) => p.id === paperId);
     if (paper && onPaperChange) {
       onPaperChange(paper);
     }
@@ -167,6 +175,131 @@ export default function BookCreationSummaryDialog({
     setPromoError("");
   };
 
+  // Create custom order function
+  const handleCreateCustomOrder = async () => {
+    if (
+      !selectedCover ||
+      !selectedPaper ||
+      !selectedPaymentMethod ||
+      pages.length === 0
+    ) {
+      return;
+    }
+
+    try {
+      // Create SVG elements from page data URLs
+      const svgElements: SVGElement[] = [];
+
+      // Helper function to extract SVG from data URL
+      const extractSvgFromDataUrl = (dataUrl: string): string | null => {
+        if (dataUrl.startsWith("data:image/svg+xml;base64,")) {
+          try {
+            const base64Data = dataUrl.split(",")[1];
+            return atob(base64Data);
+          } catch (e) {
+            console.error("Error decoding base64 SVG:", e);
+            return null;
+          }
+        }
+        return null;
+      };
+
+      // Helper function to create SVG element from string
+      const createSvgElement = (svgString: string): SVGElement | null => {
+        try {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(svgString, "image/svg+xml");
+          const svgElement = doc.querySelector("svg") as SVGElement;
+
+          if (svgElement) {
+            // Ensure proper dimensions and viewBox
+            const currentWidth = svgElement.getAttribute("width");
+            const currentHeight = svgElement.getAttribute("height");
+            const currentViewBox = svgElement.getAttribute("viewBox");
+
+            // If no viewBox, create one from width/height or use default
+            if (!currentViewBox) {
+              const width = currentWidth ? parseFloat(currentWidth) : 800;
+              const height = currentHeight ? parseFloat(currentHeight) : 600;
+              svgElement.setAttribute("viewBox", `0 0 ${width} ${height}`);
+            }
+
+            // Ensure width and height are set
+            if (!currentWidth) {
+              svgElement.setAttribute("width", "800");
+            }
+            if (!currentHeight) {
+              svgElement.setAttribute("height", "600");
+            }
+
+            // Set preserveAspectRatio to maintain aspect ratio
+            svgElement.setAttribute("preserveAspectRatio", "xMidYMid meet");
+          }
+
+          return svgElement;
+        } catch (e) {
+          console.error("Error creating SVG element:", e);
+          return null;
+        }
+      };
+
+      // Add pages SVGs only (skip cover)
+      pages.forEach((page, index) => {
+        if (page.imageUrl) {
+          const pageSvgString = extractSvgFromDataUrl(page.imageUrl);
+          if (pageSvgString) {
+            const pageSvg = createSvgElement(pageSvgString);
+            if (pageSvg) {
+              svgElements.push(pageSvg);
+            }
+          }
+        }
+      });
+
+      if (svgElements.length === 0) {
+        throw new Error(
+          "No SVG data found in pages. Please make sure the book pages contain valid SVG data."
+        );
+      }
+
+      // Convert SVGs to images
+      const imageBlobs = await Promise.all(
+        svgElements.map((svg, index) =>
+          svgToImage(svg, { width: 800, height: 600 })
+        )
+      );
+
+      // Convert blobs to files
+      const imageFiles = imageBlobs.map((blob, index) =>
+        blobToFile(blob, `book-${index + 1}.png`)
+      );
+
+      // Prepare order data
+      const pageIds = pages.map((page) => page.id);
+
+      const orderData = {
+        couponId: appliedCoupon?.id,
+        paperTypeId: selectedPaper.id,
+        booksIds: pageIds,
+        paymentMethodId: selectedPaymentMethod.id.toString(),
+        images: imageFiles,
+      };
+
+      // Create custom order
+      const result = await createCustomOrder(orderData);
+
+      if (result.statusCode === 201) {
+        // Success - close dialog and call onCreateBook
+        onCreateBook();
+      } else {
+        throw new Error(result.error || "Failed to create custom order");
+      }
+    } catch (error) {
+      console.error("Error creating custom order:", error);
+      // Handle error - you might want to show a toast or error message
+    }
+  };
+
   const getPaymentIcon = (icon: string) => {
     switch (icon) {
       case "credit-card":
@@ -223,11 +356,15 @@ export default function BookCreationSummaryDialog({
                   value={selectedPaper?.id}
                   onChange={(e) => handlePaperChange(e.target.value)}
                 >
-                  {PAPER_OPTIONS.map((option) => (
-                    <option key={option.id} value={option.id}>
-                      {option.label} ({formatCurrency(option.price)})
-                    </option>
-                  ))}
+                  {paperTypes && paperTypes.length > 0 ? (
+                    paperTypes.map((option, index) => (
+                      <option key={index} value={option.id}>
+                        {option.label} ({formatCurrency(option.value)})
+                      </option>
+                    ))
+                  ) : (
+                    <option value="">جاري التحميل...</option>
+                  )}
                 </select>
               </div>
             </div>
@@ -485,15 +622,15 @@ export default function BookCreationSummaryDialog({
           {/* Action Buttons */}
           <div className="flex gap-3 pt-6">
             <Button
-              onClick={onCreateBook}
-              disabled={!canCreateBook}
+              onClick={handleCreateCustomOrder}
+              disabled={!canCreateBook || isCreatingOrder}
               className={`flex-1 border-0 shadow-lg ${
-                canCreateBook
+                canCreateBook && !isCreatingOrder
                   ? "bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
               }`}
             >
-              إنشاء الكتاب
+              {isCreatingOrder ? "جاري الإنشاء..." : "إنشاء الكتاب"}
             </Button>
             <Button
               onClick={onClose}

@@ -9,11 +9,11 @@ import {
   BookPage,
   convertDynamicBookToBook,
   defaultTextStyle,
-  PAPER_OPTIONS,
   UserCustomCover,
 } from "@/components/books/data/books-data";
 import PageTemplateSelectorDialog from "@/components/books/page-template-selector-dialog";
 import SavedCoupleDisplay from "@/components/books/saved-couple-display";
+import { PaperType, usePaperTypes } from "@/hooks/use-paper-types";
 import { SavedCouple, useSavedCouples } from "@/hooks/use-saved-couples";
 import { useTranslation } from "@/hooks/use-translation";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -55,7 +55,7 @@ interface BookCreationSummary {
   isOpen: boolean;
   selectedCover: Book | null;
   pages: BookPage[];
-  selectedPaper: { id: string; label: string; price: number };
+  selectedPaper: PaperType | null;
   couple: SavedCouple | null;
 }
 
@@ -77,13 +77,14 @@ export default function RelatedBooksPage() {
   const router = useRouter();
   const { savedCouples } = useSavedCouples();
   const { t } = useTranslation();
+  const { paperTypes, loading: paperTypesLoading } = usePaperTypes();
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState<PaginationInfo>({
     currentPage: 1,
     totalPages: 1,
     totalCount: 0,
-    limit: 10,
+    limit: 5,
     hasNextPage: false,
     hasPrevPage: false,
   });
@@ -123,7 +124,7 @@ export default function RelatedBooksPage() {
       isOpen: false,
       selectedCover: null,
       pages: [],
-      selectedPaper: PAPER_OPTIONS[0],
+      selectedPaper: null,
       couple: null,
     });
 
@@ -132,13 +133,20 @@ export default function RelatedBooksPage() {
       isOpen: false,
     });
 
-  const [selectedPaper, setSelectedPaper] = useState(PAPER_OPTIONS[0]);
+  const [selectedPaper, setSelectedPaper] = useState<PaperType | null>(null);
 
   // Get the most recently saved couple
   const latestCouple =
     savedCouples.length > 0 ? savedCouples[savedCouples.length - 1] : null;
 
   const isFetchingRef = useRef(false);
+
+  // Set first paper type when paperTypes are loaded
+  useEffect(() => {
+    if (paperTypes.length > 0 && !selectedPaper) {
+      setSelectedPaper(paperTypes[0]);
+    }
+  }, [paperTypes, selectedPaper]);
 
   useEffect(() => {
     // Prevent multiple simultaneous requests
@@ -179,7 +187,6 @@ export default function RelatedBooksPage() {
                 )
               );
               setBooks(convertedBooks);
-              console.log(data.data.pagination);
               // Handle pagination
               if (data.data.pagination) {
                 setPagination({
@@ -279,7 +286,7 @@ export default function RelatedBooksPage() {
   const handleSaveCover = () => {
     // Create a new book with the cover
     const coverPage: BookPage = {
-      id: "cover-1",
+      id: coverEditor.selectedBook?.id || "",
       type: "cover",
       title: coverEditor.customTitle || coverEditor.selectedBook?.title || "",
       subtitle:
@@ -412,7 +419,7 @@ export default function RelatedBooksPage() {
     if (!coverManager.selectedCover) return;
 
     const newCover: UserCustomCover = {
-      id: `custom-${Date.now()}`,
+      id: template.id,
       baseBookId: template.id,
       title: template.title,
       subtitle: template.subtitle,
@@ -482,11 +489,7 @@ export default function RelatedBooksPage() {
     resetAllState();
   };
 
-  const handlePaperChange = (paper: {
-    id: string;
-    label: string;
-    price: number;
-  }) => {
+  const handlePaperChange = (paper: PaperType) => {
     setSelectedPaper(paper);
     setBookCreationSummary((prev) => ({
       ...prev,
@@ -507,7 +510,7 @@ export default function RelatedBooksPage() {
     if (isNewBook) {
       // Create a cover page from the selected cover
       const coverPage: BookPage = {
-        id: "cover-1",
+        id: coverManager.selectedCover?.id || "",
         type: "cover",
         title: coverManager.selectedCover?.title || "",
         subtitle: coverManager.selectedCover?.subtitle || "",
@@ -522,7 +525,7 @@ export default function RelatedBooksPage() {
 
       // Create a content page from the selected template
       const contentPage: BookPage = {
-        id: `page-${Date.now()}`,
+        id: template.id,
         type: "page",
         title: template.title,
         subtitle: template.subtitle,
@@ -545,7 +548,7 @@ export default function RelatedBooksPage() {
     } else {
       // Add new page to existing book
       const newPage: BookPage = {
-        id: `page-${Date.now()}`,
+        id: template.id,
         type: "page",
         title: template.title,
         subtitle: template.subtitle,
@@ -591,7 +594,7 @@ export default function RelatedBooksPage() {
   // Function to reset all state completely
   const resetAllState = () => {
     // Don't reset books - keep them for display
-    setSelectedPaper(PAPER_OPTIONS[0]);
+    setSelectedPaper(paperTypes.length > 0 ? paperTypes[0] : null);
 
     setBookCreator({
       isOpen: false,
@@ -618,7 +621,7 @@ export default function RelatedBooksPage() {
       isOpen: false,
       selectedCover: null,
       pages: [],
-      selectedPaper: PAPER_OPTIONS[0],
+      selectedPaper: paperTypes.length > 0 ? paperTypes[0] : null,
       couple: null,
     });
 

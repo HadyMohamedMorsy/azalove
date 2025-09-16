@@ -38,13 +38,45 @@ export default function MultiLayerPreview({
         className="absolute top-0 left-0"
         id={characterType ? `${characterType}` : "character-unknown"}
       >
-        {layers.map((layer, index) => (
-          <g
-            id={layer.bodyType}
-            key={`${layer.bodyType}-${index}`}
-            dangerouslySetInnerHTML={{ __html: layer.svg }}
-          />
-        ))}
+        {Object.entries(
+          layers.reduce(
+            (acc, layer) => {
+              if (!acc[layer.bodyType]) {
+                acc[layer.bodyType] = [];
+              }
+              acc[layer.bodyType].push(layer);
+              return acc;
+            },
+            {} as Record<string, typeof layers>
+          )
+        ).map(([bodyType, bodyLayers]) => {
+          // Filter out empty layers
+          const validLayers = bodyLayers.filter(
+            (layer) => layer.svg && layer.svg.trim() !== ""
+          );
+
+          // Only render if there are valid layers
+          if (validLayers.length === 0) return null;
+
+          return (
+            <g id={bodyType} key={bodyType}>
+              {validLayers.map((layer, index) => {
+                // Remove <g> tags from layer.svg to prevent nested groups
+                const cleanSvg = layer.svg
+                  .replace(/<g[^>]*>/g, "") // Remove opening <g> tags
+                  .replace(/<\/g>/g, ""); // Remove closing </g> tags
+
+                return (
+                  <g
+                    key={`${layer.bodyType}-${index}`}
+                    id={layer.label || `${layer.bodyType}-${index}`}
+                    dangerouslySetInnerHTML={{ __html: cleanSvg }}
+                  />
+                );
+              })}
+            </g>
+          );
+        })}
       </svg>
     </div>
   );
