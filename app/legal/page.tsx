@@ -36,35 +36,39 @@ const legalDocuments = [
   {
     id: 1,
     title: "عقد تأسيس شركة أزالوف",
-    description: "الوثيقة الرسمية لتأسيس شركة أزالوف والتي تتضمن جميع التفاصيل القانونية والإدارية للشركة",
-    filePath: "/media/pdf/عقد تأسيس  شركة ازلوف.pdf",
+    description:
+      "الوثيقة الرسمية لتأسيس شركة أزالوف والتي تتضمن جميع التفاصيل القانونية والإدارية للشركة",
+    filePath: "/media/pdf/deal.pdf",
     icon: Building2,
-    category: "التأسيس"
+    category: "التأسيس",
   },
   {
     id: 2,
     title: "وثيقة الضرائب",
-    description: "الوثيقة الرسمية للضرائب التي تثبت التزام شركة أزالوف بجميع المتطلبات الضريبية",
-    filePath: "/media/pdf/وثيقة الضرائب.pdf",
+    description:
+      "الوثيقة الرسمية للضرائب التي تثبت التزام شركة أزالوف بجميع المتطلبات الضريبية",
+    filePath: "/media/pdf/wazeka.pdf",
     icon: Receipt,
-    category: "الضرائب"
+    category: "الضرائب",
   },
   {
     id: 3,
     title: "سجل شركة أزالوف",
-    description: "السجل التجاري الرسمي لشركة أزالوف والذي يوثق جميع الأنشطة التجارية للشركة",
-    filePath: "/media/pdf/سجل شركة ازلوف.pdf",
+    description:
+      "السجل التجاري الرسمي لشركة أزالوف والذي يوثق جميع الأنشطة التجارية للشركة",
+    filePath: "/media/pdf/azalove.pdf",
     icon: FileCheck,
-    category: "السجل التجاري"
+    category: "السجل التجاري",
   },
   {
     id: 4,
     title: "البطاقة الضريبية",
-    description: "البطاقة الضريبية الرسمية لشركة أزالوف والتي تثبت التسجيل في النظام الضريبي",
-    filePath: "/media/pdf/البطاقة الضريبية.pdf",
+    description:
+      "البطاقة الضريبية الرسمية لشركة أزالوف والتي تثبت التسجيل في النظام الضريبي",
+    filePath: "/media/pdf/dareba.pdf",
     icon: CreditCard,
-    category: "الضرائب"
-  }
+    category: "الضرائب",
+  },
 ];
 
 export default function LegalPage() {
@@ -112,7 +116,7 @@ export default function LegalPage() {
                       </p>
                       <a
                         href={document.filePath}
-                        target="_blank"
+                        download
                         rel="noopener noreferrer"
                         className="inline-flex items-center px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors duration-200 font-medium"
                       >
