@@ -3,10 +3,11 @@ import { NextResponse } from "next/server";
 
 export async function POST(
   request: Request,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const response = await apiFetch(`/blog/increment-views/${params.slug}`);
+    const { slug } = await params;
+    const response = await apiFetch(`/blog/increment-views/${slug}`);
 
     if (response.error) {
       return NextResponse.json(

@@ -32,5 +32,12 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [...protectedPaths, ...authPaths],
+  matcher: [
+    "/dashboard",
+    "/checkout", 
+    "/start-character",
+    "/related-books",
+    "/login",
+    "/register"
+  ],
 };

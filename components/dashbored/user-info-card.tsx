@@ -94,12 +94,12 @@ const UserInfoCard = () => {
             </div>
           </div>
 
-          {user.phone && (
+          {user.phoneNumber && (
             <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
               <Phone className="w-5 h-5 text-amaranth-500" />
               <div>
                 <p className="text-sm font-medium text-gray-700">رقم الهاتف</p>
-                <p className="text-sm text-gray-600">{user.phone}</p>
+                <p className="text-sm text-gray-600">{user.phoneNumber}</p>
               </div>
             </div>
           )}

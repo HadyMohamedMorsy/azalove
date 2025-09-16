@@ -3,9 +3,9 @@ import StructuredData from "@/components/seo/structured-data";
 import { Metadata } from "next";
 
 interface ProductPageProps {
-  params: {
+  params: Promise<{
     productslug: string;
-  };
+  }>;
 }
 
 // Generate metadata for SEO

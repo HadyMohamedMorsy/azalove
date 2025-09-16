@@ -3,14 +3,16 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
-  if (!params?.slug) {
-    return NextResponse.json({ error: "Slug is required" }, { status: 400 });
-  }
-
   try {
-    const response = await apiFetch(`/product/by-slug/${params.slug}`);
+    const { slug } = await params;
+    
+    if (!slug) {
+      return NextResponse.json({ error: "Slug is required" }, { status: 400 });
+    }
+
+    const response = await apiFetch(`/product/by-slug/${slug}`);
 
     if (!response.data) {
       return NextResponse.json({ error: "Product not found" }, { status: 404 });

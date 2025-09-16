@@ -5,8 +5,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { categoryslug: string } }
+  { params }: { params: Promise<{ categoryslug: string }> }
 ) {
+  const { categoryslug } = await params;
+  
   const response = await apiFetch(API_ENDPOINTS_FROM_SERVER.PRODUCTS, {
     params: {
       query: {
@@ -18,7 +20,7 @@ export async function GET(
           categories: {
             select: ["id", "name", "slug"],
             filters: {
-              slug: params.categoryslug,
+              slug: categoryslug,
             },
           },
           sku: {
