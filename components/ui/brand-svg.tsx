@@ -47,7 +47,7 @@ export function BrandSVG({
     >
       <img
         src={svgPath}
-        alt="أزالوف - تصميم رومانسي"
+        alt="أزلــوڤ - تصميم رومانسي"
         className="w-full h-full object-contain drop-shadow-lg"
         loading="lazy"
       />

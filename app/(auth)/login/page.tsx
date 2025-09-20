@@ -158,7 +158,7 @@ function Login() {
               </div>
               <Button
                 type="submit"
-                className="w-full bg-gradient-to-r from-amaranth-500 to-royal-500 hover:from-amaranth-600 hover:to-royal-600 text-white font-semibold py-3 rounded-xl shadow-lg shadow-amaranth-200/50 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:transform-none"
+                className="w-full bg-gradient-to-r bg-amaranth-900 hover:bg-royal-900 text-white font-semibold py-3 rounded-xl shadow-lg shadow-amaranth-200/50 transition-all duration-300 transform hover:scale-105"
                 disabled={isLoading}
               >
                 {isLoading ? (

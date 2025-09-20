@@ -71,7 +71,7 @@ export function BlogMegaMenu({
       onMouseLeave={onMouseLeave}
     >
       {/* Romantic background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-cream-50/80 via-amaranth-50/60 to-royal-50/80 pointer-events-none" />
+      <div className="absolute inset-0 bg-cream-100 pointer-events-none" />
 
       {/* Decorative floating elements */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -106,7 +106,7 @@ export function BlogMegaMenu({
                 {blogCategories?.map((category) => (
                   <div key={category.id} className="space-y-4">
                     {/* Category Title */}
-                    <h3 className="text-lg font-bold text-amaranth-700 border-b-2 border-amaranth-200 pb-2 mb-4">
+                    <h3 className="text-lg font-bold text-amaranth-900 border-b-2 border-amaranth-200 pb-2 mb-4">
                       {category.name}
                     </h3>
 
@@ -119,7 +119,7 @@ export function BlogMegaMenu({
                             <Link
                               href={`/blogs/${subcategory.slug}`}
                               onClick={onClose}
-                              className="text-gray-700 hover:text-amaranth-600 text-sm transition-colors duration-200 hover:translate-x-1 transform block py-1"
+                              className="text-gray-700 hover:text-amaranth-900 text-sm transition-colors duration-200 hover:translate-x-1 transform block py-1"
                             >
                               {subcategory.name}
                             </Link>
@@ -130,7 +130,7 @@ export function BlogMegaMenu({
                           <Link
                             href={`/blogs/${category.slug}`}
                             onClick={onClose}
-                            className="text-gray-700 hover:text-amaranth-600 text-sm transition-colors duration-200 hover:translate-x-1 transform block py-1"
+                            className="text-gray-700 hover:text-amaranth-900 text-sm transition-colors duration-200 hover:translate-x-1 transform block py-1"
                           >
                             عرض جميع المقالات
                           </Link>
@@ -149,7 +149,7 @@ export function BlogMegaMenu({
                   <Link
                     href="/blogs"
                     onClick={onClose}
-                    className="text-amaranth-600 hover:text-amaranth-800 font-semibold transition-colors duration-200"
+                    className="text-amaranth-900  font-semibold transition-colors duration-200"
                   >
                     جميع المقالات ←
                   </Link>
@@ -163,7 +163,7 @@ export function BlogMegaMenu({
             <div className="space-y-6">
               <div className="flex items-center gap-2 mb-6">
                 <Sparkles className="w-5 h-5 text-royal-600" />
-                <h3 className="text-xl font-bold text-royal-800">
+                <h3 className="text-xl font-bold text-royal-900">
                   مقالات مميزة
                 </h3>
               </div>

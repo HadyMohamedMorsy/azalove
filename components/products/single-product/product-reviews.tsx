@@ -202,7 +202,7 @@ const ProductReviews = ({ reviews: initialReviews }: ProductReviewsProps) => {
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-4">
             <Heart className="w-6 h-6 text-amaranth-500" />
-            <h2 className="heading-section bg-gradient-to-r from-royal-700 to-amaranth-700 bg-clip-text text-transparent">
+            <h2 className="heading-section bg-amaranth-900 bg-clip-text text-transparent">
               {t("product.customerReviews")}
             </h2>
             <Sparkles className="w-6 h-6 text-azalove-500" />
@@ -217,8 +217,8 @@ const ProductReviews = ({ reviews: initialReviews }: ProductReviewsProps) => {
             variant={showReviewForm ? "outline" : "default"}
             className={`flex items-center gap-2 transition-all duration-300 transform hover:scale-105 ${
               showReviewForm
-                ? "border-2 border-amaranth-200 hover:border-amaranth-300 hover:bg-amaranth-50"
-                : "bg-gradient-to-r from-azalove-500 to-amaranth-600 hover:from-azalove-600 hover:to-azalove-700 text-white border-0 shadow-lg hover:shadow-xl"
+                ? "border-amaranth-900 hover:border-amaranth-900 text-white border-0 shadow-lg hover:shadow-xl"
+                : "bg-amaranth-900 hover:to-azalove-700 text-white border-0 shadow-lg hover:shadow-xl"
             }`}
           >
             {showReviewForm ? (
@@ -257,7 +257,7 @@ const ProductReviews = ({ reviews: initialReviews }: ProductReviewsProps) => {
             <div className="grid md:grid-cols-2 gap-8">
               {/* Average Rating */}
               <div className="text-center p-6 bg-gradient-to-br from-azalove-50 to-azalove-100 rounded-2xl border border-azalove-200">
-                <div className="text-5xl font-bold bg-gradient-to-r from-royal-600 to-amaranth-600 bg-clip-text text-transparent mb-3">
+                <div className="text-5xl font-bold bg-amaranth-900 bg-clip-text text-transparent mb-3">
                   {averageRating}
                 </div>
                 <div className="flex justify-center mb-3">
@@ -309,7 +309,7 @@ const ProductReviews = ({ reviews: initialReviews }: ProductReviewsProps) => {
         {/* Sort Options */}
         <div className="flex justify-between items-center p-4 bg-gradient-to-r from-cream-50 to-azalove-50 rounded-xl border border-azalove-200">
           <h3 className="text-lg font-semibold text-royal-700 flex items-center gap-2">
-            <MessageCircle className="w-5 h-5 text-azalove-500" />
+            <MessageCircle className="w-5 h-5 text-amaranth-900" />
             {t("product.customerReviews")} ({reviews.length})
           </h3>
           <select
@@ -419,7 +419,7 @@ const ProductReviews = ({ reviews: initialReviews }: ProductReviewsProps) => {
             </p>
             <Button
               onClick={handleToggleReviewForm}
-              className="bg-gradient-to-r from-azalove-500 to-amaranth-600 hover:from-azalove-600 hover:to-azalove-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              className="bg-amaranth-900 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
             >
               <Plus className="w-4 h-4 mr-2" />
               {t("product.writeFirstReview")}

@@ -33,12 +33,12 @@ const Dashboard = () => {
   }, [searchParams]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amaranth-50 to-amaranth-100">
+    <div className="min-h-screen bg-cream-100">
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 bg-gradient-to-r from-amaranth-500 to-amaranth-600 rounded-full flex items-center justify-center">
+            <div className="w-12 h-12 bg-amaranth-900 rounded-full flex items-center justify-center">
               <User className="w-6 h-6 text-white" />
             </div>
             <div>
@@ -87,15 +87,7 @@ const Dashboard = () => {
                   {t("dashboard.tabs.favorites")}
                 </span>
               </TabsTrigger>
-              <TabsTrigger
-                value="cart"
-                className="flex items-center gap-3 h-12 px-4 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-amaranth-600 text-gray-600 hover:text-amaranth-500 transition-all duration-200"
-              >
-                <ShoppingCart className="w-5 h-5" />
-                <span className="hidden sm:inline font-medium">
-                  {t("dashboard.tabs.cart")}
-                </span>
-              </TabsTrigger>
+    
               <TabsTrigger
                 value="addresses"
                 className="flex items-center gap-3 h-12 px-4 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-amaranth-600 text-gray-600 hover:text-amaranth-500 transition-all duration-200"
@@ -118,10 +110,6 @@ const Dashboard = () => {
 
           <TabsContent value="favorites" className="space-y-6">
             <Favorites />
-          </TabsContent>
-
-          <TabsContent value="cart" className="space-y-6">
-            <CartItems />
           </TabsContent>
 
           <TabsContent value="addresses" className="space-y-6">

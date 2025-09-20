@@ -50,7 +50,7 @@ function CategoriesList() {
     <ul className="grid lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-3">
       {data?.map((category: Category) => (
         <li key={category.id}>
-          <CategoryCard bgColor="#faf1ff" title={category.name} />
+          <CategoryCard bgColor="#fff5e9" title={category.name} />
         </li>
       ))}
     </ul>

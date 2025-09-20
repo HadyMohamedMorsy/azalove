@@ -277,14 +277,14 @@ export default function AddressDialog({
         className="sm:max-w-2xl border-0 shadow-2xl bg-white/95 backdrop-blur-sm max-h-[90vh] overflow-y-auto"
         showCloseButton={false}
       >
-        <DialogHeader className="bg-gradient-to-r from-rose-50 to-pink-50 border-b border-rose-100 rounded-t-lg -mt-6 -mx-6 px-6 py-4">
-          <DialogTitle className="flex items-center gap-2 text-rose-800">
+        <DialogHeader className="bg-cream-100 border-b border-rose-100 rounded-t-lg -mt-6 -mx-6 px-6 py-4">
+          <DialogTitle className="flex items-center gap-2 text-amber-900">
             <div className="relative">
-              <Heart className="w-3 h-3 text-rose-400 absolute -top-1 -right-1" />
+              <Heart className="w-3 h-3 text-amaranth-900 absolute -top-1 -right-1" />
             </div>
             {editingAddress ? "تعديل العنوان" : "إضافة عنوان جديد"}
           </DialogTitle>
-          <DialogDescription className="text-rose-600">
+          <DialogDescription className="text-amber-900">
             {editingAddress
               ? "تحديث معلومات عنوانك بحب ❤️"
               : "أضف عنوان جديد إلى دليل العناوين الخاص بك 💕"}
@@ -292,7 +292,7 @@ export default function AddressDialog({
         </DialogHeader>
         <div className="space-y-4 pt-4">
           <div className="space-y-2">
-            <Label htmlFor="title" className="text-rose-700 font-medium">
+            <Label htmlFor="title" className="text-amber-900 font-medium">
               عنوان العنوان *
             </Label>
             <Input
@@ -300,12 +300,15 @@ export default function AddressDialog({
               placeholder="مثال: المنزل، العمل، المكتب"
               value={formData.title}
               onChange={(e) => handleFormChange("title", e.target.value)}
-              className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20"
+              className="border-cream-200 focus:border-amaranth-900 focus:ring-amaranth-900/20"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="addressLine1" className="text-rose-700 font-medium">
+            <Label
+              htmlFor="addressLine1"
+              className="text-amber-900 font-medium"
+            >
               سطر العنوان 1 *
             </Label>
             <Input
@@ -313,12 +316,15 @@ export default function AddressDialog({
               placeholder="عنوان الشارع، صندوق البريد"
               value={formData.addressLine1}
               onChange={(e) => handleFormChange("addressLine1", e.target.value)}
-              className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20"
+              className="border-cream-200 focus:border-amaranth-900 focus:ring-amaranth-900/20"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="addressLine2" className="text-rose-700 font-medium">
+            <Label
+              htmlFor="addressLine2"
+              className="text-amber-900 font-medium"
+            >
               سطر العنوان 2 (اختياري)
             </Label>
             <Input
@@ -326,19 +332,19 @@ export default function AddressDialog({
               placeholder="شقة، جناح، وحدة، مبنى، طابق، إلخ"
               value={formData.addressLine2}
               onChange={(e) => handleFormChange("addressLine2", e.target.value)}
-              className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20"
+              className="border-cream-200 focus:border-amaranth-900 focus:ring-amaranth-900/20"
             />
           </div>
 
           {/* Country Dropdown */}
           <div className="space-y-2">
-            <Label className="text-rose-700 font-medium">البلد *</Label>
+            <Label className="text-amber-900 font-medium">البلد *</Label>
             <Select
               value={formData.countryId.toString()}
               onValueChange={(value) => handleCountryChange(parseInt(value))}
               disabled={loadingLocations}
             >
-              <SelectTrigger className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20">
+              <SelectTrigger className="border-cream-200 focus:border-amaranth-900 focus:ring-amaranth-900/20">
                 <SelectValue placeholder="اختر البلد" />
               </SelectTrigger>
               <SelectContent>
@@ -356,13 +362,13 @@ export default function AddressDialog({
 
           {/* City Dropdown */}
           <div className="space-y-2">
-            <Label className="text-rose-700 font-medium">المدينة *</Label>
+            <Label className="text-amber-900 font-medium">المدينة *</Label>
             <Select
               value={formData.cityId.toString()}
               onValueChange={(value) => handleCityChange(parseInt(value))}
               disabled={!formData.countryId || loadingLocations}
             >
-              <SelectTrigger className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20">
+              <SelectTrigger className="border-cream-200 focus:border-amaranth-900 focus:ring-amaranth-900/20">
                 <SelectValue placeholder="اختر المدينة" />
               </SelectTrigger>
               <SelectContent>
@@ -377,7 +383,7 @@ export default function AddressDialog({
 
           {/* Area Dropdown */}
           <div className="space-y-2">
-            <Label className="text-rose-700 font-medium">المنطقة *</Label>
+            <Label className="text-amber-900 font-medium">المنطقة *</Label>
             <Select
               value={formData.areaId.toString()}
               onValueChange={(value) =>
@@ -385,7 +391,7 @@ export default function AddressDialog({
               }
               disabled={!formData.cityId || loadingLocations}
             >
-              <SelectTrigger className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20">
+              <SelectTrigger className="border-cream-200 focus:border-amaranth-900 focus:ring-amaranth-900/20">
                 <SelectValue placeholder="اختر المنطقة" />
               </SelectTrigger>
               <SelectContent>
@@ -400,7 +406,10 @@ export default function AddressDialog({
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="postalCode" className="text-rose-700 font-medium">
+              <Label
+                htmlFor="postalCode"
+                className="text-amber-900 font-medium"
+              >
                 الرمز البريدي *
               </Label>
               <Input
@@ -408,13 +417,13 @@ export default function AddressDialog({
                 placeholder="الرمز البريدي"
                 value={formData.postalCode}
                 onChange={(e) => handleFormChange("postalCode", e.target.value)}
-                className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20"
+                className="border-cream-200 focus:border-amaranth-900 focus:ring-amaranth-900/20"
               />
             </div>
             <div className="space-y-2">
               <Label
                 htmlFor="phoneNumber"
-                className="text-rose-700 font-medium"
+                className="text-amber-900 font-medium"
               >
                 رقم الهاتف *
               </Label>
@@ -425,13 +434,13 @@ export default function AddressDialog({
                 onChange={(e) =>
                   handleFormChange("phoneNumber", e.target.value)
                 }
-                className="border-rose-200 focus:border-rose-400 focus:ring-rose-400/20"
+                className="border-cream-200 focus:border-amaranth-900 focus:ring-amaranth-900/20"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="landmark" className="text-rose-700 font-medium">
+            <Label htmlFor="landmark" className="text-amber-900 font-medium">
               معلم (اختياري)
             </Label>
             <Input
@@ -445,14 +454,14 @@ export default function AddressDialog({
 
           {/* Default Address Switch */}
           <div className="flex items-center justify-between space-x-2 space-x-reverse">
-            <Label htmlFor="isDefault" className="text-rose-700 font-medium">
+            <Label htmlFor="isDefault" className="text-amber-900 font-medium">
               تعيين كعنوان افتراضي
             </Label>
             <Switch
               id="isDefault"
               checked={isDefault}
               onCheckedChange={setIsDefault}
-              className="data-[state=checked]:bg-rose-500"
+              className="data-[state=checked]:bg-amaranth-900"
             />
           </div>
 
@@ -462,14 +471,14 @@ export default function AddressDialog({
               variant="outline"
               onClick={() => onOpenChange(false)}
               disabled={isLoading}
-              className="flex-1 border-rose-200 text-rose-700 hover:bg-rose-50 hover:border-rose-300 hover:text-rose-800 transition-all duration-200 font-medium"
+              className="flex-1 border-cream-200 text-amber-900 hover:bg-cream-50 hover:border-cream-300 hover:text-amber-800 transition-all duration-200 font-medium"
             >
               إلغاء
             </Button>
             <Button
               onClick={handleSubmit}
               disabled={isLoading}
-              className="flex-1 bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1  bg-amaranth-900   hover:bg-royal-900 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading
                 ? "جاري الحفظ..."

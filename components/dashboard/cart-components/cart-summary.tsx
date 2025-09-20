@@ -4,6 +4,7 @@ import { useCurrency } from "@/hooks/use-currency";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "@/hooks/use-translation";
 import { CreditCard, Gift } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface CartSummaryProps {
   subtotal: number;
@@ -19,19 +20,21 @@ export default function CartSummary({
   const { toast } = useToast();
   const { t } = useTranslation();
   const { formatCurrency } = useCurrency();
+  const router = useRouter();
 
   const handleCheckout = () => {
     toast({
       title: t("cart.checkoutTitle"),
       description: t("cart.checkoutDescription"),
     });
+    router.push("/checkout");
   };
 
   return (
     <Card className="border-0 shadow-xl bg-gradient-to-br from-white via-purple-50 to-pink-50 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-r from-purple-100/20 via-pink-100/20 to-rose-100/20 pointer-events-none"></div>
+      <div className="absolute inset-0 bg-cream-100 pointer-events-none"></div>
       <CardHeader className="relative">
-        <CardTitle className="flex items-center gap-3 text-xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 bg-clip-text text-transparent">
+        <CardTitle className="flex items-center gap-3 text-xl font-bold bg-amaranth-900 bg-clip-text text-transparent">
           <Gift className="w-5 h-5 text-purple-500" />
           {t("cart.summaryTitle")}
         </CardTitle>
@@ -49,10 +52,10 @@ export default function CartSummary({
 
           <div className="border-t border-rose-200 pt-4">
             <div className="flex justify-between items-center font-bold text-xl">
-              <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 bg-clip-text text-transparent">
+              <span className="bg-amaranth-900 bg-clip-text text-transparent">
                 {t("cart.total")}
               </span>
-              <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 bg-clip-text text-transparent font-bold">
+              <span className="bg-amaranth-900 bg-clip-text text-transparent font-bold">
                 {formatCurrency(total)}
               </span>
             </div>
@@ -61,7 +64,7 @@ export default function CartSummary({
 
         <Button
           onClick={handleCheckout}
-          className="w-full bg-gradient-to-r from-rose-500 via-pink-500 to-purple-500 hover:from-rose-600 hover:via-pink-600 hover:to-purple-600 text-white font-semibold py-3 text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+          className="w-full bg-amaranth-900 hover:bg-amaranth-900 text-white font-semibold py-3 text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
           size="lg"
           disabled={disabled}
         >

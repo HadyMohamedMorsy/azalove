@@ -107,7 +107,7 @@ const OrderHistory = () => {
 
   if (loading) {
     return (
-      <Card className="border-0 shadow-lg bg-gradient-to-br from-pink-50 to-rose-50">
+      <Card className="border-0 shadow-lg bg-cream-100">
         <CardContent className="p-6">
           <div className="text-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-rose-500 mx-auto"></div>
@@ -120,7 +120,7 @@ const OrderHistory = () => {
 
   if (error) {
     return (
-      <Card className="border-0 shadow-lg bg-gradient-to-br from-pink-50 to-rose-50">
+      <Card className="border-0 shadow-lg bg-cream-100">
         <CardContent className="p-6">
           <div className="text-center py-8">
             <p className="text-red-600 mb-4">{error}</p>
@@ -135,14 +135,14 @@ const OrderHistory = () => {
 
   return (
     <>
-      <Card className="border-0 shadow-lg bg-gradient-to-br from-pink-50 to-rose-50">
+      <Card className="border-0 shadow-lg bg-cream-100">
         <CardHeader className="text-center pb-6">
           <div className="flex items-center justify-center gap-3 mb-2">
-            <Heart className="w-6 h-6 text-rose-500" />
-            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent">
+            <Heart className="w-6 h-6 text-amber-900" />
+            <CardTitle className="text-2xl font-bold bg-amaranth-900 bg-clip-text text-transparent">
               {t("orderHistory.title")}
             </CardTitle>
-            <Sparkles className="w-6 h-6 text-rose-500" />
+            <Sparkles className="w-6 h-6 text-amber-900" />
           </div>
           <CardDescription className="text-lg text-gray-600">
             {t("orderHistory.description")}
@@ -168,7 +168,7 @@ const OrderHistory = () => {
                         <div className="flex-1 space-y-4">
                           <div className="flex items-center gap-3">
                             <div className="flex items-center gap-2">
-                              <Package className="w-5 h-5 text-rose-500" />
+                              <Package className="w-5 h-5 text-amber-900" />
                               <h3 className="font-bold text-lg text-gray-800">
                                 {t("orderHistory.orderId")}: {order.id}
                               </h3>
@@ -182,14 +182,14 @@ const OrderHistory = () => {
 
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                             <div className="flex items-center gap-2 text-gray-600">
-                              <Calendar className="w-4 h-4 text-rose-400" />
+                              <Calendar className="w-4 h-4 text-amber-900" />
                               <span>
                                 {t("orderHistory.orderDate")}:{" "}
                                 {new Date(order.date).toLocaleDateString()}
                               </span>
                             </div>
                             <div className="flex items-center gap-2 text-gray-600">
-                              <Package className="w-4 h-4 text-rose-400" />
+                              <Package className="w-4 h-4 text-amber-900" />
                               <span>
                                 {order.items.length}{" "}
                                 {order.items.length === 1
@@ -198,8 +198,8 @@ const OrderHistory = () => {
                               </span>
                             </div>
                             <div className="flex items-center gap-2 text-gray-600">
-                              <CreditCard className="w-4 h-4 text-rose-400" />
-                              <span className="font-semibold text-rose-600">
+                              <CreditCard className="w-4 h-4 text-amber-900" />
+                              <span className="font-semibold text-amaranth-900">
                                 ${order.total}
                               </span>
                             </div>
@@ -218,7 +218,7 @@ const OrderHistory = () => {
                             variant="outline"
                             size="sm"
                             onClick={() => handleViewDetails(order)}
-                            className="group-hover:bg-rose-50 group-hover:border-rose-300 group-hover:text-rose-700 transition-colors"
+                            className="group-hover:bg-rose-50 group-hover:border-rose-300 group-hover:text-amber-900 transition-colors"
                           >
                             <Eye className="w-4 h-4 mr-2" />
                             {t("orderHistory.viewDetails")}

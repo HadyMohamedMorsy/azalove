@@ -157,7 +157,7 @@ function ReturnRefund() {
                     {t("returnRefund.sections.returnProcess.steps.title")}
                   </h3>
                   <ol className="list-decimal pr-6 space-y-2 font-web text-gray-700">
-                    <li>قم بتسجيل الدخول إلى حسابك في أزالوف</li>
+                    <li>قم بتسجيل الدخول إلى حسابك في أزلــوڤ</li>
                     <li>اذهب إلى قسم "مكتبتي" أو "طلباتي"</li>
                     <li>اختر الكتاب المراد إرجاعه</li>
                     <li>انقر على "طلب إرجاع الكتاب"</li>
@@ -229,7 +229,7 @@ function ReturnRefund() {
                   </h3>
                   <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                     <li>الاسترداد إلى نفس طريقة الدفع الأصلية</li>
-                    <li>رصيد في موقع أزالوف للكتب الرومانسية</li>
+                    <li>رصيد في موقع أزلــوڤ للكتب الرومانسية</li>
                     <li>بطاقة هدايا لشراء كتب جديدة</li>
                     <li>التبرع بقيمة الكتاب لمكتبة عامة (اختياري)</li>
                   </ul>
@@ -362,7 +362,7 @@ function ReturnRefund() {
               </p>
               <ul className="list-disc pr-6 space-y-2 font-web text-gray-700">
                 <li>يمكن إرجاع الكتب المُهداة خلال 45 يوماً</li>
-                <li>الاسترداد يتم كرصيد في موقع أزالوف</li>
+                <li>الاسترداد يتم كرصيد في موقع أزلــوڤ</li>
                 <li>يمكن استبدال الكتاب بكتاب آخر مجاناً</li>
                 <li>يمكن للمُهدي طلب الاسترداد المالي</li>
                 <li>بطاقة هدايا جديدة بنفس القيمة</li>

@@ -48,7 +48,7 @@ export default function UserPreferencesDisplay({
     <div className="bg-white rounded-lg p-6 shadow-sm border border-azalove-100">
       <h2 className="text-lg font-semibold mb-4 text-royal-800">اختياراتك:</h2>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-gradient-to-br from-amaranth-50 to-amaranth-100 p-3 rounded-lg border border-amaranth-200">
+        <div className="bg-cream-100 p-3 rounded-lg border border-amaranth-200">
           <p className="text-sm text-amaranth-700">المناسبة</p>
           <p className="font-semibold text-amaranth-800">
             {getOccasionLabel(userAnswers.occasion)}

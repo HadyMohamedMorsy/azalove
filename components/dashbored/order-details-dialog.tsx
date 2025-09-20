@@ -125,14 +125,14 @@ const OrderDetailsDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-pink-50 to-rose-50">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-cream-100">
         <DialogHeader className="text-center">
           <div className="flex items-center justify-center gap-3 mb-2">
-            <Heart className="w-6 h-6 text-rose-500" />
-            <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent">
+            <Heart className="w-6 h-6 text-amber-900" />
+            <DialogTitle className="text-2xl font-bold bg-amaranth-900 bg-clip-text text-transparent">
               {t("orderHistory.orderDetails.title")} - {order.id}
             </DialogTitle>
-            <Sparkles className="w-6 h-6 text-rose-500" />
+            <Sparkles className="w-6 h-6 text-amber-900" />
           </div>
           <DialogDescription className="text-lg text-gray-600">
             {t("orderHistory.orderDetails.description")}
@@ -181,7 +181,7 @@ const OrderDetailsDialog = ({
               </h3>
               <div className="space-y-4">
                 <div className="flex items-center gap-3 text-sm">
-                  <Calendar className="w-5 h-5 text-rose-500" />
+                  <Calendar className="w-5 h-5 text-amber-900" />
                   <div>
                     <span className="font-semibold text-gray-700">
                       {t("orderHistory.orderDate")}:
@@ -192,7 +192,7 @@ const OrderDetailsDialog = ({
                   </div>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
-                  <CreditCard className="w-5 h-5 text-rose-500" />
+                  <CreditCard className="w-5 h-5 text-amber-900" />
                   <div>
                     <span className="font-semibold text-gray-700">
                       {t("orderHistory.orderDetails.payment")}:
@@ -213,7 +213,7 @@ const OrderDetailsDialog = ({
               </h3>
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-rose-500 mt-1" />
+                  <MapPin className="w-5 h-5 text-amber-900 mt-1" />
                   <div className="text-sm">
                     <p className="font-semibold text-gray-800">
                       {order.shippingAddress.name}
@@ -229,7 +229,7 @@ const OrderDetailsDialog = ({
                   </div>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
-                  <Phone className="w-5 h-5 text-rose-500" />
+                  <Phone className="w-5 h-5 text-amber-900" />
                   <span className="text-gray-600">
                     {order.shippingAddress.phone}
                   </span>
@@ -249,10 +249,10 @@ const OrderDetailsDialog = ({
               {order.items.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-center gap-4 p-4 bg-gradient-to-r from-pink-50 to-rose-50 rounded-lg border border-rose-200"
+                  className="flex items-center gap-4 p-4 bg-cream-100 rounded-lg border border-rose-200"
                 >
                   <div className="w-16 h-16 bg-gradient-to-br from-rose-100 to-pink-100 rounded-lg flex items-center justify-center">
-                    <Package className="w-6 h-6 text-rose-600" />
+                    <Package className="w-6 h-6 text-amaranth-900" />
                   </div>
                   <div className="flex-1">
                     <h4 className="font-semibold text-gray-800">{item.name}</h4>
@@ -261,7 +261,7 @@ const OrderDetailsDialog = ({
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="font-semibold text-rose-600">
+                    <p className="font-semibold text-amaranth-900">
                       ${(item.price * item.quantity).toFixed(2)}
                     </p>
                     <p className="text-sm text-gray-500">
@@ -299,7 +299,7 @@ const OrderDetailsDialog = ({
                 <span className="font-semibold">${order.tax.toFixed(2)}</span>
               </div>
               <Separator className="bg-rose-200" />
-              <div className="flex justify-between font-bold text-lg text-rose-600">
+              <div className="flex justify-between font-bold text-lg text-amaranth-900">
                 <span>{t("cart.total")}</span>
                 <span>${order.total.toFixed(2)}</span>
               </div>
@@ -310,7 +310,7 @@ const OrderDetailsDialog = ({
           <div className="flex gap-4 pt-4">
             <Button
               variant="outline"
-              className="flex-1 bg-white/80 hover:bg-rose-50 border-rose-200 text-rose-700"
+              className="flex-1 bg-white/80 hover:bg-rose-50 border-rose-200 text-amber-900"
             >
               <Mail className="w-4 h-4 mr-2" />
               {t("orderHistory.orderDetails.contactSupport")}

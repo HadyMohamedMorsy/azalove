@@ -69,7 +69,7 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
 
         <div className="mt-4 text-center">
           <h2 className="text-2xl font-bold text-amaranth-600 mb-2" dir="rtl">
-            أزالوف
+            أزلــوڤ
           </h2>
           <p className="text-sm text-gray-600" dir="rtl">
             جاري التحميل...

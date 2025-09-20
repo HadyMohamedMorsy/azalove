@@ -16,27 +16,27 @@ export async function generateMetadata({
   const { productslug } = resolvedParams;
 
   return {
-    title: `${productslug} - أزالوف | كتب رومانسية`,
-    description: `اكتشف ${productslug} من أزالوف - كتب رومانسية ساحرة ستأسر قلبك`,
-    keywords: "كتب رومانسية, روايات حب, أزالوف, كتب عربية, رومانسية",
+    title: `${productslug} - أزلــوڤ | كتب رومانسية`,
+    description: `اكتشف ${productslug} من أزلــوڤ - كتب رومانسية ساحرة ستأسر قلبك`,
+    keywords: "كتب رومانسية, روايات حب, أزلــوڤ, كتب عربية, رومانسية",
     openGraph: {
       type: "website",
-      title: `${productslug} - أزالوف`,
-      description: `اكتشف ${productslug} من أزالوف - كتب رومانسية ساحرة ستأسر قلبك`,
+      title: `${productslug} - أزلــوڤ`,
+      description: `اكتشف ${productslug} من أزلــوڤ - كتب رومانسية ساحرة ستأسر قلبك`,
       url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://azalove.com"}/product/${productslug}`,
-      siteName: "أزالوف",
+      siteName: "أزلــوڤ",
       locale: "ar_SA",
     },
     twitter: {
       card: "summary_large_image",
-      title: `${productslug} - أزالوف`,
-      description: `اكتشف ${productslug} من أزالوف - كتب رومانسية ساحرة ستأسر قلبك`,
+      title: `${productslug} - أزلــوڤ`,
+      description: `اكتشف ${productslug} من أزلــوڤ - كتب رومانسية ساحرة ستأسر قلبك`,
     },
     robots: {
       index: true,
       follow: true,
     },
-    authors: [{ name: "أزالوف" }],
+    authors: [{ name: "أزلــوڤ" }],
     alternates: {
       canonical: `${process.env.NEXT_PUBLIC_SITE_URL || "https://azalove.com"}/product/${productslug}`,
     },
@@ -53,11 +53,11 @@ export default async function ProductSlug({ params }: ProductPageProps) {
     "@type": "Product",
     "@id": `${process.env.NEXT_PUBLIC_SITE_URL || "https://azalove.com"}/product/${productslug}`,
     name: productslug,
-    description: `اكتشف ${productslug} من أزالوف - كتب رومانسية ساحرة ستأسر قلبك`,
+    description: `اكتشف ${productslug} من أزلــوڤ - كتب رومانسية ساحرة ستأسر قلبك`,
     url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://azalove.com"}/product/${productslug}`,
     brand: {
       "@type": "Brand",
-      name: "أزالوف",
+      name: "أزلــوڤ",
       url: process.env.NEXT_PUBLIC_SITE_URL || "https://azalove.com",
     },
     category: "كتب رومانسية",
@@ -67,7 +67,7 @@ export default async function ProductSlug({ params }: ProductPageProps) {
       availability: "https://schema.org/InStock",
       seller: {
         "@type": "Organization",
-        name: "أزالوف",
+        name: "أزلــوڤ",
         url: process.env.NEXT_PUBLIC_SITE_URL || "https://azalove.com",
       },
       priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
@@ -91,7 +91,7 @@ export default async function ProductSlug({ params }: ProductPageProps) {
       },
       author: {
         "@type": "Person",
-        name: "عميل أزالوف",
+        name: "عميل أزلــوڤ",
       },
       reviewBody: "كتاب رومانسي رائع وممتع للقراءة",
       datePublished: new Date().toISOString().split("T")[0],

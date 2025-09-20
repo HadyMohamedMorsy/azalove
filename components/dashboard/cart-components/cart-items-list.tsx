@@ -14,13 +14,13 @@ export default function CartItemsList() {
       <div className="text-center py-16">
         <div className="relative mb-6">
           <div className="w-24 h-24 bg-gradient-to-br from-rose-100 to-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <ShoppingCart className="w-12 h-12 text-rose-400" />
+            <ShoppingCart className="w-12 h-12 text-amaranth-900" />
           </div>
           <div className="absolute -top-2 -right-2">
-            <Heart className="w-6 h-6 text-pink-500 animate-pulse" />
+            <Heart className="w-6 h-6 text-amaranth-900 animate-pulse" />
           </div>
         </div>
-        <h3 className="text-2xl font-bold bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 bg-clip-text text-transparent mb-3">
+        <h3 className="text-2xl font-bold bg-amaranth-900 bg-clip-text text-transparent mb-3">
           {t("cart.emptyTitle")}
         </h3>
         <p className="text-gray-600 mb-4 max-w-md mx-auto">
@@ -38,7 +38,7 @@ export default function CartItemsList() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-2 mb-4">
-        <Heart className="w-5 h-5 text-rose-500" />
+        <Heart className="w-5 h-5 text-amaranth-900" />
         <span className="text-lg font-semibold text-gray-700">
           {t("cart.loveCollection")} ({cartItems.length} {t("cart.items")})
         </span>

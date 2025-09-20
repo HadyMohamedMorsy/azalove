@@ -24,7 +24,7 @@ export function ToastDemo() {
               "Your romantic message has been sent with love and care.",
           });
         }}
-        className="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white"
+        className="bg-cream-100 hover:bg-cream-100 text-white"
       >
         <Heart className="mr-2 h-4 w-4" />
         Romantic Toast

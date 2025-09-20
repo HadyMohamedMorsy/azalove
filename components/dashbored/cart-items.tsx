@@ -16,12 +16,12 @@ const CartItems = () => {
   const total = subtotal;
 
   return (
-    <div className="bg-gradient-to-br from-rose-50 via-pink-50 to-purple-50">
+    <div>
       {/* Romantic Header */}
       <div className="text-center py-8 mb-8">
         <div className="flex items-center justify-center gap-3 mb-4">
-          <Heart className="w-8 h-8 text-rose-500 animate-pulse" />
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 bg-clip-text text-transparent">
+          <Heart className="w-8 h-8 text-amber-900 animate-pulse" />
+          <h1 className="text-4xl font-bold bg-amaranth-900 bg-clip-text text-transparent">
             {t("cart.cartTitle")}
           </h1>
           <Sparkles className="w-8 h-8 text-purple-500 animate-bounce" />

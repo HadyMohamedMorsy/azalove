@@ -1,29 +1,29 @@
-import CategoriesSection, { Category } from "@/components/categories/categories-section";
+import CategoriesSection from "@/components/categories/categories-section";
 import StructuredData from "@/components/seo/structured-data";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "فئات الكتب الرومانسية - أزالوف",
-  description: "اكتشف فئات مختلفة من الكتب الرومانسية العربية في أزالوف",
-  keywords: "فئات الكتب, كتب رومانسية, أزالوف, تصنيفات الكتب",
+  title: "فئات الكتب الرومانسية - أزلــوڤ",
+  description: "اكتشف فئات مختلفة من الكتب الرومانسية العربية في أزلــوڤ",
+  keywords: "فئات الكتب, كتب رومانسية, أزلــوڤ, تصنيفات الكتب",
   openGraph: {
     type: "website",
-    title: "فئات الكتب الرومانسية - أزالوف",
-    description: "اكتشف فئات مختلفة من الكتب الرومانسية العربية في أزالوف",
+    title: "فئات الكتب الرومانسية - أزلــوڤ",
+    description: "اكتشف فئات مختلفة من الكتب الرومانسية العربية في أزلــوڤ",
     url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://azalove.com"}/categories`,
-    siteName: "أزالوف",
+    siteName: "أزلــوڤ",
     locale: "ar_SA",
   },
   twitter: {
     card: "summary_large_image",
-    title: "فئات الكتب الرومانسية - أزالوف",
-    description: "اكتشف فئات مختلفة من الكتب الرومانسية العربية في أزالوف",
+    title: "فئات الكتب الرومانسية - أزلــوڤ",
+    description: "اكتشف فئات مختلفة من الكتب الرومانسية العربية في أزلــوڤ",
   },
   robots: {
     index: true,
     follow: true,
   },
-  authors: [{ name: "أزالوف" }],
+  authors: [{ name: "أزلــوڤ" }],
   alternates: {
     canonical: `${process.env.NEXT_PUBLIC_SITE_URL || "https://azalove.com"}/categories`,
   },

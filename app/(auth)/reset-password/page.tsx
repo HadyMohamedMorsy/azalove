@@ -164,13 +164,13 @@ function ResetPassword() {
           <Card className="backdrop-blur-sm bg-white/80 border-0 shadow-2xl shadow-amaranth-100/50">
             <CardHeader className="space-y-4 pb-6">
               <div className="text-center space-y-2">
-                <div className="w-16 h-16 mx-auto bg-gradient-to-r from-amaranth-500 to-royal-500 rounded-full flex items-center justify-center shadow-lg shadow-amaranth-200/50">
+                <div className="w-16 h-16 mx-auto bg-amaranth-900 rounded-full flex items-center justify-center shadow-lg shadow-amaranth-200/50">
                   <div className="w-8 h-8 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                 </div>
-                <CardTitle className="text-3xl font-bold bg-gradient-to-r from-amaranth-600 to-royal-600 bg-clip-text text-transparent">
+                <CardTitle className="text-3xl font-bold bg-amaranth-900 bg-clip-text text-transparent">
                   {t("auth.resetPassword.loading")}
                 </CardTitle>
-                <CardDescription className="text-royal-600/80 text-base">
+                <CardDescription className="text-amaranth-900/80 text-base">
                   {t("auth.resetPassword.verifyingToken")}
                 </CardDescription>
               </div>
@@ -258,7 +258,7 @@ function ResetPassword() {
                 </p>
                 <Button
                   asChild
-                  className="w-full bg-gradient-to-r from-amaranth-500 to-royal-500 hover:from-amaranth-600 hover:to-royal-600 text-white font-semibold py-3 rounded-xl shadow-lg shadow-amaranth-200/50 transition-all duration-300 transform hover:scale-105"
+                  className="w-full bg-gradient-to-r bg-amaranth-900 hover:bg-royal-900 text-white font-semibold py-3 rounded-xl shadow-lg shadow-amaranth-200/50 transition-all duration-300 transform hover:scale-105"
                 >
                   <Link href="/login">{t("auth.resetPassword.loginNow")}</Link>
                 </Button>

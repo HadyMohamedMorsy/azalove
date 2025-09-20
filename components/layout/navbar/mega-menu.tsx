@@ -51,7 +51,7 @@ export function MegaMenu({
       onMouseLeave={onMouseLeave}
     >
       {/* Romantic background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-cream-50/80 via-amaranth-50/60 to-royal-50/80 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-br bg-cream-100 pointer-events-none" />
 
       {/* Decorative floating elements */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -99,7 +99,7 @@ export function MegaMenu({
                             <Link
                               href={`/products/${subcategory.slug}`}
                               onClick={onClose}
-                              className="text-gray-700 hover:text-amaranth-600 text-sm transition-colors duration-200 hover:translate-x-1 transform block py-1"
+                              className="text-gray-700 hover:text-amaranth-900 text-sm transition-colors duration-200 hover:translate-x-1 transform block py-1"
                             >
                               {subcategory.name}
                             </Link>
@@ -110,7 +110,7 @@ export function MegaMenu({
                           <Link
                             href={`/products/${category.slug}`}
                             onClick={onClose}
-                            className="text-gray-700 hover:text-amaranth-600 text-sm transition-colors duration-200 hover:translate-x-1 transform block py-1"
+                            className="text-gray-700 hover:text-amaranth-900 text-sm transition-colors duration-200 hover:translate-x-1 transform block py-1"
                           >
                             عرض جميع المنتجات
                           </Link>

@@ -5,7 +5,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Slider } from "@/components/ui/slider";
 import { useFetch } from "@/hooks/use-fetch";
 import Image from "next/image";
 import { useMemo } from "react";
@@ -127,13 +126,13 @@ const FiltersProducts = ({ filters, onFilterChange }: FiltersProductsProps) => {
           {(filters?.category || filters?.priceRange) && (
             <button
               onClick={handleClearFilters}
-              className="w-full px-4 py-2 text-sm font-medium text-amaranth-600 bg-amaranth-50 border border-amaranth-200 rounded-lg hover:bg-amaranth-100 transition-colors duration-200"
+              className="w-full px-4 py-2 text-sm font-medium text-amaranth-900 bg-amaranth-50 border border-amaranth-200 rounded-lg hover:bg-cream-100 transition-colors duration-200"
             >
               مسح الفلاتر
             </button>
           )}
 
-          <div className="px-4 py-3 border border-amaranth-200 rounded-lg bg-gradient-to-r from-cream-50 to-amaranth-50">
+          <div className="px-4 py-3 border border-amaranth-200 rounded-lg bg-cream-100">
             <Accordion type="single" collapsible defaultValue="categories">
               <AccordionItem value="categories" className="border-0">
                 <AccordionTrigger className="text-amaranth-700 font-semibold hover:text-amaranth-800">
@@ -148,7 +147,7 @@ const FiltersProducts = ({ filters, onFilterChange }: FiltersProductsProps) => {
                           onClick={() => handleCategoryChange(category.slug)}
                           className={`text-right text-base font-medium hover:text-amaranth-600 transition-colors duration-200 ${
                             filters?.category === category.slug
-                              ? "text-amaranth-600 font-semibold"
+                              ? "text-amaranth-900 font-semibold"
                               : "text-gray-700"
                           }`}
                         >
@@ -184,36 +183,6 @@ const FiltersProducts = ({ filters, onFilterChange }: FiltersProductsProps) => {
               </AccordionItem>
             </Accordion>
           </div>
-
-          {/* <div className="px-4 py-3 border border-amaranth-200 rounded-lg bg-gradient-to-r from-cream-50 to-amaranth-50">
-            <Accordion type="single" collapsible defaultValue="price">
-              <AccordionItem value="price" className="border-0">
-                <AccordionTrigger className="text-amaranth-700 font-semibold hover:text-amaranth-800">
-                  تصفية حسب السعر
-                </AccordionTrigger>
-                <AccordionContent>
-                  <div className="space-y-4">
-                    <Slider
-                      value={currentPriceRange}
-                      max={1000}
-                      min={0}
-                      step={50}
-                      className="w-full"
-                      onValueChange={(value) => {
-                        if (value && value.length === 2) {
-                          handlePriceChange(`${value[0]}-${value[1]}`);
-                        }
-                      }}
-                    />
-                    <div className="flex justify-between text-sm text-gray-600">
-                      <span>{currentPriceRange[0]} جنيه</span>
-                      <span>{currentPriceRange[1]} جنيه</span>
-                    </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </div> */}
 
           {featuredProducts?.length > 0 && (
             <div className="px-4 py-3 border border-amaranth-200 rounded-lg bg-gradient-to-r from-cream-50 to-amaranth-50">

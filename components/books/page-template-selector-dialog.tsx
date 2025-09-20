@@ -166,7 +166,7 @@ export default function PageTemplateSelectorDialog({
         preventOutsideClose
         className="sm:max-w-6xl w-[95vw] max-h-[95vh] overflow-y-auto bg-gradient-to-br from-cream-50 to-azalove-50 border-2 border-azalove-200 shadow-2xl"
       >
-        <DialogHeader className="bg-gradient-to-r from-royal-600 to-amaranth-600 text-white rounded-t-lg -m-6 mb-6 p-6">
+        <DialogHeader className=" bg-amaranth-900 text-white rounded-t-lg -m-6 mb-6 p-6">
           <DialogTitle className="flex items-center gap-2 text-white">
             <Plus className="w-5 h-5 text-azalove-300" />
             اختر قالب صفحة

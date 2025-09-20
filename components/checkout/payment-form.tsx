@@ -161,7 +161,7 @@ export default function PaymentForm({
 
       {/* Payment Summary */}
       {selectedPaymentMethod && (
-        <Card className="bg-gradient-to-r from-azalove-50 to-azalove-100 border-azalove-200 shadow-sm">
+        <Card className="bg-cream-100 border-azalove-200 shadow-sm">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
@@ -267,7 +267,7 @@ export default function PaymentForm({
           <Button
             onClick={handleConfirmOrder}
             disabled={!canProceed || isCreatingOrder}
-            className="flex-1 px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-semibold shadow-lg hover:shadow-xl"
+            className="flex-1 px-6 py-3 bg-amaranth-900 hover:bg-amaranth-900 text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-semibold shadow-lg hover:shadow-xl"
           >
             <svg
               className="w-5 h-5 mr-2"
@@ -290,7 +290,7 @@ export default function PaymentForm({
           <Button
             onClick={handleSubmit}
             disabled={!canProceed}
-            className="flex-1 px-6 py-3 bg-gradient-to-r from-azalove-600 to-azalove-700 hover:from-azalove-700 hover:to-azalove-800 text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-semibold shadow-lg hover:shadow-xl"
+            className="flex-1 px-6 py-3 bg-amaranth-900 hover:bg-amaranth-900 text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-semibold shadow-lg hover:shadow-xl"
           >
             <svg
               className="w-5 h-5 mr-2"

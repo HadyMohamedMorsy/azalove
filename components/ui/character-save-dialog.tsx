@@ -357,13 +357,14 @@ export function CharacterSaveDialog({
               variant="outline"
               onClick={handleBack}
               disabled={step === 1}
+              className="border-royal-900 text-amaranth-900 hover:text-white hover:bg-amaranth-900"
             >
               {t("character.saveDialog.cancel")}
             </Button>
             <Button
               onClick={handleNext}
               disabled={!canProceed()}
-              className="bg-red-600 hover:bg-red-700"
+              className="bg-amaranth-900 hover:bg-royal-900 text-white"
             >
               {step === totalSteps
                 ? t("character.saveDialog.save")

@@ -10,7 +10,7 @@ const Footer = () => {
 
   return (
     <footer
-      className="bg-gradient-to-br from-amaranth-50 via-amaranth-100 to-royal-50 text-foreground py-12 md:py-16"
+      className="bg-cream-100 text-foreground py-12 md:py-16"
       dir="rtl"
     >
       <div className="max-w-6xl mx-auto px-4 md:px-6">
@@ -49,11 +49,11 @@ const Footer = () => {
                   </g>
                 </g>
               </svg>
-              <h3 className="text-xl md:text-2xl font-bold text-amaranth-800">
-                {settings?.store_name || "أزالوف"}
+              <h3 className="text-xl md:text-2xl font-bold text-amaranth-900">
+                {settings?.store_name || "أزلــوڤ"}
               </h3>
             </div>
-            <p className="text-amaranth-600 text-sm md:text-base lg:text-lg mb-6 md:mb-8 italic">
+            <p className="text-black text-sm md:text-base lg:text-lg mb-6 md:mb-8 italic">
               "حيث تتحول كل صفحة إلى قصة حب"
             </p>
 
@@ -61,31 +61,31 @@ const Footer = () => {
             <div className="flex flex-wrap justify-start gap-4 md:gap-6 mb-6 md:mb-8 text-xs md:text-sm">
               <a
                 href="/"
-                className="text-amaranth-600 hover:text-amaranth-800 transition-colors"
+                className="text-black hover:text-amaranth-900 transition-colors"
               >
                 الرئيسية
               </a>
               <a
                 href="/shop"
-                className="text-amaranth-600 hover:text-amaranth-800 transition-colors"
+                className="text-black hover:text-amaranth-900 transition-colors"
               >
                 المتجر
               </a>
               <a
                 href="/categories"
-                className="text-amaranth-600 hover:text-amaranth-800 transition-colors"
+                className="text-black hover:text-amaranth-900 transition-colors"
               >
                 التصنيفات
               </a>
               <a
                 href="/blogs"
-                className="text-amaranth-600 hover:text-amaranth-800 transition-colors"
+                className="text-black hover:text-amaranth-900 transition-colors"
               >
                 المدونة
               </a>
               <a
                 href="/contact-us"
-                className="text-amaranth-600 hover:text-amaranth-800 transition-colors"
+                className="text-black hover:text-amaranth-900 transition-colors"
               >
                 اتصل بنا
               </a>
@@ -95,31 +95,31 @@ const Footer = () => {
             <div className="flex flex-wrap justify-start gap-4 md:gap-6 mb-6 md:mb-8 text-xs md:text-sm">
               <a
                 href="/terms-and-conditions"
-                className="text-amaranth-600 hover:text-amaranth-800 transition-colors"
+                className="text-black hover:text-amaranth-900 transition-colors"
               >
                 الشروط والأحكام
               </a>
               <a
                 href="/privacy-policy"
-                className="text-amaranth-600 hover:text-amaranth-800 transition-colors"
+                className="text-black hover:text-amaranth-900 transition-colors"
               >
                 سياسة الخصوصية
               </a>
               <a
                 href="/cookie-policy"
-                className="text-amaranth-600 hover:text-amaranth-800 transition-colors"
+                className="text-black hover:text-amaranth-900 transition-colors"
               >
                 سياسة الكوكيز
               </a>
               <a
                 href="/return-refund"
-                className="text-amaranth-600 hover:text-amaranth-800 transition-colors"
+                className="text-black hover:text-amaranth-900 transition-colors"
               >
                 سياسة الإرجاع والاسترداد
               </a>
               <a
                 href="/shipping-delivery"
-                className="text-amaranth-600 hover:text-amaranth-800 transition-colors"
+                className="text-black hover:text-amaranth-900 transition-colors"
               >
                 الشحن والتسليم
               </a>
@@ -131,7 +131,7 @@ const Footer = () => {
             <h4 className="font-semibold text-amaranth-800 mb-3 md:mb-4 text-sm md:text-base">
               ابقَ على تواصل
             </h4>
-            <p className="text-amaranth-600 text-xs md:text-sm mb-3 md:mb-4">
+            <p className="text-black text-xs md:text-sm mb-3 md:mb-4">
               اشترك في نشرتنا الإخبارية للحصول على أحدث إصدارات كتب الرومانسية
               والعروض الحصرية.
             </p>
@@ -143,7 +143,7 @@ const Footer = () => {
               />
               <Button
                 size="sm"
-                className="bg-amaranth-600 hover:bg-amaranth-700 text-xs md:text-sm"
+                className="bg-amaranth-900 hover:bg-royal-900 text-xs md:text-sm"
               >
                 اشترك
               </Button>
@@ -192,7 +192,7 @@ const Footer = () => {
               {!settings?.instagram_url &&
                 !settings?.facebook_url &&
                 !settings?.twitter_url && (
-                  <p className="text-amaranth-500 text-xs md:text-sm">
+                  <p className="text-black text-xs md:text-sm">
                     قريباً على وسائل التواصل الاجتماعي
                   </p>
                 )}
@@ -202,8 +202,8 @@ const Footer = () => {
 
         {/* Bottom Section */}
         <div className="border-t border-amaranth-200 pt-6 md:pt-8 text-center">
-          <p className="text-amaranth-500 text-xs md:text-sm">
-            © {new Date().getFullYear()} {settings?.store_name || "أزالوف"}.
+          <p className="text-black text-xs md:text-sm">
+            © {new Date().getFullYear()} {settings?.store_name || "أزلــوڤ"}.
             جميع الحقوق محفوظة. صُنع بـ 💕 لعشاق الرومانسية.
           </p>
         </div>

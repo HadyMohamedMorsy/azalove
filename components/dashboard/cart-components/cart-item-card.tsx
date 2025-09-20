@@ -60,7 +60,7 @@ export function CartItemCard({ item, variant = "list" }: CartItemCardProps) {
 
   if (variant === "dropdown") {
     return (
-      <Card className="border border-rose-200 shadow-sm bg-gradient-to-r from-white to-rose-50">
+      <Card className="border bg-cream-100">
         <CardContent className="p-4">
           <div className="flex items-center space-x-3">
             <div className="w-12 h-12 bg-gradient-to-br from-rose-100 to-pink-100 rounded-lg flex items-center justify-center overflow-hidden relative">
@@ -72,7 +72,7 @@ export function CartItemCard({ item, variant = "list" }: CartItemCardProps) {
                 className="w-full h-full object-cover"
               />
               <div className="absolute -top-1 -right-1">
-                <Heart className="w-3 h-3 text-rose-500" />
+                <Heart className="w-3 h-3 text-amaranth-900" />
               </div>
             </div>
             <div className="flex-1 min-w-0">
@@ -82,7 +82,7 @@ export function CartItemCard({ item, variant = "list" }: CartItemCardProps) {
               <div className="flex items-center space-x-2 mt-1">
                 {hasDiscount ? (
                   <>
-                    <span className="text-sm font-bold text-rose-600">
+                    <span className="text-sm font-bold text-amaranth-900">
                       {formatCurrency(displayPrice)}
                     </span>
                     <span className="text-xs text-gray-400 line-through">
@@ -100,7 +100,7 @@ export function CartItemCard({ item, variant = "list" }: CartItemCardProps) {
               <Button
                 variant="outline"
                 size="sm"
-                className="h-7 w-7 p-0 border-rose-300 hover:bg-rose-50 text-rose-600"
+                className="h-7 w-7 p-0 border-rose-300 hover:bg-rose-50 text-amaranth-900"
                 onClick={() => handleQuantityUpdate(item.quantity - 1)}
               >
                 <Minus className="h-3 w-3" />
@@ -111,7 +111,7 @@ export function CartItemCard({ item, variant = "list" }: CartItemCardProps) {
               <Button
                 variant="outline"
                 size="sm"
-                className="h-7 w-7 p-0 border-rose-300 hover:bg-rose-50 text-rose-600"
+                className="h-7 w-7 p-0 border-rose-300 hover:bg-rose-50 text-amaranth-900"
                 onClick={() => handleQuantityUpdate(item.quantity + 1)}
                 disabled={item.quantity >= item.skuQuantity}
               >
@@ -120,7 +120,7 @@ export function CartItemCard({ item, variant = "list" }: CartItemCardProps) {
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-7 w-7 p-0 text-gray-400 hover:text-rose-500 hover:bg-rose-50"
+                className="h-7 w-7 p-0 text-gray-400 hover:text-amber-900 hover:bg-rose-50"
                 onClick={handleRemoveFromCart}
               >
                 <Trash2 className="h-3 w-3" />
@@ -133,10 +133,10 @@ export function CartItemCard({ item, variant = "list" }: CartItemCardProps) {
   }
 
   return (
-    <div className="flex gap-4 p-6 border border-rose-200 rounded-xl bg-gradient-to-r from-white via-rose-50 to-pink-50 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-r from-rose-100/10 via-pink-100/10 to-purple-100/10 pointer-events-none"></div>
+    <div className="flex gap-4 p-6 border border-rose-200 rounded-xl bg-cream-100 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden">
+      <div className="absolute inset-0 bg-amaranth-900 pointer-events-none"></div>
 
-      <div className="relative z-10 w-24 h-24 bg-gradient-to-br from-rose-100 to-pink-100 rounded-xl flex items-center justify-center overflow-hidden shadow-sm">
+      <div className="relative z-10 w-24 h-24 bg-cream-100 rounded-xl flex items-center justify-center overflow-hidden shadow-sm">
         <Image
           src={`${API_BASE_URL}${item.image}`}
           alt={item.name}
@@ -145,7 +145,7 @@ export function CartItemCard({ item, variant = "list" }: CartItemCardProps) {
           className="w-full h-full object-cover"
         />
         <div className="absolute -top-1 -right-1">
-          <Heart className="w-4 h-4 text-rose-500" />
+          <Heart className="w-4 h-4 text-amber-900" />
         </div>
       </div>
 
@@ -154,21 +154,21 @@ export function CartItemCard({ item, variant = "list" }: CartItemCardProps) {
         <div className="flex items-center space-x-3">
           {hasDiscount ? (
             <>
-              <span className="text-xl font-bold bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent">
+              <span className="text-xl font-bold bg-amaranth-900 bg-clip-text text-transparent">
                 {formatCurrency(displayPrice)}
               </span>
               <span className="text-sm text-gray-400 line-through">
                 {formatCurrency(item.price)}
               </span>
-              <div className="flex items-center gap-1 bg-gradient-to-r from-rose-100 to-pink-100 px-2 py-1 rounded-full">
-                <Sparkles className="w-3 h-3 text-rose-500" />
-                <span className="text-xs font-medium text-rose-700">
+              <div className="flex items-center gap-1 bg-cream-100 px-2 py-1 rounded-full">
+                <Sparkles className="w-3 h-3 text-amaranth-900" />
+                <span className="text-xs font-medium text-amber-900">
                   {t("cart.specialOffer")}
                 </span>
               </div>
             </>
           ) : (
-            <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-rose-600 bg-clip-text text-transparent">
+            <span className="text-xl font-bold bg-amaranth-900 bg-clip-text text-transparent">
               {formatCurrency(displayPrice)}
             </span>
           )}
@@ -179,7 +179,7 @@ export function CartItemCard({ item, variant = "list" }: CartItemCardProps) {
         <Button
           variant="ghost"
           size="sm"
-          className="text-gray-400 hover:text-rose-500 hover:bg-rose-50 rounded-full"
+          className="text-gray-400 hover:text-amber-900 hover:bg-rose-50 rounded-full"
           onClick={handleRemoveFromCart}
         >
           <Trash2 className="w-4 h-4" />
@@ -189,7 +189,7 @@ export function CartItemCard({ item, variant = "list" }: CartItemCardProps) {
           <Button
             variant="outline"
             size="sm"
-            className="border-rose-300 hover:bg-rose-50 text-rose-600 rounded-full"
+            className="border-rose-300 hover:bg-rose-50 text-amaranth-900 rounded-full"
             onClick={() => handleQuantityUpdate(item.quantity - 1)}
           >
             <Minus className="w-3 h-3" />
@@ -199,13 +199,13 @@ export function CartItemCard({ item, variant = "list" }: CartItemCardProps) {
             onChange={(e) =>
               handleQuantityUpdate(parseInt(e.target.value) || 1)
             }
-            className="w-16 text-center border-rose-300 focus:border-rose-500 focus:ring-rose-500 rounded-full"
+            className="w-16 text-center border-rose-300 focus:border-amber-900 focus:ring-amber-500 rounded-full"
             min="1"
           />
           <Button
             variant="outline"
             size="sm"
-            className="border-rose-300 hover:bg-rose-50 text-rose-600 rounded-full"
+            className="border-rose-300 hover:bg-rose-50 text-amaranth-900 rounded-full"
             onClick={() => handleQuantityUpdate(item.quantity + 1)}
             disabled={item.quantity >= item.skuQuantity}
           >

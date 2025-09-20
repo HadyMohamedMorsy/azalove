@@ -67,7 +67,7 @@ export default function BookCard({ book, onBookSelect }: BookCardProps) {
       {/* Book Info */}
       <div className="p-3">
         <div className="flex items-center justify-between">
-          <span className="text-royal-700 font-bold text-sm bg-gradient-to-r from-azalove-500 to-azalove-600 text-white px-3 py-1 rounded-full shadow-sm">
+          <span className="font-bold text-sm bg-amaranth-900 text-white px-3 py-1 rounded-full shadow-sm">
             {formatCurrency(book.price)}
           </span>
           <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">

@@ -3,7 +3,7 @@ import SliderProductsList from "./slider-products-list/slider-products-list";
 
 const SectionSliderProducts = () => {
   return (
-    <div className="bg-[#fff6f6]">
+    <div className="bg-cream-100">
       <section className="container py-10 relative px-4">
         <HeaderTitle title="عروض" />
         <SliderProductsList />

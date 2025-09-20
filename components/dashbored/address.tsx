@@ -42,7 +42,7 @@ const AddressBook = () => {
 
       {/* Floating hearts decoration */}
       <div className="absolute top-4 right-4 opacity-20">
-        <Heart className="w-6 h-6 text-rose-400 animate-pulse" />
+        <Heart className="w-6 h-6 text-amber-900 animate-pulse" />
       </div>
       <div className="absolute bottom-4 left-4 opacity-20">
         <Sparkles className="w-4 h-4 text-pink-400 animate-bounce" />
@@ -53,7 +53,7 @@ const AddressBook = () => {
           <>
             <Button
               onClick={handleAddNewAddress}
-              className="bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              className="bg-amaranth-900 hover:bg-royal-900 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
             >
               <Plus className="w-4 h-4 mr-2" />
               إضافة عنوان

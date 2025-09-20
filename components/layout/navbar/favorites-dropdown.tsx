@@ -25,11 +25,11 @@ export function FavoritesDropdown() {
         <Button
           variant="ghost"
           size="icon"
-          className="relative hover:bg-royal-50 transition-all duration-300 group"
+          className="relative hover:bg-cream-100 transition-all duration-300 group"
         >
           <Heart className="w-7 h-7 text-royal-500 group-hover:text-royal-600 group-hover:scale-110 transition-all duration-300" />
           {getTotalFavorites() > 0 && (
-            <Badge className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 flex items-center justify-center text-xs bg-royal-500 hover:bg-royal-600 text-white border-2 border-white shadow-lg">
+            <Badge className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 flex items-center justify-center text-xs  text-white border-2 border-white shadow-lg">
               {getTotalFavorites()}
             </Badge>
           )}

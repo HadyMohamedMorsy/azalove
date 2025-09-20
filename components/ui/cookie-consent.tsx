@@ -137,7 +137,7 @@ export function CookieConsent() {
             <div className="flex flex-col sm:flex-row gap-2 min-w-fit">
               <Button
                 onClick={handleAcceptAll}
-                className="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-2 font-web"
+                className="bg-amaranth-900 hover:bg-royal-900 text-white px-6 py-2 font-web"
               >
                 قبول الكل
               </Button>
@@ -151,7 +151,7 @@ export function CookieConsent() {
               <Button
                 onClick={() => setShowSettings(true)}
                 variant="outline"
-                className="border-gray-300 text-gray-600 hover:bg-gray-50 px-6 py-2 font-web"
+                className="border-royal-900 text-amaranth-900 hover:text-white hover:bg-amaranth-900 px-6 py-2 font-web"
               >
                 إدارة الكوكيز
               </Button>

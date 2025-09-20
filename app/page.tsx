@@ -10,30 +10,30 @@ import StructuredData from "@/components/seo/structured-data";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "أزالوف - كتب رومانسية ساحرة ستأسر قلبك",
+  title: "أزلــوڤ - كتب رومانسية ساحرة ستأسر قلبك",
   description:
-    "اكتشف قصص حب ساحرة ستأسر قلبك وتشعل خيالك - كتب رومانسية عربية من أزالوف",
-  keywords: "كتب رومانسية, روايات حب, أزالوف, كتب عربية, رومانسية, قصص حب",
+    "اكتشف قصص حب ساحرة ستأسر قلبك وتشعل خيالك - كتب رومانسية عربية من أزلــوڤ",
+  keywords: "كتب رومانسية, روايات حب, أزلــوڤ, كتب عربية, رومانسية, قصص حب",
   openGraph: {
     type: "website",
-    title: "أزالوف - كتب رومانسية ساحرة ستأسر قلبك",
+    title: "أزلــوڤ - كتب رومانسية ساحرة ستأسر قلبك",
     description:
-      "اكتشف قصص حب ساحرة ستأسر قلبك وتشعل خيالك - كتب رومانسية عربية من أزالوف",
+      "اكتشف قصص حب ساحرة ستأسر قلبك وتشعل خيالك - كتب رومانسية عربية من أزلــوڤ",
     url: process.env.NEXT_PUBLIC_SITE_URL || "https://azalove.com",
-    siteName: "أزالوف",
+    siteName: "أزلــوڤ",
     locale: "ar_SA",
   },
   twitter: {
     card: "summary_large_image",
-    title: "أزالوف - كتب رومانسية ساحرة ستأسر قلبك",
+    title: "أزلــوڤ - كتب رومانسية ساحرة ستأسر قلبك",
     description:
-      "اكتشف قصص حب ساحرة ستأسر قلبك وتشعل خيالك - كتب رومانسية عربية من أزالوف",
+      "اكتشف قصص حب ساحرة ستأسر قلبك وتشعل خيالك - كتب رومانسية عربية من أزلــوڤ",
   },
   robots: {
     index: true,
     follow: true,
   },
-  authors: [{ name: "أزالوف" }],
+  authors: [{ name: "أزلــوڤ" }],
   alternates: {
     canonical: process.env.NEXT_PUBLIC_SITE_URL || "https://azalove.com",
   },
@@ -44,7 +44,7 @@ export default function Home() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "أزالوف",
+    name: "أزلــوڤ",
     description:
       "اكتشف قصص حب ساحرة ستأسر قلبك وتشعل خيالك - كتب رومانسية عربية",
     url: process.env.NEXT_PUBLIC_SITE_URL || "https://azalove.com",
@@ -58,7 +58,7 @@ export default function Home() {
     },
     publisher: {
       "@type": "Organization",
-      name: "أزالوف",
+      name: "أزلــوڤ",
       url: process.env.NEXT_PUBLIC_SITE_URL || "https://azalove.com",
       logo: {
         "@type": "ImageObject",

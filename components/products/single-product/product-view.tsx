@@ -13,6 +13,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCart } from "@/contexts/cart-context";
 import { useFavorites } from "@/contexts/favorites-context";
+import { useCurrency } from "@/hooks/use-currency";
 import { useFetch } from "@/hooks/use-fetch";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "@/hooks/use-translation";
@@ -51,6 +52,7 @@ const ProductView = ({ params }: ProductViewProps) => {
   const { toast } = useToast();
   const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
   const { t } = useTranslation();
+  const { formatCurrency } = useCurrency();
 
   if (loading) {
     return (
@@ -305,12 +307,12 @@ const ProductView = ({ params }: ProductViewProps) => {
                 <Crown className="w-5 h-5 text-azalove-500" />
               </div>
               <div className="flex items-center gap-4">
-                <span className="text-responsive-4xl font-bold bg-gradient-to-r from-royal-600 to-amaranth-600 bg-clip-text text-transparent">
-                  ${finalPrice?.toFixed(2)}
+                <span className="text-responsive-4xl font-bold bg-amaranth-900 bg-clip-text text-transparent">
+                  {formatCurrency(finalPrice || 0)}
                 </span>
                 {product.sku?.discount && (
                   <span className="text-responsive-xl text-muted-foreground line-through">
-                    ${product.sku?.price}
+                    {formatCurrency(product.sku?.price || 0)}
                   </span>
                 )}
               </div>
@@ -378,7 +380,7 @@ const ProductView = ({ params }: ProductViewProps) => {
                     getAvailableQuantity() <= 0
                   }
                   size="lg"
-                  className="flex-1 bg-gradient-to-r from-azalove-500 to-amaranth-600 hover:from-azalove-600 hover:to-azalove-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 bg-amaranth-900  text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={handleAddToCart}
                 >
                   <ShoppingCart className="w-5 h-5 mr-2" />
@@ -500,20 +502,20 @@ const ProductView = ({ params }: ProductViewProps) => {
           >
             <TabsTrigger
               value="reviews"
-              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-azalove-500 data-[state=active]:to-amaranth-600 data-[state=active]:text-white"
+              className="data-[state=active]:bg-amaranth-900 data-[state=active]:text-white"
             >
               {t("product.customerReviews")}
             </TabsTrigger>
             <TabsTrigger
               value="specifications"
-              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-azalove-500 data-[state=active]:to-amaranth-600 data-[state=active]:text-white"
+              className="data-[state=active]:bg-amaranth-900 data-[state=active]:text-white"
             >
               {t("product.specifications")}
             </TabsTrigger>
             {faqData.length > 0 && (
               <TabsTrigger
                 value="faq"
-                className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-azalove-500 data-[state=active]:to-amaranth-600 data-[state=active]:text-white"
+                className="data-[state=active]:bg-amaranth-900 data-[state=active]:text-white"
               >
                 {t("product.faq")}
               </TabsTrigger>

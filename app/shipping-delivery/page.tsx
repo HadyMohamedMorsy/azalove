@@ -354,7 +354,7 @@ function ShippingDelivery() {
                     {t("shippingDelivery.sections.tracking.howToTrack.title")}
                   </h3>
                   <ol className="list-decimal pr-6 space-y-2 font-web text-gray-700">
-                    <li>سجل الدخول إلى حسابك في أزالوف</li>
+                    <li>سجل الدخول إلى حسابك في أزلــوڤ</li>
                     <li>اذهب إلى قسم "طلباتي"</li>
                     <li>انقر على رقم الطلب</li>
                     <li>تابع حالة الشحن والتوصيل</li>

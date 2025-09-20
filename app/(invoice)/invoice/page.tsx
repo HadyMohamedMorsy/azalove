@@ -152,7 +152,7 @@ export default function InvoicePage() {
             </h3>
             <div className="space-y-1 text-sm text-gray-600">
               <p className="font-semibold">
-                {settings?.store_name || "أزالوف"}
+                {settings?.store_name || "أزلــوڤ"}
               </p>
               <p>
                 {settings?.store_address ||

@@ -188,7 +188,7 @@ function Contact() {
 
                 <div className="flex gap-4">
                   <Button
-                    className="w-[150px] mt-5 font-web bg-royal-500 hover:bg-azalove-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-azalove-500 hover:border-azalove-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                  className="w-full  bg-amaranth-900 hover:bg-royal-900 text-white font-semibold py-3 rounded-xl shadow-lg shadow-amaranth-200/50 transition-all duration-300 transform hover:scale-105"
                     type="submit"
                     disabled={loading}
                   >
@@ -210,7 +210,7 @@ function Contact() {
                 className="mx-auto"
               />
               {/* Decorative elements around the SVG */}
-              <div className="absolute -top-4 -right-4 w-8 h-8 bg-amaranth-100 rounded-full opacity-60 animate-pulse"></div>
+              <div className="absolute -top-4 -right-4 w-8 h-8 bg-cream-100 rounded-full opacity-60 animate-pulse"></div>
               <div className="absolute -bottom-6 -left-6 w-6 h-6 bg-royal-100 rounded-full opacity-50 animate-pulse delay-1000"></div>
               <div className="absolute top-1/2 -left-8 w-4 h-4 bg-cream-200 rounded-full opacity-40 animate-pulse delay-500"></div>
             </div>

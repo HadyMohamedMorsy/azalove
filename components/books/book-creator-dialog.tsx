@@ -120,7 +120,7 @@ export default function BookCreatorDialog({
         preventOutsideClose
         className="sm:max-w-7xl w-[95vw] max-h-[95vh] overflow-y-auto bg-gradient-to-br from-cream-50 to-azalove-50 border-2 border-azalove-200 shadow-2xl"
       >
-        <DialogHeader className="bg-gradient-to-r from-royal-600 to-amaranth-600 text-white rounded-t-lg -m-6 mb-6 p-6">
+        <DialogHeader className="bg-amaranth-900 text-white rounded-t-lg -m-6 mb-6 p-6">
           <DialogTitle className="flex items-center gap-2 text-white">
             <Edit3 className="w-5 h-5 text-azalove-300" />
             إنشاء كتابك
@@ -172,7 +172,7 @@ export default function BookCreatorDialog({
                           e.stopPropagation();
                           onDeletePage(index);
                         }}
-                        className="ml-2 p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition-colors"
+                        className="ml-2 p-1 text-amaranth-900 hover:text-white hover:bg-amaranth-900 rounded-full transition-colors"
                         title="حذف الصفحة"
                       >
                         <Trash2 className="w-3 h-3" />
@@ -375,7 +375,7 @@ export default function BookCreatorDialog({
               <div className="flex gap-3 pt-4">
                 <Button
                   onClick={onAddPage}
-                  className="flex-1 bg-gradient-to-r from-amaranth-500 to-amaranth-600 hover:from-amaranth-600 hover:to-amaranth-700 text-white border-0 shadow-lg"
+                  className="flex-1 bg-amaranth-900 hover:bg-amaranth-900 text-white border-0 shadow-lg"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   إضافة صفحة
@@ -390,7 +390,7 @@ export default function BookCreatorDialog({
                 </Button>
                 <Button
                   onClick={onCreateBook}
-                  className="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white border-0 shadow-lg"
+                  className="flex-1 bg-amaranth-900 hover:bg-amaranth-900 text-white border-0 shadow-lg"
                 >
                   <CheckCircle className="w-4 h-4 mr-2" />
                   إنشاء الكتاب

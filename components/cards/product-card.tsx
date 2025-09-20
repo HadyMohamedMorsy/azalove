@@ -147,14 +147,14 @@ const ProductCard = ({
       {/* Product badges */}
       <div className="absolute top-3 left-3 z-10 flex flex-col gap-1">
         {sku && discountAmount && (
-          <span className="px-2 py-1 bg-gradient-to-r from-amaranth-500 to-amaranth-600 text-white text-xs font-semibold rounded-full">
+          <span className="px-2 py-1 bg-amaranth-900  text-white text-xs font-semibold rounded-full">
             {sku?.discountType === "percentage"
               ? `${sku?.discount}% OFF`
               : `${formatCurrency(sku?.discount)} OFF`}
           </span>
         )}
         {sku && !sku?.quantity && (
-          <span className="px-2 py-1 bg-gradient-to-r from-royal-500 to-amaranth-500 text-white text-xs font-semibold rounded-full">
+          <span className="px-2 py-1 bg-amaranth-900 text-white text-xs font-semibold rounded-full">
             Out of Stock
           </span>
         )}
@@ -172,7 +172,7 @@ const ProductCard = ({
 
       {/* Product Image */}
       <div
-        className={`relative bg-gradient-to-br from-amaranth-100 to-amaranth-200 flex items-center justify-center overflow-hidden ${
+        className={`relative bg-cream-100 flex items-center justify-center overflow-hidden ${
           viewMode === "list" ? "w-48 h-32 flex-shrink-0" : "h-64"
         }`}
       >
@@ -195,7 +195,7 @@ const ProductCard = ({
         className={`${viewMode === "list" ? "flex-1 flex flex-col justify-between" : ""} p-6`}
       >
         <div>
-          <h3 className="font-bold text-base md:text-lg lg:text-xl text-foreground mb-1 group-hover:text-amaranth-600 transition-colors duration-300">
+          <h3 className="font-bold text-base md:text-lg lg:text-xl text-foreground mb-1 group-hover:text-amaranth-900 transition-colors duration-300">
             <Link href={`/product/${slug}`} onClick={handleProductClick}>
               {name}
             </Link>
@@ -227,7 +227,7 @@ const ProductCard = ({
           <div className="flex flex-col">
             {discountAmount ? (
               <>
-                <span className="text-lg md:text-xl font-bold text-amaranth-600">
+                <span className="text-lg md:text-xl font-bold text-amaranth-900">
                   {formatCurrency(finalPrice)}
                 </span>
                 <span className="text-xs md:text-sm text-muted-foreground line-through">
@@ -235,14 +235,14 @@ const ProductCard = ({
                 </span>
               </>
             ) : (
-              <span className="text-lg md:text-xl font-bold text-amaranth-600">
+              <span className="text-lg md:text-xl font-bold text-amaranth-900">
                 {formatCurrency(finalPrice)}
               </span>
             )}
           </div>
           <Button
             size="sm"
-            className="bg-gradient-to-r from-amaranth-500 to-amaranth-600 hover:from-amaranth-600 hover:to-amaranth-700 text-white rounded-full px-4 transition-all duration-300 hover:scale-105"
+            className=" bg-amaranth-900 hover:bg-royal-900 text-white rounded-full px-4 transition-all duration-300 hover:scale-105"
             onClick={handleAddToCart}
             disabled={!sku || !availableQuantity}
           >

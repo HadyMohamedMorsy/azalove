@@ -93,7 +93,7 @@ function Shop() {
   if (!products || products.length === 0) {
     return (
       <>
-        <header className="container px-6 py-4 border-t border-b border-amaranth-200 bg-gradient-to-r from-cream-50 to-amaranth-50">
+        <header className="container px-6 py-4 border-t border-b border-amaranth-200 bg-cream-100">
           <nav className="flex" aria-label="Breadcrumb">
             <ol className="flex items-center space-x-2 space-x-reverse">
               <li>

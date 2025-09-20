@@ -30,7 +30,7 @@ const toastVariants = cva(
         default:
           "bg-gradient-to-r from-pink-50 to-rose-50 border border-pink-200/50 text-pink-900 shadow-pink-200/20",
         success:
-          "bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-200/50 text-emerald-900 shadow-emerald-200/20",
+          "bg-cream-100 border border-emerald-200/50 text-emerald-900 shadow-emerald-200/20",
         error:
           "bg-gradient-to-r from-red-50 to-rose-50 border border-red-200/50 text-red-900 shadow-red-200/20",
         warning:

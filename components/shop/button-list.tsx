@@ -50,8 +50,8 @@ export default function ButtonList({
               onClick={() => onViewModeChange("grid")}
               className={
                 viewMode === "grid"
-                  ? "bg-amaranth-500 hover:bg-amaranth-600 text-white border-amaranth-500"
-                  : "text-amaranth-600 border-amaranth-200 hover:bg-amaranth-50 hover:text-amaranth-700"
+                  ? "bg-amaranth-900 hover:bg-royal-900 text-white border-amaranth-500"
+                  : "text-amaranth-900 border-amaranth-200 hover:bg-amaranth-50 hover:text-amaranth-700"
               }
             >
               <FontAwesomeIcon icon={faTableList} />

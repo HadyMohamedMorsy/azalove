@@ -101,7 +101,7 @@ const BlogFilters = ({ filters, onFilterChange }: BlogFiltersProps) => {
         <div className="space-y-4">
           {/* Clear Filters Button */}
           {filters?.category && (
-            <div className="px-4 py-3 border border-amaranth-200 rounded-lg bg-gradient-to-r from-cream-50 to-amaranth-50">
+            <div className="px-4 py-3 border border-amaranth-900 rounded-lg bg-cream-100">
               <Button
                 onClick={handleClearFilters}
                 variant="outline"
@@ -112,7 +112,7 @@ const BlogFilters = ({ filters, onFilterChange }: BlogFiltersProps) => {
             </div>
           )}
 
-          <div className="px-4 py-3 border border-amaranth-200 rounded-lg bg-gradient-to-r from-cream-50 to-amaranth-50">
+          <div className="px-4 py-3 border border-amaranth-900 rounded-lg bg-cream-100">
             <Accordion type="single" collapsible defaultValue="categories">
               <AccordionItem value="categories" className="border-0">
                 <AccordionTrigger className="text-amaranth-700 font-semibold hover:text-amaranth-800">
@@ -165,7 +165,7 @@ const BlogFilters = ({ filters, onFilterChange }: BlogFiltersProps) => {
           </div>
 
           {featuredBlogs?.length > 0 && (
-            <div className="px-4 py-3 border border-amaranth-200 rounded-lg bg-gradient-to-r from-cream-50 to-amaranth-50">
+            <div className="px-4 py-3 border border-amaranth-900 rounded-lg bg-cream-100">
               <Accordion type="single" collapsible defaultValue="featured">
                 <AccordionItem value="featured" className="border-0">
                   <AccordionTrigger className="text-amaranth-700 font-semibold hover:text-amaranth-800">

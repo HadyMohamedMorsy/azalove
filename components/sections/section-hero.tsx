@@ -3,7 +3,7 @@ import { Book, Heart } from "lucide-react";
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-amaranth-50 via-amaranth-100 to-royal-50">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-cream-100">
       {/* Simple background elements */}
       <div className="absolute inset-0">
         <div className="absolute top-20 left-10 w-4 h-4 bg-amaranth-300/20 rounded-full"></div>
@@ -136,7 +136,7 @@ const HeroSection = () => {
       <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
         {/* Icons */}
         <div className="flex justify-center items-center gap-4 mb-6 md:mb-8">
-          <div className="p-3 md:p-4 bg-amaranth-100 rounded-full">
+          <div className="p-3 md:p-4 bg-cream-100 rounded-full">
             <Book className="w-6 h-6 md:w-8 md:h-8 text-amaranth-600" />
           </div>
           <Heart className="w-5 h-5 md:w-6 md:h-6 text-amaranth-500" />
@@ -147,8 +147,8 @@ const HeroSection = () => {
 
         {/* Main heading */}
         <h1 className="text-2xl md:text-3xl lg:text-5xl font-bold text-foreground mb-4 md:mb-6">
-          <span className="bg-gradient-to-r from-amaranth-600 via-amaranth-700 to-royal-600 bg-clip-text text-transparent">
-            أزالوف
+          <span className=" bg-amaranth-900 bg-clip-text text-transparent">
+            أزلــوڤ
           </span>
           <br />
         </h1>
@@ -165,16 +165,9 @@ const HeroSection = () => {
         <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center items-center">
           <Button
             size="lg"
-            className="bg-gradient-to-r from-amaranth-600 to-amaranth-700 hover:from-amaranth-700 hover:to-amaranth-800 text-white px-6 md:px-8 py-2 md:py-3 text-sm md:text-base rounded-full"
+            className=" bg-amaranth-900 hover:bg-royal-900 text-white px-6 md:px-8 py-2 md:py-3 text-sm md:text-base rounded-full"
           >
             استكشف كتب الرومانسية
-          </Button>
-          <Button
-            variant="outline"
-            size="lg"
-            className="border-amaranth-300 text-amaranth-600 hover:bg-amaranth-50 px-6 md:px-8 py-2 md:py-3 text-sm md:text-base rounded-full"
-          >
-            تصفح المجموعات
           </Button>
         </div>
 

@@ -325,7 +325,7 @@ const ProfileSettings = () => {
         <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
           <CardHeader className="pb-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-amaranth-500 to-amaranth-600 rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 bg-amaranth-900 rounded-xl flex items-center justify-center">
                 <User className="w-5 h-5 text-white" />
               </div>
               <div>
@@ -536,9 +536,9 @@ const ProfileSettings = () => {
                       handleInputChange("password", e.target.value)
                     }
                     onBlur={() => handleBlur("password")}
-                    className={`pl-10 pr-12 h-12 border-gray-200 focus:border-amaranth-500 focus:ring-amaranth-500 ${
+                    className={`pl-10 pr-12 h-12 border-gray-200 focus:border-amaranth-900 focus:ring-amaranth-900 ${
                       shouldShowError("password")
-                        ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                        ? "border-amaranth-900 focus:border-amaranth-900 focus:ring-amaranth-900"
                         : ""
                     }`}
                     placeholder="أدخل كلمة المرور الجديدة (اختياري)"
@@ -581,7 +581,7 @@ const ProfileSettings = () => {
                     onBlur={() => handleBlur("password_confirmation")}
                     className={`pl-10 pr-12 h-12 border-gray-200 focus:border-amaranth-500 focus:ring-amaranth-500 ${
                       shouldShowError("password_confirmation")
-                        ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                        ? "border-amaranth-900 focus:border-amaranth-900 focus:ring-amaranth-900"
                         : ""
                     }`}
                     placeholder="أكد كلمة المرور الجديدة (اختياري)"
@@ -614,7 +614,7 @@ const ProfileSettings = () => {
               <Button
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="w-full h-12 bg-gradient-to-r from-amaranth-500 to-amaranth-600 hover:from-amaranth-600 hover:to-amaranth-700 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full h-12 bg-amaranth-900 hover:bg-amaranth-900 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? (
                   <>

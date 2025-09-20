@@ -83,7 +83,7 @@ export default function MaintenancePage() {
         {/* Status Information */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           <div className="bg-white/60 backdrop-blur-sm rounded-xl p-6 border border-amaranth-200/30">
-            <div className="w-12 h-12 bg-amaranth-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+            <div className="w-12 h-12 bg-cream-100 rounded-lg flex items-center justify-center mx-auto mb-4">
               <Clock className="w-6 h-6 text-amaranth-600" />
             </div>
             <h3 className="font-semibold text-amaranth-800 mb-2">
@@ -108,7 +108,7 @@ export default function MaintenancePage() {
 
           <div className="bg-white/60 backdrop-blur-sm rounded-xl p-6 border border-amaranth-200/30">
             <div className="w-12 h-12 bg-rose-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <Mail className="w-6 h-6 text-rose-600" />
+              <Mail className="w-6 h-6 text-amaranth-900" />
             </div>
             <h3 className="font-semibold text-amaranth-800 mb-2">
               {t("maintenance.status.contact.title")}
@@ -123,7 +123,7 @@ export default function MaintenancePage() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
           <button
             onClick={() => window.location.reload()}
-            className="px-8 py-4 bg-gradient-to-r from-amaranth-600 to-royal-600 hover:from-amaranth-700 hover:to-royal-700 text-white rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center gap-3"
+            className="px-8 py-4  from-amaranth-900  hover:from-amaranth-900 hover:to-royal-700 text-white rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center gap-3"
           >
             <RefreshCw className="w-5 h-5" />
             {t("maintenance.actions.refreshPage")}
@@ -161,7 +161,7 @@ export default function MaintenancePage() {
         {/* Decorative Elements */}
         <div className="maintenance-bg-circle absolute top-10 left-10 w-20 h-20 bg-amaranth-200/30"></div>
         <div className="maintenance-bg-circle absolute bottom-10 right-10 w-32 h-32 bg-royal-200/30"></div>
-        <div className="maintenance-bg-circle absolute top-1/2 left-5 w-16 h-16 bg-amaranth-100/50"></div>
+        <div className="maintenance-bg-circle absolute top-1/2 left-5 w-16 h-16 bg-cream-100/50"></div>
       </div>
     </div>
   );

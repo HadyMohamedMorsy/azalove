@@ -109,7 +109,7 @@ export default function CoverManagerDialog({
           preventOutsideClose
           className="sm:max-w-7xl w-[95vw] max-h-[95vh] overflow-y-auto bg-gradient-to-br from-cream-50 to-azalove-50 border-2 border-azalove-200 shadow-2xl"
         >
-          <DialogHeader className="bg-gradient-to-r from-royal-600 to-amaranth-600 text-white rounded-t-lg -m-6 mb-6 p-6">
+          <DialogHeader className=" bg-amaranth-900 text-white rounded-t-lg -m-6 mb-6 p-6">
             <DialogTitle className="flex items-center gap-2 text-white">
               <Edit3 className="w-5 h-5 text-azalove-300" />
               مدير الغلاف - {coverManager.selectedCover?.title}
@@ -146,7 +146,7 @@ export default function CoverManagerDialog({
               <div className="space-y-2">
                 <Button
                   onClick={onAddNewCover}
-                  className="w-full border-0 shadow-lg bg-gradient-to-r from-amaranth-500 to-amaranth-600 hover:from-amaranth-600 hover:to-amaranth-700 text-white"
+                  className="w-full border-0 shadow-lg bg-amaranth-900 hover:bg-amaranth-900 text-white"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   إضافة صفحة
@@ -447,7 +447,7 @@ export default function CoverManagerDialog({
                           {}
                         )
                       }
-                      className="flex-1 bg-gradient-to-r from-azalove-500 to-amaranth-600 hover:from-azalove-600 hover:to-azalove-700 text-white border-0 shadow-lg"
+                      className="flex-1 bg-amaranth-900 hover:bg-amaranth-900 text-white border-0 shadow-lg"
                     >
                       انتهى التحرير
                     </Button>
@@ -476,7 +476,7 @@ export default function CoverManagerDialog({
           preventOutsideClose
           className="sm:max-w-md bg-gradient-to-br from-cream-50 to-azalove-50 border-2 border-azalove-200 shadow-2xl"
         >
-          <DialogHeader className="bg-gradient-to-r from-red-600 to-red-700 text-white rounded-t-lg -m-6 mb-6 p-6">
+          <DialogHeader className="bg-amaranth-900 text-white rounded-t-lg -m-6 mb-6 p-6">
             <DialogTitle className="flex items-center gap-2 text-white">
               <X className="w-5 h-5 text-red-200" />
               حذف الغلاف
@@ -495,7 +495,7 @@ export default function CoverManagerDialog({
             <div className="flex gap-3 pt-4">
               <Button
                 onClick={onConfirmDeleteCover}
-                className="flex-1 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white border-0 shadow-lg"
+                className="flex-1 bg-amaranth-900 hover:bg-amaranth-900 text-white border-0 shadow-lg"
               >
                 حذف الغلاف
               </Button>
@@ -520,7 +520,7 @@ export default function CoverManagerDialog({
           preventOutsideClose
           className="sm:max-w-6xl w-[95vw] max-h-[95vh] overflow-y-auto bg-gradient-to-br from-cream-50 to-azalove-50 border-2 border-azalove-200 shadow-2xl"
         >
-          <DialogHeader className="bg-gradient-to-r from-royal-600 to-amaranth-600 text-white rounded-t-lg -m-6 mb-6 p-6">
+          <DialogHeader className="bg-amaranth-900 text-white rounded-t-lg -m-6 mb-6 p-6">
             <DialogTitle className="flex items-center gap-2 text-white">
               <Plus className="w-5 h-5 text-azalove-300" />
               اختر قالب غلاف

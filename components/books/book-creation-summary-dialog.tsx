@@ -319,7 +319,7 @@ export default function BookCreationSummaryDialog({
         preventOutsideClose
         className="sm:max-w-6xl w-[95vw] max-h-[95vh] overflow-y-auto bg-gradient-to-br from-cream-50 to-azalove-50 border-2 border-azalove-200 shadow-2xl"
       >
-        <DialogHeader className="bg-gradient-to-r from-green-600 to-green-700 text-white rounded-t-lg -m-6 mb-6 p-6">
+        <DialogHeader className="bg-amaranth-900 text-white rounded-t-lg -m-6 mb-6 p-6">
           <DialogTitle className="flex items-center gap-2 text-white">
             <CheckCircle className="w-5 h-5 text-green-200" />
             ملخص إنشاء الكتاب
@@ -521,7 +521,7 @@ export default function BookCreationSummaryDialog({
           </div>
 
           {/* Total Price */}
-          <div className="bg-gradient-to-r from-azalove-500 to-azalove-600 p-6 rounded-lg text-white">
+          <div className="bg-amaranth-900 p-6 rounded-lg text-white">
             <div className="space-y-3">
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
@@ -557,7 +557,7 @@ export default function BookCreationSummaryDialog({
           {couple && (
             <div className="bg-white p-6 rounded-lg border border-azalove-200 shadow-sm">
               <h4 className="font-semibold text-lg text-royal-800 mb-4 flex items-center gap-2">
-                <Heart className="w-5 h-5 text-rose-500" />
+                <Heart className="w-5 h-5 text-amber-900" />
                 الشخصيات المختارة
               </h4>
               <CouplePreview
@@ -626,7 +626,7 @@ export default function BookCreationSummaryDialog({
               disabled={!canCreateBook || isCreatingOrder}
               className={`flex-1 border-0 shadow-lg ${
                 canCreateBook && !isCreatingOrder
-                  ? "bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white"
+                  ? "bg-amaranth-900 hover:bg-amaranth-900 text-white"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
               }`}
             >

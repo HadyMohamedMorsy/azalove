@@ -139,8 +139,8 @@ export default function AddressesList({
     return (
       <div className="flex items-center justify-center py-12">
         <div className="text-center">
-          <Heart className="w-12 h-12 mx-auto text-rose-400 animate-pulse mb-4" />
-          <p className="text-rose-600 font-medium">جاري تحميل عناوينك...</p>
+          <Heart className="w-12 h-12 mx-auto text-amber-900 animate-pulse mb-4" />
+          <p className="text-amaranth-900 font-medium">جاري تحميل عناوينك...</p>
         </div>
       </div>
     );
@@ -149,7 +149,7 @@ export default function AddressesList({
   if (error) {
     return (
       <div className="text-center py-12">
-        <div className="text-rose-500 mb-4">
+        <div className="text-amber-900 mb-4">
           <Sparkles className="w-12 h-12 mx-auto mb-2" />
           <p className="font-medium">خطأ في تحميل العناوين: {error}</p>
         </div>
@@ -159,9 +159,9 @@ export default function AddressesList({
 
   return (
     <Card className="border-0 shadow-lg bg-white/60 backdrop-blur-sm ">
-      <CardHeader className="bg-gradient-to-r from-rose-50 to-pink-50 border-b border-rose-100">
-        <CardTitle className="flex items-center gap-2 text-rose-800">
-          <MapPin className="w-5 h-5 text-rose-500" />
+      <CardHeader className=" border-b border-rose-100">
+        <CardTitle className="flex items-center gap-2 text-amber-900">
+          <MapPin className="w-5 h-5 text-amber-900" />
           عناوينك
         </CardTitle>
       </CardHeader>
@@ -169,13 +169,13 @@ export default function AddressesList({
         {!localAddresses || localAddresses.length === 0 ? (
           <div className="text-center py-12">
             <div className="relative mb-6">
-              <MapPin className="w-16 h-16 mx-auto text-rose-300 mb-2" />
-              <Heart className="w-6 h-6 text-rose-400 absolute top-2 right-1/2 transform translate-x-8 animate-pulse" />
+              <MapPin className="w-16 h-16 mx-auto text-amber-900 mb-2" />
+              <Heart className="w-6 h-6 text-amber-900 absolute top-2 right-1/2 transform translate-x-8 animate-pulse" />
             </div>
-            <h3 className="text-xl font-semibold mb-2 text-rose-800">
+            <h3 className="text-xl font-semibold mb-2 text-amber-900">
               لا توجد عناوين بعد
             </h3>
-            <p className="text-rose-600">أضف عنوانك الأول للبدء! 💕</p>
+            <p className="text-amaranth-900">أضف عنوانك الأول للبدء! 💕</p>
           </div>
         ) : (
           <div className="grid gap-6 md:grid-cols-2 mt-4">
@@ -188,17 +188,17 @@ export default function AddressesList({
                   <div className="flex items-center gap-3">
                     <div className="relative">
                       {address.title === "Home" ? (
-                        <Home className="w-6 h-6 text-rose-500" />
+                        <Home className="w-6 h-6 text-amber-900" />
                       ) : (
-                        <Building className="w-6 h-6 text-rose-500" />
+                        <Building className="w-6 h-6 text-amber-900" />
                       )}
-                      <Heart className="w-3 h-3 text-rose-400 absolute -top-1 -right-1 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <Heart className="w-3 h-3 text-amber-900 absolute -top-1 -right-1 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
-                    <h3 className="font-semibold text-rose-800">
+                    <h3 className="font-semibold text-amber-900">
                       {address.title}
                     </h3>
                     {address.isDefault && (
-                      <span className="text-xs bg-gradient-to-r from-rose-500 to-pink-500 text-white px-3 py-1 rounded-full font-medium shadow-sm">
+                      <span className="text-xs bg-amber-900 text-white px-3 py-1 rounded-full font-medium shadow-sm">
                         افتراضي
                       </span>
                     )}
@@ -208,7 +208,7 @@ export default function AddressesList({
                       variant="ghost"
                       size="sm"
                       onClick={() => handleEdit(address)}
-                      className="text-rose-600 hover:text-rose-700 hover:bg-rose-50"
+                      className="text-amaranth-900 hover:text-amber-900 hover:bg-rose-50"
                     >
                       <Edit className="w-4 h-4" />
                     </Button>
@@ -216,23 +216,25 @@ export default function AddressesList({
                       variant="ghost"
                       size="sm"
                       onClick={() => address.id && handleDelete(address.id)}
-                      className="text-rose-400 hover:text-rose-600 hover:bg-rose-50"
+                      className="text-amber-900 hover:text-amaranth-900 hover:bg-rose-50"
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
                 </div>
 
-                <div className="text-sm text-rose-700 space-y-2">
+                <div className="text-sm text-amber-900 space-y-2">
                   <div className="font-medium">{address.addressLine1}</div>
                   {address.addressLine2 && (
-                    <div className="text-rose-600">{address.addressLine2}</div>
+                    <div className="text-amaranth-900">
+                      {address.addressLine2}
+                    </div>
                   )}
-                  <div className="text-rose-600">
+                  <div className="text-amaranth-900">
                     {address.postalCode}
                     {address.landmark && `, ${address.landmark}`}
                   </div>
-                  <div className="text-rose-600">{address.phoneNumber}</div>
+                  <div className="text-amaranth-900">{address.phoneNumber}</div>
                 </div>
 
                 {!address.isDefault && (
@@ -240,7 +242,7 @@ export default function AddressesList({
                     variant="outline"
                     size="sm"
                     onClick={() => address.id && setAsDefault(address.id)}
-                    className="w-full border-rose-200 text-rose-600 hover:bg-rose-50 hover:border-rose-300 transition-colors"
+                    className="w-full border-rose-200 text-amaranth-900 hover:bg-rose-50 hover:border-rose-300 transition-colors"
                   >
                     تعيين كافتراضي
                   </Button>

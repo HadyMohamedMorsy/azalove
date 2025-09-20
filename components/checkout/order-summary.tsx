@@ -205,7 +205,7 @@ const OrderSummary = () => {
               key={item.id}
               className="flex gap-3 p-3 bg-cream-50/50 rounded-lg"
             >
-              <div className="w-12 h-12 bg-amaranth-100 rounded-lg flex items-center justify-center overflow-hidden">
+              <div className="w-12 h-12 bg-cream-100 rounded-lg flex items-center justify-center overflow-hidden">
                 <Image
                   src={`${API_BASE_URL}${item.image}`}
                   alt={item.name}

@@ -153,7 +153,7 @@ const ReviewForm = ({ onSubmit, onCancel }: ReviewFormProps) => {
           <div className="flex gap-4 pt-6">
             <Button
               type="submit"
-              className="flex-1 bg-gradient-to-r from-azalove-500 to-amaranth-600 hover:from-azalove-600 hover:to-azalove-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              className="flex-1 bg-amaranth-900 hover:to-azalove-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               disabled={isSubmitting}
             >
               {isSubmitting ? (

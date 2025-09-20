@@ -175,8 +175,8 @@ const Checkout = () => {
                   <div
                     className={`w-12 h-12 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-300 ${
                       currentStep >= step.id
-                        ? "bg-royal-500 text-white shadow-lg shadow-azalove-500/30"
-                        : "bg-amaranth-100 text-royal-400 border-2 border-cream-200"
+                        ? "bg-royal-900 text-white shadow-lg shadow-azalove-500/30"
+                        : "bg-cream-100 text-royal-400 border-2 border-cream-200"
                     }`}
                   >
                     {currentStep > step.id ? (
@@ -323,7 +323,7 @@ const Checkout = () => {
                         <div className="flex justify-center pt-4">
                           <button
                             onClick={() => handleNext({})}
-                            className="px-10 py-4 bg-gradient-to-r from-azalove-600 to-azalove-700 hover:from-azalove-700 hover:to-azalove-800 text-white transition-all duration-200 font-semibold shadow-lg hover:shadow-xl rounded-lg flex items-center justify-center text-lg"
+                            className="px-10 py-4  bg-amaranth-900  text-white transition-all duration-200 font-semibold shadow-lg hover:shadow-xl rounded-lg flex items-center justify-center text-lg"
                           >
                             <svg
                               className="w-5 h-5 mr-2"
