@@ -59,17 +59,32 @@ export default function MultiLayerPreview({
           if (validLayers.length === 0) return null;
 
           return (
-            <g id={bodyType} key={bodyType}>
+            <g className={bodyType} key={bodyType}>
               {validLayers.map((layer, index) => {
                 // Remove <g> tags from layer.svg to prevent nested groups
-                const cleanSvg = layer.svg
+                let cleanSvg = layer.svg
                   .replace(/<g[^>]*>/g, "") // Remove opening <g> tags
                   .replace(/<\/g>/g, ""); // Remove closing </g> tags
+
+                // Add class to each path element that has fill color
+                let pathCounter = 0;
+                cleanSvg = cleanSvg.replace(
+                  /<path([^>]*fill="[^"]*"[^>]*)>/g, 
+                  (match, attributes) => {
+                    // Extract the fill color
+                    const fillMatch = attributes.match(/fill="([^"]*)"/);
+                    if (fillMatch && fillMatch[1] && fillMatch[1] !== 'none' && fillMatch[1] !== 'transparent') {
+                      const fillColor = fillMatch[1].replace('#', ''); // Remove # from color
+                      return `<path${attributes} class="${layer.label || `${layer.bodyType}-${index}`}-${pathCounter++}-${fillColor}">`;
+                    }
+                    return match;
+                  }
+                );
 
                 return (
                   <g
                     key={`${layer.bodyType}-${index}`}
-                    id={layer.label || `${layer.bodyType}-${index}`}
+                    className={layer.label || `${layer.bodyType}-${index}`}
                     dangerouslySetInnerHTML={{ __html: cleanSvg }}
                   />
                 );
