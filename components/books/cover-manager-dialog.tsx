@@ -228,7 +228,7 @@ export default function CoverManagerDialog({
                               e.stopPropagation();
                               onDeleteCustomCover(cover.id);
                             }}
-                            className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                            className="absolute top-2 right-2 bg-amaranth-900 hover:bg-amaranth-900 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                             title="حذف الغلاف"
                           >
                             <X className="w-3 h-3" />

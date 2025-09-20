@@ -14,6 +14,13 @@ export default function CharacterSelector({
   const { shapes } = useStartCharacterShapes();
   const hasInitialized = useRef(false);
 
+  // Function to get display text for character type
+  const getDisplayText = (type: string) => {
+    if (type === "Layer_2") return "الشخصية الأولى";
+    if (type === "Layer_4") return "الشخصية الثانية";
+    return type.charAt(0).toUpperCase() + type.slice(1);
+  };
+
   useEffect(() => {
     if (shapes.types && shapes.types.length > 0 && !hasInitialized.current) {
       onCharacterChange(shapes.types[0]);
@@ -29,12 +36,12 @@ export default function CharacterSelector({
             key={type}
             className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
               activeCharacter === type
-                ? "bg-red-600 text-white"
+                ? "bg-amaranth-900 text-white"
                 : "bg-gray-200 text-gray-700 hover:bg-gray-300"
             }`}
             onClick={() => onCharacterChange(type)}
           >
-            {type.charAt(0).toUpperCase() + type.slice(1)}
+            {getDisplayText(type)}
           </button>
         ))}
       </div>

@@ -49,10 +49,10 @@ export default function CharacterCustomizer({
   useEffect(() => {
     if (selection.activeCharacter) {
       setActiveType(selection.activeCharacter);
-      // Reset parts data when switching characters
       setActiveAvailablePart("");
       setAvailablePartsData([]);
       setAllPartsData([]);
+      setActiveBodyType("");
     }
   }, [selection.activeCharacter]);
 

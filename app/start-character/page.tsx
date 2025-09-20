@@ -101,7 +101,7 @@ function StartCharacterContent() {
               disabled={!canCreateCouple}
               className={`px-6 py-2 rounded-lg font-medium transition-colors ${
                 canCreateCouple
-                  ? "bg-red-600 hover:bg-red-700 text-white cursor-pointer"
+                  ? "bg-amaranth-900 text-white cursor-pointer"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
               }`}
             >

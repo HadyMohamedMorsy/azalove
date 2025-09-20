@@ -73,7 +73,7 @@ const OrderConfirmation = ({
             <p className="text-red-600 mt-2 text-lg">{orderError}</p>
             <Button
               onClick={() => window.location.reload()}
-              className="mt-4 bg-red-600 hover:bg-red-700 text-white"
+              className="mt-4 bg-amaranth-900 hover:bg-amaranth-900 text-white"
             >
               {t("checkout.confirmation.tryAgain")}
             </Button>

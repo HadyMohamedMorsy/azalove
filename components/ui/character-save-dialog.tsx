@@ -342,7 +342,7 @@ export function CharacterSaveDialog({
                   <div
                     key={stepNumber}
                     className={`w-3 h-3 rounded-full ${
-                      stepNumber <= step ? "bg-red-600" : "bg-gray-300"
+                      stepNumber <= step ? "bg-amaranth-900" : "bg-gray-300"
                     }`}
                   />
                 )
