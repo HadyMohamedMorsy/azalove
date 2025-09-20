@@ -13,6 +13,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCart } from "@/contexts/cart-context";
 import { useFavorites } from "@/contexts/favorites-context";
+import { useGeneralSettings } from "@/contexts/general-settings-context";
 import { useCurrency } from "@/hooks/use-currency";
 import { useFetch } from "@/hooks/use-fetch";
 import { useToast } from "@/hooks/use-toast";
@@ -25,11 +26,9 @@ import {
   HelpCircle,
   RotateCcw,
   Share2,
-  Shield,
   ShoppingCart,
   Sparkles,
-  Star,
-  Truck,
+  Star
 } from "lucide-react";
 
 import { useState } from "react";
@@ -53,6 +52,7 @@ const ProductView = ({ params }: ProductViewProps) => {
   const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
   const { t } = useTranslation();
   const { formatCurrency } = useCurrency();
+  const { settings } = useGeneralSettings();
 
   if (loading) {
     return (
@@ -206,7 +206,7 @@ const ProductView = ({ params }: ProductViewProps) => {
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-cream-50 via-white to-azalove-50">
+    <div className="relative min-h-screen bg-cream-100">
       {/* Romantic Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 animate-float-slow">
@@ -253,8 +253,8 @@ const ProductView = ({ params }: ProductViewProps) => {
                   variant="secondary"
                   className={`${
                     quantity >= product.sku?.quantity
-                      ? "bg-gradient-to-r from-royal-100 to-royal-200 text-royal-700 border-royal-300"
-                      : "bg-gradient-to-r from-azalove-100 to-azalove-200 text-azalove-700 border-azalove-300"
+                      ? "bg-royal-900"
+                      : "bg-amaranth-900"
                   } border shadow-sm`}
                 >
                   {quantity >= product.sku?.quantity
@@ -262,7 +262,7 @@ const ProductView = ({ params }: ProductViewProps) => {
                     : t("product.inStock")}
                 </Badge>
                 {discount > 0 && (
-                  <Badge className="bg-gradient-to-r from-amaranth-500 to-amaranth-600 text-white border-0 shadow-lg">
+                  <Badge className="bg-amaranth-900 text-white border-0 shadow-lg">
                     {product.sku?.discountType === "percentage"
                       ? `${product.sku?.discount}% ${t("product.off")}`
                       : `$${product.sku?.discount} ${t("product.off")}`}
@@ -271,7 +271,7 @@ const ProductView = ({ params }: ProductViewProps) => {
               </div>
 
               {/* Product Title */}
-              <h1 className="heading-section mb-4 bg-gradient-to-r from-royal-700 to-royal-900 bg-clip-text text-transparent">
+              <h1 className="heading-section mb-4 bg-royal-900 bg-clip-text text-transparent">
                 {product.name}
               </h1>
 
@@ -319,7 +319,7 @@ const ProductView = ({ params }: ProductViewProps) => {
             </div>
 
             {/* Stock Information */}
-            <div className="p-4 bg-gradient-to-r from-azalove-50 to-royal-50 rounded-xl border border-azalove-200">
+            <div className="p-4 bg-cream-100 rounded-xl border border-azalove-200">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 bg-green-500 rounded-full"></div>
@@ -436,38 +436,12 @@ const ProductView = ({ params }: ProductViewProps) => {
               <CardContent className="p-6">
                 <div className="grid grid-cols-4 gap-6 text-center">
                   <div className="flex flex-col items-center gap-3 group">
-                    <div className="p-3 bg-gradient-to-br from-azalove-100 to-azalove-200 rounded-full group-hover:scale-110 transition-transform duration-300">
-                      <Truck className="w-6 h-6 text-azalove-600" />
-                    </div>
-                    <div>
-                      <p className="body-tiny font-semibold text-royal-700">
-                        {t("product.freeShipping")}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {t("product.ordersOver")} $50
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex flex-col items-center gap-3 group">
-                    <div className="p-3 bg-gradient-to-br from-amaranth-100 to-amaranth-200 rounded-full group-hover:scale-110 transition-transform duration-300">
-                      <Shield className="w-6 h-6 text-amaranth-600" />
-                    </div>
-                    <div>
-                      <p className="body-tiny font-semibold text-royal-700">
-                        {t("product.yearWarranty")}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {t("product.fullCoverage")}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex flex-col items-center gap-3 group">
                     <div className="p-3 bg-gradient-to-br from-royal-100 to-royal-200 rounded-full group-hover:scale-110 transition-transform duration-300">
                       <RotateCcw className="w-6 h-6 text-royal-600" />
                     </div>
                     <div>
                       <p className="body-tiny font-semibold text-royal-700">
-                        {t("product.dayReturns")}
+                        {`${settings?.shipping_days} يوم`}
                       </p>
                       <p className="text-xs text-muted-foreground">
                         {t("product.noQuestionsAsked")}
@@ -498,7 +472,7 @@ const ProductView = ({ params }: ProductViewProps) => {
         {/* Product Details Tabs */}
         <Tabs defaultValue="reviews" className="mb-16">
           <TabsList
-            className={`grid w-full ${faqData.length > 0 ? "grid-cols-3" : "grid-cols-2"} bg-gradient-to-r from-cream-100 to-azalove-100 border-2 border-azalove-200`}
+            className={`grid w-full ${faqData.length > 0 ? "grid-cols-3" : "grid-cols-2"} bg-cream-100 border-2 border-azalove-200`}
           >
             <TabsTrigger
               value="reviews"
@@ -598,10 +572,10 @@ const ProductView = ({ params }: ProductViewProps) => {
         {relatedProducts && relatedProducts.length > 0 && (
           <div className="mt-16">
             <div className="text-center mb-8">
-              <h2 className="heading-section bg-gradient-to-r from-royal-700 to-amaranth-700 bg-clip-text text-transparent">
+              <h2 className="heading-section bg-amaranth-900 bg-clip-text text-transparent">
                 {t("product.relatedProducts")}
               </h2>
-              <div className="w-24 h-1 bg-gradient-to-r from-azalove-500 to-amaranth-500 mx-auto mt-4 rounded-full"></div>
+              <div className="w-24 h-1 bg-amaranth-900 mx-auto mt-4 rounded-full"></div>
             </div>
             <ProductGrid
               products={relatedProducts as Product[]}

@@ -68,7 +68,7 @@ const BlogPost: React.FC<ShowBlog> = ({
           {categories.map((category, index) => (
             <span
               key={index}
-              className="px-3 py-1 bg-secondary text-secondary-foreground rounded-full text-sm hover:bg-accent transition-colors"
+              className="px-3 py-1 bg-secondary text-white rounded-full text-sm hover:bg-accent transition-colors"
             >
               {category.name}
             </span>

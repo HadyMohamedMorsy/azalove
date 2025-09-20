@@ -88,7 +88,7 @@ export default function PaginationWrapper({
 
   return (
     <div
-      className={`p-6 border-t border-amaranth-100 bg-gradient-to-r from-cream-50 to-amaranth-50 ${className}`}
+      className={`p-6 border-t border-amaranth-100 bg-cream-100 ${className}`}
     >
       <Pagination>
         <PaginationContent>

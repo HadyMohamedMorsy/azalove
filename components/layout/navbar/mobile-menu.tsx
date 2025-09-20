@@ -151,7 +151,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                       onClick={onClose}
                       className={`flex items-center gap-4 p-5 rounded-xl transition-all duration-200 shadow-sm ${
                         isActive
-                          ? "bg-gradient-to-r from-amaranth-100 to-royal-100 text-amaranth-700 border-r-4 border-amaranth-500"
+                          ? "bg-amaranth-900 border-r-4 border-amaranth-500"
                           : "hover:bg-white hover:shadow-md hover:scale-[1.02] bg-white"
                       }`}
                     >
@@ -204,7 +204,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                                             <Link
                                               href={`/products/${subcategory.slug}`}
                                               onClick={onClose}
-                                              className="block text-sm text-gray-700 hover:text-amaranth-600 py-3 hover:bg-gradient-to-r hover:from-amaranth-50 hover:to-royal-50 px-3 rounded-lg transition-all duration-200 hover:shadow-sm"
+                                              className="block text-sm text-gray-700 hover:text-amaranth-900 py-3 hover:bg-cream-100 px-3 rounded-lg transition-all duration-200 hover:shadow-sm"
                                             >
                                               {subcategory.name}
                                             </Link>
@@ -216,7 +216,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                                         <Link
                                           href={`/products/${category.slug}`}
                                           onClick={onClose}
-                                          className="block text-sm text-gray-700 hover:text-amaranth-600 py-3 hover:bg-gradient-to-r hover:from-amaranth-50 hover:to-royal-50 px-3 rounded-lg transition-all duration-200 hover:shadow-sm"
+                                          className="block text-sm text-gray-700 hover:text-amaranth-900 py-3 hover:bg-cream-100 px-3 rounded-lg transition-all duration-200 hover:shadow-sm"
                                         >
                                           عرض جميع المنتجات
                                         </Link>
@@ -249,7 +249,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                       onClick={onClose}
                       className={`flex items-center gap-4 p-5 rounded-xl transition-all duration-200 shadow-sm ${
                         isActive
-                          ? "bg-gradient-to-r from-amaranth-100 to-royal-100 text-amaranth-700 border-r-4 border-amaranth-500"
+                          ? "bg-cream-100 text-amaranth-700 border-r-4 border-amaranth-500"
                           : "hover:bg-white hover:shadow-md hover:scale-[1.02] bg-white"
                       }`}
                     >
@@ -301,7 +301,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                                             <Link
                                               href={`/blogs/${subcategory.slug}`}
                                               onClick={onClose}
-                                              className="block text-sm text-gray-700 hover:text-amaranth-600 py-3 hover:bg-gradient-to-r hover:from-amaranth-50 hover:to-royal-50 px-3 rounded-lg transition-all duration-200 hover:shadow-sm"
+                                              className="block text-sm text-gray-700 hover:text-amaranth-900 hover:bg-cream-100 py-3  px-3 rounded-lg transition-all duration-200 hover:shadow-sm"
                                             >
                                               {subcategory.name}
                                             </Link>
@@ -313,7 +313,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                                         <Link
                                           href={`/blogs/${category.slug}`}
                                           onClick={onClose}
-                                          className="block text-sm text-gray-700 hover:text-amaranth-600 py-3 hover:bg-gradient-to-r hover:from-amaranth-50 hover:to-royal-50 px-3 rounded-lg transition-all duration-200 hover:shadow-sm"
+                                          className="block text-sm text-gray-700 hover:text-amaranth-900 py-3 hover:bg-cream-100 px-3 rounded-lg transition-all duration-200 hover:shadow-sm"
                                         >
                                           عرض جميع المقالات
                                         </Link>
@@ -345,7 +345,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                   onClick={onClose}
                   className={`flex items-center gap-4 p-5 rounded-xl transition-all duration-200 shadow-sm ${
                     isActive
-                      ? "bg-gradient-to-r from-amaranth-100 to-royal-100 text-amaranth-700 border-r-4 border-amaranth-500"
+                      ? "bg-amaranth-900 border-r-4 border-amaranth-900"
                       : "hover:bg-white hover:shadow-md hover:scale-[1.02] bg-white"
                   }`}
                 >

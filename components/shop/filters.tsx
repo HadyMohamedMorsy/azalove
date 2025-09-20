@@ -185,7 +185,7 @@ const FiltersProducts = ({ filters, onFilterChange }: FiltersProductsProps) => {
           </div>
 
           {featuredProducts?.length > 0 && (
-            <div className="px-4 py-3 border border-amaranth-200 rounded-lg bg-gradient-to-r from-cream-50 to-amaranth-50">
+            <div className="px-4 py-3 border border-amaranth-200 rounded-lg bg-cream-100">
               <Accordion type="single" collapsible defaultValue="featured">
                 <AccordionItem value="featured" className="border-0">
                   <AccordionTrigger className="text-amaranth-700 font-semibold hover:text-amaranth-800">

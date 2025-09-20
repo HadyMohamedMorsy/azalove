@@ -69,7 +69,7 @@ const ReviewForm = ({ onSubmit, onCancel }: ReviewFormProps) => {
           <div className="p-2 bg-gradient-to-br from-azalove-100 to-azalove-200 rounded-full">
             <MessageCircle className="w-6 h-6 text-azalove-600" />
           </div>
-          <CardTitle className="text-xl font-bold bg-gradient-to-r from-royal-700 to-amaranth-700 bg-clip-text text-transparent">
+          <CardTitle className="text-xl font-bold bg-amaranth-900 bg-clip-text text-transparent">
             {t("product.shareExperience")}
           </CardTitle>
         </div>
@@ -111,7 +111,7 @@ const ReviewForm = ({ onSubmit, onCancel }: ReviewFormProps) => {
 
               {rating > 0 && (
                 <div className="text-center">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-azalove-200 to-amaranth-200 rounded-full">
+                  <div className="inline-flex items-center gap-2 px-4 py-2bg-cream-100 rounded-full">
                     <Heart className="w-4 h-4 text-amaranth-500" />
                     <span className="font-semibold text-royal-700">
                       {getRatingText(rating)}
@@ -181,7 +181,7 @@ const ReviewForm = ({ onSubmit, onCancel }: ReviewFormProps) => {
           </div>
 
           {/* Tips */}
-          <div className="p-4 bg-gradient-to-r from-cream-50 to-azalove-50 rounded-xl border border-azalove-200">
+          <div className="p-4 bg-cream-100 rounded-xl border border-azalove-200">
             <div className="flex items-start gap-3">
               <Sparkles className="w-5 h-5 text-azalove-500 mt-0.5" />
               <div>

@@ -148,7 +148,7 @@ const BlogCard = ({
         <div className="mt-6">
           <Button
             onClick={handleReadMore}
-            className="bg-gradient-to-r from-amaranth-500 to-amaranth-600 hover:from-amaranth-600 hover:to-amaranth-700 text-white rounded-full px-4 transition-all duration-300 hover:scale-105"
+            className="bg-amaranth-900 text-white rounded-full px-4 transition-all duration-300 hover:scale-105"
           >
             <span className="relative z-10">اقرأ المزيد</span>
             <Heart className="w-4 h-4 mr-2 transition-transform duration-300 group-hover/btn:scale-110 fill-current" />

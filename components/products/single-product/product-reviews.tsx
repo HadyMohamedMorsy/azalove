@@ -207,7 +207,7 @@ const ProductReviews = ({ reviews: initialReviews }: ProductReviewsProps) => {
             </h2>
             <Sparkles className="w-6 h-6 text-azalove-500" />
           </div>
-          <div className="w-24 h-1 bg-gradient-to-r from-azalove-500 to-amaranth-500 mx-auto rounded-full"></div>
+          <div className="w-24 h-1 bg-amaranth-900 mx-auto rounded-full"></div>
         </div>
 
         {/* Toggle Review Form Button */}
@@ -248,7 +248,7 @@ const ProductReviews = ({ reviews: initialReviews }: ProductReviewsProps) => {
         {/* Rating Overview */}
         <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-cream-50 overflow-hidden">
           <CardHeader className="relative">
-            <CardTitle className="text-xl font-bold bg-gradient-to-r from-royal-700 to-amaranth-700 bg-clip-text text-transparent flex items-center gap-2">
+            <CardTitle className="text-xl font-bold bg-amaranth-900 bg-clip-text text-transparent flex items-center gap-2">
               <Award className="w-5 h-5 text-azalove-500" />
               {t("product.ratingOverview")}
             </CardTitle>
@@ -307,7 +307,7 @@ const ProductReviews = ({ reviews: initialReviews }: ProductReviewsProps) => {
         </Card>
 
         {/* Sort Options */}
-        <div className="flex justify-between items-center p-4 bg-gradient-to-r from-cream-50 to-azalove-50 rounded-xl border border-azalove-200">
+        <div className="flex justify-between items-center p-4 bg-cream-100 rounded-xl border border-azalove-200">
           <h3 className="text-lg font-semibold text-royal-700 flex items-center gap-2">
             <MessageCircle className="w-5 h-5 text-amaranth-900" />
             {t("product.customerReviews")} ({reviews.length})
@@ -352,7 +352,7 @@ const ProductReviews = ({ reviews: initialReviews }: ProductReviewsProps) => {
                             {review.createdBy.lastName}
                           </h4>
                           {review.is_approved === 1 && (
-                            <span className="text-xs bg-gradient-to-r from-green-100 to-green-200 text-green-700 px-3 py-1 rounded-full font-medium border border-green-300">
+                            <span className="text-xs bg-cream-100 text-green-700 px-3 py-1 rounded-full font-medium border border-green-300">
                               {t("product.verifiedPurchase")}
                             </span>
                           )}

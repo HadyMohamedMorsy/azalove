@@ -38,7 +38,7 @@ const Favorites = () => {
                 <Heart className="w-6 h-6 text-amaranth-500 animate-pulse" />
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-azalove-400 rounded-full animate-ping"></div>
               </div>
-              <span className="bg-gradient-to-r from-royal-700 to-amaranth-700 bg-clip-text text-transparent">
+              <span className="bg-amaranth-900 bg-clip-text text-transparent">
                 المفضلة
               </span>
             </CardTitle>
@@ -68,9 +68,9 @@ const Favorites = () => {
               <div className="relative z-10">
                 <div className="relative inline-block mb-6">
                   <Heart className="w-16 h-16 mx-auto text-amaranth-400 animate-pulse" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-azalove-200 to-amaranth-200 rounded-full blur-xl opacity-30 animate-pulse"></div>
+                  <div className="absolute inset-0 bg-cream-100 rounded-full blur-xl opacity-30 animate-pulse"></div>
                 </div>
-                <h3 className="text-xl font-semibold mb-3 bg-gradient-to-r from-royal-700 to-amaranth-700 bg-clip-text text-transparent">
+                <h3 className="text-xl font-semibold mb-3 bg-amaranth-900 bg-clip-text text-transparent">
                   قائمة أمنياتك تنتظر الحب
                 </h3>
                 <p className="text-royal-600 max-w-md mx-auto">
@@ -78,7 +78,7 @@ const Favorites = () => {
                   عنصر تحبه يجلب المزيد من الفرح إلى مجموعتك!
                 </p>
                 <div className="mt-6">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-azalove-100 to-cream-100 rounded-full border border-azalove-200">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-cream-100 rounded-full border border-azalove-200">
                     <Sparkles className="w-4 h-4 text-azalove-500" />
                     <span className="text-sm text-royal-700">
                       ابدأ الاستكشاف
@@ -91,7 +91,7 @@ const Favorites = () => {
             <div className="space-y-6">
               {/* Romantic header for items */}
               <div className="text-center mb-6">
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-azalove-50 to-amaranth-50 rounded-full border border-azalove-200">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-cream-100 rounded-full border border-azalove-200">
                   <Sparkles className="w-4 h-4 text-azalove-500" />
                   <span className="text-sm font-medium text-royal-700">
                     مجموعتك العزيزة
