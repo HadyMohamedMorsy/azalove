@@ -61,17 +61,28 @@ export default function CharacterCustomizer({
     if (
       shapes.bodyTypes &&
       shapes.bodyTypes.length > 0 &&
-      !selection.activeBodyType
+      selection.activeCharacter &&
+      (!selection.activeBodyType || selection.activeBodyType === "")
     ) {
-      const firstBodyType = shapes.bodyTypes[0].id;
-      setActiveBodyType(firstBodyType);
+      // Choose different body type based on character
+      let selectedBodyType;
+      if (selection.activeCharacter === "Layer_4") {
+        // For Layer_4, try to find "middle" first
+        const middleBodyType = shapes.bodyTypes.find(bt => bt.id.toLowerCase() === "middle");
+        selectedBodyType = middleBodyType ? middleBodyType.id : shapes.bodyTypes[0].id;
+      } else {
+        // For Layer_2, use the first one
+        selectedBodyType = shapes.bodyTypes[0].id;
+      }
+      
+      setActiveBodyType(selectedBodyType);
 
-      // Auto-select first available color and shape for the first body type
+      // Auto-select first available color and shape for the selected body type
       if (
-        shapes.bodyShapes?.[firstBodyType] &&
-        shapes.bodyShapes[firstBodyType].length > 0
+        shapes.bodyShapes?.[selectedBodyType] &&
+        shapes.bodyShapes[selectedBodyType].length > 0
       ) {
-        const firstShape = shapes.bodyShapes[firstBodyType][0];
+        const firstShape = shapes.bodyShapes[selectedBodyType][0];
         if (firstShape.colorCode) {
           setActiveColor(firstShape.colorCode);
         }
@@ -80,7 +91,7 @@ export default function CharacterCustomizer({
         }
         // Auto-apply the first shape
         updateCharacterLayer(
-          firstBodyType,
+          selectedBodyType,
           firstShape.svg,
           firstShape.colorCode,
           firstShape.label

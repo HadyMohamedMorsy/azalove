@@ -17,32 +17,15 @@ export const filterSvgByCharacters = (
       return svgContent;
     }
 
-    // Get all selected classes from character selection
-    const selectedClasses = new Set<string>();
-    
-    characterSelection.forEach((char) => {
-        if (char.body && Array.isArray(char.body)) {
-          char.body.forEach((bodyItem: any) => {
-            if (bodyItem.label && bodyItem.bodyType) {
-            // Add body type class
-            selectedClasses.add(bodyItem.bodyType.toLowerCase());
-            // Add label class
-            selectedClasses.add(bodyItem.label.toLowerCase());
-            // Add combination class
-            selectedClasses.add(`${bodyItem.bodyType}-${bodyItem.label}`.toLowerCase());
-            }
-          });
-        }
-    });
-
-
     // Array of colors to exclude from comparison
     const excludedColors = ["#111009"];
 
     // Process Layer_2 - use id from books
     const layer2 = svgElement.querySelector('g[id="Layer_2"]');
     if (layer2) {
-      filterLayerBySelectedClasses(layer2, selectedClasses);
+      // Get classes selected for Layer_2 only
+      const layer2Classes = getSelectedClassesForLayer(characterSelection, 0);
+      filterLayerBySelectedClasses(layer2, layer2Classes);
       addClassesToPaths(layer2);
       applyColorsFromCharacters(layer2, characterSelection, excludedColors);
     }
@@ -50,7 +33,9 @@ export const filterSvgByCharacters = (
     // Process Layer_4 - use id from books
     const layer4 = svgElement.querySelector('g[id="Layer_4"]');
     if (layer4) {
-      filterLayerBySelectedClasses(layer4, selectedClasses);
+      // Get classes selected for Layer_4 only
+      const layer4Classes = getSelectedClassesForLayer(characterSelection, 1);
+      filterLayerBySelectedClasses(layer4, layer4Classes);
       addClassesToPaths(layer4);
       applyColorsFromCharacters(layer4, characterSelection, excludedColors);
     }
@@ -61,6 +46,28 @@ export const filterSvgByCharacters = (
     console.error("Error filtering SVG:", error);
     return svgContent;
   }
+};
+
+// Helper function to get selected classes for a specific layer
+export const getSelectedClassesForLayer = (characterSelection: any[], layerIndex: number) => {
+  const selectedClasses = new Set<string>();
+  
+  // Get the character for this specific layer
+  const char = characterSelection[layerIndex];
+  if (char && char.body && Array.isArray(char.body)) {
+    char.body.forEach((bodyItem: any) => {
+      if (bodyItem.label && bodyItem.bodyType) {
+        // Add body type class
+        selectedClasses.add(bodyItem.bodyType.toLowerCase());
+        // Add label class
+        selectedClasses.add(bodyItem.label.toLowerCase());
+        // Add combination class
+        selectedClasses.add(`${bodyItem.bodyType}-${bodyItem.label}`.toLowerCase());
+      }
+    });
+  }
+  
+  return selectedClasses;
 };
 
 // Helper function to filter a layer by selected classes
