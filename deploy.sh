@@ -2,6 +2,9 @@ SERVER="root@82.112.240.180"
 TARGET_DIR="/var/www/azalove/front"
 APP_NAME="azalove-frontend"
 
+# Navigate to target directory
+cd $TARGET_DIR
+
 # Move node_modules to parent directory
 mv node_modules ../
 
