@@ -1,6 +1,7 @@
 "use client";
 
 import CouplePreview from "@/components/avatars/couple-preview";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -8,23 +9,30 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useAuth } from "@/contexts/auth-context";
 import { useGeneralSettings } from "@/contexts/general-settings-context";
 import { useCreateCustomOrder } from "@/hooks/use-create-custom-order";
 import { useCurrency } from "@/hooks/use-currency";
+import { useFetch } from "@/hooks/use-fetch";
 import { PaperType, usePaperTypes } from "@/hooks/use-paper-types";
 import { PaymentMethod, usePaymentMethods } from "@/hooks/use-payment-methods";
 import { SavedCouple } from "@/hooks/use-saved-couples";
+import { useToast } from "@/hooks/use-toast";
 import { CouponService } from "@/lib/coupon-service";
-import { AppliedCoupon, ValidateCouponDto } from "@/types";
+import { Address, AppliedCoupon, ValidateCouponDto } from "@/types";
 import { blobToFile, svgToImage } from "@/utils/svg-to-image";
 import {
   CheckCircle,
   CreditCard,
   DollarSign,
   Heart,
+  Home,
+  MapPin,
+  Plus,
   Tag,
   X,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Book, BookPage } from "./data/books-data";
 import PagePreview from "./page-preview";
@@ -53,6 +61,7 @@ export default function BookCreationSummaryDialog({
   const { formatCurrency } = useCurrency();
   const { settings } = useGeneralSettings();
   const { paperTypes, loading: paperTypesLoading } = usePaperTypes();
+  const { toast } = useToast();
   const {
     createCustomOrder,
     loading: isCreatingOrder,
@@ -76,6 +85,21 @@ export default function BookCreationSummaryDialog({
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
     useState<PaymentMethod | null>(null);
 
+  // Address selection state
+  const { user } = useAuth();
+  const router = useRouter();
+  const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
+  const [showAddressForm, setShowAddressForm] = useState(false);
+
+  // Fetch user addresses
+  const {
+    data: addresses,
+    loading: addressesLoading,
+    error: addressesError,
+  } = useFetch<Address[]>(
+    user ? `/api/addresses/addresses` : ""
+  );
+
   // Calculate prices - ensure all are numbers
   const coverPrice = Number(selectedCover?.price) || 0;
   const pagesPrice = pages
@@ -95,7 +119,7 @@ export default function BookCreationSummaryDialog({
 
   // Check if all required fields are selected
   const canCreateBook =
-    selectedCover && selectedPaper && selectedPaymentMethod && pages.length > 0;
+    selectedCover && selectedPaper && selectedPaymentMethod && selectedAddress && pages.length > 0;
 
   const handlePaperChange = (paperId: string) => {
     const paper = paperTypes.find((p) => p.id === paperId);
@@ -277,26 +301,44 @@ export default function BookCreationSummaryDialog({
       // Prepare order data
       const pageIds = pages.map((page) => page.id);
 
+      // Get answerIds from couple's answers
+      const answerIds = couple?.answers?.selectedAnswers?.map(answer => answer.answerId).filter(id => id !== undefined) || [];
+
       const orderData = {
         couponId: appliedCoupon?.id,
         paperTypeId: selectedPaper.id,
         booksIds: pageIds,
         paymentMethodId: selectedPaymentMethod.id.toString(),
         images: imageFiles,
+        addressId: selectedAddress?.id,
+        answerIds: answerIds,
       };
 
       // Create custom order
       const result = await createCustomOrder(orderData);
 
       if (result.statusCode === 201) {
-        // Success - close dialog and call onCreateBook
-        onCreateBook();
+        // Success - redirect to order confirmation page
+        const orderId = result.data?.id || `order_${Date.now()}`;
+        const currency = settings?.default_currency || "SAR";
+        const confirmationUrl = `/order-confirmation?orderId=${orderId}&totalAmount=${totalPrice}&itemsCount=${pages.length}&address=${encodeURIComponent(selectedAddress?.addressLine1 || '')}&paymentMethod=${encodeURIComponent(selectedPaymentMethod?.name || '')}&currency=${encodeURIComponent(currency)}`;
+        
+        // Close dialog first
+        onClose();
+        
+        // Navigate to confirmation page
+        router.push(confirmationUrl);
       } else {
         throw new Error(result.error || "Failed to create custom order");
       }
     } catch (error) {
       console.error("Error creating custom order:", error);
-      // Handle error - you might want to show a toast or error message
+      // Show error toast
+      toast({
+        title: "خطأ في إنشاء الطلب",
+        description: "حدث خطأ أثناء إنشاء الطلب. يرجى المحاولة مرة أخرى.",
+        variant: "error",
+      });
     }
   };
 
@@ -568,6 +610,90 @@ export default function BookCreationSummaryDialog({
             </div>
           )}
 
+          {/* Address Selection */}
+          <div className="bg-white p-6 rounded-lg border border-azalove-200 shadow-sm">
+            <h4 className="font-semibold text-lg text-royal-800 mb-4 flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-azalove-600" />
+              عنوان التوصيل
+            </h4>
+            
+            {addressesLoading ? (
+              <div className="text-center py-4">
+                <p className="text-royal-600">جاري تحميل العناوين...</p>
+              </div>
+            ) : addressesError ? (
+              <div className="text-center py-4">
+                <p className="text-red-600">خطأ في تحميل العناوين</p>
+              </div>
+            ) : addresses && addresses.length > 0 ? (
+              <div className="space-y-4">
+                <div className="grid gap-3">
+                  {addresses.map((address) => (
+                    <div
+                      key={address.id}
+                      className={`p-4 border rounded-lg cursor-pointer transition-all ${
+                        selectedAddress?.id === address.id
+                          ? "border-azalove-500 bg-azalove-50"
+                          : "border-gray-200 hover:border-azalove-300"
+                      }`}
+                      onClick={() => setSelectedAddress(address)}
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Home className="w-4 h-4 text-azalove-600" />
+                            <span className="font-medium text-royal-800">
+                              {address.title}
+                            </span>
+                            {address.isDefault && (
+                              <Badge className="bg-azalove-100 text-azalove-700 border-azalove-200">
+                                افتراضي
+                              </Badge>
+                            )}
+                          </div>
+                          <p className="text-royal-600 text-sm mb-1">
+                            {address.addressLine1}
+                          </p>
+                          {address.addressLine2 && (
+                            <p className="text-royal-600 text-sm mb-1">
+                              {address.addressLine2}
+                            </p>
+                          )}
+                          <p className="text-royal-600 text-sm">
+                            {address.phoneNumber}
+                          </p>
+                        </div>
+                        {selectedAddress?.id === address.id && (
+                          <CheckCircle className="w-5 h-5 text-azalove-600" />
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                <Button
+                  variant="outline"
+                  onClick={() => setShowAddressForm(true)}
+                  className="w-full border-azalove-300 text-azalove-700 hover:bg-azalove-50"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  إضافة عنوان جديد
+                </Button>
+              </div>
+            ) : (
+              <div className="text-center py-4">
+                <p className="text-royal-600 mb-4">لا توجد عناوين محفوظة</p>
+                <Button
+                  onClick={() => setShowAddressForm(true)}
+                  className="bg-azalove-500 hover:bg-azalove-600 text-white"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  إضافة عنوان جديد
+                </Button>
+              </div>
+            )}
+          </div>
+
           {/* Cover Preview */}
           {selectedCover && (
             <div className="space-y-4">
@@ -647,11 +773,45 @@ export default function BookCreationSummaryDialog({
               {!selectedCover && "يرجى اختيار غلاف للكتاب"}
               {!selectedPaper && " • يرجى اختيار نوع الورق"}
               {!selectedPaymentMethod && " • يرجى اختيار طريقة الدفع"}
+              {!selectedAddress && " • يرجى اختيار عنوان التوصيل"}
               {pages.length === 0 && " • يرجى إضافة صفحات للكتاب"}
             </div>
           )}
         </div>
       </DialogContent>
+
+      {/* Address Dialog */}
+      {showAddressForm && (
+        <Dialog open={showAddressForm} onOpenChange={setShowAddressForm}>
+          <DialogContent className="sm:max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>إضافة عنوان جديد</DialogTitle>
+            </DialogHeader>
+            <div className="text-center py-8">
+              <p className="text-royal-600 mb-4">
+                سيتم فتح نموذج إضافة العنوان في صفحة جديدة
+              </p>
+              <div className="flex gap-3 justify-center">
+                <Button
+                  onClick={() => {
+                    window.open('/dashboard', '_blank');
+                    setShowAddressForm(false);
+                  }}
+                  className="bg-azalove-500 hover:bg-azalove-600 text-white"
+                >
+                  فتح صفحة العناوين
+                </Button>
+                <Button
+                  onClick={() => setShowAddressForm(false)}
+                  variant="outline"
+                >
+                  إلغاء
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </Dialog>
   );
 }

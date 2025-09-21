@@ -98,8 +98,8 @@ export default function LegalPage() {
                 >
                   <div className="flex items-start space-x-4 rtl:space-x-reverse">
                     <div className="flex-shrink-0">
-                      <div className="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center">
-                        <IconComponent className="w-6 h-6 text-pink-600" />
+                      <div className="w-12 h-12 bg-cream-100 rounded-lg flex items-center justify-center">
+                        <IconComponent className="w-6 h-6 text-amaranth-900" />
                       </div>
                     </div>
                     <div className="flex-1 min-w-0">
@@ -107,7 +107,7 @@ export default function LegalPage() {
                         <h3 className="text-xl font-semibold text-gray-900">
                           {document.title}
                         </h3>
-                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-pink-100 text-pink-800">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-cream-100 text-amaranth-900">
                           {document.category}
                         </span>
                       </div>
@@ -118,7 +118,7 @@ export default function LegalPage() {
                         href={document.filePath}
                         download
                         rel="noopener noreferrer"
-                        className="inline-flex items-center px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors duration-200 font-medium"
+                        className="inline-flex items-center px-4 py-2 bg-amaranth-900 text-white rounded-lg hover:bg-royal-900 transition-colors duration-200 font-medium"
                       >
                         <Download className="w-4 h-4 ml-2" />
                         تحميل الوثيقة
@@ -133,7 +133,7 @@ export default function LegalPage() {
           {/* Additional Info Section */}
           <div className="mt-16 bg-white rounded-lg shadow-lg p-8 max-w-4xl mx-auto">
             <div className="text-center">
-              <FileText className="w-16 h-16 text-pink-600 mx-auto mb-4" />
+              <FileText className="w-16 h-16 text-amaranth-900 mx-auto mb-4" />
               <h2 className="text-2xl font-bold text-gray-900 mb-4">
                 معلومات إضافية
               </h2>

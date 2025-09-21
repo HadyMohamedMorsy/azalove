@@ -1,7 +1,15 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Book, Heart } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const HeroSection = () => {
+  const router = useRouter();
+
+  const handleStartNow = () => {
+    router.push("/start-character");
+  };
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-cream-100">
       {/* Simple background elements */}
@@ -165,9 +173,10 @@ const HeroSection = () => {
         <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center items-center">
           <Button
             size="lg"
+            onClick={handleStartNow}
             className=" bg-amaranth-900 hover:bg-royal-900 text-white px-6 md:px-8 py-2 md:py-3 text-sm md:text-base rounded-full"
           >
-            استكشف كتب الرومانسية
+            ابدأ الان
           </Button>
         </div>
 

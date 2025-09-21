@@ -3,10 +3,78 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useGeneralSettings } from "@/contexts/general-settings-context";
-import { Facebook, Instagram, Twitter } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { Facebook, Instagram, Loader2, Twitter } from "lucide-react";
+import { useState } from "react";
 
 const Footer = () => {
   const { settings } = useGeneralSettings();
+  const { toast } = useToast();
+  const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubscription = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!email.trim()) {
+      toast({
+        title: "خطأ",
+        description: "يرجى إدخال البريد الإلكتروني",
+        variant: "error",
+      });
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast({
+        title: "خطأ",
+        description: "يرجى إدخال بريد إلكتروني صحيح",
+        variant: "error",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email: email.trim(),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast({
+          title: "تم الاشتراك بنجاح!",
+          description: "شكراً لك على الاشتراك في نشرتنا الإخبارية",
+        });
+        setEmail(""); // Clear the input
+      } else {
+        toast({
+          title: "خطأ في الاشتراك",
+          description: data.message || "حدث خطأ أثناء الاشتراك، يرجى المحاولة مرة أخرى",
+          variant: "error",
+        });
+      }
+    } catch (error) {
+      console.error("Subscription error:", error);
+      toast({
+        title: "خطأ في الاتصال",
+        description: "حدث خطأ أثناء الاتصال بالخادم، يرجى المحاولة مرة أخرى",
+        variant: "error",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <footer
@@ -135,19 +203,29 @@ const Footer = () => {
               اشترك في نشرتنا الإخبارية للحصول على أحدث إصدارات كتب الرومانسية
               والعروض الحصرية.
             </p>
-            <div className="flex gap-2">
+            <form onSubmit={handleSubscription} className="flex gap-2">
               <Input
                 type="email"
                 placeholder="بريدك الإلكتروني"
                 className="flex-1 text-xs md:text-sm"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={isLoading}
+                required
               />
               <Button
+                type="submit"
                 size="sm"
-                className="bg-amaranth-900 hover:bg-royal-900 text-xs md:text-sm"
+                className="bg-amaranth-900 hover:bg-royal-900 text-xs md:text-sm disabled:opacity-50"
+                disabled={isLoading}
               >
-                اشترك
+                {isLoading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  "اشترك"
+                )}
               </Button>
-            </div>
+            </form>
           </div>
 
           {/* Social Media */}

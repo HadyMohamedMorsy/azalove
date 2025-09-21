@@ -43,10 +43,6 @@ const PromoBlock = ({
           <span className="text-sm md:text-base lg:text-lg text-muted-foreground font-semibold">
             {description || t("promoBlock.defaultDescription")}
           </span>
-
-          <button className="btn text-white bg-amaranth-900 hover:bg-royal-900 capitalize mt-4 w-[120px] transition-all duration-300 text-sm md:text-base lg:text-lg">
-            {buttonText || t("promoBlock.defaultButtonText")}
-          </button>
         </div>
       </div>
     </div>

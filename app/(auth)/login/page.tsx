@@ -1,6 +1,5 @@
 "use client";
 
-import { SocialAuthButtons } from "@/components/auth/social-auth-buttons";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -172,7 +171,8 @@ function Login() {
               </Button>
             </form>
 
-            <SocialAuthButtons isLoading={isLoading} />
+            {/* Temporarily disabled social auth buttons */}
+            {/* <SocialAuthButtons isLoading={isLoading} /> */}
             <div className="text-center pt-4 border-t border-royal-200/50">
               <span className="text-royal-600 text-sm">
                 {t("auth.login.noAccount")}{" "}

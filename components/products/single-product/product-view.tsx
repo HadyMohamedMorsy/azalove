@@ -30,6 +30,7 @@ import {
   Sparkles,
   Star
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import { useState } from "react";
 import StructuredData from "../../seo/structured-data";
@@ -53,6 +54,7 @@ const ProductView = ({ params }: ProductViewProps) => {
   const { t } = useTranslation();
   const { formatCurrency } = useCurrency();
   const { settings } = useGeneralSettings();
+  const router = useRouter();
 
   if (loading) {
     return (
@@ -143,6 +145,41 @@ const ProductView = ({ params }: ProductViewProps) => {
       title: "Added to cart",
       description: `${product.name} has been added to your cart.`,
     });
+  };
+
+  const handleCheckout = () => {
+    if (!product.sku?.quantity) return;
+
+    const availableQuantity = getAvailableQuantity();
+    if (availableQuantity <= 0) {
+      toast({
+        title: "Cannot proceed",
+        description: `This product is out of stock.`,
+      });
+      return;
+    }
+
+    if (quantity > availableQuantity) {
+      toast({
+        title: "Quantity exceeded",
+        description: `Maximum available quantity is ${availableQuantity}.`,
+      });
+      return;
+    }
+
+    // Add to cart first
+    addToCart({
+      id: product.id.toString(),
+      finalPrice: finalPrice ?? product.sku?.price,
+      skuQuantity: product.sku?.quantity,
+      name: product.name,
+      price: product.sku?.price,
+      image: product.images?.[0] ?? "",
+      quantity: quantity,
+    });
+
+    // Navigate to checkout
+    router.push("/checkout");
   };
 
   const handleToggleFavorite = () => {
@@ -279,23 +316,35 @@ const ProductView = ({ params }: ProductViewProps) => {
               <div className="flex items-center gap-4 mb-6">
                 <div className="flex items-center gap-2">
                   <div className="flex items-center gap-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`w-4 h-4 md:w-5 md:h-5 ${
-                          i < (product.rating || 0)
-                            ? "fill-yellow-400 text-yellow-400"
-                            : "text-gray-300"
-                        }`}
-                      />
-                    ))}
+                    {[...Array(5)].map((_, i) => {
+                      const actualRating = product.reviews && product.reviews.length > 0 
+                        ? (() => {
+                            const totalRating = product.reviews.reduce((sum, review) => sum + Number(review.rate || 0), 0);
+                            const averageRating = totalRating / product.reviews.length;
+                            return isNaN(averageRating) ? 0 : averageRating;
+                          })()
+                        : 0;
+                      return (
+                        <Star
+                          key={i}
+                          className={`w-4 h-4 md:w-5 md:h-5 ${
+                            i < actualRating
+                              ? "fill-yellow-400 text-yellow-400"
+                              : "text-gray-300"
+                          }`}
+                        />
+                      );
+                    })}
                   </div>
                   <span className="body-tiny text-muted-foreground">
-                    {product.rating || 0} (
-                    {product.rating
-                      ? t("product.reviews")
-                      : t("product.noReviews")}
-                    )
+                    {product.reviews && product.reviews.length > 0 
+                      ? (() => {
+                          const totalRating = product.reviews.reduce((sum, review) => sum + Number(review.rate || 0), 0);
+                          const averageRating = totalRating / product.reviews.length;
+                          return `${isNaN(averageRating) ? '0.0' : averageRating.toFixed(1)} (${product.reviews.length} ${t("product.reviews")})`;
+                        })()
+                      : `0 (${t("product.noReviews")})`
+                    }
                   </span>
                 </div>
               </div>
@@ -416,12 +465,12 @@ const ProductView = ({ params }: ProductViewProps) => {
               <Button
                 variant="outline"
                 size="lg"
-                className="w-full bg-gradient-to-r from-royal-500 to-royal-600 hover:from-royal-600 hover:to-royal-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-royal-900  text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={
                   quantity > getAvailableQuantity() ||
                   getAvailableQuantity() <= 0
                 }
-                onClick={handleAddToCart}
+                onClick={handleCheckout}
               >
                 {getAvailableQuantity() <= 0
                   ? t("product.outOfStock")

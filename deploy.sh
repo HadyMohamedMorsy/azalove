@@ -1,15 +1,39 @@
 SERVER="root@82.112.240.180"
 TARGET_DIR="/var/www/azalove/front"
-LOCAL_DIR="./dist/azalove/browser"
+APP_NAME="azalove-frontend"
 
-echo "Starting deployment to $SERVER:$TARGET_DIR"
+# Move node_modules to parent directory
+mv node_modules ../
 
-# Step 1: Clean the remote directory
-echo "Cleaning remote directory..."
-ssh $SERVER "rm -rf $TARGET_DIR/*"
+# Remove all files and directories
+rm -rf *
 
-# Step 2: Deploy new files
-echo "Deploying new files..."
-scp -r $LOCAL_DIR/* $SERVER:$TARGET_DIR/
+# Clone the repository
+git clone https://github.com/HadyMohamedMorsy/azalove.git
 
-echo "Deployment completed successfully!"
+# Enter the project directory
+cd azalove
+
+# Move all files and directories to parent directory
+mv * ../
+
+# Go back to parent directory
+cd ../
+
+# Remove the empty azalove directory
+rm -rf azalove
+
+# Go back to parent directory
+cd ..
+
+mv node_modules ./front
+
+echo "Restarting PM2 process..."
+ssh $SERVER "cd $TARGET_DIR && \
+             pm2 delete $APP_NAME && \
+             pm2 save && \
+             pm2 start $APP_NAME && \
+             pm2 save && \
+             pm2 startup"
+
+echo "Frontend deployment completed successfully!"

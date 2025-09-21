@@ -6,6 +6,8 @@ export interface CreateCustomOrderData {
   booksIds: string[];
   paymentMethodId: string;
   images: File[];
+  addressId?: number;
+  answerIds?: number[];
 }
 
 export interface CreateCustomOrderResponse {
@@ -45,6 +47,18 @@ export function useCreateCustomOrder() {
       data.images.forEach((image, index) => {
         formData.append(`images[${index}]`, image);
       });
+
+      // Add addressId if provided
+      if (data.addressId) {
+        formData.append("addressId", data.addressId.toString());
+      }
+
+      // Add answerIds if provided
+      if (data.answerIds && data.answerIds.length > 0) {
+        data.answerIds.forEach((answerId, index) => {
+          formData.append(`answerIds[${index}]`, answerId.toString());
+        });
+      }
 
       // Send request
       const response = await fetch("/api/custom-orders/store", {

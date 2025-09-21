@@ -29,6 +29,7 @@ export async function POST(request: NextRequest) {
     // Get FormData from request
     const formData = await request.formData();
 
+
     // Prepare headers for backend request
     const headers: Record<string, string> = {
       Authorization: `Bearer ${token}`,
