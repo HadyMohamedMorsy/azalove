@@ -83,14 +83,12 @@ deploy() {
         # Start the application
         if [ -f 'ecosystem.config.js' ] || [ -f 'ecosystem.config.cjs' ]; then
             pm2 start ecosystem.config.js --env production
-        else
+        elif [ -f 'package.json' ] && grep -q '"start"' package.json; then
             # Fallback: start directly from package.json
-            if [ -f 'package.json' ] && grep -q '"start"' package.json; then
-                pm2 start npm --name \"$APP_NAME\" -- run start
-            else
-                echo 'No start script or ecosystem config found!'
-                exit 1
-            fi
+            pm2 start npm --name \"$APP_NAME\" -- run start
+        else
+            echo 'No start script or ecosystem config found!'
+            exit 1
         fi
         
         # Save and setup startup

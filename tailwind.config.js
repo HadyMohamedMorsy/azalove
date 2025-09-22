@@ -132,7 +132,7 @@ const config = {
           600: "#cd2f54",
           700: "#B22947", // Main amaranth-purple
           800: "#9c253f",
-          900: "#872239",
+          900: "#b22947",
         },
       },
       borderRadius: {
