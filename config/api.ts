@@ -1,4 +1,12 @@
-export const API_BASE_URL = "http://localhost:3001/api/v1";
+// Environment-based API URLs
+const isDevelopment = process.env.NODE_ENV === 'development';
+const isProduction = process.env.NODE_ENV === 'production';
+
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 
+  (isDevelopment ? "http://localhost:3001/api/v1" : "https://azalove.com/api/v1");
+
+export const API_BASE_URL_NEXT = process.env.NEXT_PUBLIC_API_BASE_URL_NEXT || 
+  (isDevelopment ? "http://localhost:3001" : "https://azalove.com");
 
 export const API_ENDPOINTS_FROM_NEXT = {
   CATEGORIES: "/api/home/categories",

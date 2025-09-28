@@ -9,7 +9,6 @@ export async function GET() {
       query: {
         select: CATEGORY_SELECT,
         isPagination: false,
-        limit: 5,
         filters: {
           categoryType: "product",
         },

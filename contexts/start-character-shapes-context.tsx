@@ -43,6 +43,16 @@ export function StartCharacterShapesProvider({
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // Check if user is authenticated
+    const isAuthenticated = typeof window !== "undefined" && 
+      (localStorage.getItem("auth_token") || 
+       document.cookie.split("; ").find(row => row.startsWith("auth_token="))?.split("=")[1]);
+
+    if (!isAuthenticated) {
+      setLoading(false);
+      return;
+    }
+
     async function fetchShapes() {
       try {
         setLoading(true);

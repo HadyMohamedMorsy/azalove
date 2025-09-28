@@ -12,7 +12,7 @@ function SectionCategories() {
       </div>
       <div className="container mx-auto relative z-10">
         <HeaderTitle
-          title="احدث التصنيفات"
+          title="احدث فئات المنتجات"
           description="احدث التصنيفات في الموقع"
         />
         <CategoriesList />

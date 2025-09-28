@@ -15,7 +15,7 @@ export const SKU_SELECT = [
   "discountType",
 ] as const;
 
-export const CATEGORY_SELECT = ["id", "name", "slug", "icon"] as const;
+export const CATEGORY_SELECT = ["id", "name", "slug", "image"] as const;
 
 export const BLOG_SELECT = [
   "id",
